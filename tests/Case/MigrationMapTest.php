@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Proves the generated alias map covers the classification completely and mechanically.
+ * Proves the generated migration map covers the classification completely and mechanically.
  *
- * @since 0.1.0
+ * @since 0.1.1
  */
 
 declare(strict_types=1);
@@ -13,59 +13,59 @@ namespace Kumwe\Extension\Tests\Case;
 use Kumwe\Extension\Tests\TestCase;
 
 /**
- * Holds `docs/alias-map.json` to its contract: complete, disjoint, mechanical, and honest.
+ * Holds `docs/migration-map.json` to its contract: complete, disjoint, mechanical, and honest.
  *
- * Every classified public type appears in exactly one of the two sets; every alias target is a real
- * declaration in this package whose kind matches the classification; every target is derivable from
- * the recorded prefix rules, so no alias can be invented by hand; and every skipped entry names the
- * closure members that block it.
+ * Every classified public type appears in exactly one of the two sets; every moved type's canonical
+ * name is a real declaration in this package whose kind matches the classification; every canonical
+ * name is derivable from the recorded prefix rules, so no moved name can be invented by hand; and
+ * every retained entry names the closure members that block it.
  *
- * @since  0.1.0
+ * @since  0.1.1
  */
-final class AliasMapTest extends TestCase
+final class MigrationMapTest extends TestCase
 {
     /**
-     * Every classified public type lands in exactly one of aliases or skipped.
+     * Every classified public type lands in exactly one of moved or retained.
      *
      * @return  void
      *
-     * @since   0.1.0
+     * @since   0.1.1
      */
-    public function testAliasMapCoversTheClassificationExactly(): void
+    public function testMigrationMapCoversTheClassificationExactly(): void
     {
         $map = $this->map();
         $classified = $this->classifiedTypes();
-        $aliased = array_keys($map['aliases']);
-        $skipped = array_map(static fn (array $entry): string => $entry['type'], $map['skipped']);
+        $moved = array_keys($map['moved']);
+        $retained = array_map(static fn (array $entry): string => $entry['type'], $map['retained']);
 
-        $covered = [...$aliased, ...$skipped];
+        $covered = [...$moved, ...$retained];
         sort($covered, SORT_STRING);
         $expected = array_keys($classified);
         sort($expected, SORT_STRING);
 
         $this->assertSame(
-            count($aliased) + count($skipped),
+            count($moved) + count($retained),
             count(array_unique($covered)),
-            'No classified type may appear in both the alias set and the skipped set.',
+            'No classified type may appear in both the moved set and the retained set.',
         );
-        $this->assertSame($expected, $covered, 'The alias map must cover every classified public type exactly once.');
+        $this->assertSame($expected, $covered, 'The migration map must cover every classified public type exactly once.');
     }
 
     /**
-     * Every alias target exists in this package as the kind the classification promises.
+     * Every moved type's canonical name exists in this package as the kind the classification promises.
      *
      * @return  void
      *
-     * @since   0.1.0
+     * @since   0.1.1
      */
-    public function testEveryAliasTargetExistsWithItsClassifiedKind(): void
+    public function testEveryMovedTypeExistsWithItsClassifiedKind(): void
     {
         $map = $this->map();
         $classified = $this->classifiedTypes();
-        foreach ($map['aliases'] as $source => $target) {
+        foreach ($map['moved'] as $source => $target) {
             $this->assertTrue(
                 str_starts_with($target, 'Kumwe\\Extension\\'),
-                sprintf('Alias target %s must be a canonical Kumwe\\Extension name.', $target),
+                sprintf('Moved type %s must carry a canonical Kumwe\\Extension name.', $target),
             );
             $kind = $classified[$source]['kind'];
             $exists = match ($kind) {
@@ -73,21 +73,21 @@ final class AliasMapTest extends TestCase
                 'enum' => enum_exists($target),
                 default => class_exists($target) && !enum_exists($target),
             };
-            $this->assertTrue($exists, sprintf('Alias target %s must be a declared %s.', $target, $kind));
+            $this->assertTrue($exists, sprintf('Canonical name %s must be a declared %s.', $target, $kind));
         }
     }
 
     /**
-     * Every alias target is exactly what the recorded prefix rules derive from its source.
+     * Every canonical name is exactly what the recorded prefix rules derive from its historical name.
      *
      * @return  void
      *
-     * @since   0.1.0
+     * @since   0.1.1
      */
-    public function testEveryAliasIsDerivedFromTheRecordedRules(): void
+    public function testEveryCanonicalNameIsDerivedFromTheRecordedRules(): void
     {
         $map = $this->map();
-        foreach ($map['aliases'] as $source => $target) {
+        foreach ($map['moved'] as $source => $target) {
             $derived = null;
             foreach ($map['rules'] as $rule) {
                 if (str_starts_with($source, $rule['from'])) {
@@ -98,56 +98,56 @@ final class AliasMapTest extends TestCase
             $this->assertSame(
                 $derived,
                 $target,
-                sprintf('Alias for %s must follow the recorded mechanical derivation.', $source),
+                sprintf('Canonical name for %s must follow the recorded mechanical derivation.', $source),
             );
         }
     }
 
     /**
-     * Every skipped entry records the blockers that keep it in the App, and none is empty.
+     * Every retained entry records the blockers that keep it in the App, and none is empty.
      *
      * @return  void
      *
-     * @since   0.1.0
+     * @since   0.1.1
      */
-    public function testEverySkippedTypeNamesItsBlockers(): void
+    public function testEveryRetainedTypeNamesItsBlockers(): void
     {
         $map = $this->map();
-        $this->assertTrue(count($map['skipped']) > 0, 'The skipped set documents the not-yet-portable surface.');
-        foreach ($map['skipped'] as $entry) {
+        $this->assertTrue(count($map['retained']) > 0, 'The retained set documents the not-yet-portable surface.');
+        foreach ($map['retained'] as $entry) {
             $this->assertTrue(
                 is_array($entry['blocked_by']) && $entry['blocked_by'] !== [],
-                sprintf('Skipped type %s must name at least one blocking closure member.', $entry['type']),
+                sprintf('Retained type %s must name at least one blocking closure member.', $entry['type']),
             );
             foreach ($entry['blocked_by'] as $blocker) {
                 $this->assertTrue(
                     str_starts_with((string) $blocker, 'Kumwe\\App\\'),
-                    sprintf('Skipped type %s names a non-App blocker.', $entry['type']),
+                    sprintf('Retained type %s names a non-App blocker.', $entry['type']),
                 );
             }
         }
     }
 
     /**
-     * Load the committed alias map.
+     * Load the committed migration map.
      *
-     * @return  array{aliases: array<string, string>, skipped: list<array{type: string,
+     * @return  array{moved: array<string, string>, retained: list<array{type: string,
      *          blocked_by: list<string>}>, rules: list<array{from: string, to: string}>}  Decoded map.
      *
-     * @since   0.1.0
+     * @since   0.1.1
      */
     private function map(): array
     {
-        $path = dirname(__DIR__, 2) . '/docs/alias-map.json';
+        $path = dirname(__DIR__, 2) . '/docs/migration-map.json';
         $map = json_decode((string) file_get_contents($path), true);
-        $this->assertTrue(is_array($map), 'docs/alias-map.json must decode.');
+        $this->assertTrue(is_array($map), 'docs/migration-map.json must decode.');
         $this->assertSame(
-            'kumwe-extension-sdk-alias-map-v1',
+            'kumwe-extension-sdk-migration-map-v1',
             $map['format'] ?? null,
-            'The alias map must declare its format.',
+            'The migration map must declare its format.',
         );
 
-        /** @var array{aliases: array<string, string>, skipped: list<array{type: string,
+        /** @var array{moved: array<string, string>, retained: list<array{type: string,
          *      blocked_by: list<string>}>, rules: list<array{from: string, to: string}>} $map */
         return $map;
     }

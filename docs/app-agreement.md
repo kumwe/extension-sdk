@@ -22,21 +22,25 @@ this states what a consumer may rely on and what it owes.
    same values the App's `extension:contract` gate verifies. A byte of drift between the two is a
    release-blocking defect on whichever side moved.
 
-## The alias contract
+## The canonical-name contract
 
-1. Every pinned `Kumwe\App\...` FQCN in the classification resolves, forever. The App carries a
-   `class_alias` shim per pinned name, mapping it to the canonical `Kumwe\Extension\...` type.
-   Because `class_alias` creates one class under two names, `instanceof`, type declarations,
-   reflection, and serialized references behave identically under either name.
-2. The shim file is **generated from the classification**, never hand-maintained, so a public
-   type cannot be missed; a completeness check that every classified public type resolves under
-   both names runs in the App's gate.
-3. The aliases are extension API. Removing one, or changing what it points to, is a breaking
-   change the contract forbids — the withdrawn list exists for surface that was never
-   load-bearing, and an alias is load-bearing by definition.
-4. New public types are born canonical: they appear under `Kumwe\Extension\...` only and receive
-   no `Kumwe\App\...` alias. The alias set is closed at extraction and only ever shrinks by the
-   ordinary generation-withdrawal rules, which for aliases means never.
+1. The canonical `Kumwe\Extension\...` names are the only names. The App consumes them directly:
+   its adoption change migrates every reference — imports, FQCN strings, docblocks, and its
+   classification records — to canonical names and retires every historical `Kumwe\App\...`
+   name. No translation layer exists, and none ever will: a historical name does not resolve
+   after adoption.
+2. The migration map ([`migration-map.json`](migration-map.json)) is **generated from the
+   classification**, never hand-maintained, so a public type cannot be missed: every classified
+   public type is recorded in exactly one of `moved` — its canonical name here, the rename the
+   adoption change performs on every reference — or `retained` — its App retention with the
+   closure members that block it.
+3. The classification's recorded FQCNs are re-recorded at canonical names **once**, in the
+   adoption change, as a deliberate generation action — legitimate because no third-party
+   extension was ever published against the historical names. The six signed compatibility
+   fixture generations remain frozen signed bytes; replayed, they are the compatibility proof,
+   with the App's full suite green and its assertions unchanged.
+4. New public types are born canonical: they appear under `Kumwe\Extension\...` only. There is
+   no second namespace for any public type, existing or new.
 
 ## The shared-inspector invariant
 

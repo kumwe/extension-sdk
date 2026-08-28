@@ -23,33 +23,35 @@ App decides and enforces; the SDK verifies and reports. The SDK holds no authori
 and no App domain imports. The full statement of scope — including the three never-clauses — is
 law in [`CHARTER.md`](CHARTER.md).
 
-## The drop-in promise
+## The canonical names
 
-The extension API this SDK carries already ships inside Kumwe App, pinned under `Kumwe\App\...`
-fully qualified class names. Extraction changes where the code lives, never what an extension
-observes:
+The extension API this SDK carries already ships inside Kumwe App, historically declared under
+`Kumwe\App\...` fully qualified class names. The canonical `Kumwe\Extension\...` names are the
+only names — no second namespace, no translation layer, ever:
 
-- canonical names move to `Kumwe\Extension\...` in this repository;
-- the App keeps a `class_alias` shim for every pinned `Kumwe\App\...` FQCN, permanently;
-- the App's signed compatibility fixtures, across every manifest generation, are replayed
-  unmodified as the proof that nothing observable changed.
+- canonical names live under `Kumwe\Extension\...` in this repository;
+- the App imports these names directly: its adoption change migrates every reference — imports,
+  FQCN strings, docblocks, and its classification records — to canonical names and retires every
+  historical `Kumwe\App\...` name;
+- the App's signed compatibility fixtures, across every manifest generation, remain frozen signed
+  bytes, replayed as the proof that nothing observable changed.
 
-No published extension recompiles, re-declares, or breaks. The App becomes consumer #1 of this
-package, pinning it exactly; the agreement is recorded in
-[`docs/app-agreement.md`](docs/app-agreement.md).
+Retiring the historical names is legitimate because no third-party extension was ever published
+against them. The App becomes consumer #1 of this package, pinning it exactly; the agreement is
+recorded in [`docs/app-agreement.md`](docs/app-agreement.md).
 
 ## Status
 
-**Extracted, awaiting adoption** — the frozen contract artifacts are vendored and
+**Extracted and published, awaiting adoption** — the frozen contract artifacts are vendored and
 digest-verified under `resources/` (E-1); the portable public contract types live under
-`Kumwe\Extension\` with the generated App-side alias plan in
-[`docs/alias-map.json`](docs/alias-map.json) (E-2); the author toolchain — scaffold,
+`Kumwe\Extension\` with the generated migration map in
+[`docs/migration-map.json`](docs/migration-map.json) (E-2); the author toolchain — scaffold,
 deterministic build, sign, inspect, conformance — is extracted with byte-determinism and
-findings-equality proofs against the App's recorded builds and findings (E-3); and the
-conformance runner is self-contained, requiring PHP and extensions only (E-4). The remaining
-phases — the App consuming this package, then Packagist — are tracked in
-[`docs/roadmap.md`](docs/roadmap.md). Until they land, Kumwe App's in-tree implementation
-remains the authority the App itself runs on.
+findings-equality proofs against the App's recorded builds and findings (E-3); the conformance
+runner is self-contained, requiring PHP and extensions only (E-4); and the package is live on
+Packagist with release automation (E-6). The remaining phase — the App consuming this package —
+is tracked in [`docs/roadmap.md`](docs/roadmap.md). Until it lands, Kumwe App's in-tree
+implementation remains the authority the App itself runs on.
 
 ## Checking your work
 

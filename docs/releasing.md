@@ -22,5 +22,5 @@ Version policy:
 - **Minor** — new capability that no existing consumer must act on; a contract re-pin that adds
   a generation without moving any existing surface.
 - **Major** — a change a consumer must act on; the one-implementation findings invariant and the
-  App agreement's alias table make any observable difference a major by definition.
+  App agreement's canonical-name contract make any observable difference a major by definition.
 - While the extraction is settling, the SDK stays `0.x` and the App pins exactly.

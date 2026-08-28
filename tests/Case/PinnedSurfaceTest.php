@@ -24,11 +24,11 @@ use ReflectionUnionType;
 /**
  * Compares each moved type against the vendored compatibility pin that froze its members.
  *
- * The pin fixtures record method signatures and enum cases under the frozen `Kumwe\App` names; this
- * test translates every name through the alias map and holds the canonical `Kumwe\Extension` type to
- * exactly those members, using the same signature grammar the App's own compatibility gate renders.
- * A pinned type the alias map does not move stays the App's to assert and is skipped here; the test
- * fails if that skipping ever leaves nothing to prove.
+ * The pin fixtures record method signatures and enum cases under the historical `Kumwe\App` names;
+ * this test translates every name through the migration map's moved set and holds the canonical
+ * `Kumwe\Extension` type to exactly those members, using the same signature grammar the App's own
+ * compatibility gate renders. A pinned type the migration map retains stays the App's to assert and
+ * is passed over here; the test fails if that ever leaves nothing to prove.
  *
  * @since  0.1.0
  */
@@ -43,7 +43,7 @@ final class PinnedSurfaceTest extends TestCase
      */
     public function testMovedPinnedInterfacesKeepTheirSignatures(): void
     {
-        $aliases = $this->aliases();
+        $moved = $this->movedNames();
         $checked = 0;
         foreach ($this->pinFixtures() as $file => $fixture) {
             $interfaces = $fixture['interfaces'] ?? [];
@@ -51,7 +51,7 @@ final class PinnedSurfaceTest extends TestCase
                 $interfaces[$fixture['interface']] = $fixture['methods'];
             }
             foreach ($interfaces as $appName => $expected) {
-                $target = $aliases[$appName] ?? null;
+                $target = $moved[$appName] ?? null;
                 if ($target === null) {
                     continue;
                 }
@@ -65,7 +65,7 @@ final class PinnedSurfaceTest extends TestCase
                         $actual[] = $this->signature($method);
                     }
                 }
-                $translated = array_map(fn (string $line): string => $this->translate($line, $aliases), $expected);
+                $translated = array_map(fn (string $line): string => $this->translate($line, $moved), $expected);
                 sort($actual, SORT_STRING);
                 sort($translated, SORT_STRING);
                 $this->assertSame(
@@ -88,11 +88,11 @@ final class PinnedSurfaceTest extends TestCase
      */
     public function testMovedPinnedEnumsKeepTheirCases(): void
     {
-        $aliases = $this->aliases();
+        $moved = $this->movedNames();
         $checked = 0;
         foreach ($this->pinFixtures() as $file => $fixture) {
             foreach ($fixture['enums'] ?? [] as $appName => $expected) {
-                $target = $aliases[$appName] ?? null;
+                $target = $moved[$appName] ?? null;
                 if ($target === null) {
                     continue;
                 }
@@ -145,12 +145,12 @@ final class PinnedSurfaceTest extends TestCase
     {
         $fixtures = $this->pinFixtures();
         $fixture = $fixtures['content-translation-association-v1.json'];
-        $aliases = $this->aliases();
-        $target = $aliases[$fixture['association_class']] ?? null;
+        $moved = $this->movedNames();
+        $target = $moved[$fixture['association_class']] ?? null;
         $this->assertSame(
             \Kumwe\Extension\Spi\Contribution\TranslationSetItemAssociation::class,
             $target,
-            'The association class must be moved by the alias map.',
+            'The association class must be moved by the migration map.',
         );
 
         $example = $fixture['group_derivation']['example'];
@@ -198,35 +198,35 @@ final class PinnedSurfaceTest extends TestCase
     }
 
     /**
-     * Load the alias map's moved-name translations.
+     * Load the migration map's moved-name translations.
      *
-     * @return  array<string, string>  Canonical name by frozen `Kumwe\App` name.
+     * @return  array<string, string>  Canonical name by historical `Kumwe\App` name.
      *
-     * @since   0.1.0
+     * @since   0.1.1
      */
-    private function aliases(): array
+    private function movedNames(): array
     {
-        $map = json_decode((string) file_get_contents(dirname(__DIR__, 2) . '/docs/alias-map.json'), true);
-        $this->assertTrue(is_array($map) && is_array($map['aliases'] ?? null), 'The alias map must decode.');
+        $map = json_decode((string) file_get_contents(dirname(__DIR__, 2) . '/docs/migration-map.json'), true);
+        $this->assertTrue(is_array($map) && is_array($map['moved'] ?? null), 'The migration map must decode.');
 
-        return $map['aliases'];
+        return $map['moved'];
     }
 
     /**
      * Rewrite the `Kumwe\App` names inside one pinned signature line to their canonical names.
      *
-     * @param   string                 $line     Signature line as the pin fixture records it.
-     * @param   array<string, string>  $aliases  Canonical name by frozen name.
+     * @param   string                 $line   Signature line as the pin fixture records it.
+     * @param   array<string, string>  $moved  Canonical name by historical name.
      *
      * @return  string  The line with every moved name translated.
      *
      * @since   0.1.0
      */
-    private function translate(string $line, array $aliases): string
+    private function translate(string $line, array $moved): string
     {
         return (string) preg_replace_callback(
             '/Kumwe\\\\App\\\\[A-Za-z0-9_\\\\]+/',
-            static fn (array $match): string => $aliases[$match[0]] ?? $match[0],
+            static fn (array $match): string => $moved[$match[0]] ?? $match[0],
             $line,
         );
     }
@@ -296,7 +296,7 @@ final class PinnedSurfaceTest extends TestCase
     }
 
     /**
-     * Render named, union, and intersection reflection types without source-context aliases.
+     * Render named, union, and intersection reflection types without source-context import abbreviations.
      *
      * @param   ReflectionType  $type  Reflected type declaration.
      *

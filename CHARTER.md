@@ -41,19 +41,27 @@ tests it passes.
    never its owner and never its dependency. The dependency arrow points one way: the App requires
    the SDK.
 
-## Drop-in, not mutation
+## Canonical names, not mutation
 
-The extension API this SDK carries already exists, pinned under `Kumwe\App\...` fully qualified
-class names — the classification currently lists 122 public types, 34 of them byte-pinned by
-compatibility fixtures — and those names are frozen extension API. The extraction therefore works
-like this, and only like this:
+The extension API this SDK carries already exists in Kumwe App, historically declared under
+`Kumwe\App\...` fully qualified class names — the classification currently lists 122 public
+types, 34 of them byte-pinned by compatibility fixtures. The extraction therefore works like
+this, and only like this:
 
-- The canonical namespace is `Kumwe\Extension\...`, owned by this repository.
-- The App keeps a `class_alias` shim for every pinned `Kumwe\App\...` FQCN, so no published
-  extension ever recompiles, re-declares, or breaks. The aliases are permanent extension API.
+- The canonical namespace is `Kumwe\Extension\...`, owned by this repository, and the canonical
+  names are the only names. The App carries no translation layer of any kind, ever: no
+  historical name survives its adoption change, and no mechanism that would let one resolve will
+  ever ship.
+- The App consumes the canonical names directly. Its adoption change migrates every reference —
+  imports, FQCN strings, docblocks, and its classification records — to canonical names, retires
+  every historical `Kumwe\App\...` name, and deletes its in-tree copies. Retiring the historical
+  names is legitimate because no third-party extension was ever published against them; the
+  classification's recorded FQCNs are re-recorded at canonical names once, as a deliberate
+  generation action.
 - The proof that nothing observable changed is the App's existing signed compatibility fixtures
-  across all manifest generations, replayed unmodified: build, sign, admit, and drive the full
-  lifecycle exactly as before the extraction.
+  across all manifest generations — six signed generations that remain frozen signed bytes —
+  replayed: build, sign, admit, and drive the full lifecycle exactly as before the extraction,
+  with the App's full suite green and its assertions unchanged.
 
 The App becomes consumer #1 of this package. Extraction lands in reviewed phases recorded in
 [`docs/roadmap.md`](docs/roadmap.md); until a phase lands, the App's in-tree code remains the
@@ -79,7 +87,7 @@ testable obligation in [`docs/app-agreement.md`](docs/app-agreement.md).
   until the phase that moves them lands.
 - **With Kumwe App as consumer #1**: the App pins this package exactly; a contract change reaches
   the App only as a deliberate re-pin with its own review and evidence. The agreement — pin
-  protocol, alias contract, shared-inspector obligation — is recorded in
+  protocol, canonical-name contract, shared-inspector obligation — is recorded in
   [`docs/app-agreement.md`](docs/app-agreement.md), written so a second consumer needs no new
   agreement.
 
