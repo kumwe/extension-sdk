@@ -8,7 +8,8 @@
             "contract": "docs/extension-contract",
             "fixtures/generations": "tests/Fixtures/ExtensionApi/generations",
             "fixtures/schemas/schema-N": "tests/Fixtures/ExtensionApi/schema-N",
-            "fixtures/pins": "tests/Fixtures/ExtensionApi"
+            "fixtures/pins": "tests/Fixtures/ExtensionApi",
+            "extension-scaffold": "resources/extension-scaffold"
         }
     },
     "files": [
@@ -23,6 +24,106 @@
         {
             "file": "contract/generations.json",
             "sha256": "4e17d4805b82b47a7e0de8e957d2d4e8e160fd6a6209922e1a3a748b65e32c37"
+        },
+        {
+            "file": "extension-scaffold/complete-component/.gitignore.tpl",
+            "sha256": "717fcdbfa0487d7e19357fb2cb7b36b7fee79a128d1f74bae65a8d0de9835bec"
+        },
+        {
+            "file": "extension-scaffold/complete-component/README.md.tpl",
+            "sha256": "e41a176205a5c14bddca904e904d9ced23b1bafad6dcf6127843fe13aa3f20be"
+        },
+        {
+            "file": "extension-scaffold/complete-component/composer.json.tpl",
+            "sha256": "d671a6fff43b87b3b9d75d860a668bfecb7106c10c7a09000d0aa54956e97018"
+        },
+        {
+            "file": "extension-scaffold/complete-component/docs/authoring.md.tpl",
+            "sha256": "4a0b3317612cd59a0b49d3610e9130ee1fcc71d73b88a5fa3c541a154624b3a4"
+        },
+        {
+            "file": "extension-scaffold/complete-component/docs/operations.md.tpl",
+            "sha256": "5dc511482f12d8f53d3730f882048215ffba7ced16d9357cd9199b54f79ff10d"
+        },
+        {
+            "file": "extension-scaffold/complete-component/kumwe.json.tpl",
+            "sha256": "ad25d3d0e09b2778401cbbf31121e92d133563f593fb25b14d647f97900a2961"
+        },
+        {
+            "file": "extension-scaffold/complete-component/phpunit.xml.dist.tpl",
+            "sha256": "1ee222932f3de13f2d7e71b7c016b9ea8b7810729a88f70a595c45b924f67c84"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Application/OverviewService.php.tpl",
+            "sha256": "19e78811463fcb6f6a16b5e8e3cfe03657437429eba9284b8eb1ae1f17ac914c"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Definition/BusinessDefinitions.php.tpl",
+            "sha256": "c37a6cd37e93729d757de3505e099c5dc92487053038578a92baff200ec60d77"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Delivery/Administrator/OverviewHandler.php.tpl",
+            "sha256": "fb95dff36405d111b17dbc6cbee99ce62f7f6efb7c1eb00fe7dab53d46313878"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Delivery/Administrator/OverviewHandlerFactory.php.tpl",
+            "sha256": "c69f13fb36d1fc8898dc68c9d2289eed03b8be44d3d5720888c382765db36364"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Delivery/Portal/OverviewHandler.php.tpl",
+            "sha256": "7c2731792a147da25c750c212cb9ccc5da6b67d8ffaeb9ce52269ea054b53670"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Delivery/Portal/OverviewHandlerFactory.php.tpl",
+            "sha256": "6f2168a82d73daf033fccce36bc8069c2be03a769c1e64f29720fbd600184942"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Integration/DigestJobHandler.php.tpl",
+            "sha256": "ca24cbf8c2b0a6b341481cfa27647bfc3b9023b01ee981bfc71709dd08d479af"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Integration/IntegrationDefinitions.php.tpl",
+            "sha256": "b301de7a2d4d32422b5df5c5845f50adf26e566cd75efdaac0350a04087154df"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Integration/IntegrationLedger.php.tpl",
+            "sha256": "45afe8a0243b957bb8ff61ddb3b1b93e023e398597fd8a104344142135c31f02"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Integration/ItemDomainListener.php.tpl",
+            "sha256": "714fd41d08c5bd99b3d49bed0bb777de0dcaddaa5a595ce87ec45810b53e354d"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Integration/ItemIntegrationConsumer.php.tpl",
+            "sha256": "67308c03e07283d84c4b771e2b2a4d38126bca5ded4281bedd0d02ebd2ec4698"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Integration/ItemProjectionBuilder.php.tpl",
+            "sha256": "3887268393c606f720ce3ab2fe59db8d35d185e28affa4a6154f8ad8ef73ae19"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Migration/CreateComponentRecords.php.tpl",
+            "sha256": "29b6ee38e21ef1a368f53dbe861adc06677d78e494e88282c247f7af1707c3d8"
+        },
+        {
+            "file": "extension-scaffold/complete-component/src/Provider.php.tpl",
+            "sha256": "a6e54e0ed315ba104250c07b3571c5099ab2bf5d826fb00ea0d02c4b3912bb2d"
+        },
+        {
+            "file": "extension-scaffold/complete-component/templates/views/administrator/index.twig.tpl",
+            "sha256": "a5088b382548d14f1d59ab9aa55f2bfbdb62ef648a25553024e4318b4dd26e00"
+        },
+        {
+            "file": "extension-scaffold/complete-component/templates/views/portal/index.twig.tpl",
+            "sha256": "17d9b06e2f4e25face7cf290016632aff41bd83e8a8910b558994ba91bd6a79e"
+        },
+        {
+            "file": "extension-scaffold/complete-component/tests/IntegrationContributionTest.php.tpl",
+            "sha256": "5297be3550f1c2f3e5634ca08aa98fc9b355dff32fd74813a8a46dec272b134b"
+        },
+        {
+            "file": "extension-scaffold/complete-component/tests/PackageDefinitionTest.php.tpl",
+            "sha256": "cb311731b06c933944765d406edb3bf65371e8b9ab2ce8de9174e0871f4f8141"
         },
         {
             "file": "fixtures/generations/manifest-1/README.md",

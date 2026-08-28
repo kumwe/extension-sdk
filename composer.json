@@ -9,7 +9,10 @@
     "source": "https://github.com/kumwe/extension-sdk"
   },
   "require": {
-    "php": "^8.5"
+    "php": "^8.5",
+    "ext-json": "*",
+    "ext-sodium": "*",
+    "ext-zip": "*"
   },
   "autoload": {
     "psr-4": {
