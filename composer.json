@@ -24,10 +24,12 @@
   "scripts": {
     "lint": "php tools/lint.php",
     "docs": "php tools/check-docblocks.php",
+    "contract": "php tools/verify-contract.php",
     "test": "php tests/run.php",
     "check": [
       "@lint",
       "@docs",
+      "@contract",
       "@test"
     ]
   },
