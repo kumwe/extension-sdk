@@ -41,9 +41,11 @@ package, pinning it exactly; the agreement is recorded in
 ## Status
 
 **Extracting** — the frozen contract artifacts are vendored and digest-verified under
-`resources/` (E-1), and the portable public contract types live under `Kumwe\Extension\` with
-the generated App-side alias plan in [`docs/alias-map.json`](docs/alias-map.json) (E-2); the
-remaining extraction phases are tracked in [`docs/roadmap.md`](docs/roadmap.md). Until a phase
+`resources/` (E-1); the portable public contract types live under `Kumwe\Extension\` with the
+generated App-side alias plan in [`docs/alias-map.json`](docs/alias-map.json) (E-2); and the
+author toolchain — scaffold, deterministic build, sign, inspect, conformance — is extracted with
+byte-determinism and findings-equality proofs against the App's recorded builds and findings
+(E-3). The remaining phases are tracked in [`docs/roadmap.md`](docs/roadmap.md). Until a phase
 lands, Kumwe App's in-tree implementation remains the authority for that phase's surface.
 
 ## Checking your work

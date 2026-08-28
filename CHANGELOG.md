@@ -9,6 +9,24 @@ clean clone.
 
 ### Added
 
+- E-3: the author toolchain, with byte-determinism and findings-equality proofs. The Manifest
+  layer carries the frozen grammar, the manifest value types, and a bounded structural parse of
+  the contribution surfaces that accepts every vendored fixture generation and reproduces the
+  App's closed key sets, ownership assertions and duplicate refusals — deep semantic validation
+  of business, interface, integration and canonical Studio declarations stays the App's by
+  classification. The Package layer carries the archive reader and streaming content reader, the
+  safety policy, the shared per-file code conformance checks, the admission scanner with its
+  attestation verification (bill of materials and provenance), and the Ed25519 verification
+  primitive. The Toolchain layer carries the scaffolder (template vendored and pinned), the
+  deterministic package builder, the signer with its protected key reader and signature document,
+  the inspector, the static conformance runner, and the lifecycle conformance runner. Proofs:
+  each fixture generation builds twice to identical bytes whose digest equals the App-built
+  archive at the pinned commit; the static and admission findings over all six generations and an
+  eight-case hostile corpus equal the App's recorded findings exactly
+  (`tests/Fixtures/app-parity.json`); the fixture-key signing round-trip verifies through the
+  same sodium primitive admission uses; and the dependency-free UUIDv5 reproduces the App's
+  ramsey-derived values. `ext-json`, `ext-sodium` and `ext-zip` are declared with the code that
+  needs them.
 - E-2: the portable public contract types under `Kumwe\Extension\`. Forty-three of the 122
   classified types move to canonical names — the SPI contribution definitions and registrars, the
   runtime interfaces (`ExtensionContainer`, `ExtensionEvent`, `ExtensionRouteRegistrar`,

@@ -6,15 +6,17 @@ phase is its own reviewed change — extraction never lands as one big move.
 
 ## Position
 
-E-1 and E-2 delivered. The frozen contract records, the manifest schema fixtures, and the six
-signed compatibility fixture generations are vendored under `resources/` as digest-pinned verbatim
-artifacts, verified by `composer contract` inside the check lane. The portable public contract
-types live under `Kumwe\Extension\` at their canonical names, proven against the vendored pin
-fixtures, and `docs/alias-map.json` records for every classified type either its canonical alias
-target or the closure members that keep it in the App for now. Until a phase below lands, Kumwe
-App's in-tree implementation remains the authority for that phase's surface, and the App's
-`docs/extension-contract/` documents remain the authoritative contract record until E-5 re-points
-them.
+E-1 through E-3 delivered. The frozen contract records, the manifest schema fixtures, the six
+signed compatibility fixture generations, and the scaffold template are vendored under
+`resources/` as digest-pinned verbatim artifacts, verified by `composer contract` inside the
+check lane. The portable public contract types live under `Kumwe\Extension\` at their canonical
+names, proven against the vendored pin fixtures, with the App-side alias plan generated into
+`docs/alias-map.json`. The author toolchain — scaffolder, deterministic builder, signer,
+inspector, and the shared findings implementation admission stands on — lives here, proven
+byte-identical to the App's builds and findings by the recorded parity evidence in
+`tests/Fixtures/app-parity.json`. Until a phase below lands, Kumwe App's in-tree implementation
+remains the authority for that phase's surface, and the App's `docs/extension-contract/`
+documents remain the authoritative contract record until E-5 re-points them.
 
 ## The shape of the extraction
 
@@ -30,27 +32,6 @@ permanent `class_alias` shims for every pinned `Kumwe\App\...` FQCN — are law 
 [`app-agreement.md`](app-agreement.md).
 
 ## Phases
-
-### E-3 — the toolchain, with byte-determinism proofs
-
-Move the author toolchain: the scaffolder, the deterministic package builder, the signer and its
-signature document, the inspector/verifier, and the shared findings implementation they and the
-App's admission both stand on — archive reading, package safety limits, and the per-file code
-conformance checks. This is the phase that lands the one-implementation security invariant in
-code: after E-3 there is exactly one implementation of package findings, and it lives here.
-`ext-json`, `ext-zip`, and `ext-sodium` are declared in `composer.json` as this code arrives.
-
-- **Proof**: byte-determinism — each generation fixture package built twice yields identical
-  archive bytes, and those bytes equal the App-built archive for the same input at the pinned
-  source commit; a signer round-trip against the published fixture-key stem verifies with the
-  same admission verifier primitive the App uses; findings equality — the inspector here and the
-  App's in-tree inspector produce identical findings over the fixture corpus and a hostile-archive
-  corpus.
-- **Non-goals**: no trust store, no revocation feeds, no admission decision, no activation — the
-  toolchain reports findings and produces artifacts, nothing more; no runtime Composer
-  dependency arrives with it (the App's scaffolder and bill of materials currently derive
-  name-based UUIDs via `ramsey/uuid`; the extraction reimplements that derivation
-  dependency-free, proven byte-identical by fixture).
 
 ### E-4 — the conformance runner, self-contained
 
