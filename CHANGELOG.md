@@ -5,6 +5,30 @@ All notable changes to `kumwe/extension-sdk` are recorded here, in
 [`docs/roadmap.md`](docs/roadmap.md); a claim lands here only when `composer check` proves it on a
 clean clone.
 
+## [0.1.1] - 2026-08-28
+
+### Changed
+
+- The migration map replaces the alias plan. Kumwe App consumes the canonical
+  `Kumwe\Extension\...` names directly — its adoption change (E-5) migrates every reference
+  (imports, FQCN strings, docblocks, and its classification records) to canonical names and
+  retires every historical `Kumwe\App\...` name; no alias layer exists in the App, and no
+  `class_alias` will ever ship. `docs/alias-map.json` is renamed to `docs/migration-map.json`
+  and its sets to what they are: `moved` records, for each historical FQCN, the canonical name
+  the adoption change renames it to; `retained` records every type that stays in the App with
+  the closure members that block it. The generator (`tools/generate-migration-map.php`) and the
+  suite's map proofs move with it; the map stays mechanically generated, and the regenerated
+  artifact is content-identical to its predecessor apart from the renamed keys and note. The
+  charter, the App agreement, the roadmap, and the README state the direct-consumption doctrine
+  throughout; the six signed compatibility fixture generations remain frozen signed bytes.
+
+### Added
+
+- E-6: Packagist. `kumwe/extension-sdk` is live on Packagist with release automation on the
+  record: every push to `main` re-proves the check lane, a changelog heading that records a new
+  version becomes the tag and the GitHub release, and Packagist follows the tag through its
+  GitHub integration — no registry credential in this repository.
+
 ## [0.1.0] - 2026-08-28
 
 ### Added
@@ -43,10 +67,11 @@ clean clone.
   runtime interfaces (`ExtensionContainer`, `ExtensionEvent`, `ExtensionRouteRegistrar`,
   `RuntimeExtension`, `ExtensionEventRegistrar`), `ExtensionServiceProvider`, the lifecycle
   conformance adapter, and the policy, presentation, preview and integration value types — with
-  namespaces and `@since` adapted and behaviour untouched. `docs/alias-map.json` is generated
-  mechanically from the vendored classification by `tools/generate-alias-map.php`: every
-  classified type lands in exactly one of `aliases` (43, the App-side `class_alias` plan for E-5)
-  or `skipped` (79, each recording the unclassified closure members that keep it App-side).
+  namespaces and `@since` adapted and behaviour untouched. The migration map (so named since
+  0.1.1, which records the renames) is generated mechanically from the vendored classification:
+  every classified type lands in exactly one of the moved set (43, re-recorded at canonical
+  names in the App's adoption change, E-5) or the retained set (79, each recording the
+  unclassified closure members that keep it App-side).
   `Kumwe\Extension\Contract\NameBasedUuid` replaces `ramsey/uuid` for name-based derivation,
   proven byte-identical against the RFC 4122 reference vector and the pinned translation-group
   example value. Moved pinned types are held to their vendored pin fixtures by member-signature
