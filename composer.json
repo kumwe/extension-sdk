@@ -14,6 +14,9 @@
     "ext-sodium": "*",
     "ext-zip": "*"
   },
+  "suggest": {
+    "phpunit/phpunit": "Activates the ExtensionConformanceTestCase and ExtensionLifecycleTestCase bridges in a consuming suite."
+  },
   "autoload": {
     "psr-4": {
       "Kumwe\\Extension\\": "src/"

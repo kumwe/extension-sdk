@@ -40,13 +40,16 @@ package, pinning it exactly; the agreement is recorded in
 
 ## Status
 
-**Extracting** — the frozen contract artifacts are vendored and digest-verified under
-`resources/` (E-1); the portable public contract types live under `Kumwe\Extension\` with the
-generated App-side alias plan in [`docs/alias-map.json`](docs/alias-map.json) (E-2); and the
-author toolchain — scaffold, deterministic build, sign, inspect, conformance — is extracted with
-byte-determinism and findings-equality proofs against the App's recorded builds and findings
-(E-3). The remaining phases are tracked in [`docs/roadmap.md`](docs/roadmap.md). Until a phase
-lands, Kumwe App's in-tree implementation remains the authority for that phase's surface.
+**Extracted, awaiting adoption** — the frozen contract artifacts are vendored and
+digest-verified under `resources/` (E-1); the portable public contract types live under
+`Kumwe\Extension\` with the generated App-side alias plan in
+[`docs/alias-map.json`](docs/alias-map.json) (E-2); the author toolchain — scaffold,
+deterministic build, sign, inspect, conformance — is extracted with byte-determinism and
+findings-equality proofs against the App's recorded builds and findings (E-3); and the
+conformance runner is self-contained, requiring PHP and extensions only (E-4). The remaining
+phases — the App consuming this package, then Packagist — are tracked in
+[`docs/roadmap.md`](docs/roadmap.md). Until they land, Kumwe App's in-tree implementation
+remains the authority the App itself runs on.
 
 ## Checking your work
 
