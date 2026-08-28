@@ -6,7 +6,7 @@ phase is its own reviewed change — extraction never lands as one big move.
 
 ## Position
 
-E-1 through E-3 delivered. The frozen contract records, the manifest schema fixtures, the six
+E-1 through E-4 delivered. The frozen contract records, the manifest schema fixtures, the six
 signed compatibility fixture generations, and the scaffold template are vendored under
 `resources/` as digest-pinned verbatim artifacts, verified by `composer contract` inside the
 check lane. The portable public contract types live under `Kumwe\Extension\` at their canonical
@@ -14,9 +14,13 @@ names, proven against the vendored pin fixtures, with the App-side alias plan ge
 `docs/alias-map.json`. The author toolchain — scaffolder, deterministic builder, signer,
 inspector, and the shared findings implementation admission stands on — lives here, proven
 byte-identical to the App's builds and findings by the recorded parity evidence in
-`tests/Fixtures/app-parity.json`. Until a phase below lands, Kumwe App's in-tree implementation
-remains the authority for that phase's surface, and the App's `docs/extension-contract/`
-documents remain the authoritative contract record until E-5 re-points them.
+`tests/Fixtures/app-parity.json`. The conformance runner is self-contained: an author installs
+this package alone — PHP and extensions only, no `kumwe/app` anywhere in the dependency tree —
+and runs the same static conformance admission enforces, with lifecycle conformance driven
+through a platform-supplied adapter. Until a phase below lands, Kumwe App's in-tree
+implementation remains the authority for that phase's surface, and the App's
+`docs/extension-contract/` documents remain the authoritative contract record until E-5
+re-points them.
 
 ## The shape of the extraction
 
@@ -32,23 +36,6 @@ permanent `class_alias` shims for every pinned `Kumwe\App\...` FQCN — are law 
 [`app-agreement.md`](app-agreement.md).
 
 ## Phases
-
-### E-4 — the conformance runner, self-contained
-
-Make the conformance runner a package an author can actually install: static package conformance
-fully self-contained here, and lifecycle conformance as a port — the SDK defines the runner and
-the adapter interface, and a platform (the App first) supplies the adapter that drives its own
-real deployment. This kills the `kumwe/app ^2.0` pin that makes the in-tree
-`sdk/extension-conformance` package unpublishable: the runner an author's CI needs must not
-require the App. The signed compatibility fixture packages for all six generations are vendored
-here with digest verification, so the runner proves itself on a clean clone.
-
-- **Proof**: on a clean clone with no `kumwe/app` anywhere in the dependency tree, the static
-  conformance runner passes over all six vendored generation fixtures and refuses the hostile
-  corpus; this package's `composer.json` requires PHP and extensions only.
-- **Non-goals**: the SDK does not drive a live platform lifecycle itself — install, activate,
-  upgrade, disable, reactivate, uninstall run only through a platform-supplied adapter; no
-  PHPUnit or any other package joins `require`.
 
 ### E-5 — the App consumes the package
 

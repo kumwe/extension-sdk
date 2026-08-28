@@ -9,6 +9,17 @@ clean clone.
 
 ### Added
 
+- E-4: the conformance runner, self-contained. `ExtensionPackageConformance` is the entry point
+  an author's CI installs and calls: its production defaults wire the same archive reader,
+  safety limits and shared static checks admission runs, from this package alone. The
+  `kumwe/app ^2.0` pin that made the in-tree `sdk/extension-conformance` package unpublishable
+  is dead: `composer.json` requires PHP and extensions only, and the suite proves both that no
+  library source references the host application and that the facade passes all six vendored
+  generation fixtures while refusing the recorded hostile corpus on a clean clone. Lifecycle
+  conformance stays a port — the SDK defines the runner and the adapter interface, and a
+  platform supplies the adapter that drives its own real deployment. The two PHPUnit bridge
+  base classes travel along and activate only where a consuming suite installs
+  `phpunit/phpunit` (suggested, never required).
 - E-3: the author toolchain, with byte-determinism and findings-equality proofs. The Manifest
   layer carries the frozen grammar, the manifest value types, and a bounded structural parse of
   the contribution surfaces that accepts every vendored fixture generation and reproduces the
