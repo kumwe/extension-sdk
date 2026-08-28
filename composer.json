@@ -1,0 +1,37 @@
+{
+  "name": "kumwe/extension-sdk",
+  "description": "The Kumwe extension SDK: the manifest contract, SPI interfaces, classification data and signed compatibility fixtures, plus the author toolchain - scaffold, deterministic build, sign, inspect and conformance-test - sharing one inspection implementation with Kumwe App's admission.",
+  "type": "library",
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/kumwe/extension-sdk",
+  "support": {
+    "issues": "https://github.com/kumwe/extension-sdk/issues",
+    "source": "https://github.com/kumwe/extension-sdk"
+  },
+  "require": {
+    "php": "^8.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Kumwe\\Extension\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Kumwe\\Extension\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "lint": "php tools/lint.php",
+    "docs": "php tools/check-docblocks.php",
+    "test": "php tests/run.php",
+    "check": [
+      "@lint",
+      "@docs",
+      "@test"
+    ]
+  },
+  "config": {
+    "sort-packages": true
+  }
+}
