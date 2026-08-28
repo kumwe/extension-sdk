@@ -6,10 +6,12 @@ phase is its own reviewed change — extraction never lands as one big move.
 
 ## Position
 
-Founded. The charter, the engineering standard, and the dependency-free check lane exist; no
-extracted code ships yet. Until a phase below lands, Kumwe App's in-tree implementation remains
-the authority for that phase's surface, and the App's `docs/extension-contract/` documents remain
-the authoritative contract record.
+E-1 delivered. The frozen contract records, the manifest schema fixtures, and the six signed
+compatibility fixture generations are vendored under `resources/` as digest-pinned verbatim
+artifacts, verified by `composer contract` inside the check lane. Until a phase below lands,
+Kumwe App's in-tree implementation remains the authority for that phase's surface, and the App's
+`docs/extension-contract/` documents remain the authoritative contract record until E-5 re-points
+them.
 
 ## The shape of the extraction
 
@@ -25,22 +27,6 @@ permanent `class_alias` shims for every pinned `Kumwe\App\...` FQCN — are law 
 [`app-agreement.md`](app-agreement.md).
 
 ## Phases
-
-### E-1 — the frozen contract as verified artifacts
-
-Vendor the contract records — the manifest generation records and their schemas, the SPI
-generation records, and the classification data — as artifacts under `resources/`, with a
-dependency-free digest verifier joining `composer check` as the `contract` script. The generations
-are frozen-forever artifacts: the verifier recomputes each generation's `surface_digest` over its
-canonical bytes and refuses any drift, exactly as the App's `extension:contract` gate does.
-
-- **Proof**: byte equality between the vendored artifacts and the App's
-  `docs/extension-contract/generations.json` and `classification.json` at the recorded source
-  commit; every recomputed `surface_digest` matches its recorded value; the App's own
-  `composer extension:contract` stays green, untouched.
-- **Non-goals**: no PHP types move; no manifest parser; the signed compatibility fixture packages
-  stay in the App until E-4; the App's documents are not deleted — they remain authoritative
-  until E-5 re-points them.
 
 ### E-2 — SPI interfaces under `Kumwe\Extension\`, with the App-side alias plan
 

@@ -40,19 +40,20 @@ package, pinning it exactly; the agreement is recorded in
 
 ## Status
 
-**Founding** — the charter, the engineering standard, and the package skeleton are in place;
-extraction phases are tracked in [`docs/roadmap.md`](docs/roadmap.md). No extracted code ships
-yet; until a phase lands, Kumwe App's in-tree implementation remains the authority for that
-phase's surface.
+**Extracting** — the frozen contract artifacts are vendored and digest-verified under
+`resources/` (phase E-1); the remaining extraction phases are tracked in
+[`docs/roadmap.md`](docs/roadmap.md). Until a phase lands, Kumwe App's in-tree implementation
+remains the authority for that phase's surface.
 
 ## Checking your work
 
 The lane is dependency-free and runs on a clean clone with no composer install:
 
 ```bash
-composer check        # lint + docs + test, or run the three directly:
+composer check        # lint + docs + contract + test, or run the four directly:
 php tools/lint.php
 php tools/check-docblocks.php
+php tools/verify-contract.php
 php tests/run.php
 ```
 
