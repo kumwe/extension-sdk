@@ -9,6 +9,19 @@ clean clone.
 
 ### Added
 
+- E-2: the portable public contract types under `Kumwe\Extension\`. Forty-three of the 122
+  classified types move to canonical names — the SPI contribution definitions and registrars, the
+  runtime interfaces (`ExtensionContainer`, `ExtensionEvent`, `ExtensionRouteRegistrar`,
+  `RuntimeExtension`, `ExtensionEventRegistrar`), `ExtensionServiceProvider`, the lifecycle
+  conformance adapter, and the policy, presentation, preview and integration value types — with
+  namespaces and `@since` adapted and behaviour untouched. `docs/alias-map.json` is generated
+  mechanically from the vendored classification by `tools/generate-alias-map.php`: every
+  classified type lands in exactly one of `aliases` (43, the App-side `class_alias` plan for E-5)
+  or `skipped` (79, each recording the unclassified closure members that keep it App-side).
+  `Kumwe\Extension\Contract\NameBasedUuid` replaces `ramsey/uuid` for name-based derivation,
+  proven byte-identical against the RFC 4122 reference vector and the pinned translation-group
+  example value. Moved pinned types are held to their vendored pin fixtures by member-signature
+  and enum-case comparison in the suite.
 - E-1: the frozen contract as verified artifacts. `resources/` vendors the contract records
   (`generations.json`, `classification.json`, the contract README), the four manifest schema pin
   fixtures, the ten compatibility pin documents, and the six signed compatibility fixture

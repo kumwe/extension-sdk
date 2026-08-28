@@ -6,10 +6,13 @@ phase is its own reviewed change — extraction never lands as one big move.
 
 ## Position
 
-E-1 delivered. The frozen contract records, the manifest schema fixtures, and the six signed
-compatibility fixture generations are vendored under `resources/` as digest-pinned verbatim
-artifacts, verified by `composer contract` inside the check lane. Until a phase below lands,
-Kumwe App's in-tree implementation remains the authority for that phase's surface, and the App's
+E-1 and E-2 delivered. The frozen contract records, the manifest schema fixtures, and the six
+signed compatibility fixture generations are vendored under `resources/` as digest-pinned verbatim
+artifacts, verified by `composer contract` inside the check lane. The portable public contract
+types live under `Kumwe\Extension\` at their canonical names, proven against the vendored pin
+fixtures, and `docs/alias-map.json` records for every classified type either its canonical alias
+target or the closure members that keep it in the App for now. Until a phase below lands, Kumwe
+App's in-tree implementation remains the authority for that phase's surface, and the App's
 `docs/extension-contract/` documents remain the authoritative contract record until E-5 re-points
 them.
 
@@ -27,23 +30,6 @@ permanent `class_alias` shims for every pinned `Kumwe\App\...` FQCN — are law 
 [`app-agreement.md`](app-agreement.md).
 
 ## Phases
-
-### E-2 — SPI interfaces under `Kumwe\Extension\`, with the App-side alias plan
-
-Move the public contract types — the SPI interfaces an extension implements, the interfaces it
-calls and resolves, and the value types core exchanges with it — to canonical names under
-`Kumwe\Extension\`, exactly as the classification lists them. Produce the alias map as a generated
-artifact: for every pinned `Kumwe\App\...` FQCN, the canonical name it will alias to, derived
-mechanically from the classification so no type can be missed. The App-side `class_alias` shim
-file is generated from that map and lands in the App at E-5.
-
-- **Proof**: member-signature comparison of every moved type against the pinned fixture bytes
-  (`public-interfaces-v2.json`, `extension-event-v1.json`, and the other pins named by
-  `pinned_by`); a completeness check that the alias map covers every public type in the vendored
-  classification; `composer check` green with the docblock gate now counting real members.
-- **Non-goals**: no behaviour and no implementations — interfaces and value types only; no
-  toolchain; nothing changes in the App yet; types the classification marks internal do not move
-  and never will.
 
 ### E-3 — the toolchain, with byte-determinism proofs
 
