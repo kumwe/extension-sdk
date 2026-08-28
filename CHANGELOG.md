@@ -5,7 +5,7 @@ All notable changes to `kumwe/extension-sdk` are recorded here, in
 [`docs/roadmap.md`](docs/roadmap.md); a claim lands here only when `composer check` proves it on a
 clean clone.
 
-## [Unreleased]
+## [0.1.0] - 2026-08-28
 
 ### Added
 
