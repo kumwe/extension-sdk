@@ -4,71 +4,39 @@ declare(strict_types=1);
 
 namespace @@PHP_NAMESPACE@@\Tests;
 
-use @@PHP_NAMESPACE@@\Definition\BusinessDefinitions;
-use @@PHP_NAMESPACE@@\Provider;
-use Kumwe\App\BusinessDefinition\Domain\EntityTypeDefinition;
-use Kumwe\App\Extension\Contribution\ExtensionContributionRegistrySet;
-use Kumwe\App\Extension\Domain\ExtensionManifest;
-use Kumwe\App\Extension\Runtime\RestrictedExtensionContainer;
+use Kumwe\Extension\Manifest\ExtensionManifest;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Verifies that the package-owned business definition is complete and stable.
- *
- * @since  2.0.0
- */
+/** Proves the signed manifest remains the component's sole complete declaration source. @since 2.0.0 */
 final class PackageDefinitionTest extends TestCase
 {
-    /**
-     * Confirm the scaffold exposes the signed definition handle.
-     *
-     * @return  void
-     *
-     * @since   2.0.0
-     */
-    public function testDefinitionHandleIsStable(): void
-    {
-        $definitions = BusinessDefinitions::all();
-        $json = file_get_contents(dirname(__DIR__) . '/kumwe.json');
-        self::assertIsString($json);
-        $manifest = json_decode($json, true, 64, JSON_THROW_ON_ERROR);
-        self::assertIsArray($manifest);
-        $declared = $manifest['contributions']['business']['definitions'];
-
-        self::assertCount(1, $definitions);
-        self::assertSame('@@EXTENSION_DOTTED@@.item', $definitions[0]->handle);
-        self::assertSame($declared, array_map(
-            static fn (EntityTypeDefinition $definition): array => $definition->toArray(),
-            $definitions,
-        ));
-    }
-
-    /**
-     * Prove the executable provider registers every signed declaration exactly once and no others.
-     *
-     * @return  void
-     *
-     * @since   2.0.0
-     */
-    public function testProviderExactlyReconcilesSignedManifest(): void
+    /** @since 2.0.0 */
+    public function testCanonicalManifestCarriesTheCompleteComponentContract(): void
     {
         $json = file_get_contents(dirname(__DIR__) . '/kumwe.json');
         self::assertIsString($json);
         $manifest = ExtensionManifest::fromJson($json);
-        $declarations = $manifest->contributions();
-        $registries = new ExtensionContributionRegistrySet();
-        $container = new RestrictedExtensionContainer($manifest->identifier()->value(), []);
-        $provider = new Provider();
-        $provider->register($container);
-        $registrar = $registries->registrar($declarations->owner, $declarations);
-        $provider->contribute($registrar, $container);
-        $registrar->complete();
-        $registries->validateBusinessDefinitions();
-        $catalog = $registries->validateIntegrationContributions();
+        $declarations = $manifest->contributions()->declarations();
 
+        self::assertSame('@@EXTENSION_IDENTIFIER@@', $manifest->identifier()->value());
+        self::assertSame(2, $declarations['version']);
+        self::assertSame('@@EXTENSION_DOTTED@@.item', $declarations['business']['definitions'][0]['handle']);
+        self::assertSame(
+            '@@EXTENSION_DOTTED@@.administrator.index',
+            $declarations['administrator']['routes'][0]['name'],
+        );
+        self::assertSame('@@EXTENSION_DOTTED@@.portal.index', $declarations['portal']['routes'][0]['name']);
         self::assertSame(
             '@@EXTENSION_DOTTED@@.item_consumer',
-            $catalog->consumer('@@EXTENSION_DOTTED@@.item_consumer')->identifier(),
+            $declarations['integration']['consumers'][0]['consumer_id'],
+        );
+        self::assertSame(
+            '@@EXTENSION_DOTTED@@.item_projection',
+            $declarations['integration']['projections'][0]['identifier'],
+        );
+        self::assertSame(
+            '@@EXTENSION_DOTTED@@.item_report',
+            $declarations['integration']['reports'][0]['identifier'],
         );
     }
 }

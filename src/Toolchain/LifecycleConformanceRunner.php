@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Toolchain;
 
+use Kumwe\Extension\Package\PackageFinding;
 use RuntimeException;
 use Throwable;
 
@@ -159,7 +160,10 @@ final readonly class LifecycleConformanceRunner
     {
         $report = $this->static->run($archiveFile);
         if (!$report->conforms()) {
-            throw new RuntimeException(implode('; ', $report->violations));
+            throw new RuntimeException(implode('; ', array_map(
+                static fn (PackageFinding $finding): string => $finding->message,
+                $report->findings,
+            )));
         }
     }
 }

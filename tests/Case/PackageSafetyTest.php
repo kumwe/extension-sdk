@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Proves the archive safety gate and the streaming content reader keep the App's contract.
+ * Proves neutral archive findings and snapshot-bound expansion fail closed on hostile ZIP metadata.
  *
- * @since 0.1.0
+ * @since 0.2.0
  */
 
 declare(strict_types=1);
@@ -14,231 +14,485 @@ use InvalidArgumentException;
 use Kumwe\Extension\Package\ArchiveEntry;
 use Kumwe\Extension\Package\ArchiveEntryType;
 use Kumwe\Extension\Package\ArchivePackage;
+use Kumwe\Extension\Package\InspectedPackage;
+use Kumwe\Extension\Package\InvalidPackage;
+use Kumwe\Extension\Package\PackageBillOfMaterials;
+use Kumwe\Extension\Package\PackageLimits;
 use Kumwe\Extension\Package\PackagePath;
-use Kumwe\Extension\Package\PackageSafetyPolicy;
-use Kumwe\Extension\Package\UnsafePackage;
+use Kumwe\Extension\Package\PackageProvenance;
+use Kumwe\Extension\Package\PackageFinding;
+use Kumwe\Extension\Package\PackageSafetyInspector;
 use Kumwe\Extension\Package\ZipArchiveContentReader;
+use Kumwe\Extension\Package\ZipArchiveReader;
 use Kumwe\Extension\Tests\TestCase;
+use Kumwe\Extension\Toolchain\DeterministicPackageBuilder;
+use Kumwe\Extension\Toolchain\PackageInspector;
+use RuntimeException;
+use LogicException;
 use ZipArchive;
 
 /**
- * Assertions carried over from the App's safety-policy and ZIP content-reader suites.
+ * Exercises every archive direction before extraction or execution.
  *
- * The safety policy is judged from the entry table alone; the content reader expands one bounded
- * entry at a time. Both are security surfaces, so the refusal paths are first-class here.
- *
- * @since  0.1.0
+ * @since  0.2.0
  */
 final class PackageSafetyTest extends TestCase
 {
     /**
-     * A unique, bounded package with a root manifest passes the gate.
+     * Unsafe archive metadata is returned as stable facts without an SDK admission outcome.
      *
      * @return  void
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
-    public function testAcceptsAUniqueBoundedPackageWithRootManifest(): void
+    public function testSafetyInspectorReturnsCodedFindings(): void
     {
         $package = new ArchivePackage([
-            $this->file('kumwe.json', 50, 100),
-            $this->file('src/Provider.php', 100, 200),
+            $this->file('kumwe.json', 10, 10),
+            new ArchiveEntry(PackagePath::fromString('link'), ArchiveEntryType::SymbolicLink, 1, 1),
+            $this->file('A', 1, 1),
+            $this->file('a', 1, 1),
+            $this->file('parent', 1, 1),
+            $this->file('parent/child', 1, 1),
+            new ArchiveEntry(PackagePath::fromString('secret.bin'), ArchiveEntryType::File, 1, 1, true),
+            $this->file(
+                PackageBillOfMaterials::PATH,
+                PackageBillOfMaterials::MAXIMUM_BYTES + 1,
+                PackageBillOfMaterials::MAXIMUM_BYTES + 1,
+            ),
+            $this->file(
+                PackageProvenance::PATH,
+                PackageProvenance::MAXIMUM_BYTES + 1,
+                PackageProvenance::MAXIMUM_BYTES + 1,
+            ),
         ]);
 
-        (new PackageSafetyPolicy())->assertSafe($package);
-        $this->assertTrue(true, 'A safe package returns without a refusal.');
+        $findings = (new PackageSafetyInspector())->findings($package, new PackageLimits());
+        $codes = array_map(static fn (PackageFinding $finding): string => $finding->code, $findings);
+
+        $this->assertTrue(in_array('archive.entry.symbolic_link', $codes, true), 'A link is observable.');
+        $this->assertTrue(in_array('archive.entry.encrypted', $codes, true), 'Encryption is observable.');
+        $this->assertTrue(in_array('archive.path.collision', $codes, true), 'A case collision is observable.');
+        $this->assertTrue(in_array('archive.path.file_ancestor', $codes, true), 'A file-parent conflict is observable.');
+        $this->assertTrue(
+            in_array('attestation.sbom.expanded_limit', $codes, true),
+            'The inventory-specific expansion cap is observable before content reads.',
+        );
+        $this->assertTrue(
+            in_array('attestation.provenance.expanded_limit', $codes, true),
+            'The provenance-specific expansion cap is observable before content reads.',
+        );
     }
 
     /**
-     * Links, case-colliding paths, and compression bombs are refused from the entry table alone.
+     * The package path profile rejects traversal, device names, ambiguous punctuation and Unicode aliases.
      *
      * @return  void
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
-    public function testRejectsLinksDuplicatePathsAndCompressionBombs(): void
+    public function testPackagePathsUseOnePortableProfile(): void
     {
-        $unsafePackages = [
-            'symbolic link' => new ArchivePackage([
-                $this->file('kumwe.json', 50, 100),
-                new ArchiveEntry(PackagePath::fromString('link'), ArchiveEntryType::SymbolicLink, 1, 1),
-            ]),
-            'case collision' => new ArchivePackage([
-                $this->file('kumwe.json', 50, 100),
-                $this->file('KUMWE.JSON', 50, 100),
-            ]),
-            'compression bomb' => new ArchivePackage([
-                $this->file('kumwe.json', 1, 101),
-            ]),
-        ];
-
-        foreach ($unsafePackages as $label => $package) {
+        foreach (['../escape', 'NUL.txt', 'trailing.', 'has space.txt', "caf\xC3\xA9.txt"] as $path) {
             $this->assertThrows(
-                static fn () => (new PackageSafetyPolicy())->assertSafe($package),
-                UnsafePackage::class,
-                sprintf('An archive with a %s must be refused.', $label),
+                static fn (): PackagePath => PackagePath::fromString($path),
+                InvalidArgumentException::class,
+                sprintf('Unsafe path %s must be refused.', $path),
             );
         }
+        $this->assertSame(
+            'src/Provider.php',
+            PackagePath::fromString('src/Provider.php')->value(),
+            'Portable source paths survive unchanged.',
+        );
     }
 
     /**
-     * A directory entry claiming payload bytes is an impossible claim and refuses construction.
+     * The staged archive cap is checked before package bytes are hashed or opened as ZIP data.
      *
      * @return  void
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
-    public function testRejectsImpossibleArchiveEntrySizes(): void
+    public function testArchiveFileLimitProducesANeutralFinding(): void
     {
+        $work = $this->workspace();
+        $archive = $this->archive($work, ['kumwe.json' => $this->manifest()]);
+        $failure = $this->assertThrows(
+            static fn (): InspectedPackage => InspectedPackage::inspect(
+                $archive,
+                new PackageLimits(maximumArchiveBytes: 64),
+            ),
+            InvalidPackage::class,
+            'An oversized staged ZIP must be described before hashing or central-directory reads.',
+        );
+        $this->assertSame(
+            'archive.file.limit',
+            $failure instanceof InvalidPackage ? $failure->finding->code : '',
+            'The refusal is exposed as a neutral stable finding.',
+        );
+        $this->removeTree($work);
+    }
+
+    /**
+     * Every later digest refuses an oversized or non-regular replacement before following its bytes.
+     *
+     * @return  void
+     *
+     * @since   0.2.0
+     */
+    public function testSnapshotIdentityRechecksCurrentFileTypeAndArchiveLimit(): void
+    {
+        $work = $this->workspace();
+        $archive = $this->archive($work, ['kumwe.json' => $this->manifest()]);
+        $archiveBytes = filesize($archive);
+        $this->assertTrue(is_int($archiveBytes), 'The staged archive has a measurable size.');
+        $package = InspectedPackage::inspect(
+            $archive,
+            new PackageLimits(maximumArchiveBytes: is_int($archiveBytes) ? $archiveBytes : 1),
+        );
+        file_put_contents($archive, 'x', FILE_APPEND | LOCK_EX);
         $this->assertThrows(
-            static fn (): ArchiveEntry => new ArchiveEntry(
-                PackagePath::fromString('directory'),
-                ArchiveEntryType::Directory,
-                1,
-                0,
+            static fn (): null => $package->assertCurrentArchiveIdentity(),
+            RuntimeException::class,
+            'A digest read must refuse bytes beyond the snapshot archive cap.',
+        );
+
+        $symlinkWork = $this->workspace();
+        $symlinkArchive = $this->archive($symlinkWork, ['kumwe.json' => $this->manifest()]);
+        $symlinkPackage = InspectedPackage::inspect($symlinkArchive);
+        $target = $symlinkWork . '/retained.zip';
+        $this->assertTrue(rename($symlinkArchive, $target), 'The original file is retained under a private path.');
+        $this->assertTrue(symlink($target, $symlinkArchive), 'A link replaces the inspected pathname.');
+        $this->assertThrows(
+            static fn (): null => $symlinkPackage->assertCurrentArchiveIdentity(),
+            RuntimeException::class,
+            'A digest read must reject a symlink even when its target has identical bytes.',
+        );
+
+        $this->removeTree($work);
+        $this->removeTree($symlinkWork);
+    }
+
+    /**
+     * A trailing-slash entry with payload is malformed data, not a zero-byte directory.
+     *
+     * @return  void
+     *
+     * @since   0.2.0
+     */
+    public function testReaderDoesNotEraseDirectoryPayloadSizes(): void
+    {
+        $work = $this->workspace();
+        $archive = $this->archive($work, ['payloadX' => 'not-a-directory']);
+        $zip = new ZipArchive();
+        $this->assertTrue($zip->open($archive) === true, 'The hostile ZIP reopens for mode mutation.');
+        $this->assertTrue(
+            $zip->setExternalAttributesName('payloadX', ZipArchive::OPSYS_UNIX, 0040755 << 16),
+            'The entry claims a directory mode while retaining payload.',
+        );
+        $this->assertTrue($zip->close(), 'The mode-mutated ZIP closes.');
+        $bytes = (string) file_get_contents($archive);
+        $hostile = str_replace('payloadX', 'payload/', $bytes, $replacements);
+        $this->assertSame(2, $replacements, 'Both local and central entry names are made directory-shaped.');
+        file_put_contents($archive, $hostile, LOCK_EX);
+
+        $failure = $this->assertThrows(
+            static fn (): ArchivePackage => (new ZipArchiveReader())->inspect($archive, new PackageLimits()),
+            InvalidPackage::class,
+            'A payload-bearing directory record must be reported as malformed.',
+        );
+        $this->assertSame(
+            'archive.directory.payload',
+            $failure instanceof InvalidPackage ? $failure->finding->code : '',
+            'The finding preserves the hostile direction.',
+        );
+        $this->removeTree($work);
+    }
+
+    /**
+     * Encryption and Unix special-file modes survive central-directory classification as findings.
+     *
+     * @return  void
+     *
+     * @since   0.2.0
+     */
+    public function testReaderSurfacesEncryptionAndSpecialTypes(): void
+    {
+        $work = $this->workspace();
+        $archive = $work . '/hostile.zip';
+        $zip = new ZipArchive();
+        $this->assertTrue($zip->open($archive, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true, 'ZIP opens.');
+        $this->assertTrue($zip->addFromString('kumwe.json', $this->manifest()), 'Manifest is added.');
+        $this->assertTrue($zip->addFromString('fifo', 'x'), 'Special entry is added.');
+        $this->assertTrue(
+            $zip->setExternalAttributesName('fifo', ZipArchive::OPSYS_UNIX, 0010644 << 16),
+            'FIFO mode is recorded.',
+        );
+        $this->assertTrue($zip->addFromString('secret.txt', 'secret'), 'Encrypted entry is added.');
+        $this->assertTrue($zip->addFromString('dos-directory-claim', 'x'), 'DOS attribute entry is added.');
+        $this->assertTrue(
+            $zip->setExternalAttributesName('dos-directory-claim', ZipArchive::OPSYS_DOS, 0x10),
+            'A contradictory DOS directory attribute is recorded.',
+        );
+        $this->assertTrue($zip->setPassword('test-password'), 'ZIP password is configured.');
+        $this->assertTrue(
+            $zip->setEncryptionName('secret.txt', ZipArchive::EM_AES_256),
+            'Entry encryption is recorded.',
+        );
+        $this->assertTrue($zip->close(), 'ZIP closes.');
+
+        $limits = new PackageLimits();
+        $entries = (new ZipArchiveReader())->inspect($archive, $limits);
+        $findings = (new PackageSafetyInspector())->findings($entries, $limits);
+        $codes = array_map(static fn (PackageFinding $finding): string => $finding->code, $findings);
+        $specialPaths = array_map(
+            static fn (PackageFinding $finding): ?string => $finding->code === 'archive.entry.special'
+                ? $finding->path
+                : null,
+            $findings,
+        );
+
+        $this->assertTrue(in_array('archive.entry.special', $codes, true), 'The FIFO is not a regular file.');
+        $this->assertTrue(
+            in_array('dos-directory-claim', $specialPaths, true),
+            'A DOS directory bit cannot contradict a file-shaped entry name.',
+        );
+        $this->assertTrue(in_array('archive.entry.encrypted', $codes, true), 'The encrypted entry is observable.');
+        $this->removeTree($work);
+    }
+
+    /**
+     * Content expansion consumes the inspected checksum and refuses bytes changed afterwards.
+     *
+     * @return  void
+     *
+     * @since   0.2.0
+     */
+    public function testContentReaderIsBoundToTheInspectedSnapshot(): void
+    {
+        $work = $this->workspace();
+        $archive = $this->archive($work, [
+            'README.md' => "# Snapshot\n",
+            'kumwe.json' => $this->manifest(),
+        ]);
+        $inspection = $this->inspector()->inspect($archive);
+        $zip = new ZipArchive();
+        $this->assertTrue($zip->open($archive) === true, 'Inspected ZIP reopens for mutation.');
+        $this->assertTrue($zip->addFromString('README.md', "# Replaced\n"), 'Entry is replaced.');
+        $this->assertTrue($zip->close(), 'Mutated ZIP closes.');
+
+        $this->assertThrows(
+            static fn (): array => iterator_to_array(
+                (new ZipArchiveContentReader())->contents($inspection->package),
+            ),
+            RuntimeException::class,
+            'A changed archive must not be read under an old entry table or manifest.',
+        );
+        $this->removeTree($work);
+    }
+
+    /**
+     * Callers cannot manufacture a clean snapshot from caller-selected metadata or findings.
+     *
+     * @return  void
+     *
+     * @since   0.2.0
+     */
+    public function testSnapshotConstructionIsClosedAndUnsafeBytesRemainReported(): void
+    {
+        $constructor = (new \ReflectionClass(InspectedPackage::class))->getConstructor();
+        $this->assertTrue(
+            $constructor !== null && $constructor->isPrivate(),
+            'The same-bytes snapshot constructor must not be callable by package consumers.',
+        );
+
+        $work = $this->workspace();
+        $archive = $this->archive($work, [
+            'A.php' => "<?php\n",
+            'a.php' => "<?php\n",
+            'kumwe.json' => $this->manifest(),
+        ]);
+        $snapshot = InspectedPackage::inspect($archive);
+        $this->assertTrue(
+            !$snapshot->hasNoSafetyFindings(),
+            'The only public factory derives case-collision findings from the archive itself.',
+        );
+        $codes = array_map(
+            static fn (PackageFinding $finding): string => $finding->code,
+            $snapshot->safetyFindings,
+        );
+        $this->assertTrue(
+            in_array('archive.path.collision', $codes, true),
+            'An unsafe archive cannot be re-described as a clean snapshot.',
+        );
+        $this->assertThrows(
+            static fn (): string => serialize($snapshot),
+            LogicException::class,
+            'Serialization cannot bypass or outlive the same-bytes inspection boundary.',
+        );
+        $this->removeTree($work);
+    }
+
+    /**
+     * Configured limits are carried into expansion rather than replaced by hard-coded defaults.
+     *
+     * @return  void
+     *
+     * @since   0.2.0
+     */
+    public function testOneLimitObjectControlsInspectionAndExpansion(): void
+    {
+        $work = $this->workspace();
+        $archive = $this->archive($work, [
+            'README.md' => str_repeat('x', 200),
+            'kumwe.json' => $this->manifest(),
+        ]);
+        $limits = new PackageLimits(
+            maximumEntryBytes: 512,
+            maximumExpandedBytes: 1_024,
+            maximumCompressedBytes: 1_024,
+            maximumArchiveBytes: 8_192,
+            maximumManifestBytes: 512,
+            maximumBillOfMaterialsBytes: 512,
+            maximumProvenanceBytes: 512,
+            readChunkBytes: 32,
+        );
+        $inspection = (new PackageInspector($limits))->inspect($archive);
+        $contents = iterator_to_array((new ZipArchiveContentReader())->contents($inspection->package));
+
+        $this->assertSame(32, $inspection->package->limits->readChunkBytes, 'The snapshot retains the exact budget.');
+        $this->assertSame(200, strlen($contents['README.md']), 'Expansion succeeds under that same budget.');
+        $this->removeTree($work);
+    }
+
+    /**
+     * Protocol-document readers cannot be configured outside the shared expansion budget.
+     *
+     * @return  void
+     *
+     * @since   0.2.0
+     */
+    public function testProtocolDocumentLimitsStayInsideEntryAndTotalCaps(): void
+    {
+        foreach (['manifest', 'sbom', 'provenance'] as $document) {
+            $arguments = [
+                'maximumEntryBytes' => 512,
+                'maximumExpandedBytes' => 1_536,
+                'maximumManifestBytes' => 512,
+                'maximumBillOfMaterialsBytes' => 512,
+                'maximumProvenanceBytes' => 512,
+                'readChunkBytes' => 128,
+            ];
+            $arguments[match ($document) {
+                'manifest' => 'maximumManifestBytes',
+                'sbom' => 'maximumBillOfMaterialsBytes',
+                'provenance' => 'maximumProvenanceBytes',
+            }] = 513;
+            $this->assertThrows(
+                static fn (): PackageLimits => new PackageLimits(...$arguments),
+                InvalidArgumentException::class,
+                sprintf('The %s cap cannot exceed the shared per-entry ceiling.', $document),
+            );
+        }
+        $this->assertThrows(
+            static fn (): PackageLimits => new PackageLimits(
+                maximumEntryBytes: 512,
+                maximumExpandedBytes: 512,
+                maximumManifestBytes: 513,
+                maximumBillOfMaterialsBytes: 512,
+                maximumProvenanceBytes: 512,
+                readChunkBytes: 128,
             ),
             InvalidArgumentException::class,
-            'A directory with payload bytes must be refused.',
+            'A protocol-document cap cannot exceed the shared total expansion ceiling.',
         );
-    }
 
-    /**
-     * Retaining every expanded entry costs the entry bytes rather than the per-entry ceiling.
-     *
-     * @return  void
-     *
-     * @since   0.1.0
-     */
-    public function testRetainingEveryEntryCostsTheEntryBytesRatherThanTheCeiling(): void
-    {
-        $work = $this->workspace();
-        $archive = $this->archive($work, [
-            'kumwe.sbom.json' => str_repeat('s', 4_096),
-            'kumwe.provenance.json' => str_repeat('p', 4_096),
-            'a.php' => '<?php',
-            'b.php' => '<?php',
-            'c.php' => '<?php',
-            'd.php' => '<?php',
-            'e.php' => '<?php',
-        ]);
-
-        $before = memory_get_usage(true);
-        $retained = [];
-        foreach ((new ZipArchiveContentReader())->contents($archive) as $path => $entry) {
-            $retained[$path] = $entry;
-        }
-        $growth = memory_get_usage(true) - $before;
-
-        $this->assertSame(7, count($retained), 'Every regular entry is yielded.');
-        $this->assertTrue(
-            $growth < 8 * 1024 * 1024,
-            sprintf('Retaining seven small entries must stay small in memory, grew %d bytes.', $growth),
+        $limits = new PackageLimits(
+            maximumEntryBytes: 512,
+            maximumExpandedBytes: 1_536,
+            maximumManifestBytes: 512,
+            maximumBillOfMaterialsBytes: 512,
+            maximumProvenanceBytes: 512,
+            readChunkBytes: 128,
         );
-        $this->removeTree($work);
+        $this->assertSame(512, $limits->maximumManifestBytes, 'Exact shared-limit boundaries remain valid.');
     }
 
     /**
-     * An entry longer than one read chunk is reassembled exactly, in central-directory order.
+     * Generated evidence entries count against both entry and expanded-byte builder ceilings.
      *
      * @return  void
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
-    public function testEntriesSpanningManyChunksAreReassembledByteForByte(): void
+    public function testBuilderReservesAttestationsInsideConfiguredCaps(): void
     {
         $work = $this->workspace();
-        $long = random_bytes(700_000);
-        $archive = $this->archive($work, [
-            'first.txt' => 'first',
-            'long.bin' => $long,
-            'empty.txt' => '',
-        ]);
+        $source = $work . '/source';
+        mkdir($source, 0700);
+        file_put_contents($source . '/kumwe.json', $this->manifest(), LOCK_EX);
 
-        $read = [];
-        foreach ((new ZipArchiveContentReader())->contents($archive) as $path => $entry) {
-            $read[$path] = $entry;
-        }
-
-        $this->assertSame(['first.txt', 'long.bin', 'empty.txt'], array_keys($read), 'Order is the directory order.');
-        $this->assertSame($long, $read['long.bin'], 'A multi-chunk entry reassembles byte for byte.');
-        $this->assertSame('', $read['empty.txt'], 'An empty entry yields empty bytes.');
-        $this->removeTree($work);
-    }
-
-    /**
-     * Directory entries are skipped rather than yielded as empty files.
-     *
-     * @return  void
-     *
-     * @since   0.1.0
-     */
-    public function testDirectoryEntriesAreSkipped(): void
-    {
-        $work = $this->workspace();
-        $archive = $work . '/dirs.zip';
-        $zip = new ZipArchive();
-        $zip->open($archive, ZipArchive::CREATE | ZipArchive::OVERWRITE);
-        $zip->addEmptyDir('src');
-        $zip->addFromString('src/Thing.php', '<?php');
-        $zip->close();
-
-        $read = iterator_to_array((new ZipArchiveContentReader())->contents($archive));
-
-        $this->assertSame(['src/Thing.php'], array_keys($read), 'Only the regular file entry is yielded.');
-        $this->removeTree($work);
-    }
-
-    /**
-     * A file that is not a ZIP archive is refused before anything is expanded.
-     *
-     * @return  void
-     *
-     * @since   0.1.0
-     */
-    public function testANonArchiveIsRefused(): void
-    {
-        $work = $this->workspace();
-        $path = $work . '/not-a-zip.bin';
-        file_put_contents($path, 'plainly not a zip archive');
-
+        $entryLimits = new PackageLimits(maximumEntries: 3);
+        $entryInspector = new PackageInspector($entryLimits);
+        $built = (new DeterministicPackageBuilder($entryInspector))->build($source, $work . '/three.zip');
+        $this->assertSame(
+            3,
+            count($built->inspection->package->paths()),
+            'One authored manifest and two generated attestations fill the configured ceiling.',
+        );
+        file_put_contents($source . '/README.md', "# Overflow\n", LOCK_EX);
         $this->assertThrows(
-            static fn (): array => iterator_to_array((new ZipArchiveContentReader())->contents($path)),
-            InvalidArgumentException::class,
-            'A non-archive must be refused before expansion.',
+            static fn () => (new DeterministicPackageBuilder($entryInspector))
+                ->build($source, $work . '/too-many.zip'),
+            RuntimeException::class,
+            'A second source file cannot consume an attestation-reserved entry.',
+        );
+
+        $byteLimits = new PackageLimits(
+            maximumEntryBytes: 4_194_304,
+            maximumExpandedBytes: 4_194_304,
+        );
+        $byteInspector = new PackageInspector($byteLimits);
+        $this->assertThrows(
+            static fn () => (new DeterministicPackageBuilder($byteInspector))
+                ->build($source, $work . '/too-large.zip'),
+            RuntimeException::class,
+            'The builder reserves the maximum generated evidence bytes inside the total ceiling.',
         );
         $this->removeTree($work);
     }
 
     /**
-     * Build one regular-file entry for a synthetic archive description.
+     * Build one synthetic regular-file entry.
      *
-     * @param   string  $path          Package path of the entry.
-     * @param   int     $compressed    Stored size the header claims.
-     * @param   int     $uncompressed  Expanded size the header claims.
+     * @param   string  $path        Portable package path.
+     * @param   int     $compressed  Declared compressed bytes.
+     * @param   int     $expanded    Declared expanded bytes.
      *
-     * @return  ArchiveEntry  The described entry.
+     * @return  ArchiveEntry  Entry description.
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
-    private function file(string $path, int $compressed, int $uncompressed): ArchiveEntry
+    private function file(string $path, int $compressed, int $expanded): ArchiveEntry
     {
         return new ArchiveEntry(
             PackagePath::fromString($path),
             ArchiveEntryType::File,
             $compressed,
-            $uncompressed,
+            $expanded,
         );
     }
 
     /**
-     * Build a ZIP archive holding the supplied entries.
+     * Write a test ZIP from path-to-bytes entries.
      *
-     * @param   string                 $work     Private directory to write into.
-     * @param   array<string, string>  $entries  Entry bytes keyed by package path.
+     * @param   string                 $work     Private test directory.
+     * @param   array<string, string>  $entries  Entry bytes keyed by ZIP path.
      *
-     * @return  string  Absolute path of the written archive.
+     * @return  string  Canonical archive path.
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
     private function archive(string $work, array $entries): string
     {
@@ -254,11 +508,37 @@ final class PackageSafetyTest extends TestCase
     }
 
     /**
-     * Allocate a private working directory for one test.
+     * Return a minimal strict schema-one manifest.
      *
-     * @return  string  Absolute path of the writable directory.
+     * @return  string  Valid manifest JSON.
      *
-     * @since   0.1.0
+     * @since   0.2.0
+     */
+    private function manifest(): string
+    {
+        return (string) file_get_contents(
+            dirname(__DIR__, 2) . '/resources/fixtures/generations/manifest-1/kumwe.json',
+        );
+    }
+
+    /**
+     * Build the production-neutral package inspector.
+     *
+     * @return  PackageInspector  Snapshot producer using SDK defaults.
+     *
+     * @since   0.2.0
+     */
+    private function inspector(): PackageInspector
+    {
+        return new PackageInspector(new PackageLimits());
+    }
+
+    /**
+     * Allocate a private test directory.
+     *
+     * @return  string  Canonical writable directory.
+     *
+     * @since   0.2.0
      */
     private function workspace(): string
     {
@@ -269,21 +549,28 @@ final class PackageSafetyTest extends TestCase
     }
 
     /**
-     * Remove one private working directory created by this test.
+     * Remove one private directory allocated by this test.
      *
-     * @param   string  $root  Absolute path of the tree to remove.
+     * @param   string  $root  Exact test directory.
      *
      * @return  void
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
     private function removeTree(string $root): void
     {
         if (!str_starts_with($root, sys_get_temp_dir() . '/kumwe-sdk-safety-')) {
             return;
         }
-        foreach (glob($root . '/*') ?: [] as $file) {
-            unlink($file);
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS),
+            \RecursiveIteratorIterator::CHILD_FIRST,
+        );
+        foreach ($iterator as $entry) {
+            if (!$entry instanceof \SplFileInfo) {
+                continue;
+            }
+            $entry->isDir() && !$entry->isLink() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
         }
         rmdir($root);
     }

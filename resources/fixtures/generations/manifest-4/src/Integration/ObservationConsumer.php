@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace KumweContract\ManifestFour\Integration;
 
-use Kumwe\App\Application\Authorization\ExecutionContext;
-use Kumwe\App\BusinessIntegration\Application\IntegrationEventHandler;
-use Kumwe\App\BusinessIntegration\Domain\EventConsumerDefinition;
-use Kumwe\App\BusinessIntegration\Domain\IntegrationEvent;
+use Kumwe\Extension\Spi\Application\ExecutionContext;
+use Kumwe\Extension\Spi\BusinessIntegration\Application\IntegrationEventHandler;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventConsumerDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\IntegrationEvent;
 
 /**
  * Durable, queue-backed consumer half of the manifest-4 compatibility package.
@@ -19,27 +19,12 @@ final readonly class ObservationConsumer implements IntegrationEventHandler
     /**
      * Bind the executable consumer to the declaration the manifest signed.
      *
-     * @param  EventConsumerDefinition  $definition  Exact consumer declaration.
-     * @param  ObservationLedger        $ledger      Process-local evidence sink.
+     * @param  ObservationLedger  $ledger  Process-local evidence sink.
      *
      * @since  2.0.0
      */
-    public function __construct(
-        private EventConsumerDefinition $definition,
-        private ObservationLedger $ledger,
-    ) {
-    }
-
-    /**
-     * Return the signed consumer contract implemented here.
-     *
-     * @return  EventConsumerDefinition  The declaration handed in at construction.
-     *
-     * @since   2.0.0
-     */
-    public function definition(): EventConsumerDefinition
+    public function __construct(private ObservationLedger $ledger)
     {
-        return $this->definition;
     }
 
     /**
@@ -52,8 +37,19 @@ final readonly class ObservationConsumer implements IntegrationEventHandler
      *
      * @since   2.0.0
      */
-    public function handle(IntegrationEvent $event, ExecutionContext $context): void
+    public function handle(
+        EventConsumerDefinition $declaration,
+        IntegrationEvent $event,
+        ExecutionContext $context,
+    ): void
     {
+        if (
+            $declaration->eventType() !== $event->eventType()
+            || !$declaration->acceptsVersion($event->schemaVersion())
+            || !$event->sensitivity()->allowedBy($declaration->sensitivityCeiling())
+        ) {
+            throw new \InvalidArgumentException('The fixture consumer received an undeclared event.');
+        }
         $this->ledger->record('consumer');
     }
 }

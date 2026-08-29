@@ -68,7 +68,7 @@ final readonly class ExtensionManifest
     private array $permissions;
 
     /**
-     * Route declarations left uninterpreted here; each entry is an object, never a list.
+     * Frozen schema-one route metadata. It is inert and never mounts executable routes.
      *
      * @var    list<array<string, mixed>>
      * @since  0.1.0
@@ -76,7 +76,7 @@ final readonly class ExtensionManifest
     private array $routes;
 
     /**
-     * Event listener declarations left uninterpreted here; each entry is an object, never a list.
+     * Frozen schema-one event metadata. It is inert and never subscribes executable listeners.
      *
      * @var    list<array<string, mixed>>
      * @since  0.1.0
@@ -92,7 +92,7 @@ final readonly class ExtensionManifest
     private array $assets;
 
     /**
-     * Typed shell contributions; an empty legacy set when the manifest is schema 1.
+     * Canonical contributions; an empty inert set when the manifest is schema one.
      *
      * @var    ManifestContributions
      * @since  0.1.0
@@ -127,7 +127,7 @@ final readonly class ExtensionManifest
      * @param   array<mixed>               $routes                 Route declaration objects, at most 256.
      * @param   array<mixed>               $events                 Event declaration objects, at most 256.
      * @param   array<mixed>               $assets                 Package-relative asset paths, at most 512.
-     * @param   ?ManifestContributions   $contributions          Strict contributions; null selects the legacy set.
+     * @param   ?ManifestContributions     $contributions          Strict contributions; null selects schema-one.
      * @param   int                        $schemaVersion          Manifest schema revision; 1 through 6 are supported.
      * @param   ?TemplateKisCompatibility  $templateCompatibility  Closed KIS compatibility contract for templates.
      *
@@ -220,8 +220,13 @@ final readonly class ExtensionManifest
         $this->permissions = $this->identifierList($permissions, 'permissions');
         $this->routes = $this->objectList($routes, 'routes');
         $this->events = $this->objectList($events, 'events');
+        if ($schemaVersion > 1 && ($this->routes !== [] || $this->events !== [])) {
+            throw new InvalidArgumentException(
+                'Strict manifests declare routes and events only through canonical contributions.',
+            );
+        }
         $this->assets = $this->pathList($assets, 'assets');
-        $this->contributions = $contributions ?? ManifestContributions::legacy($identifier, $this->permissions);
+        $this->contributions = $contributions ?? ManifestContributions::fromSchemaOne($identifier);
         if ($type === ExtensionType::Template && $templateCompatibility === null) {
             throw new InvalidArgumentException(
                 'A template extension must declare its versioned KIS compatibility contract.',
@@ -384,7 +389,7 @@ final readonly class ExtensionManifest
         /** @var ?array<string, mixed> $templateDeclaration */
         $templateCompatibility = match (true) {
             $templateDeclaration !== null => TemplateKisCompatibility::fromArray($templateDeclaration),
-            $type === ExtensionType::Template && $schema === 1 => TemplateKisCompatibility::legacyKisOne(),
+            $type === ExtensionType::Template && $schema === 1 => TemplateKisCompatibility::schemaOneKis(),
             default => null,
         };
 
@@ -414,7 +419,7 @@ final readonly class ExtensionManifest
     /**
      * Report which manifest revision the package was written against.
      *
-     * @return  int  1 for legacy through 6 for canonical composition contributions, as `fromJson()` accepted it.
+     * @return  int  1 for the frozen first schema through 6 for canonical composition contributions.
      *
      * @since   0.1.0
      */
@@ -548,25 +553,25 @@ final readonly class ExtensionManifest
     }
 
     /**
-     * List the route declarations the package ships, for the route registrar to interpret.
+     * List inert schema-one route metadata retained only for frozen-document inspection.
      *
      * @return  list<array<string, mixed>>  Objects as declared; this type checks their shape, not their content.
      *
      * @since   0.1.0
      */
-    public function routes(): array
+    public function schemaOneRoutes(): array
     {
         return $this->routes;
     }
 
     /**
-     * List the event declarations the package ships, for the runtime loader to interpret.
+     * List inert schema-one event metadata retained only for frozen-document inspection.
      *
      * @return  list<array<string, mixed>>  Objects as declared; this type checks their shape, not their content.
      *
      * @since   0.1.0
      */
-    public function events(): array
+    public function schemaOneEvents(): array
     {
         return $this->events;
     }

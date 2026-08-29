@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Toolchain;
 
-use Kumwe\Extension\Package\PackageSafetyPolicy;
-use Kumwe\Extension\Package\ZipArchiveReader;
+use Kumwe\Extension\Package\PackageLimits;
 
 /**
  * Public SDK facade for repeatable code-free extension package conformance.
  *
  * This is the entry point an author's CI installs and calls, and it is fully self-contained: the
- * production defaults wire the same archive reader, safety limits and shared static checks the
- * platform's admission runs, from this package alone — no host application appears anywhere in the
- * dependency tree. Static package conformance runs entirely here; lifecycle conformance is a port,
+ * production defaults wire the SDK archive reader, safety limits and shared static checks from this
+ * package alone — no host application appears anywhere in the dependency tree. Static package
+ * conformance runs entirely here; lifecycle conformance is a port,
  * driven through whatever `LifecycleConformanceAdapter` the platform under test supplies.
  *
  * @since  0.1.0
@@ -32,7 +31,7 @@ final readonly class ExtensionPackageConformance
     }
 
     /**
-     * Create a facade using the exact archive reader and default limits used by Kumwe installation.
+     * Create a facade using the SDK's documented default archive limits.
      *
      * @return  self  Ready-to-run conformance facade.
      *
@@ -40,10 +39,9 @@ final readonly class ExtensionPackageConformance
      */
     public static function withProductionDefaults(): self
     {
-        return new self(new StaticConformanceRunner(new PackageInspector(
-            new ZipArchiveReader(),
-            new PackageSafetyPolicy(),
-        )));
+        $limits = new PackageLimits();
+
+        return new self(new StaticConformanceRunner(new PackageInspector($limits)));
     }
 
     /**
@@ -51,7 +49,7 @@ final readonly class ExtensionPackageConformance
      *
      * @param   string  $archiveFile  Canonical absolute extension ZIP path.
      *
-     * @return  ConformanceReport  Stable package inventory and all static violations.
+     * @return  ConformanceReport  Stable package inventory, checks and coded findings.
      *
      * @since   0.1.0
      */

@@ -12,7 +12,7 @@ use Kumwe\Extension\Package\PackagePath;
  * to be.
  *
  * An `ArchiveReader` builds these from the archive's header alone, without expanding anything, so
- * `PackageSafetyPolicy` can reject a decompression bomb, a symbolic link or a case-colliding path while
+ * `PackageSafetyInspector` can report a decompression bomb, a symbolic link or a case-colliding path while
  * none of the package's bytes have touched the filesystem. The sizes are therefore the archive's own
  * claims and are not evidence about the eventual output — treating them as budgets to enforce is the
  * point, and trusting them as facts is not.
@@ -34,6 +34,7 @@ final readonly class ArchiveEntry
      *          directory, and never negative.
      * @param   int               $uncompressedBytes  Bytes the header claims the entry expands to; zero for a
      *          directory, and never negative.
+     * @param   bool              $encrypted          Whether the entry requires decryption before expansion.
      *
      * @throws  InvalidArgumentException  When either size is negative, or a directory entry reports payload
      *          bytes.
@@ -45,6 +46,7 @@ final readonly class ArchiveEntry
         private ArchiveEntryType $type,
         private int $compressedBytes,
         private int $uncompressedBytes,
+        private bool $encrypted = false,
     ) {
         if ($compressedBytes < 0 || $uncompressedBytes < 0) {
             throw new InvalidArgumentException('Archive entry sizes cannot be negative.');
@@ -59,7 +61,7 @@ final readonly class ArchiveEntry
      * Return where the entry sits inside the archive.
      *
      * @return  PackagePath  Relative path, already proven free of absolute roots, `..` segments, backslashes
-     *          and control characters; the safety policy compares these case-insensitively to catch
+     *          and control characters; neutral safety inspection compares these case-insensitively to catch
      *          collisions that only a case-insensitive filesystem would notice.
      *
      * @since   0.1.0
@@ -73,7 +75,7 @@ final readonly class ArchiveEntry
      * Return what kind of entry this is.
      *
      * @return  ArchiveEntryType  The classification the reader derived from the archive directory; a
-     *          symbolic link here is grounds for rejecting the whole package.
+     *          symbolic link here is reported before content expansion.
      *
      * @since   0.1.0
      */
@@ -87,7 +89,7 @@ final readonly class ArchiveEntry
      *
      * @return  int  Stored size in bytes, as the archive header reports it; zero for a directory. A file
      *          that claims expanded bytes yet zero stored bytes is treated as an impossible claim and
-     *          rejects the package, since it would otherwise present an unbounded compression ratio.
+     *          produces a finding, since it would otherwise present an unbounded compression ratio.
      *
      * @since   0.1.0
      */
@@ -109,5 +111,17 @@ final readonly class ArchiveEntry
     public function uncompressedBytes(): int
     {
         return $this->uncompressedBytes;
+    }
+
+    /**
+     * Report whether the ZIP entry is encrypted.
+     *
+     * @return  bool  True when the central directory names a non-plaintext encryption method.
+     *
+     * @since   0.2.0
+     */
+    public function encrypted(): bool
+    {
+        return $this->encrypted;
     }
 }

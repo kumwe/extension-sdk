@@ -4,56 +4,77 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Toolchain;
 
+use InvalidArgumentException;
+use Kumwe\Extension\Package\PackageFinding;
+
 /**
- * Stable, machine-readable result of code-free extension package conformance checks.
+ * Stable author-tool result derived from neutral package findings.
  *
- * @since  0.1.0
+ * A host does not consume `conforms()` as admission policy. It consumes the underlying coded findings
+ * and applies its own posture; this author-facing report treats every failed check as nonconforming.
+ *
+ * @since  0.2.0
  */
 final readonly class ConformanceReport
 {
     /**
-     * Record the inspected package and every deterministic check result.
+     * Retain the optional snapshot, objective checks and neutral findings.
      *
-     * @param  PackageInspection    $inspection  Safe package inventory.
-     * @param  array<string, bool>  $checks      Named checks in stable order.
-     * @param  list<string>         $violations  Operator-readable failures in stable order.
+     * @param   ?PackageInspection     $inspection  Snapshot, or null when package data was too malformed.
+     * @param   array<string, bool>    $checks      Named objective outcomes.
+     * @param   list<PackageFinding>   $findings    Stable neutral findings.
      *
-     * @since  0.1.0
+     * @throws  InvalidArgumentException  When findings are not a typed list.
+     *
+     * @since   0.2.0
      */
     public function __construct(
-        public PackageInspection $inspection,
+        public ?PackageInspection $inspection,
         public array $checks,
-        public array $violations,
+        public array $findings,
     ) {
+        if (!array_is_list($findings)) {
+            throw new InvalidArgumentException('Conformance findings must be a list.');
+        }
+        foreach ($findings as $finding) {
+            if (!$finding instanceof PackageFinding) {
+                throw new InvalidArgumentException('Every conformance finding must be typed.');
+            }
+        }
     }
 
     /**
-     * Decide whether every conformance check passed.
+     * Derive the author-tool conformance outcome.
      *
-     * @return  bool  True only when no violation was found.
+     * @return  bool  True only when a complete snapshot has no finding or failed check.
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
     public function conforms(): bool
     {
-        return $this->violations === [] && !in_array(false, $this->checks, true);
+        return $this->inspection !== null
+            && $this->findings === []
+            && !in_array(false, $this->checks, true);
     }
 
     /**
-     * Export the stable JSON-compatible report consumed by CI and the console command.
+     * Export the stable author-facing report.
      *
-     * @return  array<string, mixed>  Package identity, checks, and violations.
+     * @return  array<string, mixed>  Package identity, checks and coded findings.
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
     public function toArray(): array
     {
         return [
-            'format' => 'kumwe-extension-conformance-v1',
+            'format' => 'kumwe-extension-conformance-v2',
             'conforms' => $this->conforms(),
-            'package' => $this->inspection->toArray(),
+            'package' => $this->inspection?->toArray(),
             'checks' => $this->checks,
-            'violations' => $this->violations,
+            'findings' => array_map(
+                static fn (PackageFinding $finding): array => $finding->toArray(),
+                $this->findings,
+            ),
         ];
     }
 }

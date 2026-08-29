@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Minimal assertion base for the dependency-free suite.
+ * Minimal assertion base for the Composer-installed package suite.
  *
  * @since 0.1.0
  */

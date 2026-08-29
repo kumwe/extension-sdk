@@ -66,7 +66,36 @@
     },
     "business": {
       "field_types": [],
-      "definitions": []
+      "definitions": [
+        {
+          "id": "018f22e2-7c8b-7ab0-8f3a-88e8026bc104",
+          "owner": {"type": "extension", "identifier": "kumwe/contract-manifest-four"},
+          "site": "default",
+          "handle": "kumwe.contract-manifest-four.entity",
+          "singular_label": "Observed entity",
+          "plural_label": "Observed entities",
+          "status": "published",
+          "definition_version": 1,
+          "storage_mode": "relational",
+          "identity_strategy": "uuid",
+          "scope": "site",
+          "fields": [
+            {
+              "handle": "id", "label": "ID", "type": "core.uuid", "required": true,
+              "nullable": false, "length": null, "unique": true, "indexed": true,
+              "immutable_after_create": true, "filterable": false, "sortable": false, "order": 0
+            },
+            {
+              "handle": "count", "label": "Count", "type": "core.integer", "required": true,
+              "nullable": false, "length": null, "unique": false, "indexed": true,
+              "filterable": true, "sortable": true, "order": 10
+            }
+          ],
+          "relationships": [],
+          "views": [],
+          "actions": []
+        }
+      ]
     },
     "integration": {
       "event_schemas": [

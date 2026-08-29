@@ -10,8 +10,6 @@
   "migrations": ["@@PHP_NAMESPACE_JSON@@\\Migration\\CreateComponentRecords"],
   "configuration": {"type": "object", "properties": {}},
   "permissions": ["@@EXTENSION_DOTTED@@.access"],
-  "routes": [],
-  "events": [],
   "assets": [],
   "contributions": {
     "version": 2,

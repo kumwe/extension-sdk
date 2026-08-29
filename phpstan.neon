@@ -1,0 +1,10 @@
+parameters:
+    level: max
+    paths:
+        - src
+        - resources/toolchain/autoload-smoke.php
+    tmpDir: var/phpstan
+    reportUnmatchedIgnoredErrors: true
+    # Public constructors deliberately validate values received at runtime even
+    # when their documented author-facing shape is narrower.
+    treatPhpDocTypesAsCertain: false

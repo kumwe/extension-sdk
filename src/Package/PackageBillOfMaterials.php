@@ -26,7 +26,7 @@ use Kumwe\Extension\Contract\NameBasedUuid;
  * evidence rather than an assertion: the package digest covers it, and the detached Ed25519 signature
  * covers the package digest, so the publisher's signature already vouches for the inventory without a
  * second signature format. The document necessarily excludes itself and its provenance sibling from
- * its own component list — a document cannot contain its own digest — and admission verifies that
+ * its own component list — a document cannot contain its own digest — and reconciliation verifies that
  * exclusion rather than assuming it, by requiring every other entry to be listed with a matching
  * digest and every listed component to exist.
  *
@@ -54,7 +54,7 @@ final readonly class PackageBillOfMaterials
     public const string SPEC_VERSION = '1.6';
 
     /**
-     * Largest bill of materials expanded during admission, covering the 4096-entry package limit.
+     * Largest bill of materials expanded during bounded evidence inspection.
      *
      * @var    int
      * @since  0.1.0
@@ -81,6 +81,13 @@ final readonly class PackageBillOfMaterials
         $components = [];
         $rolling = '';
         foreach ($entryDigests as $path => $digest) {
+            if (!is_string($path)) {
+                throw new InvalidArgumentException('A package bill-of-materials path must be a string.');
+            }
+            $path = PackagePath::fromString($path)->value();
+            if (in_array($path, [self::PATH, PackageProvenance::PATH], true)) {
+                throw new InvalidArgumentException('Package attestations cannot inventory themselves.');
+            }
             if (preg_match('/^[a-f0-9]{64}$/D', $digest) !== 1) {
                 throw new InvalidArgumentException('A package bill-of-materials digest must be a SHA-256 value.');
             }
@@ -143,12 +150,11 @@ final readonly class PackageBillOfMaterials
     }
 
     /**
-     * Decode a bill of materials read from a package and refuse a shape admission cannot judge.
+     * Decode the exact canonical CycloneDX profile emitted by this SDK.
      *
-     * The parse is deliberately strict about the few fields verification depends on and deliberately
-     * tolerant of everything else CycloneDX allows, so a document enriched by a future builder still
-     * installs. What it will not accept is a document that is not CycloneDX, is a specification version
-     * this code has not been written against, or carries a component list it cannot read.
+     * This package-level attestation is intentionally narrower than arbitrary CycloneDX. Unknown,
+     * missing or reordered semantic fields would create a second representation of the same inventory,
+     * so they are rejected and profile evolution requires an explicit format revision.
      *
      * @param   string  $json  Raw document bytes read from the package.
      *
@@ -165,10 +171,10 @@ final readonly class PackageBillOfMaterials
         if (strlen($json) > self::MAXIMUM_BYTES) {
             throw new InvalidArgumentException('The package bill of materials exceeds 4 MiB.');
         }
-        $value = json_decode($json, true, 32, JSON_THROW_ON_ERROR);
-        if (!is_array($value) || array_is_list($value)) {
-            throw new InvalidArgumentException('The package bill of materials must be a JSON object.');
-        }
+        $value = self::object(
+            json_decode($json, true, 32, JSON_THROW_ON_ERROR),
+            'document',
+        );
         if (($value['bomFormat'] ?? null) !== 'CycloneDX') {
             throw new InvalidArgumentException('The package bill of materials must declare bomFormat CycloneDX.');
         }
@@ -182,9 +188,140 @@ final readonly class PackageBillOfMaterials
         if (!is_array($components) || !array_is_list($components)) {
             throw new InvalidArgumentException('The package bill of materials must carry a component list.');
         }
+        self::assertCanonicalShape($value);
 
         /** @var array<string, mixed> $value */
-        return new self($value);
+        $document = new self($value);
+        if (!hash_equals($document->toJson(), $json)) {
+            throw new InvalidArgumentException('The package bill of materials is not canonical SDK JSON.');
+        }
+
+        return $document;
+    }
+
+    /**
+     * Require every object in the SDK CycloneDX profile to use its one declared key sequence.
+     *
+     * @param   array<string, mixed>  $document  Decoded CycloneDX document.
+     *
+     * @return  void
+     *
+     * @throws  InvalidArgumentException  When a profile object, list, or key sequence is malformed.
+     *
+     * @since   0.2.0
+     */
+    private static function assertCanonicalShape(array $document): void
+    {
+        self::assertObjectKeys(
+            $document,
+            ['bomFormat', 'specVersion', 'serialNumber', 'version', 'metadata', 'components', 'dependencies'],
+            'document',
+        );
+        $metadata = self::object($document['metadata'] ?? null, 'metadata');
+        self::assertObjectKeys($metadata, ['component', 'tools', 'properties'], 'metadata');
+
+        $root = self::object($metadata['component'] ?? null, 'root component');
+        self::assertObjectKeys($root, ['type', 'bom-ref', 'name', 'version', 'purl'], 'root component');
+
+        $tools = self::object($metadata['tools'] ?? null, 'tools section');
+        self::assertObjectKeys($tools, ['components'], 'tools');
+        $toolComponents = $tools['components'] ?? null;
+        if (!is_array($toolComponents) || !array_is_list($toolComponents) || count($toolComponents) !== 1) {
+            throw new InvalidArgumentException('The package bill of materials must name exactly one builder tool.');
+        }
+        $tool = self::object($toolComponents[0] ?? null, 'builder tool');
+        self::assertObjectKeys($tool, ['type', 'name', 'version'], 'builder tool');
+
+        $properties = $metadata['properties'] ?? null;
+        if (!is_array($properties) || !array_is_list($properties)) {
+            throw new InvalidArgumentException('The package bill-of-materials properties must be a list.');
+        }
+        foreach ($properties as $property) {
+            $property = self::object($property, 'property');
+            self::assertObjectKeys($property, ['name', 'value'], 'property');
+        }
+
+        $components = $document['components'] ?? null;
+        if (!is_array($components) || !array_is_list($components)) {
+            throw new InvalidArgumentException('The package bill of materials must carry a component list.');
+        }
+        foreach ($components as $component) {
+            $component = self::object($component, 'file component');
+            self::assertObjectKeys($component, ['type', 'bom-ref', 'name', 'hashes'], 'file component');
+            $hashes = $component['hashes'] ?? null;
+            if (!is_array($hashes) || !array_is_list($hashes) || count($hashes) !== 1) {
+                throw new InvalidArgumentException('A package bill-of-materials component must carry one hash.');
+            }
+            $hash = self::object($hashes[0] ?? null, 'component hash');
+            self::assertObjectKeys($hash, ['alg', 'content'], 'component hash');
+        }
+
+        $dependencies = $document['dependencies'] ?? null;
+        if (!is_array($dependencies) || !array_is_list($dependencies)) {
+            throw new InvalidArgumentException('The package bill-of-materials dependencies must be a list.');
+        }
+        foreach ($dependencies as $dependency) {
+            $dependency = self::object($dependency, 'dependency');
+            self::assertObjectKeys($dependency, ['ref', 'dependsOn'], 'dependency');
+            if (!is_array($dependency['dependsOn'] ?? null) || !array_is_list($dependency['dependsOn'])) {
+                throw new InvalidArgumentException('A package bill-of-materials dependency target must be a list.');
+            }
+        }
+    }
+
+    /**
+     * Require one decoded JSON object to expose exactly the canonical keys in canonical order.
+     *
+     * @param   array<string, mixed>  $object    Decoded JSON object.
+     * @param   list<string>          $expected  Exact key order.
+     * @param   string                $context   Object name used in the failure message.
+     *
+     * @return  void
+     *
+     * @throws  InvalidArgumentException  When the object key sequence differs.
+     *
+     * @since   0.2.0
+     */
+    private static function assertObjectKeys(array $object, array $expected, string $context): void
+    {
+        if (array_keys($object) !== $expected) {
+            throw new InvalidArgumentException(sprintf(
+                'The package bill-of-materials %s contains unknown, missing, or noncanonical keys.',
+                $context,
+            ));
+        }
+    }
+
+    /**
+     * Normalize one decoded JSON object and reject integer member names.
+     *
+     * @param mixed $value Candidate decoded value.
+     * @param string $context Object name used in the refusal message.
+     *
+     * @return array<string, mixed> Validated object.
+     *
+     * @since 0.2.0
+     */
+    private static function object(mixed $value, string $context): array
+    {
+        if (!is_array($value) || array_is_list($value)) {
+            throw new InvalidArgumentException(sprintf(
+                'The package bill-of-materials %s must be an object.',
+                $context,
+            ));
+        }
+        $object = [];
+        foreach ($value as $key => $member) {
+            if (!is_string($key)) {
+                throw new InvalidArgumentException(sprintf(
+                    'The package bill-of-materials %s must use string keys.',
+                    $context,
+                ));
+            }
+            $object[$key] = $member;
+        }
+
+        return $object;
     }
 
     /**
@@ -215,6 +352,10 @@ final readonly class PackageBillOfMaterials
             if (!is_string($name) || $name === '') {
                 throw new InvalidArgumentException('A bill-of-materials file component names no path.');
             }
+            $name = PackagePath::fromString($name)->value();
+            if (in_array($name, [self::PATH, PackageProvenance::PATH], true)) {
+                throw new InvalidArgumentException('A bill of materials cannot inventory an attestation document.');
+            }
             if (isset($digests[$name])) {
                 throw new InvalidArgumentException(sprintf(
                     'The bill of materials lists %s more than once.',
@@ -231,6 +372,7 @@ final readonly class PackageBillOfMaterials
     /**
      * Compare the document's inventory against the digests actually computed from the package.
      *
+     * @param   ExtensionManifest      $manifest      Manifest carried by the same inspected package.
      * @param   array<string, string>  $entryDigests  Lowercase SHA-256 by package path for every packaged
      *          file except the two attestation documents.
      *
@@ -240,7 +382,7 @@ final readonly class PackageBillOfMaterials
      *
      * @since   0.1.0
      */
-    public function reconcile(array $entryDigests): array
+    public function reconcile(ExtensionManifest $manifest, array $entryDigests): array
     {
         $claimed = $this->fileDigests();
         ksort($entryDigests, SORT_STRING);
@@ -259,6 +401,14 @@ final readonly class PackageBillOfMaterials
             if (!isset($entryDigests[$path])) {
                 $findings[] = sprintf('The bill of materials lists %s, which the package does not carry.', $path);
             }
+        }
+        try {
+            $expected = self::forPackage($manifest, $entryDigests)->document;
+            if ($this->document !== $expected) {
+                $findings[] = 'The bill of materials carries metadata or dependency claims outside the canonical package profile.';
+            }
+        } catch (InvalidArgumentException $failure) {
+            $findings[] = 'The computed package inventory is invalid: ' . $failure->getMessage();
         }
         sort($findings, SORT_STRING);
 

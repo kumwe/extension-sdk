@@ -45,7 +45,7 @@ final readonly class PortalWorkspaceDefinition implements ContributionDefinition
     }
 
     /**
-     * Enforce the bounded extension-compatible contribution grammar, including legacy internal dots.
+     * Enforce the bounded extension-compatible contribution grammar, including established internal dots.
      *
      * @param   string  $identifier  Candidate dotted identifier.
      * @param   string  $kind        Contribution kind named in a rejection.

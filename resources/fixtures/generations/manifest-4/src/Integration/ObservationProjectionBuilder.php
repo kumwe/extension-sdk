@@ -5,73 +5,41 @@ declare(strict_types=1);
 namespace KumweContract\ManifestFour\Integration;
 
 use InvalidArgumentException;
-use Kumwe\App\BusinessReporting\Application\ProjectionBuilder;
-use Kumwe\App\BusinessReporting\Application\ProjectionEvent;
-use Kumwe\App\BusinessReporting\Application\ProjectionWriter;
-use Kumwe\App\BusinessReporting\Domain\ProjectionDefinition;
+use Kumwe\Extension\Spi\BusinessReporting\Application\ProjectionBuilder;
+use Kumwe\Extension\Spi\BusinessReporting\Application\ProjectionEvent;
+use Kumwe\Extension\Spi\BusinessReporting\Application\ProjectionWriter;
+use Kumwe\Extension\Spi\BusinessReporting\Domain\ProjectionDefinition;
 
-/**
- * Rebuildable projection half of the manifest-4 compatibility package.
- *
- * @since  2.0.0
- */
+/** Rebuildable projection executable for the schema-four fixture. @since 2.0.0 */
 final readonly class ObservationProjectionBuilder implements ProjectionBuilder
 {
-    /**
-     * Bind the builder to the rebuild contract the manifest signed.
-     *
-     * @param  ProjectionDefinition  $definition  Active immutable projection declaration.
-     *
-     * @since  2.0.0
-     */
-    public function __construct(private ProjectionDefinition $definition)
-    {
-    }
-
-    /**
-     * Return the signed projection contract implemented here.
-     *
-     * @return  ProjectionDefinition  The declaration handed in at construction.
-     *
-     * @since   2.0.0
-     */
-    public function definition(): ProjectionDefinition
-    {
-        return $this->definition;
-    }
-
-    /**
-     * Replace the projected row for one observation, deterministically and without authoritative reads.
-     *
-     * @param   ProjectionDefinition  $definition  Exact active rebuild contract.
-     * @param   ProjectionEvent       $event       Next ordered source event.
-     * @param   ProjectionWriter      $writer      Replacement-generation writer.
-     *
-     * @return  void
-     *
-     * @throws  InvalidArgumentException  When an event contradicts the signed projection source contract.
-     *
-     * @since   2.0.0
-     */
+    /** @inheritDoc */
     public function apply(
-        ProjectionDefinition $definition,
+        ProjectionDefinition $declaration,
         ProjectionEvent $event,
         ProjectionWriter $writer,
-    ): void {
-        if (
-            $definition->checksum() !== $this->definition->checksum()
-            || $event->type !== 'kumwe.contract-manifest-four.observed'
-            || $event->schemaVersion !== 1
-        ) {
+    ): void
+    {
+        $accepted = false;
+        foreach ($declaration->sources as $source) {
+            if (
+                $source->eventType === $event->type()
+                && in_array($event->schemaVersion(), $source->schemaVersions, true)
+            ) {
+                $accepted = true;
+                break;
+            }
+        }
+        if ($declaration->identifier() !== 'kumwe.contract-manifest-four.activity' || !$accepted) {
             throw new InvalidArgumentException('The compatibility projection received an undeclared source event.');
         }
-        $message = $event->payload['message'] ?? null;
+        $message = $event->payload()['message'] ?? null;
         if (!is_string($message) || $message === '') {
             throw new InvalidArgumentException('The compatibility projection source payload is invalid.');
         }
         $writer->put(
-            ['aggregate_id' => $event->id],
-            ['aggregate_id' => $event->id, 'message' => $message],
+            ['aggregate_id' => $event->id()],
+            ['aggregate_id' => $event->id(), 'message' => $message],
         );
     }
 }

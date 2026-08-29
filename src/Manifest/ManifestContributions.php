@@ -5,11 +5,19 @@ declare(strict_types=1);
 namespace Kumwe\Extension\Manifest;
 
 use InvalidArgumentException;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainListenerDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventConsumerDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\WebhookContributionDefinition;
+use Kumwe\Extension\Spi\BusinessReporting\Domain\ProjectionDefinition;
+use Kumwe\Extension\Spi\Binding\ExecutableBindingRequirements;
 use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldPresentationContribution;
+use Kumwe\Extension\Spi\Contribution\AdministratorNavigationDefinition;
 use Kumwe\Extension\Spi\Contribution\AdministratorRouteDefinition;
 use Kumwe\Extension\Spi\Contribution\AdministratorViewDefinition;
 use Kumwe\Extension\Spi\Contribution\AdministratorWorkspaceDefinition;
 use Kumwe\Extension\Spi\Contribution\CanonicalCompositionKind;
+use Kumwe\Extension\Spi\Contribution\CanonicalCompositionDocument;
 use Kumwe\Extension\Spi\Contribution\CompositionBlockDeclaration;
 use Kumwe\Extension\Spi\Contribution\CompositionDesignVocabularyDeclaration;
 use Kumwe\Extension\Spi\Contribution\CompositionFieldControlDeclaration;
@@ -17,27 +25,21 @@ use Kumwe\Extension\Spi\Contribution\CompositionHostBinding;
 use Kumwe\Extension\Spi\Contribution\CompositionInspectorDeclaration;
 use Kumwe\Extension\Spi\Contribution\CompositionMigrationDeclaration;
 use Kumwe\Extension\Spi\Contribution\CompositionPatternDeclaration;
+use Kumwe\Extension\Spi\Contribution\ContributionDefinition;
 use Kumwe\Extension\Spi\Contribution\ContributionOwner;
 use Kumwe\Extension\Spi\Portal\Contribution\PortalRouteDefinition;
+use Kumwe\Extension\Spi\Portal\Contribution\PortalNavigationDefinition;
 use Kumwe\Extension\Spi\Portal\Contribution\PortalTemplateDefinition;
 use Kumwe\Extension\Spi\Portal\Contribution\PortalWorkspaceDefinition;
 
 /**
- * The contributions one package declares, parsed structurally and bounded, for tooling to report on.
+ * The canonical, owner-checked contribution graph declared by one signed package.
  *
- * This is the SDK's half of the contribution contract. It reproduces the structural layer of the
- * App's manifest contribution parse — the closed key sets per schema generation, the SPI version
- * binding, the per-declaration field grammar, the ownership namespace assertions, and the duplicate
- * refusals — and it constructs the ported declaration types wherever the classification let them
- * move. What it deliberately does not reproduce is the App's deep semantic validation: business
- * definitions, interface-surface conformance, integration payload schemas, and canonical Studio
- * documents are captured as bounded declarations and counted, while their full validation remains
- * the App's at admission and activation, where the authoritative domain types live. Findings the
- * shared inspection produces never depend on that deep layer: reference checks read only the views
- * and portal templates parsed here, and both are the ported byte-equivalent definitions.
+ * Structural grammar, bounded values, executable definitions, duplicate detection and cross-references
+ * are validated once here. A host may add admission policy, but it consumes these exact canonical values
+ * and never reparses them into a second definition graph.
  *
- * Entries are indexed and sorted by identifier exactly as the App's set is, so declaration order
- * never changes what tooling reports.
+ * Entries are indexed and sorted by identifier, so declaration order never changes what tooling reports.
  *
  * @since  0.1.0
  */
@@ -78,8 +80,7 @@ final readonly class ManifestContributions
     /**
      * Recognised capability and resource-policy lifecycle values, `active` being the default.
      *
-     * The vocabulary mirrors the App's authorization lifecycle enum by value, so a manifest the App
-     * accepts is accepted here and one it refuses is refused with the same message.
+     * Hosts may use the same closed values without importing an application-owned authorization type.
      *
      * @var    list<string>
      * @since  0.1.0
@@ -95,24 +96,66 @@ final readonly class ManifestContributions
     public ContributionOwner $owner;
 
     /**
-     * Declare the parsed set; construction goes through `fromManifest()` or `legacy()`.
+     * Declare the parsed set; construction goes through `fromManifest()` or `fromSchemaOne()`.
      *
-     * @param   ContributionOwner                            $ownerValue       Declaring package.
-     * @param   int                                          $spiVersion       Contribution SPI version.
-     * @param   array<string, array<string, mixed>>          $capabilities     Capability declarations by id.
-     * @param   array<string, AdministratorViewDefinition>   $views            Administrator views by name.
-     * @param   array<string, PortalTemplateDefinition>      $portalTemplates  Portal templates by name.
-     * @param   array<string, int>                           $counts           Declared entries per surface.
+     * @param  ContributionOwner                             $ownerValue       Declaring package.
+     * @param  int                                           $spiVersion       Contribution SPI version.
+     * @param  array<string, array<string, mixed>>           $capabilities     Capability declarations by id.
+     * @param  array<string, AdministratorWorkspaceDefinition> $workspaces     Administrator workspaces by id.
+     * @param  array<string, AdministratorNavigationDefinition> $navigation    Administrator navigation by id.
+     * @param  array<string, AdministratorRouteDefinition>    $routes           Administrator routes by name.
+     * @param  array<string, AdministratorViewDefinition>    $views            Administrator views by name.
+     * @param  array<string, PortalWorkspaceDefinition>       $portalWorkspaces Portal workspaces by id.
+     * @param  array<string, PortalNavigationDefinition>      $portalNavigation Portal navigation by id.
+     * @param  array<string, PortalRouteDefinition>           $portalRoutes     Portal routes by name.
+     * @param  array<string, PortalTemplateDefinition>       $portalTemplates  Portal templates by name.
+     * @param  array<string, FieldPresentationContribution>   $fieldPresentations Field presenters by type.
+     * @param  array<string, DomainListenerDefinition>       $domainListeners  Listener definitions by id.
+     * @param  array<string, EventConsumerDefinition>        $eventConsumers   Consumer definitions by id.
+     * @param  array<string, JobContributionDefinition>      $jobs             Job definitions by id.
+     * @param  array<string, ProjectionDefinition>           $projections      Projection definitions by id.
+     * @param  array<string, WebhookContributionDefinition>  $webhooks         Webhook definitions by id.
+     * @param  array<string, CompositionBlockDeclaration>     $compositionBlocks Blocks by id.
+     * @param  array<string, CompositionPatternDeclaration>   $compositionPatterns Patterns by id.
+     * @param  array<string, CompositionFieldControlDeclaration> $compositionFieldControls Controls by id.
+     * @param  array<string, CompositionInspectorDeclaration> $compositionInspectors Inspectors by id.
+     * @param  array<string, CompositionDesignVocabularyDeclaration> $compositionDesignVocabularies Vocabularies by id.
+     * @param  array<string, CompositionMigrationDeclaration> $compositionMigrations Migrations by id.
+     * @param  array<string, CanonicalCompositionDocument>     $canonicalCompositionDocuments Documents by kind and id.
+     * @param  array<string, CompositionHostBinding>           $compositionHostBindings Host bindings by id.
+     * @param  array<string, int>                            $counts           Declared entries per surface.
+     * @param  array<string, mixed>                          $declarations     Validated contribution object.
      *
-     * @since   0.1.0
+     * @since  0.1.0
      */
     private function __construct(
         ContributionOwner $ownerValue,
         private int $spiVersion,
         private array $capabilities = [],
+        private array $workspaces = [],
+        private array $navigation = [],
+        private array $routes = [],
         private array $views = [],
+        private array $portalWorkspaces = [],
+        private array $portalNavigation = [],
+        private array $portalRoutes = [],
         private array $portalTemplates = [],
+        private array $fieldPresentations = [],
+        private array $domainListeners = [],
+        private array $eventConsumers = [],
+        private array $jobs = [],
+        private array $projections = [],
+        private array $webhooks = [],
+        private array $compositionBlocks = [],
+        private array $compositionPatterns = [],
+        private array $compositionFieldControls = [],
+        private array $compositionInspectors = [],
+        private array $compositionDesignVocabularies = [],
+        private array $compositionMigrations = [],
+        private array $canonicalCompositionDocuments = [],
+        private array $compositionHostBindings = [],
         private array $counts = [],
+        private array $declarations = [],
     ) {
         $this->owner = $ownerValue;
     }
@@ -176,6 +219,8 @@ final readonly class ManifestContributions
             ExtensionManifestGrammar::integrationKeys($manifestSchema),
             'integration contributions',
         );
+        ManifestContributionGraphValidator::validate($owner, $data);
+        $data = self::canonicalGraph($data);
 
         $capabilities = self::index(array_map(static function (array $item) use ($owner): array {
             self::knownKeys(
@@ -242,31 +287,37 @@ final readonly class ManifestContributions
             return $definition;
         }, self::objects($administrator['workspaces'] ?? [], 'contributions.administrator.workspaces')), 'workspace');
 
-        $navigation = self::index(array_map(static function (array $item) use ($owner): array {
+        $navigation = self::indexDefinitions(array_map(static function (array $item) use (
+            $owner,
+        ): AdministratorNavigationDefinition {
             self::knownKeys(
                 $item,
                 ['id', 'workspace', 'label', 'description', 'path', 'icon', 'capability', 'priority', 'keywords',
                     'surface'],
                 'navigation contribution',
             );
-            $declaration = [
-                'id' => self::string($item, 'id'),
-                'workspace' => self::string($item, 'workspace'),
-                'label' => self::string($item, 'label'),
-                'description' => self::string($item, 'description'),
-                'path' => self::string($item, 'path'),
-                'icon' => self::string($item, 'icon'),
-                'capability' => self::string($item, 'capability'),
-                'priority' => self::integer($item, 'priority'),
-                'keywords' => self::optionalString($item, 'keywords'),
-                'surface' => self::optionalString($item, 'surface'),
-            ];
-            $owner->assertOwns($declaration['id'], 'navigation');
-            $owner->assertOwns($declaration['workspace'], 'workspace');
-            $owner->assertOwns($declaration['capability'], 'capability');
+            $surface = self::optionalString($item, 'surface');
+            $definition = new AdministratorNavigationDefinition(
+                self::string($item, 'id'),
+                self::string($item, 'workspace'),
+                self::string($item, 'label'),
+                self::string($item, 'description'),
+                self::string($item, 'path'),
+                self::string($item, 'icon'),
+                self::string($item, 'capability'),
+                self::integer($item, 'priority'),
+                self::optionalString($item, 'keywords'),
+                $surface === '' ? null : $surface,
+            );
+            $owner->assertOwns($definition->id, 'navigation');
+            $owner->assertOwns($definition->workspace, 'workspace');
+            $owner->assertOwns($definition->capability, 'capability');
+            if ($definition->surface !== null) {
+                $owner->assertOwns($definition->surface, 'interface surface');
+            }
 
-            return $declaration;
-        }, self::objects($administrator['navigation'] ?? [], 'contributions.administrator.navigation')), 'navigation', 'id');
+            return $definition;
+        }, self::objects($administrator['navigation'] ?? [], 'contributions.administrator.navigation')), 'navigation');
 
         $routes = self::indexDefinitions(array_map(static function (array $item) use (
             $owner,
@@ -315,31 +366,37 @@ final readonly class ManifestContributions
             return $definition;
         }, self::objects($portal['workspaces'] ?? [], 'contributions.portal.workspaces')), 'portal workspace');
 
-        $portalNavigation = self::index(array_map(static function (array $item) use ($owner): array {
+        $portalNavigation = self::indexDefinitions(array_map(static function (array $item) use (
+            $owner,
+        ): PortalNavigationDefinition {
             self::knownKeys(
                 $item,
                 ['id', 'workspace', 'label', 'description', 'path', 'icon', 'capability', 'priority', 'keywords',
                     'surface'],
                 'portal navigation contribution',
             );
-            $declaration = [
-                'id' => self::string($item, 'id'),
-                'workspace' => self::string($item, 'workspace'),
-                'label' => self::string($item, 'label'),
-                'description' => self::string($item, 'description'),
-                'path' => self::string($item, 'path'),
-                'icon' => self::string($item, 'icon'),
-                'capability' => self::string($item, 'capability'),
-                'priority' => self::integer($item, 'priority'),
-                'keywords' => self::optionalString($item, 'keywords'),
-                'surface' => self::optionalString($item, 'surface'),
-            ];
-            $owner->assertOwns($declaration['id'], 'portal navigation');
-            $owner->assertOwns($declaration['workspace'], 'portal workspace');
-            $owner->assertOwns($declaration['capability'], 'capability');
+            $surface = self::optionalString($item, 'surface');
+            $definition = new PortalNavigationDefinition(
+                self::string($item, 'id'),
+                self::string($item, 'workspace'),
+                self::string($item, 'label'),
+                self::string($item, 'description'),
+                self::string($item, 'path'),
+                self::string($item, 'icon'),
+                self::string($item, 'capability'),
+                self::integer($item, 'priority'),
+                self::optionalString($item, 'keywords'),
+                $surface === '' ? null : $surface,
+            );
+            $owner->assertOwns($definition->id, 'portal navigation');
+            $owner->assertOwns($definition->workspace, 'portal workspace');
+            $owner->assertOwns($definition->capability, 'capability');
+            if ($definition->surface !== null) {
+                $owner->assertOwns($definition->surface, 'interface surface');
+            }
 
-            return $declaration;
-        }, self::objects($portal['navigation'] ?? [], 'contributions.portal.navigation')), 'portal navigation', 'id');
+            return $definition;
+        }, self::objects($portal['navigation'] ?? [], 'contributions.portal.navigation')), 'portal navigation');
 
         $portalRoutes = self::indexDefinitions(array_map(static function (array $item) use (
             $owner,
@@ -383,51 +440,76 @@ final readonly class ManifestContributions
             throw new InvalidArgumentException('A declared KIS interface section requires at least one surface.');
         }
 
-        $fieldPresentations = array_map(
+        $fieldPresentations = self::indexDefinitions(array_map(
             static fn (array $item): FieldPresentationContribution => FieldPresentationContribution::fromArray($item),
             self::objects($business['field_presentations'] ?? [], 'contributions.business.field_presentations'),
-        );
+        ), 'field presentation');
 
-        $compositionDeclarations = [
-            'composition.blocks' => [$composition['blocks'] ?? [], 'contributions.composition.blocks',
-                static fn (array $item): object => CompositionBlockDeclaration::fromArray($item)],
-            'composition.patterns' => [$composition['patterns'] ?? [], 'contributions.composition.patterns',
-                static fn (array $item): object => CompositionPatternDeclaration::fromArray($item)],
-            'composition.field_controls' => [$composition['field_controls'] ?? [],
-                'contributions.composition.field_controls',
-                static fn (array $item): object => CompositionFieldControlDeclaration::fromArray($item)],
-            'composition.inspectors' => [$composition['inspectors'] ?? [], 'contributions.composition.inspectors',
-                static fn (array $item): object => CompositionInspectorDeclaration::fromArray($item)],
-            'composition.design_vocabularies' => [$composition['design_vocabularies'] ?? [],
+        $domainListeners = self::indexDefinitions(array_map(
+            static fn (array $item): DomainListenerDefinition => DomainListenerDefinition::fromArray($item),
+            self::objects($integration['domain_listeners'] ?? [], 'contributions.integration.domain_listeners'),
+        ), 'domain listener');
+        $eventConsumers = self::indexDefinitions(array_map(
+            static fn (array $item): EventConsumerDefinition => EventConsumerDefinition::fromArray($item),
+            self::objects($integration['consumers'] ?? [], 'contributions.integration.consumers'),
+        ), 'event consumer');
+        $jobs = self::indexDefinitions(array_map(
+            static fn (array $item): JobContributionDefinition => JobContributionDefinition::fromArray($item),
+            self::objects($integration['jobs'] ?? [], 'contributions.integration.jobs'),
+        ), 'job');
+        $projections = self::indexDefinitions(array_map(
+            static fn (array $item): ProjectionDefinition => ProjectionDefinition::fromArray($item),
+            self::objects($integration['projections'] ?? [], 'contributions.integration.projections'),
+        ), 'projection');
+        $webhooks = self::indexDefinitions(array_map(
+            static fn (array $item): WebhookContributionDefinition => WebhookContributionDefinition::fromArray($item),
+            self::objects($integration['webhooks'] ?? [], 'contributions.integration.webhooks'),
+        ), 'webhook');
+
+        $compositionBlocks = self::indexDefinitions(array_map(
+            static fn (array $item): CompositionBlockDeclaration => CompositionBlockDeclaration::fromArray($item),
+            self::objects($composition['blocks'] ?? [], 'contributions.composition.blocks'),
+        ), 'composition block');
+        $compositionPatterns = self::indexDefinitions(array_map(
+            static fn (array $item): CompositionPatternDeclaration => CompositionPatternDeclaration::fromArray($item),
+            self::objects($composition['patterns'] ?? [], 'contributions.composition.patterns'),
+        ), 'composition pattern');
+        $compositionFieldControls = self::indexDefinitions(array_map(
+            static fn (array $item): CompositionFieldControlDeclaration
+                => CompositionFieldControlDeclaration::fromArray($item),
+            self::objects($composition['field_controls'] ?? [], 'contributions.composition.field_controls'),
+        ), 'composition field control');
+        $compositionInspectors = self::indexDefinitions(array_map(
+            static fn (array $item): CompositionInspectorDeclaration
+                => CompositionInspectorDeclaration::fromArray($item),
+            self::objects($composition['inspectors'] ?? [], 'contributions.composition.inspectors'),
+        ), 'composition inspector');
+        $compositionDesignVocabularies = self::indexDefinitions(array_map(
+            static fn (array $item): CompositionDesignVocabularyDeclaration
+                => CompositionDesignVocabularyDeclaration::fromArray($item),
+            self::objects(
+                $composition['design_vocabularies'] ?? [],
                 'contributions.composition.design_vocabularies',
-                static fn (array $item): object => CompositionDesignVocabularyDeclaration::fromArray($item)],
-            'composition.migrations' => [$composition['migrations'] ?? [], 'contributions.composition.migrations',
-                static fn (array $item): object => CompositionMigrationDeclaration::fromArray($item)],
+            ),
+        ), 'composition design vocabulary');
+        $compositionMigrations = self::indexDefinitions(array_map(
+            static fn (array $item): CompositionMigrationDeclaration
+                => CompositionMigrationDeclaration::fromArray($item),
+            self::objects($composition['migrations'] ?? [], 'contributions.composition.migrations'),
+        ), 'composition migration');
+        $compositionCounts = [
+            'composition.blocks' => count($compositionBlocks),
+            'composition.patterns' => count($compositionPatterns),
+            'composition.field_controls' => count($compositionFieldControls),
+            'composition.inspectors' => count($compositionInspectors),
+            'composition.design_vocabularies' => count($compositionDesignVocabularies),
+            'composition.migrations' => count($compositionMigrations),
         ];
-        $compositionCounts = [];
-        foreach ($compositionDeclarations as $surface => [$declared, $field, $factory]) {
-            $identifiers = [];
-            foreach (self::objects($declared, $field) as $item) {
-                /** @var object{identifier: callable(): string} $declaration */
-                $declaration = $factory($item);
-                /** @var string $identifier */
-                $identifier = $declaration->identifier();
-                if (isset($identifiers[$identifier])) {
-                    throw new InvalidArgumentException(sprintf(
-                        'Contribution %s %s is declared more than once.',
-                        substr($surface, strlen('composition.')),
-                        $identifier,
-                    ));
-                }
-                $identifiers[$identifier] = true;
-            }
-            $compositionCounts[$surface] = count($identifiers);
-        }
 
         $documents = [];
         $hostBindings = [];
         if ($manifestSchema >= 6) {
-            foreach (self::objects($composition['documents'] ?? [], 'contributions.composition.documents') as $item) {
+            $documents = self::indexDefinitions(array_map(static function (array $item): CanonicalCompositionDocument {
                 self::knownKeys($item, ['kind', 'canonical'], 'canonical composition document');
                 $kind = CanonicalCompositionKind::tryFrom(self::string($item, 'kind'))
                     ?? throw new InvalidArgumentException('A canonical composition document names an unknown kind.');
@@ -437,9 +519,15 @@ final readonly class ManifestContributions
                         'A canonical composition document must carry its canonical JSON string.',
                     );
                 }
-                $documents[] = ['kind' => $kind->value, 'canonical' => $canonical];
+                return new CanonicalCompositionDocument($kind, $canonical);
+            }, self::objects(
+                $composition['documents'] ?? [],
+                'contributions.composition.documents',
+            )), 'canonical composition document');
+            foreach ($documents as $document) {
+                $owner->assertOwns($document->identity(), 'canonical composition document');
             }
-            $hostBindings = array_map(static function (array $item): CompositionHostBinding {
+            $hostBindings = self::indexDefinitions(array_map(static function (array $item): CompositionHostBinding {
                 self::knownKeys($item, ['kind', 'id', 'renderer', 'capability'], 'composition host binding');
                 $kind = CanonicalCompositionKind::tryFrom(self::string($item, 'kind'))
                     ?? throw new InvalidArgumentException('A composition host binding names an unknown kind.');
@@ -450,7 +538,34 @@ final readonly class ManifestContributions
                     ($item['renderer'] ?? null) !== null ? self::string($item, 'renderer') : null,
                     ($item['capability'] ?? null) !== null ? self::string($item, 'capability') : null,
                 );
-            }, self::objects($composition['host_bindings'] ?? [], 'contributions.composition.host_bindings'));
+            }, self::objects(
+                $composition['host_bindings'] ?? [],
+                'contributions.composition.host_bindings',
+            )), 'composition host binding');
+            foreach ($hostBindings as $binding) {
+                if (!isset($documents[$binding->identifier()])) {
+                    throw new InvalidArgumentException(
+                        'A composition host binding references an undeclared canonical document.',
+                    );
+                }
+                if ($binding->renderer !== null) {
+                    $owner->assertOwns($binding->renderer, 'studio preview renderer');
+                }
+                if ($binding->capability !== null && !isset($capabilities[$binding->capability])) {
+                    throw new InvalidArgumentException('A composition host binding capability is undeclared.');
+                }
+            }
+            foreach ($documents as $document) {
+                if ($document->kind !== CanonicalCompositionKind::BlockDefinition) {
+                    continue;
+                }
+                $binding = $hostBindings[$document->identifier()] ?? null;
+                if (!$binding instanceof CompositionHostBinding || $binding->renderer === null) {
+                    throw new InvalidArgumentException(
+                        'A canonical block definition requires one non-empty renderer binding.',
+                    );
+                }
+            }
         }
 
         $counts = array_filter([
@@ -532,28 +647,59 @@ final readonly class ManifestContributions
             'composition.host_bindings' => count($hostBindings),
         ], static fn (int $count): bool => $count > 0);
 
-        return new self($owner, $expectedSpi, $capabilities, $views, $portalTemplates, $counts);
+        return new self(
+            ownerValue: $owner,
+            spiVersion: $expectedSpi,
+            capabilities: $capabilities,
+            workspaces: $workspaces,
+            navigation: $navigation,
+            routes: $routes,
+            views: $views,
+            portalWorkspaces: $portalWorkspaces,
+            portalNavigation: $portalNavigation,
+            portalRoutes: $portalRoutes,
+            portalTemplates: $portalTemplates,
+            fieldPresentations: $fieldPresentations,
+            domainListeners: $domainListeners,
+            eventConsumers: $eventConsumers,
+            jobs: $jobs,
+            projections: $projections,
+            webhooks: $webhooks,
+            compositionBlocks: $compositionBlocks,
+            compositionPatterns: $compositionPatterns,
+            compositionFieldControls: $compositionFieldControls,
+            compositionInspectors: $compositionInspectors,
+            compositionDesignVocabularies: $compositionDesignVocabularies,
+            compositionMigrations: $compositionMigrations,
+            canonicalCompositionDocuments: $documents,
+            compositionHostBindings: $hostBindings,
+            counts: $counts,
+            declarations: $data,
+        );
     }
 
     /**
-     * The empty declaration set a schema-1 package stands in with.
+     * Build the inert declaration set for the frozen schema-one grammar.
      *
-     * @param   ExtensionIdentifier  $extension    Package the empty set is attributed to.
-     * @param   list<string>         $permissions  The manifest's schema-1 permission codes; not read.
+     * @param   ExtensionIdentifier  $extension  Package the empty set is attributed to.
      *
      * @return  self  A set owned by that package and declaring nothing.
      *
      * @since   0.1.0
      */
-    public static function legacy(ExtensionIdentifier $extension, array $permissions): self
+    public static function fromSchemaOne(ExtensionIdentifier $extension): self
     {
-        return new self(ContributionOwner::extension($extension->value()), self::SPI_VERSION);
+        return new self(
+            ContributionOwner::extension($extension->value()),
+            self::SPI_VERSION,
+            declarations: ['version' => self::SPI_VERSION],
+        );
     }
 
     /**
      * Report which contribution SPI generation the declaring manifest bound itself to.
      *
-     * @return  int  SPI version derived from the manifest schema; 1 for a legacy set.
+     * @return  int  SPI version derived from the manifest schema; 1 for schema one.
      *
      * @since   0.1.0
      */
@@ -565,8 +711,7 @@ final readonly class ManifestContributions
     /**
      * List the capability identifiers this package declares, sorted by identifier.
      *
-     * The order matches the App's indexed capability set, which is what strict manifests reconcile
-     * their `permissions` list against.
+     * Strict manifests reconcile this exact set against their `permissions` list.
      *
      * @return  list<string>  Sorted capability identifiers.
      *
@@ -577,17 +722,88 @@ final readonly class ManifestContributions
         return array_keys($this->capabilities);
     }
 
-    /**
-     * List the declared administrator views, sorted by view name.
-     *
-     * @return  list<AdministratorViewDefinition>  Every declared view; reference checks read each
-     *          view's template.
-     *
-     * @since   0.1.0
-     */
-    public function views(): array
+    /** @return list<AdministratorWorkspaceDefinition> Canonical administrator workspaces. @since 0.2.0 */
+    public function administratorWorkspaces(): array
+    {
+        return array_values($this->workspaces);
+    }
+
+    /** @param string $identifier Signed workspace identifier. @since 0.2.0 */
+    public function administratorWorkspace(string $identifier): ?AdministratorWorkspaceDefinition
+    {
+        return $this->workspaces[$identifier] ?? null;
+    }
+
+    /** @return list<AdministratorNavigationDefinition> Canonical administrator navigation. @since 0.2.0 */
+    public function administratorNavigation(): array
+    {
+        return array_values($this->navigation);
+    }
+
+    /** @param string $identifier Signed navigation identifier. @since 0.2.0 */
+    public function administratorNavigationItem(string $identifier): ?AdministratorNavigationDefinition
+    {
+        return $this->navigation[$identifier] ?? null;
+    }
+
+    /** @return list<AdministratorRouteDefinition> Canonical administrator routes. @since 0.2.0 */
+    public function administratorRoutes(): array
+    {
+        return array_values($this->routes);
+    }
+
+    /** @param string $identifier Signed route identifier. @since 0.2.0 */
+    public function administratorRoute(string $identifier): ?AdministratorRouteDefinition
+    {
+        return $this->routes[$identifier] ?? null;
+    }
+
+    /** @return list<AdministratorViewDefinition> Canonical administrator views. @since 0.2.0 */
+    public function administratorViews(): array
     {
         return array_values($this->views);
+    }
+
+    /** @param string $identifier Signed view identifier. @since 0.2.0 */
+    public function administratorView(string $identifier): ?AdministratorViewDefinition
+    {
+        return $this->views[$identifier] ?? null;
+    }
+
+    /** @return list<PortalWorkspaceDefinition> Canonical portal workspaces. @since 0.2.0 */
+    public function portalWorkspaces(): array
+    {
+        return array_values($this->portalWorkspaces);
+    }
+
+    /** @param string $identifier Signed portal workspace identifier. @since 0.2.0 */
+    public function portalWorkspace(string $identifier): ?PortalWorkspaceDefinition
+    {
+        return $this->portalWorkspaces[$identifier] ?? null;
+    }
+
+    /** @return list<PortalNavigationDefinition> Canonical portal navigation. @since 0.2.0 */
+    public function portalNavigation(): array
+    {
+        return array_values($this->portalNavigation);
+    }
+
+    /** @param string $identifier Signed portal navigation identifier. @since 0.2.0 */
+    public function portalNavigationItem(string $identifier): ?PortalNavigationDefinition
+    {
+        return $this->portalNavigation[$identifier] ?? null;
+    }
+
+    /** @return list<PortalRouteDefinition> Canonical portal routes. @since 0.2.0 */
+    public function portalRoutes(): array
+    {
+        return array_values($this->portalRoutes);
+    }
+
+    /** @param string $identifier Signed portal route identifier. @since 0.2.0 */
+    public function portalRoute(string $identifier): ?PortalRouteDefinition
+    {
+        return $this->portalRoutes[$identifier] ?? null;
     }
 
     /**
@@ -600,6 +816,226 @@ final readonly class ManifestContributions
     public function portalTemplates(): array
     {
         return array_values($this->portalTemplates);
+    }
+
+    /** @param string $identifier Signed portal template identifier. @since 0.2.0 */
+    public function portalTemplate(string $identifier): ?PortalTemplateDefinition
+    {
+        return $this->portalTemplates[$identifier] ?? null;
+    }
+
+    /** @return list<FieldPresentationContribution> Canonical field-presenter declarations. @since 0.2.0 */
+    public function fieldPresentations(): array
+    {
+        return array_values($this->fieldPresentations);
+    }
+
+    /** @param string $fieldType Signed field-type identifier. @since 0.2.0 */
+    public function fieldPresentation(string $fieldType): ?FieldPresentationContribution
+    {
+        return $this->fieldPresentations[$fieldType] ?? null;
+    }
+
+    /** @return list<DomainListenerDefinition> Canonical listener definitions. @since 0.2.0 */
+    public function domainListeners(): array
+    {
+        return array_values($this->domainListeners);
+    }
+
+    /**
+     * @param   string  $identifier  Signed listener binding identifier.
+     *
+     * @return  ?DomainListenerDefinition  Matching definition, or null when undeclared.
+     *
+     * @since   0.2.0
+     */
+    public function domainListener(string $identifier): ?DomainListenerDefinition
+    {
+        return $this->domainListeners[$identifier] ?? null;
+    }
+
+    /** @return list<EventConsumerDefinition> Canonical durable-consumer definitions. @since 0.2.0 */
+    public function eventConsumers(): array
+    {
+        return array_values($this->eventConsumers);
+    }
+
+    /**
+     * @param   string  $identifier  Signed consumer binding identifier.
+     *
+     * @return  ?EventConsumerDefinition  Matching definition, or null when undeclared.
+     *
+     * @since   0.2.0
+     */
+    public function eventConsumer(string $identifier): ?EventConsumerDefinition
+    {
+        return $this->eventConsumers[$identifier] ?? null;
+    }
+
+    /** @return list<JobContributionDefinition> Canonical job definitions. @since 0.2.0 */
+    public function jobs(): array
+    {
+        return array_values($this->jobs);
+    }
+
+    /**
+     * @param   string  $identifier  Signed job binding identifier.
+     *
+     * @return  ?JobContributionDefinition  Matching definition, or null when undeclared.
+     *
+     * @since   0.2.0
+     */
+    public function job(string $identifier): ?JobContributionDefinition
+    {
+        return $this->jobs[$identifier] ?? null;
+    }
+
+    /** @return list<ProjectionDefinition> Canonical projection definitions. @since 0.2.0 */
+    public function projections(): array
+    {
+        return array_values($this->projections);
+    }
+
+    /**
+     * @param   string  $identifier  Signed projection binding identifier.
+     *
+     * @return  ?ProjectionDefinition  Matching definition, or null when undeclared.
+     *
+     * @since   0.2.0
+     */
+    public function projection(string $identifier): ?ProjectionDefinition
+    {
+        return $this->projections[$identifier] ?? null;
+    }
+
+    /** @return list<WebhookContributionDefinition> Canonical webhook definitions. @since 0.2.0 */
+    public function webhooks(): array
+    {
+        return array_values($this->webhooks);
+    }
+
+    /**
+     * @param   string  $identifier  Signed webhook binding identifier.
+     *
+     * @return  ?WebhookContributionDefinition  Matching definition, or null when undeclared.
+     *
+     * @since   0.2.0
+     */
+    public function webhook(string $identifier): ?WebhookContributionDefinition
+    {
+        return $this->webhooks[$identifier] ?? null;
+    }
+
+    /** @return list<CompositionBlockDeclaration> Canonical schema-five block declarations. @since 0.2.0 */
+    public function compositionBlocks(): array
+    {
+        return array_values($this->compositionBlocks);
+    }
+
+    /** @param string $identifier Signed block identifier. @since 0.2.0 */
+    public function compositionBlock(string $identifier): ?CompositionBlockDeclaration
+    {
+        return $this->compositionBlocks[$identifier] ?? null;
+    }
+
+    /** @return list<CompositionPatternDeclaration> Canonical schema-five pattern declarations. @since 0.2.0 */
+    public function compositionPatterns(): array
+    {
+        return array_values($this->compositionPatterns);
+    }
+
+    /** @param string $identifier Signed pattern identifier. @since 0.2.0 */
+    public function compositionPattern(string $identifier): ?CompositionPatternDeclaration
+    {
+        return $this->compositionPatterns[$identifier] ?? null;
+    }
+
+    /** @return list<CompositionFieldControlDeclaration> Canonical field-control declarations. @since 0.2.0 */
+    public function compositionFieldControls(): array
+    {
+        return array_values($this->compositionFieldControls);
+    }
+
+    /** @param string $identifier Signed field-control identifier. @since 0.2.0 */
+    public function compositionFieldControl(string $identifier): ?CompositionFieldControlDeclaration
+    {
+        return $this->compositionFieldControls[$identifier] ?? null;
+    }
+
+    /** @return list<CompositionInspectorDeclaration> Canonical inspector declarations. @since 0.2.0 */
+    public function compositionInspectors(): array
+    {
+        return array_values($this->compositionInspectors);
+    }
+
+    /** @param string $identifier Signed inspector identifier. @since 0.2.0 */
+    public function compositionInspector(string $identifier): ?CompositionInspectorDeclaration
+    {
+        return $this->compositionInspectors[$identifier] ?? null;
+    }
+
+    /** @return list<CompositionDesignVocabularyDeclaration> Canonical design vocabularies. @since 0.2.0 */
+    public function compositionDesignVocabularies(): array
+    {
+        return array_values($this->compositionDesignVocabularies);
+    }
+
+    /** @param string $identifier Signed vocabulary identifier. @since 0.2.0 */
+    public function compositionDesignVocabulary(string $identifier): ?CompositionDesignVocabularyDeclaration
+    {
+        return $this->compositionDesignVocabularies[$identifier] ?? null;
+    }
+
+    /** @return list<CompositionMigrationDeclaration> Canonical composition migrations. @since 0.2.0 */
+    public function compositionMigrations(): array
+    {
+        return array_values($this->compositionMigrations);
+    }
+
+    /** @param string $identifier Signed migration identifier. @since 0.2.0 */
+    public function compositionMigration(string $identifier): ?CompositionMigrationDeclaration
+    {
+        return $this->compositionMigrations[$identifier] ?? null;
+    }
+
+    /** @return list<CanonicalCompositionDocument> Canonical schema-six Studio documents. @since 0.2.0 */
+    public function canonicalCompositionDocuments(): array
+    {
+        return array_values($this->canonicalCompositionDocuments);
+    }
+
+    /**
+     * @param string $identifier Kind-scoped canonical document identity.
+     *
+     * @since 0.2.0
+     */
+    public function canonicalCompositionDocument(string $identifier): ?CanonicalCompositionDocument
+    {
+        return $this->canonicalCompositionDocuments[$identifier] ?? null;
+    }
+
+    /** @return list<CompositionHostBinding> Canonical host bindings. @since 0.2.0 */
+    public function compositionHostBindings(): array
+    {
+        return array_values($this->compositionHostBindings);
+    }
+
+    /** @param string $identifier Kind and document identity. @since 0.2.0 */
+    public function compositionHostBinding(string $identifier): ?CompositionHostBinding
+    {
+        return $this->compositionHostBindings[$identifier] ?? null;
+    }
+
+    /**
+     * Derive the exact executable inventory a binding provider must satisfy.
+     *
+     * @return  ExecutableBindingRequirements  Canonical signed binding requirements.
+     *
+     * @since   0.2.0
+     */
+    public function executableBindingRequirements(): ExecutableBindingRequirements
+    {
+        return ExecutableBindingRequirements::fromManifestContributions($this);
     }
 
     /**
@@ -619,11 +1055,25 @@ final readonly class ManifestContributions
     }
 
     /**
+     * Return the complete contribution object after the SDK grammar accepted it.
+     *
+     * A host consumes this value to apply its own admission rules without decoding or parsing
+     * `kumwe.json` a second time. Object keys are sorted recursively and every member has crossed the
+     * canonical graph validator, so binding lookup and host activation observe the same exact bytes.
+     *
+     * @return  array<string, mixed>  Complete structurally validated contribution object.
+     *
+     * @since   0.2.0
+     */
+    public function declarations(): array
+    {
+        return $this->declarations;
+    }
+
+    /**
      * Export the declaration set for reports and diagnostics.
      *
-     * This is the SDK's bounded view — the SPI version and the per-surface declaration counts —
-     * not the App's deep normalized contribution export, which needs domain types that stay in the
-     * App by classification.
+     * This compact diagnostic view complements `declarations()`, which exposes the complete canonical graph.
      *
      * @return  array{version: int, declared: array<string, int>}  Canonical bounded export.
      *
@@ -651,7 +1101,14 @@ final readonly class ManifestContributions
     {
         $result = [];
         foreach ($items as $item) {
-            $key = (string) $item[$identifier];
+            $key = $item[$identifier] ?? null;
+            if (!is_string($key) || $key === '') {
+                throw new InvalidArgumentException(sprintf(
+                    'Contribution %s has no canonical %s identifier.',
+                    $kind,
+                    $identifier,
+                ));
+            }
             if (isset($result[$key])) {
                 throw new InvalidArgumentException(sprintf(
                     'Contribution %s %s is declared more than once.',
@@ -669,7 +1126,7 @@ final readonly class ManifestContributions
     /**
      * Key ported definition objects by their own identifier, refusing repeats, then sort by key.
      *
-     * @template T of object
+     * @template T of ContributionDefinition
      *
      * @param   list<T>  $items  Definitions of one kind, in manifest order.
      * @param   string   $kind   Kind name used in the duplicate message.
@@ -684,7 +1141,6 @@ final readonly class ManifestContributions
     {
         $result = [];
         foreach ($items as $item) {
-            /** @var string $key */
             $key = $item->identifier();
             if (isset($result[$key])) {
                 throw new InvalidArgumentException(sprintf(
@@ -698,6 +1154,71 @@ final readonly class ManifestContributions
         ksort($result, SORT_STRING);
 
         return $result;
+    }
+
+    /**
+     * Sort every decoded object while preserving list order and scalar values.
+     *
+     * @param   array<mixed, mixed>  $graph  Fully validated contribution graph.
+     *
+     * @return  array<string, mixed>  Canonical graph whose object key order is deterministic.
+     *
+     * @since   0.2.0
+     */
+    private static function canonicalGraph(array $graph): array
+    {
+        $canonical = [];
+        foreach ($graph as $key => $value) {
+            if (!is_string($key)) {
+                throw new InvalidArgumentException('A canonical manifest object requires string keys.');
+            }
+            $canonical[$key] = self::canonicalValue($value);
+        }
+        ksort($canonical, SORT_STRING);
+
+        return $canonical;
+    }
+
+    /**
+     * Canonicalize nested objects inside one list without changing list order.
+     *
+     * @param   list<mixed>  $values  Fully validated JSON list.
+     *
+     * @return  list<mixed>  List with canonicalized object members.
+     *
+     * @since   0.2.0
+     */
+    private static function canonicalList(array $values): array
+    {
+        if (!array_is_list($values)) {
+            throw new InvalidArgumentException('A canonical manifest list must use sequential indexes.');
+        }
+        $canonical = [];
+        foreach ($values as $value) {
+            $canonical[] = self::canonicalValue($value);
+        }
+
+        return $canonical;
+    }
+
+    /**
+     * Canonicalize one nested JSON value without changing its scalar type.
+     *
+     * @param mixed $value Validated manifest value.
+     *
+     * @return mixed Canonical scalar, list, or object value.
+     *
+     * @since 0.2.0
+     */
+    private static function canonicalValue(mixed $value): mixed
+    {
+        if (!is_array($value) || $value === []) {
+            return $value;
+        }
+
+        return array_is_list($value)
+            ? self::canonicalList($value)
+            : self::canonicalGraph($value);
     }
 
     /**
@@ -783,7 +1304,7 @@ final readonly class ManifestContributions
      * @param   array<string, mixed>  $values  Decoded manifest object holding the field.
      * @param   string                $field   Key to read, also named in the failure message.
      *
-     * @return  string  The value with surrounding whitespace removed.
+     * @return  string  The exact canonical value.
      *
      * @throws  InvalidArgumentException  When the key is absent, not a string, or blank once trimmed.
      *
@@ -792,11 +1313,11 @@ final readonly class ManifestContributions
     private static function string(array $values, string $field): string
     {
         $value = $values[$field] ?? null;
-        if (!is_string($value) || trim($value) === '') {
+        if (!is_string($value) || $value === '' || $value !== trim($value)) {
             throw new InvalidArgumentException(sprintf('Contribution field %s must be a non-empty string.', $field));
         }
 
-        return trim($value);
+        return $value;
     }
 
     /**
@@ -805,7 +1326,7 @@ final readonly class ManifestContributions
      * @param   array<string, mixed>  $values  Decoded manifest object that may hold the field.
      * @param   string                $field   Key to read, also named in the failure message.
      *
-     * @return  string  The trimmed value, or an empty string when the key was not present.
+     * @return  string  The exact value, or an empty string when the key was not present.
      *
      * @throws  InvalidArgumentException  When the key is present but not a string.
      *
@@ -814,11 +1335,11 @@ final readonly class ManifestContributions
     private static function optionalString(array $values, string $field): string
     {
         $value = $values[$field] ?? '';
-        if (!is_string($value)) {
+        if (!is_string($value) || $value !== trim($value)) {
             throw new InvalidArgumentException(sprintf('Contribution field %s must be a string.', $field));
         }
 
-        return trim($value);
+        return $value;
     }
 
     /**
@@ -828,7 +1349,7 @@ final readonly class ManifestContributions
      * @param   string                $field    Key to read and name in a failure.
      * @param   list<string>          $default  Value returned when the key is absent.
      *
-     * @return  list<string>  Trimmed strings in declaration order.
+     * @return  list<string>  Exact unique strings in declaration order.
      *
      * @throws  InvalidArgumentException  When the value is not a list of at most 128 non-empty strings.
      *
@@ -841,14 +1362,16 @@ final readonly class ManifestContributions
             throw new InvalidArgumentException(sprintf('Contribution field %s must be a bounded string list.', $field));
         }
         $result = [];
+        $seen = [];
         foreach ($value as $item) {
-            if (!is_string($item) || trim($item) === '') {
+            if (!is_string($item) || $item === '' || $item !== trim($item) || isset($seen[$item])) {
                 throw new InvalidArgumentException(sprintf(
-                    'Every contribution field %s entry must be a non-empty string.',
+                    'Every contribution field %s entry must be a unique canonical string.',
                     $field,
                 ));
             }
-            $result[] = trim($item);
+            $seen[$item] = true;
+            $result[] = $item;
         }
 
         return $result;

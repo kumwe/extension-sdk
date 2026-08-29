@@ -7,10 +7,8 @@ namespace Kumwe\Extension\Spi\Contribution;
 /**
  * Contract for one declarable thing an extension contributes, whatever kind it is.
  *
- * `OwnedExtensionContributionRegistrar` indexes a manifest's declarations by identifier and compares
- * each registered object against the declaration it matched, so every contribution kind has to expose
- * a stable identifier and an array form that compares equal when the two describe the same thing.
- * Implementing this is what lets a new kind take part in that check without the registrar knowing it.
+ * Every canonical contribution exposes a stable identifier and deterministic export, allowing a host
+ * to index the manifest graph without reconstructing or translating the declaration.
  *
  * @since  0.1.0
  */
@@ -26,10 +24,7 @@ interface ContributionDefinition
     public function identifier(): string;
 
     /**
-     * Export the contribution as the comparable structure the manifest and the inventory both use.
-     *
-     * Equality of two exports is what decides whether a provider registered what its manifest
-     * declared, so the shape must cover every field that distinguishes one contribution from another.
+     * Export the contribution as its deterministic manifest structure.
      *
      * @return  array<string, mixed>  Every declared field of this contribution, keyed by field name.
      *

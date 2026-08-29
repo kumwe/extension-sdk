@@ -5,19 +5,23 @@ declare(strict_types=1);
 namespace Kumwe\Extension\Package;
 
 /**
- * What an installation was able to establish about a package's bill of materials or provenance.
+ * What inspection established about a package's bill of materials or provenance.
  *
- * There are deliberately only two states that survive an install. Either the document was present and
- * every claim an installation can check was checked and held, or the package carried no such document
- * at all. A document that is present and wrong is not a third state: it refuses the install, because
- * the attestation documents travel inside the package bytes the signature covers, so a mismatch means
- * either a builder that is not the one it claims to be or bytes that changed without the signature
- * noticing. `Absent` exists because packages built before attestations shipped must keep installing.
+ * The SDK reports all four observable states and leaves their policy meaning to the consuming host.
+ * A document is verified, absent, present but invalid, or not inspected because package safety blocked
+ * content expansion. Nothing in this enum admits or refuses a package; it is evidence for caller policy.
  *
  * @since  0.1.0
  */
 enum PackageAttestationState: string
 {
+    /**
+     * Package safety findings prevented attestation bytes from being expanded.
+     *
+     * @since  0.2.0
+     */
+    case NotInspected = 'not_inspected';
+
     /**
      * The document was present and agreed with the package bytes it describes.
      *
@@ -31,4 +35,11 @@ enum PackageAttestationState: string
      * @since  0.1.0
      */
     case Absent = 'absent';
+
+    /**
+     * A document was present but could not be parsed or reconciled with the package.
+     *
+     * @since  0.2.0
+     */
+    case Invalid = 'invalid';
 }

@@ -10,10 +10,9 @@ use Stringable;
 /**
  * SHA-256 digest that stands for the exact bytes of an extension package.
  *
- * The digest is the package's identity everywhere after download: `AtomicInstallPlan` carries it
- * through the install, the registry stores it against the release row, and signature verification
- * runs over its hexadecimal rendering rather than over the archive, so a verifier never needs the
- * package in memory. Comparison goes through `matches`, which is constant time.
+ * The digest is a portable package identity for snapshot binding, storage and signature verification.
+ * Signatures use its hexadecimal rendering rather than loading the archive into memory. Comparison
+ * goes through `matches`, which is constant time.
  *
  * @since  0.1.0
  */

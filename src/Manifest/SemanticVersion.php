@@ -13,9 +13,8 @@ use Stringable;
  * The constructor is private, so every instance came through `fromString()` and is known to be well
  * formed: three non-negative components inside the platform integer range, plus the optional
  * pre-release identifiers and build metadata the grammar allows. That is what lets the rest of the
- * extension code compare versions without re-validating them — `ExtensionRecord` and
- * `DoctrineExtensionManager` use `compare()` to decide whether a packaged manifest is really an
- * upgrade, and `VersionConstraint` evaluates every dependency range through it.
+ * extension code compare versions without re-validating them. Hosts use `compare()` to decide whether
+ * a packaged manifest is an upgrade, and `VersionConstraint` evaluates every dependency range through it.
  *
  * @since  0.1.0
  */

@@ -27,18 +27,23 @@ jobs:
         uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # v2.35.5
         with:
           php-version: ${{ matrix.php }}
-          extensions: json, mbstring, zip, sodium
+          extensions: ctype, dom, filter, json, mbstring, sodium, tokenizer, xml, xmlwriter, zip
           coverage: none
-          tools: none
+          tools: composer:v2
 
-      - name: Lint
-        run: php tools/lint.php
+      - name: Validate Composer metadata
+        run: composer validate --strict --no-check-publish
 
-      - name: Verify member documentation
-        run: php tools/check-docblocks.php
+      - name: Install package QA dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
 
-      - name: Run the suite
-        run: php tests/run.php
+      - name: Run complete package gate
+        run: composer check
 
-      - name: Verify the frozen contract
-        run: php tools/verify-contract.php
+      - name: Verify production-only installation
+        run: |
+          composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
+          composer smoke
+
+      - name: Verify exported consumer archive
+        run: composer archive:verify

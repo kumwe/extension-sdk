@@ -7,15 +7,14 @@ namespace Kumwe\Extension\Contract;
 use InvalidArgumentException;
 
 /**
- * Derives RFC 4122 version-5 (SHA-1, name-based) UUIDs with no dependency beyond PHP.
+ * Derives RFC 4122 version-5 (SHA-1, name-based) UUIDs deterministically.
  *
  * Everything in this SDK that needs a stable identifier derives it from its inputs — the charter
- * forbids clocks and randomness in the library, and forbids runtime Composer dependencies outright —
- * so this one type is the SDK's whole UUID surface. The derivation is the RFC's: the namespace UUID's
+ * forbids clocks and randomness in the library, so this one type is the SDK's whole UUID surface.
+ * The derivation is the RFC's: the namespace UUID's
  * sixteen raw bytes are concatenated with the name, hashed with SHA-1, truncated to sixteen bytes, and
  * stamped with version 5 and the RFC 4122 variant. The output is byte-identical to what `ramsey/uuid`
- * produces for the same inputs, which is proven by fixture: the App derived these values through
- * `Uuid::uuid5()` before extraction, and the values must never change.
+ * produces for the same inputs, proven against the RFC reference vectors.
  *
  * @since  0.1.0
  */

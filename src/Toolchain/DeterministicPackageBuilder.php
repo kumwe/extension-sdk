@@ -8,6 +8,7 @@ use FilesystemIterator;
 use InvalidArgumentException;
 use JsonException;
 use Kumwe\Extension\Package\PackageBillOfMaterials;
+use Kumwe\Extension\Package\PackagePath;
 use Kumwe\Extension\Package\PackageProvenance;
 use Kumwe\Extension\Manifest\ExtensionManifest;
 use RecursiveDirectoryIterator;
@@ -18,7 +19,7 @@ use Throwable;
 use ZipArchive;
 
 /**
- * Builds byte-reproducible, install-safe ZIP packages from complete extension source trees.
+ * Builds byte-reproducible, bounded ZIP packages from complete extension source trees.
  *
  * Entries are sorted, stored without compressor variance, stamped with the ZIP epoch, and assigned a
  * fixed regular-file mode. The finished archive is re-read through `PackageInspector` before publication.
@@ -28,7 +29,7 @@ use ZipArchive;
  * `kumwe.provenance.json` naming the builder and binding itself to that inventory. Both are ordinary
  * archive entries, so the package digest covers them and the detached signature therefore vouches for
  * them without a second signature format; both are excluded from the inventory they participate in,
- * because a document cannot carry its own digest, and installation verifies that exclusion rather than
+ * because a document cannot carry its own digest, and evidence reconciliation verifies that exclusion rather than
  * trusting it. Neither carries a timestamp, so the reproducibility contract is unchanged: the same
  * source tree still builds to the same bytes.
  *
@@ -43,14 +44,6 @@ final readonly class DeterministicPackageBuilder
      * @since  0.1.0
      */
     private const ZIP_EPOCH = 315532800;
-
-    /**
-     * Maximum number of regular source files admitted to one package.
-     *
-     * @var    int
-     * @since  0.1.0
-     */
-    private const MAXIMUM_FILES = 4_096;
 
     /**
      * Bind post-build verification to the production package inspector.
@@ -110,9 +103,24 @@ final readonly class DeterministicPackageBuilder
         ));
         $manifest = ExtensionManifest::fromJson($manifestJson);
         $entries = [];
+        $sourceBytes = 0;
+        $reservedAttestationBytes = $this->inspector->limits()->maximumBillOfMaterialsBytes
+            + $this->inspector->limits()->maximumProvenanceBytes;
+        if ($reservedAttestationBytes > $this->inspector->limits()->maximumExpandedBytes) {
+            throw new RuntimeException(
+                'The package expanded-size limit cannot reserve both generated attestations.',
+            );
+        }
         foreach ($files as $relative => $path) {
             $contents = $this->readStableFile($path);
             $this->assertComplete($contents, $relative);
+            if (
+                strlen($contents)
+                > $this->inspector->limits()->maximumExpandedBytes - $reservedAttestationBytes - $sourceBytes
+            ) {
+                throw new RuntimeException('The extension source exceeds the package expanded-size limit.');
+            }
+            $sourceBytes += strlen($contents);
             $entries[$relative] = $contents;
         }
         $entries = [...$entries, ...$this->attestations($manifest, $entries)];
@@ -123,6 +131,7 @@ final readonly class DeterministicPackageBuilder
             throw new RuntimeException('The private extension package archive could not be created.');
         }
         $archiveOpen = true;
+        $published = false;
 
         try {
             foreach ($entries as $relative => $contents) {
@@ -145,24 +154,26 @@ final readonly class DeterministicPackageBuilder
                 throw new RuntimeException('The deterministic extension package could not be protected.');
             }
             $inspection = $this->inspector->inspect($temporary);
+            if (!$inspection->package->hasNoSafetyFindings()) {
+                throw new RuntimeException('The deterministic package carries archive safety findings.');
+            }
             if (!link($temporary, $output)) {
                 throw new RuntimeException('The extension package output was claimed before publication.');
             }
+            $published = true;
+            $publishedInspection = $this->inspector->inspect($output);
             @unlink($temporary);
 
-            return new PackageBuildResult($output, new PackageInspection(
-                $output,
-                $inspection->checksum,
-                $inspection->expandedBytes,
-                $inspection->paths,
-                $inspection->manifest,
-            ));
+            return new PackageBuildResult($output, $publishedInspection);
         } catch (Throwable $failure) {
             if ($archiveOpen) {
                 $zip->close();
             }
             if (is_file($temporary) && !is_link($temporary)) {
                 @unlink($temporary);
+            }
+            if ($published && is_file($output) && !is_link($output)) {
+                @unlink($output);
             }
             throw $failure;
         }
@@ -174,7 +185,7 @@ final readonly class DeterministicPackageBuilder
      * Order matters and is the reason these are built together. The inventory covers the source entries
      * only, so it can be digested; the statement then binds itself to that digest, so the two cannot be
      * mixed between builds. Neither document lists the other, and neither lists itself — installation
-     * re-derives both facts from the archive rather than accepting them.
+     * evidence inspection re-derives both facts from the archive rather than accepting them.
      *
      * @param   ExtensionManifest      $manifest  Parsed manifest naming the component being described.
      * @param   array<string, string>  $entries   Source entry bytes keyed by package path.
@@ -231,6 +242,11 @@ final readonly class DeterministicPackageBuilder
                 continue;
             }
             $relative = substr($file->getPathname(), strlen($root) + 1);
+            try {
+                $relative = PackagePath::fromString($relative)->value();
+            } catch (InvalidArgumentException $failure) {
+                throw new RuntimeException('The extension source contains a non-portable package path.', 0, $failure);
+            }
             if ($this->developmentPath($relative)) {
                 continue;
             }
@@ -247,7 +263,7 @@ final readonly class DeterministicPackageBuilder
                 ));
             }
             $files[$relative] = $file->getPathname();
-            if (count($files) > self::MAXIMUM_FILES) {
+            if (count($files) > $this->maximumSourceFiles()) {
                 throw new RuntimeException('The extension source contains too many files.');
             }
         }
@@ -260,7 +276,7 @@ final readonly class DeterministicPackageBuilder
     }
 
     /**
-     * Identify dependency and version-control material omitted from installable archives.
+     * Identify dependency and version-control material omitted from published archives.
      *
      * @param   string  $relative  Source path relative to the extension root.
      *
@@ -325,8 +341,9 @@ final readonly class DeterministicPackageBuilder
     private function readStableFile(string $path): string
     {
         $before = lstat($path);
-        if (!is_array($before) || !is_file($path) || is_link($path) || $before['size'] > 67_108_864) {
-            throw new RuntimeException('An extension source file is unsafe or exceeds 64 MiB.');
+        $maximumEntryBytes = $this->inspector->limits()->maximumEntryBytes;
+        if (!is_array($before) || !is_file($path) || is_link($path) || $before['size'] > $maximumEntryBytes) {
+            throw new RuntimeException('An extension source file is unsafe or exceeds the package entry limit.');
         }
         $handle = fopen($path, 'rb');
         if ($handle === false) {
@@ -342,7 +359,7 @@ final readonly class DeterministicPackageBuilder
             ) {
                 throw new RuntimeException('An extension source file changed while it was opened.');
             }
-            $contents = stream_get_contents($handle, 67_108_865);
+            $contents = stream_get_contents($handle, $maximumEntryBytes + 1);
             $after = fstat($handle);
             if (
                 !is_string($contents)
@@ -380,5 +397,24 @@ final readonly class DeterministicPackageBuilder
         ) {
             throw new RuntimeException(sprintf('Extension source path %s contains an unfinished marker.', $path));
         }
+    }
+
+    /**
+     * Reserve the two generated attestation entries inside the shared package entry ceiling.
+     *
+     * @return  int  Maximum authored source-file count.
+     *
+     * @throws  RuntimeException  When configured package limits cannot hold manifest and attestations.
+     *
+     * @since   0.2.0
+     */
+    private function maximumSourceFiles(): int
+    {
+        $maximum = $this->inspector->limits()->maximumEntries - 2;
+        if ($maximum < 1) {
+            throw new RuntimeException('Package entry limits must reserve room for both attestations.');
+        }
+
+        return $maximum;
     }
 }

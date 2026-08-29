@@ -20,15 +20,15 @@ final readonly class TemplateKisCompatibility
     /**
      * Supply the exact KIS 1.0 contract historical schema-one templates implicitly targeted.
      *
-     * This narrow default preserves manifests accepted before the compatibility envelope existed. It
-     * does not create an open range: legacy packages are admitted only against the original KIS 1.0
+     * This narrow default preserves schema-one manifests accepted before the envelope existed. It
+     * does not create an open range: those packages are admitted only against the original KIS 1.0
      * standard and the exact 1.0.0 component and token contracts.
      *
      * @return  self  Exact KIS 1.0 compatibility used only for undeclared schema-one templates.
      *
      * @since   0.1.0
      */
-    public static function legacyKisOne(): self
+    public static function schemaOneKis(): self
     {
         return self::fromArray([
             'contract' => 1,

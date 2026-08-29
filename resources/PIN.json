@@ -1,29 +1,20 @@
 {
-    "format": "kumwe-extension-sdk-resource-pin-v1",
-    "note": "Digest pin over every vendored artifact under resources/. The digests are the source digests: each file is a byte-identical copy of the Kumwe App file recorded under source, so verifying these digests verifies byte equality with the App at that commit. A contract change reaches this repository only as a deliberate re-pin: new files, new digests, and a new PIN.json in one reviewed change.",
-    "source": {
-        "repository": "kumwe/app",
-        "commit": "da1922621779e73818959b5364390011b4d23f03",
-        "paths": {
-            "contract": "docs/extension-contract",
-            "fixtures/generations": "tests/Fixtures/ExtensionApi/generations",
-            "fixtures/schemas/schema-N": "tests/Fixtures/ExtensionApi/schema-N",
-            "fixtures/pins": "tests/Fixtures/ExtensionApi",
-            "extension-scaffold": "resources/extension-scaffold"
-        }
-    },
+    "format": "kumwe-extension-sdk-resource-pin-v2",
+    "package": "kumwe/extension-sdk",
+    "release_line": "0.2",
+    "note": "SDK-owned digest inventory. It proves the canonical resources shipped by this package and names no host repository as an authority.",
     "files": [
         {
             "file": "contract/README.md",
-            "sha256": "07f4f48d1b0f51b356f5eafb74975cc4824d893c3ec5f59ce5d4deae565ae5e8"
+            "sha256": "987b97f609ba48f39f2a5be15ca9435f05aa20947cfed4305789166d1aca90b7"
         },
         {
             "file": "contract/classification.json",
-            "sha256": "5edaf43e738d64ae203a994e73341106516ded7ca171408a1f41596480d1e70d"
+            "sha256": "725bc1e2624fe580e36f0d65a59cbfc71a63e1bbc255f478f51bb522d4338073"
         },
         {
             "file": "contract/generations.json",
-            "sha256": "4e17d4805b82b47a7e0de8e957d2d4e8e160fd6a6209922e1a3a748b65e32c37"
+            "sha256": "c8eba18639c8086c5a7f91520394f2482febbcf0985c0b3d81bc28335375e0b1"
         },
         {
             "file": "extension-scaffold/complete-component/.gitignore.tpl",
@@ -35,7 +26,7 @@
         },
         {
             "file": "extension-scaffold/complete-component/composer.json.tpl",
-            "sha256": "d671a6fff43b87b3b9d75d860a668bfecb7106c10c7a09000d0aa54956e97018"
+            "sha256": "5663da670f317dfd7d92bf365384a765ba8dd16f084a5db1b0a646c5b795cbeb"
         },
         {
             "file": "extension-scaffold/complete-component/docs/authoring.md.tpl",
@@ -47,7 +38,7 @@
         },
         {
             "file": "extension-scaffold/complete-component/kumwe.json.tpl",
-            "sha256": "ad25d3d0e09b2778401cbbf31121e92d133563f593fb25b14d647f97900a2961"
+            "sha256": "573b25116969dee57294feea2f5efa8120b6686f08e30961f1ed1b540d26a3cf"
         },
         {
             "file": "extension-scaffold/complete-component/phpunit.xml.dist.tpl",
@@ -55,59 +46,51 @@
         },
         {
             "file": "extension-scaffold/complete-component/src/Application/OverviewService.php.tpl",
-            "sha256": "19e78811463fcb6f6a16b5e8e3cfe03657437429eba9284b8eb1ae1f17ac914c"
-        },
-        {
-            "file": "extension-scaffold/complete-component/src/Definition/BusinessDefinitions.php.tpl",
-            "sha256": "c37a6cd37e93729d757de3505e099c5dc92487053038578a92baff200ec60d77"
+            "sha256": "6e633424ff3c2489a4929b4ddcade7db24d8b55f9509c243072b5b82888b0177"
         },
         {
             "file": "extension-scaffold/complete-component/src/Delivery/Administrator/OverviewHandler.php.tpl",
-            "sha256": "fb95dff36405d111b17dbc6cbee99ce62f7f6efb7c1eb00fe7dab53d46313878"
+            "sha256": "189073442a4bfdee6abb704d39c25c4df1843ecea3022579ad9886de37761ede"
         },
         {
             "file": "extension-scaffold/complete-component/src/Delivery/Administrator/OverviewHandlerFactory.php.tpl",
-            "sha256": "c69f13fb36d1fc8898dc68c9d2289eed03b8be44d3d5720888c382765db36364"
+            "sha256": "94fee4ece0d2b6ec0e5e47b74849ef0b3ce480f0af7c001bab82959cb6150183"
         },
         {
             "file": "extension-scaffold/complete-component/src/Delivery/Portal/OverviewHandler.php.tpl",
-            "sha256": "7c2731792a147da25c750c212cb9ccc5da6b67d8ffaeb9ce52269ea054b53670"
+            "sha256": "1155a4576366e701c26df32c92117f0c9b7e599303954cde9b787eae2b597d81"
         },
         {
             "file": "extension-scaffold/complete-component/src/Delivery/Portal/OverviewHandlerFactory.php.tpl",
-            "sha256": "6f2168a82d73daf033fccce36bc8069c2be03a769c1e64f29720fbd600184942"
+            "sha256": "f305e0dbcdca55e1fefa547d0ccc1e7034d79709f0b8f647cf8ae4c728593a6f"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/DigestJobHandler.php.tpl",
-            "sha256": "ca24cbf8c2b0a6b341481cfa27647bfc3b9023b01ee981bfc71709dd08d479af"
-        },
-        {
-            "file": "extension-scaffold/complete-component/src/Integration/IntegrationDefinitions.php.tpl",
-            "sha256": "b301de7a2d4d32422b5df5c5845f50adf26e566cd75efdaac0350a04087154df"
+            "sha256": "58cb62269fb205217344a70e41f0a54b8402ac6b69d3219bdfdd8b4dcb36e499"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/IntegrationLedger.php.tpl",
-            "sha256": "45afe8a0243b957bb8ff61ddb3b1b93e023e398597fd8a104344142135c31f02"
+            "sha256": "b6aec09e03c81e8085bf461c66914dd654c4f17741a483df40fe9ec320a11f1b"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/ItemDomainListener.php.tpl",
-            "sha256": "714fd41d08c5bd99b3d49bed0bb777de0dcaddaa5a595ce87ec45810b53e354d"
+            "sha256": "cfe0dd6ab514fc2306106e42581555e41755d1b4835ceb03948196f9e3bec235"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/ItemIntegrationConsumer.php.tpl",
-            "sha256": "67308c03e07283d84c4b771e2b2a4d38126bca5ded4281bedd0d02ebd2ec4698"
+            "sha256": "a60295f49bb7a16c1593ae3dab79c9685420a8b284044371955a7261e254bc74"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/ItemProjectionBuilder.php.tpl",
-            "sha256": "3887268393c606f720ce3ab2fe59db8d35d185e28affa4a6154f8ad8ef73ae19"
+            "sha256": "c0c7d906f66b5367ec297819918791a1ad81eaac41dab9bac17fa31063db3f8b"
         },
         {
             "file": "extension-scaffold/complete-component/src/Migration/CreateComponentRecords.php.tpl",
-            "sha256": "29b6ee38e21ef1a368f53dbe861adc06677d78e494e88282c247f7af1707c3d8"
+            "sha256": "03764a55cc497432259e148e4cb29aa16049aefbda50147e275765785acef18f"
         },
         {
             "file": "extension-scaffold/complete-component/src/Provider.php.tpl",
-            "sha256": "a6e54e0ed315ba104250c07b3571c5099ab2bf5d826fb00ea0d02c4b3912bb2d"
+            "sha256": "e54645e35552c45e3ab65e9d4a79f7fff578f148e80df8358cc236e543c5ad9c"
         },
         {
             "file": "extension-scaffold/complete-component/templates/views/administrator/index.twig.tpl",
@@ -119,15 +102,15 @@
         },
         {
             "file": "extension-scaffold/complete-component/tests/IntegrationContributionTest.php.tpl",
-            "sha256": "5297be3550f1c2f3e5634ca08aa98fc9b355dff32fd74813a8a46dec272b134b"
+            "sha256": "10151ea96b206c862c8f8710553c5a8c12c475049565677d5706b8c215abc42a"
         },
         {
             "file": "extension-scaffold/complete-component/tests/PackageDefinitionTest.php.tpl",
-            "sha256": "cb311731b06c933944765d406edb3bf65371e8b9ab2ce8de9174e0871f4f8141"
+            "sha256": "b4938c4584c59c0814984fd71b6ef72529128fe7f208c5a6d8696c2308f0498b"
         },
         {
             "file": "fixtures/generations/manifest-1/README.md",
-            "sha256": "7cebb8c499968f2b7d75e86da01005db15208b32403f2551ec640d48940c00d8"
+            "sha256": "f3e29b9ba8b0a7ae4477eb694acefe1411c5ae7a80aabdd6b0c5a5faf2d13e65"
         },
         {
             "file": "fixtures/generations/manifest-1/kumwe.json",
@@ -139,7 +122,7 @@
         },
         {
             "file": "fixtures/generations/manifest-1/src/Provider.php",
-            "sha256": "b655b7c73710fcf6dddf0f8cebc85141eec08f02bef922f4bb8f212b663d6ddc"
+            "sha256": "ac795e46338047630cc8cf6b9e7650722de6dea773221bdca4b53904b6fe31a0"
         },
         {
             "file": "fixtures/generations/manifest-2/README.md",
@@ -151,7 +134,7 @@
         },
         {
             "file": "fixtures/generations/manifest-2/src/Provider.php",
-            "sha256": "8c41c2554091f34fad817bbad78d148f73d6f351d872606375c92e0968a0660c"
+            "sha256": "52e8633cebfda6780f98f248b742ad158d42b0f174b8ee05e39d91a1c5ff39ce"
         },
         {
             "file": "fixtures/generations/manifest-2/templates/views/administrator/index.twig",
@@ -167,11 +150,11 @@
         },
         {
             "file": "fixtures/generations/manifest-3/src/GradeFieldPresenter.php",
-            "sha256": "91d738bb8ce625f7c261fbd78b14af7a49f6de161f812e1906f09bfad602d9bc"
+            "sha256": "fb810cb9b36f298e97e81f40b20402718fea0142fdaa67034baa4cba5b6e5a4e"
         },
         {
             "file": "fixtures/generations/manifest-3/src/Provider.php",
-            "sha256": "1376ca6d0938f700d4ec713d6b533811de7a960257cce359dae5e42052d5e448"
+            "sha256": "8a337b58e06a90711c4d41eabe22687f4e8fb7f43af040b5875dd9ecbd48ed67"
         },
         {
             "file": "fixtures/generations/manifest-3/templates/views/administrator/index.twig",
@@ -187,15 +170,11 @@
         },
         {
             "file": "fixtures/generations/manifest-4/kumwe.json",
-            "sha256": "49547ae83ce6e3c4a6aa73cdc9093218e8cb27a35e93a7a5e8ae2cc0b654f439"
-        },
-        {
-            "file": "fixtures/generations/manifest-4/src/Definitions.php",
-            "sha256": "19f08d35ac108bfb418138ccf1fe0d76e68d5e2400b1fb5ad88d8bddbee076c4"
+            "sha256": "97aee4caa19f0b559f9049ff0e249bacc0a9700731858fea54efeab6d12c1704"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationConsumer.php",
-            "sha256": "8d952b2e7bab2956046f091188543b4b7f98149dc2b58cfb8e2ba8e7b639d8d2"
+            "sha256": "100c944f3c2ec72e8706251b9defdb30c4bd08e2cb68975056644b2269057e4b"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationLedger.php",
@@ -203,23 +182,23 @@
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationListener.php",
-            "sha256": "9dedf0ad8cbc571072abf768c1fadf4ebb729cb515e678210f48e2d93cd38e7b"
+            "sha256": "81fe1c67650298323c6658df18c8b0a878b2562161bea4d02029a2ebfaeaab5c"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationProjectionBuilder.php",
-            "sha256": "8ffede7ecbc355fefb40b31a9d74e95cff64c3b4d90905c0320ef89eaf82a83c"
+            "sha256": "d6d742f8a9f3e507757e75b1d9d10d573cf686e315954956987d8c5d697e916c"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationWebhookTransport.php",
-            "sha256": "ca8467d0cd785dd3344d0129539ca40fa4f1029182da11ebcb4ffcfe1635d98a"
+            "sha256": "87639aff338d8fab8b0a25bab99423e2b68cf626fe223818db3bd4a7fdbe961b"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/SummarizeJob.php",
-            "sha256": "0288c4b4f8181b7e990ab5db451d3f95886316c5622ecdf56f77ad19a397696e"
+            "sha256": "8b4616b22734b085a484033a2a60908f0386d1fbbf4657b355033520f9fabc96"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Provider.php",
-            "sha256": "bbc01f347b805e1a77e1cfbc5f3e069a358e9130bf627f59aa5bd759a8779af6"
+            "sha256": "d4e6233a26999d20c9f205d95136d300e28f299fc0aa912d9062f4f41ba43f80"
         },
         {
             "file": "fixtures/generations/manifest-5/README.md",
@@ -230,72 +209,24 @@
             "sha256": "1f63dc05bcc4faacedc42827e78fadcd582f03843b20a5557ad0b02831ea01e5"
         },
         {
-            "file": "fixtures/generations/manifest-5/src/Definitions.php",
-            "sha256": "5f98634e3ff06209e522264f5b70b511a7b63d6ef27f5ba534fbb4d91e2cf8a6"
-        },
-        {
             "file": "fixtures/generations/manifest-5/src/Provider.php",
-            "sha256": "239ce89ec8f898be9d38f8d8ec7759a9f113b8a26ed23e8354a56d87c72b2338"
+            "sha256": "3ff00bdb8133085eb03e17f7216f0c726da99e72a2fe69d6ab9ed59dc801d0d9"
         },
         {
             "file": "fixtures/generations/manifest-6/README.md",
-            "sha256": "d67e23a077bed947705600baaf18c4e873c1ca3ce46f596103364044e9dc1752"
+            "sha256": "ce33a00ec2f53886b2ebcfb61ffabb0d5965a5cfe86b463afb03ab36c4c973fa"
         },
         {
             "file": "fixtures/generations/manifest-6/kumwe.json",
-            "sha256": "21127dfa1ab305d25d29e575d47728ec6de059a7a775a403e0437b36e3a144da"
-        },
-        {
-            "file": "fixtures/generations/manifest-6/src/Definitions.php",
-            "sha256": "ddb6d64dc16954e1070d622bb38e01bf0e693699399ba0c8042f259d9525f3fd"
+            "sha256": "d9580b810086f615ca5f15a4b079419a046ef8e9215e0120dfff26140324668f"
         },
         {
             "file": "fixtures/generations/manifest-6/src/GridPreviewRenderer.php",
-            "sha256": "6380a58dac11bcac8550c339612aede100d910a0f5439f36f5ae7d62babac265"
+            "sha256": "d4717088caddaafb88ef7a54be8e4874e263049812a9e9ece0aab45ae58fe764"
         },
         {
             "file": "fixtures/generations/manifest-6/src/Provider.php",
-            "sha256": "4436757ed80be7168b81f0700d7e3e921ee335e23702a2c1e495cae584ccc1bf"
-        },
-        {
-            "file": "fixtures/pins/canonical-composition-registrar-v1.json",
-            "sha256": "2abbd30cc340edca1f76ac1a4ac38cefac077edac6ce2471762837b82443a852"
-        },
-        {
-            "file": "fixtures/pins/composition-contribution-registrar-v1.json",
-            "sha256": "abe523701f8ddfb38ad23fbbabe3ba0d513f288e336a1a6c2b4f009dcd8f388f"
-        },
-        {
-            "file": "fixtures/pins/content-translation-association-v1.json",
-            "sha256": "bf0cb4b47b2ad3760847158f633322d9cc90f9d4abda215b4dff50e7dccdb6a4"
-        },
-        {
-            "file": "fixtures/pins/content-translation-registrar-v1.json",
-            "sha256": "ce5a5fde1fa32d261dc288fecc3766fbf7c1fd8175dda625d1f9c1ee82809e0e"
-        },
-        {
-            "file": "fixtures/pins/extension-event-v1.json",
-            "sha256": "6d8eca893519563c99d77462cfc7902cb55ddec22e0f422d3eb0c075345b39de"
-        },
-        {
-            "file": "fixtures/pins/interface-surface-registrar-v1.json",
-            "sha256": "4463c89cc8fcb877dc624611ca0c9b217246a2a7b9cd18aec62018b016959d54"
-        },
-        {
-            "file": "fixtures/pins/money-rate-provider-v1.json",
-            "sha256": "301b9778de8a782cc387925729e3a88d7e67d80198b4da1364e104e5509a8b65"
-        },
-        {
-            "file": "fixtures/pins/public-interfaces-v2.json",
-            "sha256": "a155c13a5a8271c8ff92288626cce70476a751881c9b4d8ebb670deda2cf1bfb"
-        },
-        {
-            "file": "fixtures/pins/studio-preview-block-renderer-v1.json",
-            "sha256": "506d462378dc7ea3ddf7c9b8d4849d471b512e5089670498dda480de732d793c"
-        },
-        {
-            "file": "fixtures/pins/unit-conversion-provider-v1.json",
-            "sha256": "1b8b5d2c0227138ca9e1e0709b58365f6c332c7ba6aa0a628f47dce83563cb42"
+            "sha256": "d4ff4c28b58892475b3cfa32ad0e531212b0f4c3246eae8085f90c8c88283aa4"
         },
         {
             "file": "fixtures/schemas/schema-1/kumwe.json",
@@ -312,6 +243,10 @@
         {
             "file": "fixtures/schemas/schema-4/kumwe.json",
             "sha256": "d1410f96ea3b6d0036813384e03d4b91d72694d49ae49c87d098ff5602ec4402"
+        },
+        {
+            "file": "toolchain/autoload-smoke.php",
+            "sha256": "ddeaf2fdbf3d44a7593614e64354efee97e66715cb98c7f4a8ce0dd4acd47963"
         }
     ]
 }

@@ -8,9 +8,9 @@ namespace Kumwe\Extension\Package;
  * What a single entry in an extension archive is, as classified from the archive directory.
  *
  * `ZipArchiveReader` decides the case from the entry name and the Unix mode in the ZIP external
- * attributes, before anything is expanded. `PackageSafetyPolicy` then reads it to make two decisions it
- * could not make from a path and a size alone: a link is refused outright, and only a regular file at
- * the archive root can satisfy the required `kumwe.json` manifest.
+ * attributes, before anything is expanded. `PackageSafetyInspector` then reports two facts it
+ * could not make from a path and a size alone: a link is reported before expansion, and only a regular
+ * file at the archive root can satisfy the required `kumwe.json` manifest.
  *
  * @since  0.1.0
  */
@@ -29,7 +29,7 @@ enum ArchiveEntryType: string
      */
     case Directory = 'directory';
     /**
-     * An entry whose mode marks it a symbolic link, which forces the whole package to be rejected.
+     * An entry whose mode marks it a symbolic link and must be surfaced as unsafe metadata.
      *
      * A link inside a package is a way to redirect a later write outside the deployment, or to smuggle a
      * reference to a host file into the extension tree, so no packaging need justifies allowing one.
@@ -37,4 +37,14 @@ enum ArchiveEntryType: string
      * @since  0.1.0
      */
     case SymbolicLink = 'symbolic_link';
+
+    /**
+     * A filesystem object that is neither a regular file, directory nor symbolic link.
+     *
+     * FIFOs, sockets and device nodes have no legitimate portable package meaning and are reported before
+     * extraction rather than being treated as ordinary files.
+     *
+     * @since  0.2.0
+     */
+    case Special = 'special';
 }

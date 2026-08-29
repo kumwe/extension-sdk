@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Syntax-check every PHP file in the library and its tests.
+ * Syntax-check every PHP file in the library, its tests, and its toolchain.
  *
  * Dependency-free so the lane runs before any composer install. Invoked as
  * `php tools/lint.php`, and as `composer lint` inside `composer check`.
@@ -15,7 +15,7 @@ $root = dirname(__DIR__);
 $failures = [];
 $count = 0;
 
-foreach (['src', 'tests', 'tools'] as $directory) {
+foreach (['src', 'tests', 'tools', 'resources/toolchain'] as $directory) {
     $path = $root . '/' . $directory;
     if (!is_dir($path)) {
         continue;

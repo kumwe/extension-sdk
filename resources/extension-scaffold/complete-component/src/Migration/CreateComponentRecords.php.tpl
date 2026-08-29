@@ -7,8 +7,8 @@ namespace @@PHP_NAMESPACE@@\Migration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
-use Kumwe\App\Extension\Application\Migration\ExtensionMigration;
-use Kumwe\App\Extension\Application\Migration\ExtensionTableNames;
+use Kumwe\Extension\Spi\Migration\ExtensionMigration;
+use Kumwe\Extension\Spi\Migration\ExtensionTableNames;
 
 /**
  * Creates the component-owned storage used for integration exercises.

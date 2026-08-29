@@ -22,7 +22,7 @@ final readonly class SignatureDocument
      * @var    string
      * @since  0.1.0
      */
-    public const FORMAT = 'kumwe-extension-signature-v1';
+    public const FORMAT = 'kumwe-extension-signature-v2';
 
     /**
      * Trust-store identifier of the public key matching this signature.
@@ -65,6 +65,9 @@ final readonly class SignatureDocument
         string $base64Signature,
     ) {
         $checksum = PackageChecksum::sha256($packageSha256);
+        if (!hash_equals((string) $checksum, $packageSha256)) {
+            throw new InvalidArgumentException('A signature package digest must already be canonical lowercase SHA-256.');
+        }
         $signature = PackageSignature::ed25519($keyId, $base64Signature);
         $this->keyId = $signature->keyId();
         $this->packageSha256 = (string) $checksum;
@@ -107,7 +110,12 @@ final readonly class SignatureDocument
             throw new InvalidArgumentException('An extension signature document field has an invalid type.');
         }
 
-        return new self($keyId, $packageSha256, $signature);
+        $document = new self($keyId, $packageSha256, $signature);
+        if (!hash_equals($document->toJson(), $json)) {
+            throw new InvalidArgumentException('An extension signature document must use canonical SDK JSON.');
+        }
+
+        return $document;
     }
 
     /**

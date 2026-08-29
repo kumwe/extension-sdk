@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace KumweContract\ManifestFour\Integration;
 
-use Kumwe\App\BusinessIntegration\Application\DomainEventHandler;
-use Kumwe\App\BusinessIntegration\Domain\DomainEvent;
-use Kumwe\App\BusinessIntegration\Domain\DomainListenerDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Application\DomainEventHandler;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainEvent;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainListenerDefinition;
 
 /**
  * Synchronous listener half of the manifest-4 compatibility package.
@@ -18,27 +18,12 @@ final readonly class ObservationListener implements DomainEventHandler
     /**
      * Bind the executable listener to the declaration the manifest signed.
      *
-     * @param  DomainListenerDefinition  $definition  Exact listener declaration.
-     * @param  ObservationLedger         $ledger      Process-local evidence sink.
+     * @param  ObservationLedger  $ledger  Process-local evidence sink.
      *
      * @since  2.0.0
      */
-    public function __construct(
-        private DomainListenerDefinition $definition,
-        private ObservationLedger $ledger,
-    ) {
-    }
-
-    /**
-     * Return the signed listener contract implemented here.
-     *
-     * @return  DomainListenerDefinition  The declaration handed in at construction.
-     *
-     * @since   2.0.0
-     */
-    public function definition(): DomainListenerDefinition
+    public function __construct(private ObservationLedger $ledger)
     {
-        return $this->definition;
     }
 
     /**
@@ -50,8 +35,15 @@ final readonly class ObservationListener implements DomainEventHandler
      *
      * @since   2.0.0
      */
-    public function handle(DomainEvent $event): void
+    public function handle(DomainListenerDefinition $declaration, DomainEvent $event): void
     {
+        if (!$declaration->accepts(
+            $event->eventType(),
+            $event->schemaVersion(),
+            $event->sensitivity(),
+        )) {
+            throw new \InvalidArgumentException('The fixture listener received an undeclared event.');
+        }
         $this->ledger->record('domain-listener');
     }
 }

@@ -5,7 +5,11 @@
   "license": "proprietary",
   "require": {
     "php": "^8.5",
-    "kumwe/app": "^2.0"
+    "doctrine/dbal": "^4.3",
+    "kumwe/extension-sdk": "^0.2",
+    "laminas/laminas-diactoros": "^3.6",
+    "psr/http-message": "^2.0",
+    "psr/http-server-handler": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^11.5"
