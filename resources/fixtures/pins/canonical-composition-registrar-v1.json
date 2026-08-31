@@ -1,12 +1,12 @@
 {
   "format": "kumwe-canonical-composition-registrar-v1",
   "interfaces": {
-    "Kumwe\\App\\Extension\\Contribution\\CanonicalCompositionRegistrar": [
-      "canonicalCompositionDocument(Kumwe\\App\\Extension\\Contribution\\CanonicalCompositionDocument $document): void"
+    "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionRegistrar": [
+      "canonicalCompositionDocument(Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionDocument $document): void"
     ]
   },
   "enums": {
-    "Kumwe\\App\\Extension\\Contribution\\CanonicalCompositionKind": [
+    "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionKind": [
       "block-definition",
       "pattern",
       "field-adapter",

@@ -1,8 +1,8 @@
 {
   "format": "kumwe-content-translation-registrar-v1",
   "interfaces": {
-    "Kumwe\\App\\Extension\\Contribution\\ContentTranslationRegistrar": [
-      "contentTranslationGroup(Kumwe\\App\\Extension\\Contribution\\TranslationGroupDeclaration $declaration): void"
+    "Kumwe\\Extension\\Spi\\Contribution\\ContentTranslationRegistrar": [
+      "contentTranslationGroup(Kumwe\\Extension\\Spi\\Contribution\\TranslationGroupDeclaration $declaration): void"
     ]
   },
   "manifest_section": "contributions.content.translation_groups",

@@ -34,7 +34,7 @@ final readonly class WebhookDeclaration
         $sensitivity = $data['sensitivity_ceiling'] ?? null;
         if (
             !is_string($identifier)
-            || !self::identifier($identifier)
+            || !self::validIdentifier($identifier)
             || !is_array($types)
             || !array_is_list($types)
             || $types === []
@@ -49,7 +49,7 @@ final readonly class WebhookDeclaration
         }
         $seenTypes = [];
         foreach ($types as $type) {
-            if (!is_string($type) || !self::identifier($type) || isset($seenTypes[$type])) {
+            if (!is_string($type) || !self::validIdentifier($type) || isset($seenTypes[$type])) {
                 throw new InvalidArgumentException('A webhook event type is invalid.');
             }
             $seenTypes[$type] = true;
@@ -110,7 +110,7 @@ final readonly class WebhookDeclaration
     }
 
     /** @since 0.2.0 */
-    private static function identifier(string $value): bool
+    private static function validIdentifier(string $value): bool
     {
         return $value !== ''
             && strlen($value) <= 191

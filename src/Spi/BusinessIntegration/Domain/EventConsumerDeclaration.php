@@ -33,9 +33,9 @@ final readonly class EventConsumerDeclaration
         $sensitivity = $data['sensitivity_ceiling'] ?? null;
         if (
             !is_string($identifier)
-            || !self::identifier($identifier)
+            || !self::validIdentifier($identifier)
             || !is_string($eventType)
-            || !self::identifier($eventType)
+            || !self::validIdentifier($eventType)
             || !is_array($versions)
             || !array_is_list($versions)
             || $versions === []
@@ -99,7 +99,7 @@ final readonly class EventConsumerDeclaration
     }
 
     /** @since 0.2.0 */
-    private static function identifier(string $value): bool
+    private static function validIdentifier(string $value): bool
     {
         return $value !== ''
             && strlen($value) <= 191

@@ -1,17 +1,17 @@
 {
   "format": "kumwe-unit-conversion-provider-v1",
   "interfaces": {
-    "Kumwe\\App\\BusinessRecord\\Application\\UnitConversionProvider": [
-      "factorFor(Kumwe\\App\\BusinessRecord\\Domain\\UnitConversionRequest $request): Kumwe\\App\\BusinessRecord\\Domain\\UnitConversionFactor",
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\UnitConversionProvider": [
+      "factorFor(Kumwe\\Extension\\Spi\\BusinessRecord\\Domain\\UnitConversionRequest $request): Kumwe\\Extension\\Spi\\BusinessRecord\\Domain\\UnitConversionFactor",
       "identifier(): string",
-      "supports(Kumwe\\App\\BusinessRecord\\Domain\\UnitConversionRequest $request): bool"
+      "supports(Kumwe\\Extension\\Spi\\BusinessRecord\\Domain\\UnitConversionRequest $request): bool"
     ],
-    "Kumwe\\App\\Extension\\Contribution\\UnitConversionProviderRegistrar": [
-      "unitConversionProvider(Kumwe\\App\\Extension\\Contribution\\UnitConversionProviderDefinition $definition, Kumwe\\App\\BusinessRecord\\Application\\UnitConversionProvider $provider): void"
+    "Kumwe\\Extension\\Spi\\Contribution\\UnitConversionProviderRegistrar": [
+      "unitConversionProvider(Kumwe\\Extension\\Spi\\Contribution\\UnitConversionProviderDefinition $definition, Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\UnitConversionProvider $provider): void"
     ]
   },
   "enums": {
-    "Kumwe\\App\\BusinessRecord\\Domain\\QuantityRoundingMode": {
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Domain\\QuantityRoundingMode": {
       "Ceiling": "ceiling",
       "Floor": "floor",
       "HalfDown": "half_down",
