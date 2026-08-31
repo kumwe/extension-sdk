@@ -11,6 +11,9 @@ must preserve the canonical boundaries in [`CHARTER.md`](../CHARTER.md).
   reconciling exact manifest-bound IDs and invoking every executable surface.
 - Qualify the first host against [`host-integration.md`](host-integration.md): direct canonical imports,
   one manifest parse, one inspection implementation and no compatibility layer.
+- Return the `kumwe/producer` requirement from the pinned `dev-main as 0.2.x-dev` development line to
+  the released `^0.2` once Producer's governed 0.2.0 release exists; Producer records that release as
+  blocked until Studio publishes its exact browser-archive assets.
 
 ## Future framework work
 

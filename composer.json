@@ -16,7 +16,7 @@
     "ext-zip": "*",
     "doctrine/dbal": "^4.3",
     "kumwe/conversion": "^0.1",
-    "kumwe/producer": "^0.2",
+    "kumwe/producer": "dev-main as 0.2.x-dev",
     "psr/http-message": "^1.1 || ^2.0",
     "psr/http-server-handler": "^1.0",
     "ramsey/uuid": "^4.7"
@@ -25,6 +25,9 @@
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^12.0"
   },
+  "bin": [
+    "bin/kumwe-extension"
+  ],
   "autoload": {
     "psr-4": {
       "Kumwe\\Extension\\": "src/"

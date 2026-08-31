@@ -14,6 +14,8 @@ Notable changes to `kumwe/extension-sdk` are recorded here in
   field-presentation constraints and host-neutral request/context values.
 - Neutral immutable package inspection snapshots, archive limits, evidence and attestation reports, and
   domain-separated package signatures with hostile-input coverage.
+- The `kumwe-extension` command line entry, installed as a Composer binary, reporting the same
+  fact-only `build`, `inspect`, `evidence` and `conformance` lanes as the PHP API.
 - Max-level PHPStan, Composer audit, strict autoload validation and production-only autoload smoke gates.
 
 ### Changed
@@ -23,6 +25,11 @@ Notable changes to `kumwe/extension-sdk` are recorded here in
 - Made the manifest the sole declarative source; providers now bind executable behavior only to validated
   identifiers and hosts retain semantic admission policy.
 - Declared canonical library dependencies explicitly instead of copying or translating their types.
+- Pinned the Studio document-schema authority to the exact `kumwe/producer` 0.2 development line
+  (`dev-main as 0.2.x-dev`): Producer's governed 0.2.0 release is blocked until Studio publishes its
+  exact browser-archive assets, and this record keeps that dependency decision visible instead of
+  declaring a version that does not exist. The requirement returns to the released `^0.2` in the
+  release that adopts it.
 
 ### Removed
 
