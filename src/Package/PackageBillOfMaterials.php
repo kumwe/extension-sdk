@@ -202,7 +202,7 @@ final readonly class PackageBillOfMaterials
     /**
      * Require every object in the SDK CycloneDX profile to use its one declared key sequence.
      *
-     * @param   array<string, mixed>  $document  Decoded CycloneDX document.
+     * @param   array<mixed>  $document  Decoded CycloneDX document, keys and values not yet trusted.
      *
      * @return  void
      *
@@ -255,7 +255,11 @@ final readonly class PackageBillOfMaterials
             self::assertObjectKeys($property, ['name', 'value'], 'property');
         }
 
-        foreach ($document['components'] as $component) {
+        $components = $document['components'] ?? null;
+        if (!is_array($components) || !array_is_list($components)) {
+            throw new InvalidArgumentException('The package bill of materials must carry a component list.');
+        }
+        foreach ($components as $component) {
             if (!is_array($component) || array_is_list($component)) {
                 throw new InvalidArgumentException('A package bill-of-materials component must be an object.');
             }
@@ -289,9 +293,9 @@ final readonly class PackageBillOfMaterials
     /**
      * Require one decoded JSON object to expose exactly the canonical keys in canonical order.
      *
-     * @param   array<string, mixed>  $object    Decoded JSON object.
-     * @param   list<string>          $expected  Exact key order.
-     * @param   string                $context   Object name used in the failure message.
+     * @param   array<mixed>  $object    Decoded JSON object whose key sequence is being verified.
+     * @param   list<string>  $expected  Exact key order.
+     * @param   string        $context   Object name used in the failure message.
      *
      * @return  void
      *

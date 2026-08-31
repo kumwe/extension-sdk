@@ -1,10 +1,5 @@
 {
   "format": "kumwe-canonical-composition-registrar-v1",
-  "interfaces": {
-    "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionRegistrar": [
-      "canonicalCompositionDocument(Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionDocument $document): void"
-    ]
-  },
   "enums": {
     "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionKind": [
       "block-definition",
@@ -21,11 +16,28 @@
     "host_bindings"
   ],
   "declaration_members": {
-    "documents": ["kind", "canonical"],
-    "host_bindings": ["kind", "id", "renderer", "capability"]
+    "documents": [
+      "kind",
+      "canonical"
+    ],
+    "host_bindings": [
+      "kind",
+      "id",
+      "renderer",
+      "capability"
+    ]
   },
   "document_exports": {
-    "canonical_composition_document": ["kind", "id", "canonical"],
-    "composition_host_binding": ["kind", "id", "renderer", "capability"]
+    "canonical_composition_document": [
+      "kind",
+      "id",
+      "canonical"
+    ],
+    "composition_host_binding": [
+      "kind",
+      "id",
+      "renderer",
+      "capability"
+    ]
   }
 }

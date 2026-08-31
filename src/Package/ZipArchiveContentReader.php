@@ -146,6 +146,10 @@ final readonly class ZipArchiveContentReader implements ArchiveContentReader
         ArchiveEntry $expected,
         PackageLimits $limits,
     ): string {
+        $chunkBytes = $limits->readChunkBytes;
+        if ($chunkBytes < 1) {
+            throw new RuntimeException('The package read chunk limit must be a positive byte count.');
+        }
         $stream = $zip->getStreamIndex($index, ZipArchive::FL_UNCHANGED);
         if (!is_resource($stream)) {
             throw new RuntimeException(sprintf(
@@ -157,7 +161,7 @@ final readonly class ZipArchiveContentReader implements ArchiveContentReader
         try {
             $contents = '';
             while (!feof($stream)) {
-                $chunk = fread($stream, $limits->readChunkBytes);
+                $chunk = fread($stream, $chunkBytes);
                 if (!is_string($chunk)) {
                     throw new RuntimeException(sprintf(
                         'Package entry %s could not be read.',

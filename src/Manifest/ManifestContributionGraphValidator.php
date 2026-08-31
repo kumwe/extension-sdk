@@ -442,8 +442,8 @@ final class ManifestContributionGraphValidator
             ], 'projection');
             $declaration = ProjectionDefinition::fromArray($item);
             $owner->assertOwns($declaration->identifier(), 'projection');
-            foreach ($declaration->toArray()['sources'] as $source) {
-                self::assertEventReferences($eventSchemas, $source['event_type'], $source['schema_versions']);
+            foreach ($declaration->sources as $source) {
+                self::assertEventReferences($eventSchemas, $source->eventType, $source->schemaVersions);
             }
             self::requiredString($item, 'handler_version', 'projection');
             self::requiredBoolean($item['rebuildable'] ?? null, 'projection rebuildable flag');
@@ -484,11 +484,11 @@ final class ManifestContributionGraphValidator
     }
 
     /**
-     * @param string $surface Canonical argument.
-     * @param string $claims Canonical argument.
+     * @param ContributionOwner $owner Signed package owner.
+     * @param array<string, mixed> $integration Integration declaration section.
+     * @param string $surface Manifest member holding the conversion provider declarations.
+     * @param string $claims Member naming each provider's claimed conversion targets.
      *
-     * @param ContributionOwner $owner Canonical argument.
-     * @param array $integration Canonical argument.
      * @since 0.2.0
      */
     private static function validateConversionProviders(
@@ -610,6 +610,7 @@ final class ManifestContributionGraphValidator
             throw new InvalidArgumentException(sprintf('%s must be an object.', $field));
         }
 
+        /** @var array<string, mixed> $value */
         return $value;
     }
 
@@ -645,7 +646,7 @@ final class ManifestContributionGraphValidator
             throw new InvalidArgumentException(sprintf('%s must be a bounded object list.', $field));
         }
         foreach ($value as $item) {
-            if (!is_array($item) || array_is_list($item) || $item === []) {
+            if (!is_array($item) || array_is_list($item)) {
                 throw new InvalidArgumentException(sprintf('Every %s entry must be a non-empty object.', $field));
             }
         }
@@ -717,7 +718,7 @@ final class ManifestContributionGraphValidator
             $seen[$item] = true;
         }
 
-        /** @var list<string> $value */
+        /** @var list<non-empty-string> $value */
         return $value;
     }
 

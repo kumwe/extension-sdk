@@ -16,6 +16,6 @@ namespace Kumwe\Extension\Spi\BusinessRecord\Application;
  */
 interface BusinessRecordReader
 {
-    /** @since 0.2.0 */
+    /** @param BusinessRecordReadRequest $query Host-authorized request naming the definition, scope and page to disclose. @since 0.2.0 */
     public function readPage(BusinessRecordReadRequest $query): BusinessRecordPage;
 }

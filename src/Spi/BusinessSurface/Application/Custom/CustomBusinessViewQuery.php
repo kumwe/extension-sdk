@@ -12,7 +12,13 @@ use Kumwe\Extension\Spi\BusinessRecord\Query\RecordQuerySpecification;
 final readonly class CustomBusinessViewQuery
 {
     /**
-     * @param  array<string, mixed>  $parameters
+     * @param  ExecutionContext          $context                 Authenticated host-issued context for the active invocation.
+     * @param  string                    $definitionIdentifier    Published business definition UUID or multi-segment handle the view belongs to.
+     * @param  string                    $view                    Manifest-declared handle of the custom view being rendered.
+     * @param  RecordQuerySpecification  $records                 Bounded browse specification selecting the records the view draws on.
+     * @param  array<string, mixed>      $parameters              Caller-supplied view parameters, budget-checked as a custom payload.
+     * @param  ?string                   $organizationIdentifier  Organization scope, when the definition requires one.
+     * @param  ?string                   $recordId                Single record the view is anchored to, or null for a collection view.
      *
      * @since  0.2.0
      */

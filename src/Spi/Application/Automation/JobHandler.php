@@ -18,7 +18,9 @@ use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
 interface JobHandler
 {
     /**
-     * @param  array<string, mixed>  $payload  Payload validated against the signed job schema.
+     * @param  JobContributionDefinition  $definition  Signed job contribution declaration this handler is bound to.
+     * @param  array<string, mixed>       $payload     Payload validated against the signed job schema.
+     * @param  ExecutionContext           $context     Host-provided execution services scoped to this job run.
      *
      * @since  0.2.0
      */

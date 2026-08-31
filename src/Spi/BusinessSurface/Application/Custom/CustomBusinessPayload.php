@@ -10,7 +10,18 @@ use JsonException;
 /** Structural budget shared by custom business inputs and outputs. @since 0.2.0 */
 final class CustomBusinessPayload
 {
-    /** @param array<string, mixed> $payload @since 0.2.0 */
+    /**
+     * Assert that one decoded payload is a JSON object inside the shared structural budget.
+     *
+     * @param   array<string, mixed>  $payload  Decoded custom business object whose shape, size and keys are checked.
+     * @param   string                $kind     Payload role (for example "view query" or "action input") named in failure messages.
+     *
+     * @return  void
+     *
+     * @throws  InvalidArgumentException  When the payload is not an object or breaches the depth, node, string or byte budget.
+     *
+     * @since   0.2.0
+     */
     public static function assertObject(array $payload, string $kind): void
     {
         if ($payload !== [] && array_is_list($payload)) {
@@ -35,7 +46,20 @@ final class CustomBusinessPayload
         }
     }
 
-    /** @since 0.2.0 */
+    /**
+     * Recursively enforce the depth, node, string and property-name budget on one JSON value.
+     *
+     * @param   mixed   $value  Candidate JSON value found at the current position of the payload tree.
+     * @param   string  $kind   Payload role named in failure messages.
+     * @param   int     $depth  Nesting level of the current value, zero for the root object.
+     * @param   int     $nodes  Running count of visited nodes, shared by reference across the whole traversal.
+     *
+     * @return  void
+     *
+     * @throws  InvalidArgumentException  When the value is not an exact JSON value or exceeds a structural bound.
+     *
+     * @since   0.2.0
+     */
     private static function assertValue(mixed $value, string $kind, int $depth, int &$nodes): void
     {
         ++$nodes;
@@ -81,6 +105,7 @@ final class CustomBusinessPayload
         }
     }
 
+    /** Static validation utility; never instantiated. @since 0.2.0 */
     private function __construct()
     {
     }

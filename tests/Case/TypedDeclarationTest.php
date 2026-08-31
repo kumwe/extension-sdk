@@ -24,30 +24,63 @@ final class TypedDeclarationTest extends TestCase
             'listener_id' => 'acme.sample.listener',
             'event_type' => 'acme.sample.changed',
             'schema_versions' => [1, 2],
+            'handler_version' => '1.0.0',
+            'priority' => 20,
             'sensitivity_ceiling' => 'internal',
         ]);
         $consumer = EventConsumerDefinition::fromArray([
             'consumer_id' => 'acme.sample.consumer',
             'event_type' => 'acme.sample.changed',
             'schema_versions' => [1],
+            'handler_version' => '1.0.0',
+            'queue' => 'acme.sample.integration',
+            'aggregate_ordered' => true,
+            'idempotency' => 'aggregate_version',
+            'maximum_attempts' => 7,
             'sensitivity_ceiling' => 'restricted',
         ]);
-        $job = JobContributionDefinition::fromArray(['job_type' => 'acme.sample.digest', 'schema_version' => 1]);
+        $job = JobContributionDefinition::fromArray([
+            'job_type' => 'acme.sample.digest',
+            'schema_version' => 1,
+            'handler_version' => '1.0.0',
+            'payload_schema' => [
+                'type' => 'object',
+                'properties' => ['limit' => ['type' => 'integer', 'minimum' => 1, 'maximum' => 100]],
+                'required' => ['limit'],
+                'additionalProperties' => false,
+            ],
+            'queue' => 'acme.sample.integration',
+            'maximum_attempts' => 5,
+            'installation_wide' => false,
+        ]);
         $webhook = WebhookContributionDefinition::fromArray([
             'adapter_id' => 'acme.sample.webhook',
             'event_types' => ['acme.sample.changed'],
             'schema_versions' => [1],
+            'handler_version' => '1.0.0',
+            'queue' => 'acme.sample.integration',
+            'idempotency' => 'event_id',
+            'maximum_attempts' => 6,
             'sensitivity_ceiling' => 'public',
         ]);
         $projection = ProjectionDefinition::fromArray([
             'identifier' => 'acme.sample.activity',
             'version' => 1,
+            'handler_version' => '1.0.0',
+            'rebuildable' => true,
+            'sensitivity_ceiling' => 'internal',
             'sources' => [['event_type' => 'acme.sample.changed', 'schema_versions' => [1]]],
+            'fields' => [
+                ['name' => 'aggregate_id', 'type' => 'identifier', 'nullable' => false],
+                ['name' => 'message', 'type' => 'string', 'nullable' => false],
+            ],
+            'key_fields' => ['aggregate_id'],
+            'rebuild_batch_size' => 250,
         ]);
 
         $this->assertSame('acme.sample.listener', $listener->identifier(), 'Listener identity is retained.');
         $this->assertSame('acme.sample.consumer', $consumer->identifier(), 'Consumer identity is retained.');
-        $this->assertSame('acme.sample.digest', $job->type(), 'Job identity is retained.');
+        $this->assertSame('acme.sample.digest', $job->identifier(), 'Job identity is retained.');
         $this->assertSame('acme.sample.webhook', $webhook->identifier(), 'Webhook identity is retained.');
         $this->assertSame('acme.sample.activity', $projection->identifier(), 'Projection identity is retained.');
     }
@@ -56,7 +89,15 @@ final class TypedDeclarationTest extends TestCase
     public function testMalformedDeclarationMembersFailClosed(): void
     {
         $this->assertThrows(
-            fn () => JobContributionDefinition::fromArray(['job_type' => 'acme.sample.job', 'schema_version' => '1']),
+            fn () => JobContributionDefinition::fromArray([
+                'job_type' => 'acme.sample.job',
+                'schema_version' => '1',
+                'handler_version' => '1.0.0',
+                'payload_schema' => ['type' => 'object', 'additionalProperties' => false],
+                'queue' => 'acme.sample.integration',
+                'maximum_attempts' => 5,
+                'installation_wide' => false,
+            ]),
             InvalidArgumentException::class,
             'A numeric-string job schema version is refused.',
         );
@@ -65,6 +106,8 @@ final class TypedDeclarationTest extends TestCase
                 'listener_id' => 'acme.sample.listener',
                 'event_type' => 'acme.sample.changed',
                 'schema_versions' => [1, 1],
+                'handler_version' => '1.0.0',
+                'priority' => 20,
                 'sensitivity_ceiling' => 'public',
             ]),
             InvalidArgumentException::class,
@@ -75,6 +118,11 @@ final class TypedDeclarationTest extends TestCase
                 'consumer_id' => 'acme.sample.consumer',
                 'event_type' => 'acme.sample.changed',
                 'schema_versions' => [],
+                'handler_version' => '1.0.0',
+                'queue' => 'acme.sample.integration',
+                'aggregate_ordered' => true,
+                'idempotency' => 'event_id',
+                'maximum_attempts' => 7,
                 'sensitivity_ceiling' => 'public',
             ]),
             InvalidArgumentException::class,
@@ -85,6 +133,10 @@ final class TypedDeclarationTest extends TestCase
                 'adapter_id' => 'acme.sample.webhook',
                 'event_types' => ['acme.sample.changed', 'acme.sample.changed'],
                 'schema_versions' => [1],
+                'handler_version' => '1.0.0',
+                'queue' => 'acme.sample.integration',
+                'idempotency' => 'event_id',
+                'maximum_attempts' => 6,
                 'sensitivity_ceiling' => 'public',
             ]),
             InvalidArgumentException::class,
@@ -94,7 +146,13 @@ final class TypedDeclarationTest extends TestCase
             fn () => ProjectionDefinition::fromArray([
                 'identifier' => 'acme.sample.activity',
                 'version' => 1,
+                'handler_version' => '1.0.0',
+                'rebuildable' => true,
+                'sensitivity_ceiling' => 'internal',
                 'sources' => [['event_type' => 'acme.sample.changed', 'schema_versions' => [0]]],
+                'fields' => [['name' => 'aggregate_id', 'type' => 'identifier', 'nullable' => false]],
+                'key_fields' => ['aggregate_id'],
+                'rebuild_batch_size' => 250,
             ]),
             InvalidArgumentException::class,
             'A non-positive projection source version is refused.',

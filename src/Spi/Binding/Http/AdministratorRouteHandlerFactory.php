@@ -13,6 +13,12 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 interface AdministratorRouteHandlerFactory
 {
-    /** @since 0.2.0 */
+    /**
+     * @param   AdministratorRouteRenderer  $renderer  Host-bound renderer closing over the validated route and view.
+     *
+     * @return  RequestHandlerInterface  Executable handler for the declared administrator route.
+     *
+     * @since   0.2.0
+     */
     public function create(AdministratorRouteRenderer $renderer): RequestHandlerInterface;
 }

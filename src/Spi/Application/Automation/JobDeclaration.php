@@ -9,7 +9,15 @@ use InvalidArgumentException;
 /** Immutable typed view of one validated manifest job declaration. @since 0.2.0 */
 final readonly class JobDeclaration
 {
-    /** @param array<string, mixed> $data @since 0.2.0 */
+    /**
+     * Freeze one validated job declaration.
+     *
+     * @param   string                $typeValue  Non-empty, control-character-free job type the host dispatches on.
+     * @param   int                   $version    Positive schema version of the job's declared payload contract.
+     * @param   array<string, mixed>  $data       Complete declaration entry as validated from the manifest.
+     *
+     * @since   0.2.0
+     */
     private function __construct(private string $typeValue, private int $version, private array $data)
     {
     }

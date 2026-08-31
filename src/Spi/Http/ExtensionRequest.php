@@ -24,6 +24,8 @@ final class ExtensionRequest
     /**
      * Read the host-supplied execution context.
      *
+     * @param   ServerRequestInterface  $request  Incoming PSR-7 request whose attributes the host populated.
+     *
      * @return  ExecutionContext  Canonical extension context.
      *
      * @since   0.2.0
@@ -40,6 +42,8 @@ final class ExtensionRequest
 
     /**
      * Read the host-supplied CSRF token, when the surface uses one.
+     *
+     * @param   ServerRequestInterface  $request  Incoming PSR-7 request that may carry the host-issued token attribute.
      *
      * @return  ?string  CSRF token or null.
      *

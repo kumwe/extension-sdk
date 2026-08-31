@@ -1,7 +1,0 @@
-{
-  "format": "kumwe-interface-surface-registrar-v1",
-  "interface": "Kumwe\\Extension\\Spi\\Contribution\\InterfaceSurfaceRegistrar",
-  "methods": [
-    "interfaceSurface(Kumwe\\Extension\\Spi\\InterfaceStandard\\SurfaceDefinition $definition): void"
-  ]
-}

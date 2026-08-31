@@ -10,8 +10,11 @@ use InvalidArgumentException;
 final readonly class DomainListenerDeclaration
 {
     /**
-     * @param  list<int>             $schemaVersions
-     * @param  array<string, mixed>  $data
+     * @param  string                $identifierValue  Validated listener identifier declared in the manifest.
+     * @param  string                $eventTypeValue   Validated domain event type the listener subscribes to.
+     * @param  list<int>             $schemaVersions   Accepted event schema versions (positive, deduplicated).
+     * @param  EventSensitivity      $ceiling          Highest event sensitivity the listener may receive.
+     * @param  array<string, mixed>  $data             Raw validated declaration payload kept for round-tripping.
      *
      * @since  0.2.0
      */
@@ -51,7 +54,6 @@ final readonly class DomainListenerDeclaration
             }
             $seen[$version] = true;
         }
-        /** @var list<int> $versions */
         $ceiling = EventSensitivity::tryFrom($sensitivity);
         if ($ceiling === null) {
             throw new InvalidArgumentException('A domain-listener sensitivity ceiling is invalid.');
@@ -84,7 +86,7 @@ final readonly class DomainListenerDeclaration
         return $this->ceiling;
     }
 
-    /** @since 0.2.0 */
+    /** @param EventEnvelope $event Delivered event checked against declared type, schema version, and sensitivity ceiling. @since 0.2.0 */
     public function accepts(EventEnvelope $event): bool
     {
         return $event->eventType() === $this->eventType()
@@ -98,7 +100,7 @@ final readonly class DomainListenerDeclaration
         return $this->data;
     }
 
-    /** @since 0.2.0 */
+    /** @param string $value Candidate identifier checked for emptiness, length, and control characters. @since 0.2.0 */
     private static function validIdentifier(string $value): bool
     {
         return $value !== ''

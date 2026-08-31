@@ -12,7 +12,16 @@ use Kumwe\Extension\Spi\BusinessRecord\Application\BusinessRecordRequestGuard;
 final readonly class CustomBusinessActionCommand
 {
     /**
-     * @param  array<string, mixed>  $input
+     * @param  ExecutionContext      $context                 Authenticated site context supplied by the host.
+     * @param  string                $definitionIdentifier    Published definition UUID or multi-segment handle.
+     * @param  string                $recordId                Identifier of the existing record the action targets.
+     * @param  int                   $expectedVersion         Record version the caller last read, rejecting the
+     *                                                        command on concurrent modification.
+     * @param  string                $action                  Manifest-declared handle of the custom action to execute.
+     * @param  IdempotencyKey        $idempotencyKey          Caller-supplied key deduplicating replayed submissions.
+     * @param  array<string, mixed>  $input                   JSON-object payload handed to the action handler.
+     * @param ?string $organizationIdentifier Organization scope, when the definition requires one.
+     * @param ?string $approvalRequestId UUID of the approval request authorizing this action, when one is attached.
      *
      * @since  0.2.0
      */

@@ -9,7 +9,14 @@ use InvalidArgumentException;
 /** Immutable signed declaration for one custom business view handler. @since 0.2.0 */
 final readonly class CustomBusinessViewDeclaration
 {
-    /** @since 0.2.0 */
+    /**
+     * @param  string                $handler       Manifest-validated reference to the executable serving the view.
+     * @param  string                $schema        Manifest-validated reference to the view schema definition.
+     * @param  CustomBusinessSchema  $querySchema   Schema constraining the query the view accepts.
+     * @param  CustomBusinessSchema  $resultSchema  Schema constraining the result the view produces.
+     *
+     * @since  0.2.0
+     */
     private function __construct(
         public string $handler,
         public string $schema,
@@ -53,7 +60,12 @@ final readonly class CustomBusinessViewDeclaration
         ];
     }
 
-    /** @param array<string, mixed> $document @param list<string> $expected @since 0.2.0 */
+    /**
+     * @param  array<string, mixed>  $document  Validated manifest declaration under inspection.
+     * @param  list<string>          $expected  Exact member names the declaration must carry.
+     *
+     * @since  0.2.0
+     */
     private static function keys(array $document, array $expected): void
     {
         if (array_diff($expected, array_keys($document)) !== [] || array_diff(array_keys($document), $expected) !== []) {
@@ -61,7 +73,12 @@ final readonly class CustomBusinessViewDeclaration
         }
     }
 
-    /** @param array<string, mixed> $document @since 0.2.0 */
+    /**
+     * @param  array<string, mixed>  $document  Validated manifest declaration under inspection.
+     * @param  string                $key       Member name whose canonical string value is required.
+     *
+     * @since  0.2.0
+     */
     private static function string(array $document, string $key): string
     {
         $value = $document[$key] ?? null;

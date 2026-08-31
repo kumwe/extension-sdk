@@ -1,15 +1,5 @@
 {
   "format": "kumwe-composition-contribution-registrar-v1",
-  "interfaces": {
-    "Kumwe\\Extension\\Spi\\Contribution\\CompositionContributionRegistrar": [
-      "compositionBlock(Kumwe\\Extension\\Spi\\Contribution\\CompositionBlockDeclaration $declaration): void",
-      "compositionPattern(Kumwe\\Extension\\Spi\\Contribution\\CompositionPatternDeclaration $declaration): void",
-      "compositionFieldControl(Kumwe\\Extension\\Spi\\Contribution\\CompositionFieldControlDeclaration $declaration): void",
-      "compositionInspector(Kumwe\\Extension\\Spi\\Contribution\\CompositionInspectorDeclaration $declaration): void",
-      "compositionDesignVocabulary(Kumwe\\Extension\\Spi\\Contribution\\CompositionDesignVocabularyDeclaration $declaration): void",
-      "compositionMigration(Kumwe\\Extension\\Spi\\Contribution\\CompositionMigrationDeclaration $declaration): void"
-    ]
-  },
   "enums": {
     "Kumwe\\Extension\\Spi\\Contribution\\CompositionPropertyType": [
       "string",
@@ -31,13 +21,51 @@
     "migrations"
   ],
   "declaration_members": {
-    "blocks": ["block_id", "properties", "slots", "renderer", "version"],
-    "patterns": ["pattern_id", "blocks", "version"],
-    "field_controls": ["control_id", "edits", "version"],
-    "inspectors": ["inspector_id", "block", "version"],
-    "design_vocabularies": ["vocabulary_id", "tokens", "recipes", "size_roles", "version"],
-    "migrations": ["migration_id", "block", "from_version", "to_version", "operations"]
+    "blocks": [
+      "block_id",
+      "properties",
+      "slots",
+      "renderer",
+      "version"
+    ],
+    "patterns": [
+      "pattern_id",
+      "blocks",
+      "version"
+    ],
+    "field_controls": [
+      "control_id",
+      "edits",
+      "version"
+    ],
+    "inspectors": [
+      "inspector_id",
+      "block",
+      "version"
+    ],
+    "design_vocabularies": [
+      "vocabulary_id",
+      "tokens",
+      "recipes",
+      "size_roles",
+      "version"
+    ],
+    "migrations": [
+      "migration_id",
+      "block",
+      "from_version",
+      "to_version",
+      "operations"
+    ]
   },
-  "migration_actions": ["clear", "remove", "rename"],
-  "reference_kinds": ["business_record", "content", "media"]
+  "migration_actions": [
+    "clear",
+    "remove",
+    "rename"
+  ],
+  "reference_kinds": [
+    "business_record",
+    "content",
+    "media"
+  ]
 }

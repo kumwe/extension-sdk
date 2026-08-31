@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Kumwe\Extension\Package;
 
 use InvalidArgumentException;
-use JsonException;
 use Kumwe\Extension\Manifest\ExtensionManifest;
 use LogicException;
 use RuntimeException;
@@ -118,7 +117,7 @@ final readonly class InspectedPackage
         $manifestJson = self::manifest($canonical, $manifestIndex, $manifestEntry->uncompressedBytes(), $limits);
         try {
             $manifest = ExtensionManifest::fromJson($manifestJson);
-        } catch (JsonException | InvalidArgumentException $failure) {
+        } catch (InvalidArgumentException $failure) {
             throw new InvalidPackage(new PackageFinding(
                 'manifest.document.invalid',
                 'The extension package manifest is invalid: ' . $failure->getMessage(),

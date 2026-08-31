@@ -202,7 +202,14 @@ final readonly class ExecutableBindingRequirements
         if (!is_array($value) || ($value !== [] && array_is_list($value))) {
             throw new InvalidArgumentException('A validated contribution section became malformed.');
         }
+        $section = [];
+        foreach ($value as $key => $member) {
+            if (!is_string($key)) {
+                throw new InvalidArgumentException('A validated contribution section became malformed.');
+            }
+            $section[$key] = $member;
+        }
 
-        return $value;
+        return $section;
     }
 }

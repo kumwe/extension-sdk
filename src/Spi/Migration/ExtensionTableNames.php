@@ -11,9 +11,9 @@ namespace Kumwe\Extension\Spi\Migration;
  */
 interface ExtensionTableNames
 {
-    /** @since 0.2.0 */
+    /** @param string $name Logical table name from the manifest, resolved to its owner-prefixed physical name. @since 0.2.0 */
     public function raw(string $name): string;
 
-    /** @since 0.2.0 */
+    /** @param string $name Logical table name from the manifest, resolved and quoted for safe use in SQL statements. @since 0.2.0 */
     public function quoted(string $name): string;
 }

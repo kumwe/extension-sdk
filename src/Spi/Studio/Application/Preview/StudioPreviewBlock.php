@@ -16,6 +16,6 @@ interface StudioPreviewBlock
     /** @since 0.2.0 */
     public function version(): string;
 
-    /** @since 0.2.0 */
+    /** @param string $name Manifest-declared property name whose configured value is read. @since 0.2.0 */
     public function property(string $name): mixed;
 }

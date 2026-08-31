@@ -25,6 +25,7 @@ use Kumwe\Extension\Spi\Contribution\CompositionHostBinding;
 use Kumwe\Extension\Spi\Contribution\CompositionInspectorDeclaration;
 use Kumwe\Extension\Spi\Contribution\CompositionMigrationDeclaration;
 use Kumwe\Extension\Spi\Contribution\CompositionPatternDeclaration;
+use Kumwe\Extension\Spi\Contribution\ContributionDefinition;
 use Kumwe\Extension\Spi\Contribution\ContributionOwner;
 use Kumwe\Extension\Spi\Portal\Contribution\PortalRouteDefinition;
 use Kumwe\Extension\Spi\Portal\Contribution\PortalNavigationDefinition;
@@ -1092,7 +1093,7 @@ final readonly class ManifestContributions
      *
      * @return  array<string, array<string, mixed>>  Declarations keyed and sorted by identifier.
      *
-     * @throws  InvalidArgumentException  When an identifier repeats.
+     * @throws  InvalidArgumentException  When an identifier is missing, not a string, or repeats.
      *
      * @since   0.1.0
      */
@@ -1100,7 +1101,14 @@ final readonly class ManifestContributions
     {
         $result = [];
         foreach ($items as $item) {
-            $key = (string) $item[$identifier];
+            $key = $item[$identifier] ?? null;
+            if (!is_string($key)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Contribution %s declarations must carry a string %s.',
+                    $kind,
+                    $identifier,
+                ));
+            }
             if (isset($result[$key])) {
                 throw new InvalidArgumentException(sprintf(
                     'Contribution %s %s is declared more than once.',
@@ -1118,7 +1126,7 @@ final readonly class ManifestContributions
     /**
      * Key ported definition objects by their own identifier, refusing repeats, then sort by key.
      *
-     * @template T of object
+     * @template T of ContributionDefinition
      *
      * @param   list<T>  $items  Definitions of one kind, in manifest order.
      * @param   string   $kind   Kind name used in the duplicate message.
@@ -1133,7 +1141,6 @@ final readonly class ManifestContributions
     {
         $result = [];
         foreach ($items as $item) {
-            /** @var string $key */
             $key = $item->identifier();
             if (isset($result[$key])) {
                 throw new InvalidArgumentException(sprintf(
@@ -1152,9 +1159,11 @@ final readonly class ManifestContributions
     /**
      * Sort every decoded object while preserving list order and scalar values.
      *
-     * @param   array<string, mixed>  $graph  Fully validated contribution graph.
+     * @template TKey of array-key
      *
-     * @return  array<string, mixed>  Canonical graph whose object key order is deterministic.
+     * @param   array<TKey, mixed>  $graph  Fully validated contribution graph or one nested decoded object.
+     *
+     * @return  array<TKey, mixed>  Canonical graph whose object key order is deterministic.
      *
      * @since   0.2.0
      */
@@ -1165,18 +1174,9 @@ final readonly class ManifestContributions
             if (!is_array($value)) {
                 continue;
             }
-            if (array_is_list($value)) {
-                foreach ($value as $index => $member) {
-                    if (is_array($member) && !array_is_list($member)) {
-                        $value[$index] = self::canonicalGraph($member);
-                    } elseif (is_array($member)) {
-                        $value[$index] = self::canonicalList($member);
-                    }
-                }
-                $graph[$key] = $value;
-                continue;
-            }
-            $graph[$key] = self::canonicalGraph($value);
+            $graph[$key] = array_is_list($value)
+                ? self::canonicalList($value)
+                : self::canonicalGraph($value);
         }
 
         return $graph;

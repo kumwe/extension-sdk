@@ -192,6 +192,7 @@ final readonly class PackageProvenance
             'materials' => ['sbom_path', 'sbom_format', 'sbom_sha256', 'entry_count', 'expanded_bytes'],
             'invocation' => ['reproducible', 'entry_epoch', 'entry_mode', 'compression'],
         ];
+        $sections = [];
         foreach ($sectionKeys as $section => $expectedKeys) {
             $content = $value[$section] ?? null;
             if (!is_array($content) || array_is_list($content)) {
@@ -206,16 +207,17 @@ final readonly class PackageProvenance
                     $section,
                 ));
             }
+            $sections[$section] = $content;
         }
 
-        $builder = $value['builder'];
+        $builder = $sections['builder'];
         if (
             ($builder['name'] ?? null) !== self::BUILDER_NAME
             || ($builder['version'] ?? null) !== self::BUILDER_VERSION
         ) {
             throw new InvalidArgumentException('The package provenance builder profile is unsupported.');
         }
-        $subject = $value['subject'];
+        $subject = $sections['subject'];
         if (
             !is_string($subject['name'] ?? null)
             || !is_string($subject['version'] ?? null)
@@ -224,20 +226,23 @@ final readonly class PackageProvenance
         ) {
             throw new InvalidArgumentException('The package provenance subject has an invalid field type.');
         }
-        $materials = $value['materials'];
+        $materials = $sections['materials'];
+        $sbomDigest = $materials['sbom_sha256'] ?? null;
+        $entryCount = $materials['entry_count'] ?? null;
+        $expandedBytes = $materials['expanded_bytes'] ?? null;
         if (
             ($materials['sbom_path'] ?? null) !== PackageBillOfMaterials::PATH
             || ($materials['sbom_format'] ?? null) !== 'CycloneDX/' . PackageBillOfMaterials::SPEC_VERSION
-            || !is_string($materials['sbom_sha256'] ?? null)
-            || preg_match('/^[a-f0-9]{64}$/D', $materials['sbom_sha256']) !== 1
-            || !is_int($materials['entry_count'] ?? null)
-            || $materials['entry_count'] < 0
-            || !is_int($materials['expanded_bytes'] ?? null)
-            || $materials['expanded_bytes'] < 0
+            || !is_string($sbomDigest)
+            || preg_match('/^[a-f0-9]{64}$/D', $sbomDigest) !== 1
+            || !is_int($entryCount)
+            || $entryCount < 0
+            || !is_int($expandedBytes)
+            || $expandedBytes < 0
         ) {
             throw new InvalidArgumentException('The package provenance materials are malformed or unsupported.');
         }
-        $invocation = $value['invocation'];
+        $invocation = $sections['invocation'];
         if ($invocation !== [
             'reproducible' => true,
             'entry_epoch' => 315_532_800,

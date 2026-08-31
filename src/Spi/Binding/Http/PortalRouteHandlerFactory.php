@@ -13,6 +13,6 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 interface PortalRouteHandlerFactory
 {
-    /** @since 0.2.0 */
+    /** @param PortalRouteRenderer $renderer Bounded renderer port the produced handler delegates portal page rendering to. @since 0.2.0 */
     public function create(PortalRouteRenderer $renderer): RequestHandlerInterface;
 }

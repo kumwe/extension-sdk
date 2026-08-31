@@ -10,9 +10,11 @@ use InvalidArgumentException;
 final readonly class WebhookDeclaration
 {
     /**
-     * @param  list<string>          $eventTypes
-     * @param  list<int>             $schemaVersions
-     * @param  array<string, mixed>  $data
+     * @param  string                $identifierValue  Manifest-validated adapter identifier owning this webhook.
+     * @param  list<string>          $eventTypes       Distinct event-type identifiers the webhook subscribes to.
+     * @param  list<int>             $schemaVersions   Distinct positive payload schema versions it accepts.
+     * @param  EventSensitivity      $ceiling          Highest event sensitivity the webhook may be delivered.
+     * @param  array<string, mixed>  $data             Raw validated declaration backing the toArray() view.
      *
      * @since  0.2.0
      */
@@ -61,8 +63,6 @@ final readonly class WebhookDeclaration
             }
             $seenVersions[$version] = true;
         }
-        /** @var list<string> $types */
-        /** @var list<int> $versions */
         $ceiling = EventSensitivity::tryFrom($sensitivity);
         if ($ceiling === null) {
             throw new InvalidArgumentException('A webhook sensitivity ceiling is invalid.');
@@ -95,7 +95,7 @@ final readonly class WebhookDeclaration
         return $this->ceiling;
     }
 
-    /** @since 0.2.0 */
+    /** @param IntegrationEvent $event Candidate event checked against this declaration's type, version, and sensitivity filters. @since 0.2.0 */
     public function accepts(IntegrationEvent $event): bool
     {
         return in_array($event->eventType(), $this->eventTypes(), true)
@@ -109,7 +109,7 @@ final readonly class WebhookDeclaration
         return $this->data;
     }
 
-    /** @since 0.2.0 */
+    /** @param string $value Candidate identifier checked for emptiness, length, and control characters. @since 0.2.0 */
     private static function validIdentifier(string $value): bool
     {
         return $value !== ''
