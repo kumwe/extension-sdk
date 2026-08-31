@@ -18,16 +18,14 @@ final class QueryGraphGuard
      */
     public static function filter(RecordFilter $filter): void
     {
-        if (
-            !in_array($filter::class, [
+        if (!in_array($filter::class, [
             BooleanFilter::class,
             ComparisonFilter::class,
             NullFilter::class,
             RelationFilter::class,
             SetFilter::class,
             TextFilter::class,
-            ], true)
-        ) {
+        ], true)) {
             throw new InvalidArgumentException('A business-record query contains a non-canonical filter node.');
         }
     }

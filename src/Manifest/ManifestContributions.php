@@ -25,7 +25,6 @@ use Kumwe\Extension\Spi\Contribution\CompositionHostBinding;
 use Kumwe\Extension\Spi\Contribution\CompositionInspectorDeclaration;
 use Kumwe\Extension\Spi\Contribution\CompositionMigrationDeclaration;
 use Kumwe\Extension\Spi\Contribution\CompositionPatternDeclaration;
-use Kumwe\Extension\Spi\Contribution\ContributionDefinition;
 use Kumwe\Extension\Spi\Contribution\ContributionOwner;
 use Kumwe\Extension\Spi\Portal\Contribution\PortalRouteDefinition;
 use Kumwe\Extension\Spi\Portal\Contribution\PortalNavigationDefinition;
@@ -1101,14 +1100,7 @@ final readonly class ManifestContributions
     {
         $result = [];
         foreach ($items as $item) {
-            $key = $item[$identifier] ?? null;
-            if (!is_string($key) || $key === '') {
-                throw new InvalidArgumentException(sprintf(
-                    'Contribution %s has no canonical %s identifier.',
-                    $kind,
-                    $identifier,
-                ));
-            }
+            $key = (string) $item[$identifier];
             if (isset($result[$key])) {
                 throw new InvalidArgumentException(sprintf(
                     'Contribution %s %s is declared more than once.',
@@ -1126,7 +1118,7 @@ final readonly class ManifestContributions
     /**
      * Key ported definition objects by their own identifier, refusing repeats, then sort by key.
      *
-     * @template T of ContributionDefinition
+     * @template T of object
      *
      * @param   list<T>  $items  Definitions of one kind, in manifest order.
      * @param   string   $kind   Kind name used in the duplicate message.
@@ -1141,6 +1133,7 @@ final readonly class ManifestContributions
     {
         $result = [];
         foreach ($items as $item) {
+            /** @var string $key */
             $key = $item->identifier();
             if (isset($result[$key])) {
                 throw new InvalidArgumentException(sprintf(
@@ -1159,7 +1152,7 @@ final readonly class ManifestContributions
     /**
      * Sort every decoded object while preserving list order and scalar values.
      *
-     * @param   array<mixed, mixed>  $graph  Fully validated contribution graph.
+     * @param   array<string, mixed>  $graph  Fully validated contribution graph.
      *
      * @return  array<string, mixed>  Canonical graph whose object key order is deterministic.
      *
@@ -1167,16 +1160,26 @@ final readonly class ManifestContributions
      */
     private static function canonicalGraph(array $graph): array
     {
-        $canonical = [];
+        ksort($graph, SORT_STRING);
         foreach ($graph as $key => $value) {
-            if (!is_string($key)) {
-                throw new InvalidArgumentException('A canonical manifest object requires string keys.');
+            if (!is_array($value)) {
+                continue;
             }
-            $canonical[$key] = self::canonicalValue($value);
+            if (array_is_list($value)) {
+                foreach ($value as $index => $member) {
+                    if (is_array($member) && !array_is_list($member)) {
+                        $value[$index] = self::canonicalGraph($member);
+                    } elseif (is_array($member)) {
+                        $value[$index] = self::canonicalList($member);
+                    }
+                }
+                $graph[$key] = $value;
+                continue;
+            }
+            $graph[$key] = self::canonicalGraph($value);
         }
-        ksort($canonical, SORT_STRING);
 
-        return $canonical;
+        return $graph;
     }
 
     /**
@@ -1190,35 +1193,16 @@ final readonly class ManifestContributions
      */
     private static function canonicalList(array $values): array
     {
-        if (!array_is_list($values)) {
-            throw new InvalidArgumentException('A canonical manifest list must use sequential indexes.');
-        }
-        $canonical = [];
-        foreach ($values as $value) {
-            $canonical[] = self::canonicalValue($value);
-        }
-
-        return $canonical;
-    }
-
-    /**
-     * Canonicalize one nested JSON value without changing its scalar type.
-     *
-     * @param mixed $value Validated manifest value.
-     *
-     * @return mixed Canonical scalar, list, or object value.
-     *
-     * @since 0.2.0
-     */
-    private static function canonicalValue(mixed $value): mixed
-    {
-        if (!is_array($value) || $value === []) {
-            return $value;
+        foreach ($values as $index => $value) {
+            if (!is_array($value)) {
+                continue;
+            }
+            $values[$index] = array_is_list($value)
+                ? self::canonicalList($value)
+                : self::canonicalGraph($value);
         }
 
-        return array_is_list($value)
-            ? self::canonicalList($value)
-            : self::canonicalGraph($value);
+        return $values;
     }
 
     /**

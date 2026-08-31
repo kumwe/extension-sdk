@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Spi\BusinessSurface\Presentation\Field;
 
+
+
 use InvalidArgumentException;
 use Kumwe\Extension\Support\CanonicalJson;
 use Kumwe\Conversion\Value\ConvertedMoneyValue;

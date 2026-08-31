@@ -38,7 +38,7 @@ final readonly class SummarizeJob implements JobHandler
      */
     public function handle(JobContributionDefinition $declaration, array $payload, ExecutionContext $context): void
     {
-        if ($declaration->identifier() !== 'kumwe.contract-manifest-four.summarize') {
+        if ($declaration->type() !== 'kumwe.contract-manifest-four.summarize') {
             throw new \InvalidArgumentException('The fixture job received the wrong declaration.');
         }
         $this->ledger->record('job');

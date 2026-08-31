@@ -171,10 +171,10 @@ final readonly class PackageBillOfMaterials
         if (strlen($json) > self::MAXIMUM_BYTES) {
             throw new InvalidArgumentException('The package bill of materials exceeds 4 MiB.');
         }
-        $value = self::object(
-            json_decode($json, true, 32, JSON_THROW_ON_ERROR),
-            'document',
-        );
+        $value = json_decode($json, true, 32, JSON_THROW_ON_ERROR);
+        if (!is_array($value) || array_is_list($value)) {
+            throw new InvalidArgumentException('The package bill of materials must be a JSON object.');
+        }
         if (($value['bomFormat'] ?? null) !== 'CycloneDX') {
             throw new InvalidArgumentException('The package bill of materials must declare bomFormat CycloneDX.');
         }
@@ -217,19 +217,31 @@ final readonly class PackageBillOfMaterials
             ['bomFormat', 'specVersion', 'serialNumber', 'version', 'metadata', 'components', 'dependencies'],
             'document',
         );
-        $metadata = self::object($document['metadata'] ?? null, 'metadata');
+        $metadata = $document['metadata'] ?? null;
+        if (!is_array($metadata) || array_is_list($metadata)) {
+            throw new InvalidArgumentException('The package bill-of-materials metadata must be an object.');
+        }
         self::assertObjectKeys($metadata, ['component', 'tools', 'properties'], 'metadata');
 
-        $root = self::object($metadata['component'] ?? null, 'root component');
+        $root = $metadata['component'] ?? null;
+        if (!is_array($root) || array_is_list($root)) {
+            throw new InvalidArgumentException('The package bill-of-materials root component must be an object.');
+        }
         self::assertObjectKeys($root, ['type', 'bom-ref', 'name', 'version', 'purl'], 'root component');
 
-        $tools = self::object($metadata['tools'] ?? null, 'tools section');
+        $tools = $metadata['tools'] ?? null;
+        if (!is_array($tools) || array_is_list($tools)) {
+            throw new InvalidArgumentException('The package bill-of-materials tools section must be an object.');
+        }
         self::assertObjectKeys($tools, ['components'], 'tools');
         $toolComponents = $tools['components'] ?? null;
         if (!is_array($toolComponents) || !array_is_list($toolComponents) || count($toolComponents) !== 1) {
             throw new InvalidArgumentException('The package bill of materials must name exactly one builder tool.');
         }
-        $tool = self::object($toolComponents[0] ?? null, 'builder tool');
+        $tool = $toolComponents[0] ?? null;
+        if (!is_array($tool) || array_is_list($tool)) {
+            throw new InvalidArgumentException('The package bill-of-materials builder tool must be an object.');
+        }
         self::assertObjectKeys($tool, ['type', 'name', 'version'], 'builder tool');
 
         $properties = $metadata['properties'] ?? null;
@@ -237,22 +249,25 @@ final readonly class PackageBillOfMaterials
             throw new InvalidArgumentException('The package bill-of-materials properties must be a list.');
         }
         foreach ($properties as $property) {
-            $property = self::object($property, 'property');
+            if (!is_array($property) || array_is_list($property)) {
+                throw new InvalidArgumentException('A package bill-of-materials property must be an object.');
+            }
             self::assertObjectKeys($property, ['name', 'value'], 'property');
         }
 
-        $components = $document['components'] ?? null;
-        if (!is_array($components) || !array_is_list($components)) {
-            throw new InvalidArgumentException('The package bill of materials must carry a component list.');
-        }
-        foreach ($components as $component) {
-            $component = self::object($component, 'file component');
+        foreach ($document['components'] as $component) {
+            if (!is_array($component) || array_is_list($component)) {
+                throw new InvalidArgumentException('A package bill-of-materials component must be an object.');
+            }
             self::assertObjectKeys($component, ['type', 'bom-ref', 'name', 'hashes'], 'file component');
             $hashes = $component['hashes'] ?? null;
             if (!is_array($hashes) || !array_is_list($hashes) || count($hashes) !== 1) {
                 throw new InvalidArgumentException('A package bill-of-materials component must carry one hash.');
             }
-            $hash = self::object($hashes[0] ?? null, 'component hash');
+            $hash = $hashes[0] ?? null;
+            if (!is_array($hash) || array_is_list($hash)) {
+                throw new InvalidArgumentException('A package bill-of-materials component hash must be an object.');
+            }
             self::assertObjectKeys($hash, ['alg', 'content'], 'component hash');
         }
 
@@ -261,7 +276,9 @@ final readonly class PackageBillOfMaterials
             throw new InvalidArgumentException('The package bill-of-materials dependencies must be a list.');
         }
         foreach ($dependencies as $dependency) {
-            $dependency = self::object($dependency, 'dependency');
+            if (!is_array($dependency) || array_is_list($dependency)) {
+                throw new InvalidArgumentException('A package bill-of-materials dependency must be an object.');
+            }
             self::assertObjectKeys($dependency, ['ref', 'dependsOn'], 'dependency');
             if (!is_array($dependency['dependsOn'] ?? null) || !array_is_list($dependency['dependsOn'])) {
                 throw new InvalidArgumentException('A package bill-of-materials dependency target must be a list.');
@@ -290,38 +307,6 @@ final readonly class PackageBillOfMaterials
                 $context,
             ));
         }
-    }
-
-    /**
-     * Normalize one decoded JSON object and reject integer member names.
-     *
-     * @param mixed $value Candidate decoded value.
-     * @param string $context Object name used in the refusal message.
-     *
-     * @return array<string, mixed> Validated object.
-     *
-     * @since 0.2.0
-     */
-    private static function object(mixed $value, string $context): array
-    {
-        if (!is_array($value) || array_is_list($value)) {
-            throw new InvalidArgumentException(sprintf(
-                'The package bill-of-materials %s must be an object.',
-                $context,
-            ));
-        }
-        $object = [];
-        foreach ($value as $key => $member) {
-            if (!is_string($key)) {
-                throw new InvalidArgumentException(sprintf(
-                    'The package bill-of-materials %s must use string keys.',
-                    $context,
-                ));
-            }
-            $object[$key] = $member;
-        }
-
-        return $object;
     }
 
     /**

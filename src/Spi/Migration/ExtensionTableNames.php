@@ -11,17 +11,9 @@ namespace Kumwe\Extension\Spi\Migration;
  */
 interface ExtensionTableNames
 {
-    /**
-     * @param string $name Extension-logical table handle.
-     *
-     * @since 0.2.0
-     */
+    /** @since 0.2.0 */
     public function raw(string $name): string;
 
-    /**
-     * @param string $name Extension-logical table handle.
-     *
-     * @since 0.2.0
-     */
+    /** @since 0.2.0 */
     public function quoted(string $name): string;
 }

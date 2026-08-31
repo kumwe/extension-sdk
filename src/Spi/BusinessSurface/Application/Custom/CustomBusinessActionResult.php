@@ -10,16 +10,7 @@ use Kumwe\Extension\Spi\BusinessRecord\Application\BusinessRecordRequestGuard;
 /** Bounded, versioned result returned by a custom business action. @since 0.2.0 */
 final readonly class CustomBusinessActionResult
 {
-    /**
-     * @param array<string, mixed> $data Bounded result object.
-     * @param int $recordVersion Resulting positive record version.
-     * @param IdempotencyKey $operationId Exact command replay identity.
-     * @param bool $replayed Whether an earlier durable result was returned.
-     * @param ?string $workflowState Optional resulting workflow-state handle.
-     * @param bool $deleted Whether the action deleted the target record.
-     *
-     * @since 0.2.0
-     */
+    /** @param array<string, mixed> $data @since 0.2.0 */
     public function __construct(
         public array $data,
         public int $recordVersion,

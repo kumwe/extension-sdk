@@ -203,14 +203,6 @@ final readonly class ExecutableBindingRequirements
             throw new InvalidArgumentException('A validated contribution section became malformed.');
         }
 
-        $object = [];
-        foreach ($value as $key => $member) {
-            if (!is_string($key)) {
-                throw new InvalidArgumentException('A validated contribution section requires string keys.');
-            }
-            $object[$key] = $member;
-        }
-
-        return $object;
+        return $value;
     }
 }

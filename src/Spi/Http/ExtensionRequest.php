@@ -26,7 +26,6 @@ final class ExtensionRequest
      *
      * @return  ExecutionContext  Canonical extension context.
      *
-     * @param ServerRequestInterface $request Active host-authenticated request.
      * @since   0.2.0
      */
     public static function context(ServerRequestInterface $request): ExecutionContext
@@ -44,7 +43,6 @@ final class ExtensionRequest
      *
      * @return  ?string  CSRF token or null.
      *
-     * @param ServerRequestInterface $request Active host-authenticated request.
      * @since   0.2.0
      */
     public static function csrfToken(ServerRequestInterface $request): ?string

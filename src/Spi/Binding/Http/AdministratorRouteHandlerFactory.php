@@ -13,11 +13,6 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 interface AdministratorRouteHandlerFactory
 {
-    /**
-     * @param AdministratorRouteRenderer $renderer Host-issued capability bound to one validated signed route,
-     *        owner, view, navigation context, and authenticated request surface.
-     *
-     * @since 0.2.0
-     */
+    /** @since 0.2.0 */
     public function create(AdministratorRouteRenderer $renderer): RequestHandlerInterface;
 }

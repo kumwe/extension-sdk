@@ -65,11 +65,7 @@ final class TypedDefinitionTest extends TestCase
         $portalTemplate = $portal->portalTemplates()[0];
         $fieldPresentation = $portal->fieldPresentations()[0];
         $this->assertSame($portalWorkspace, $portal->portalWorkspace($portalWorkspace->identifier()), 'Portal workspace lookup retains the parsed value.');
-        $this->assertSame(
-            $portalNavigation,
-            $portal->portalNavigationItem($portalNavigation->identifier()),
-            'Portal navigation lookup retains the parsed value.',
-        );
+        $this->assertSame($portalNavigation, $portal->portalNavigationItem($portalNavigation->identifier()), 'Portal navigation lookup retains the parsed value.');
         $this->assertSame($portalTemplate, $portal->portalTemplate($portalTemplate->identifier()), 'Portal template lookup retains the parsed value.');
         $this->assertSame($fieldPresentation, $portal->fieldPresentation($fieldPresentation->identifier()), 'Field-presenter lookup retains the parsed value.');
 

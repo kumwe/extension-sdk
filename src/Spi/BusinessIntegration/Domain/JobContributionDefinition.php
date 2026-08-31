@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Spi\BusinessIntegration\Domain;
 
+
 use InvalidArgumentException;
 
 /**

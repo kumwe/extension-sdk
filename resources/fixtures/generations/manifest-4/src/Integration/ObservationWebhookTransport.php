@@ -41,7 +41,7 @@ final readonly class ObservationWebhookTransport implements IntegrationEventTran
      */
     public function publish(WebhookContributionDefinition $declaration, IntegrationEvent $event): void
     {
-        if (!$declaration->accepts($event->eventType(), $event->schemaVersion())) {
+        if (!$declaration->accepts($event)) {
             throw new \InvalidArgumentException('The fixture webhook received an undeclared event.');
         }
         $this->ledger->record('webhook');

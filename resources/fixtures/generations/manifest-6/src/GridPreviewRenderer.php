@@ -4,38 +4,44 @@ declare(strict_types=1);
 
 namespace KumweContract\ManifestSix;
 
-use Kumwe\Producer\Render\BlockRenderer;
-use Kumwe\Producer\Render\Properties;
-use Kumwe\Producer\Render\RenderState;
-use Kumwe\Producer\Render\SafeMarkup;
+use Kumwe\Extension\Spi\Studio\Application\Preview\StudioPreviewBindingResult;
+use Kumwe\Extension\Spi\Studio\Application\Preview\StudioPreviewBlock;
+use Kumwe\Extension\Spi\Studio\Application\Preview\StudioPreviewBlockFragment;
+use Kumwe\Extension\Spi\Studio\Application\Preview\StudioPreviewBlockRenderer;
 
 /**
  * Safe executable preview half of the fixture's signed grid host binding.
  *
  * @since  2.0.0
  */
-final readonly class GridPreviewRenderer implements BlockRenderer
+final readonly class GridPreviewRenderer implements StudioPreviewBlockRenderer
 {
     /**
-     * Present the bounded grid column count as semantic inner markup through Producer's escaping discipline.
+     * Present the bounded grid column count as plain text through the host's safe fragment vocabulary.
      *
-     * @param   \stdClass    $node   Canonical Blueprint node validated by Producer.
-     * @param   string       $scope  Host-issued CSS scope for this node.
-     * @param   RenderState  $state  Per-render Producer services; unused by this layout-only fixture.
+     * @param   StudioPreviewBlock          $block     Immutable copied contributed grid input.
+     * @param   StudioPreviewBindingResult  $binding   Authorized value projection, unused by this layout block.
+     * @param   string                      $viewport  Active semantic viewport, retained in the visible proof.
      *
-     * @return  string  Escaped semantic inner HTML for Producer's owner-scoped wrapper.
+     * @return  StudioPreviewBlockFragment  Safe semantic fixture output.
      *
      * @since   2.0.0
      */
     public function render(
-        \stdClass $node,
-        string $scope,
-        RenderState $state,
-    ): string {
-        $columns = Properties::integerProperty(Properties::property($node, 'columns'), 1, 12, 1);
-        $text = sprintf('Contributed grid: %d columns', $columns);
+        StudioPreviewBlock $block,
+        StudioPreviewBindingResult $binding,
+        string $viewport,
+    ): StudioPreviewBlockFragment {
+        $columns = $block->property('columns');
+        $text = is_int($columns)
+            ? sprintf('Contributed grid: %d columns (%s)', $columns, $viewport)
+            : 'Contributed grid';
 
-        return '<p class="studio-preview-extension-grid" data-scope="'
-            . SafeMarkup::escapeAttribute($scope) . '">' . SafeMarkup::escapeHtml($text) . '</p>';
+        return new StudioPreviewBlockFragment(
+            'section',
+            'studio-preview-extension-grid',
+            $text,
+            $binding->hidden,
+        );
     }
 }

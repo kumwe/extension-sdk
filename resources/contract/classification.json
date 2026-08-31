@@ -57,13 +57,13 @@
             "type": "Kumwe\\Extension\\Manifest\\ManifestContributions",
             "kind": "class",
             "path": "src/Manifest/ManifestContributions.php",
-            "source_sha256": "b45d8862c165f194d17a96654d80c3154f0d5b49ee79cf0cac3c7f0c23745e58"
+            "source_sha256": "f48ecf032929035318fadd54674b6ec8a73c4561bbdd7a35e6969adfe3eb5c91"
         },
         {
             "type": "Kumwe\\Extension\\Manifest\\SemanticVersion",
             "kind": "class",
             "path": "src/Manifest/SemanticVersion.php",
-            "source_sha256": "166f7e799291ef21d3d3e79896422a9a10df381f4238032b5e93942406c372b5"
+            "source_sha256": "041e042a3c5fd7d7a9c0c1bd4186076dd15f97730c36811c7aae30d770bb4d53"
         },
         {
             "type": "Kumwe\\Extension\\Manifest\\TemplateKisCompatibility",
@@ -111,7 +111,7 @@
             "type": "Kumwe\\Extension\\Package\\InspectedPackage",
             "kind": "class",
             "path": "src/Package/InspectedPackage.php",
-            "source_sha256": "bc157f478a5eeedd7b52c6723f9253afbf8141eb8a125d71838e09f9e5970517"
+            "source_sha256": "acc5a99ed0e117eba58c0bcf0688030990d2e6b116737ec8f40f55414a70e93b"
         },
         {
             "type": "Kumwe\\Extension\\Package\\InvalidPackage",
@@ -129,7 +129,7 @@
             "type": "Kumwe\\Extension\\Package\\PackageBillOfMaterials",
             "kind": "class",
             "path": "src/Package/PackageBillOfMaterials.php",
-            "source_sha256": "bbf9e7f616bcb442760aebea90fa97ad39173a570208700360ea99b1a52d6ac7"
+            "source_sha256": "b093c25ad89510ded3e78659bab9a3ad308f981a1e02b8e2242e702d1bfbbea5"
         },
         {
             "type": "Kumwe\\Extension\\Package\\PackageChecksum",
@@ -147,7 +147,7 @@
             "type": "Kumwe\\Extension\\Package\\PackageEvidenceInspector",
             "kind": "class",
             "path": "src/Package/PackageEvidenceInspector.php",
-            "source_sha256": "32b2f766996459addc70ddc3e654a48140afe9ba51772bbea9cdd1796ad539c6"
+            "source_sha256": "bae9fa528b840ce3ed9d274ff214775dd8a6ba92f0e8c65be7e8fc94b54485f1"
         },
         {
             "type": "Kumwe\\Extension\\Package\\PackageEvidenceReport",
@@ -171,7 +171,7 @@
             "type": "Kumwe\\Extension\\Package\\PackageLimits",
             "kind": "class",
             "path": "src/Package/PackageLimits.php",
-            "source_sha256": "83a30e4511e195aca50d7f5d0b3a53ff98923eb71018609134349d6f8d1740d1"
+            "source_sha256": "ac0bad7f9997198b803c2f3c2a1a9b773a1cf14c5a352047bfb3dd9ac9687d10"
         },
         {
             "type": "Kumwe\\Extension\\Package\\PackagePath",
@@ -183,7 +183,7 @@
             "type": "Kumwe\\Extension\\Package\\PackageProvenance",
             "kind": "class",
             "path": "src/Package/PackageProvenance.php",
-            "source_sha256": "f7b7bb9860dba26866ab9386304dd72e258fa762e2488b16fbc90ea8286fabb1"
+            "source_sha256": "fe6941ebc7e562b93499ad338bdd439e2ca3fab8a3540c16faf60426312b5465"
         },
         {
             "type": "Kumwe\\Extension\\Package\\PackageSafetyInspector",
@@ -231,7 +231,7 @@
             "type": "Kumwe\\Extension\\Package\\ZipArchiveContentReader",
             "kind": "class",
             "path": "src/Package/ZipArchiveContentReader.php",
-            "source_sha256": "2d99f9fedd6fd5349e23f0cda8887220746796e207301edc411f7e56cca16634"
+            "source_sha256": "62df3372cd5b9909c337a9ab92e9bd5636eeabd20ebf9c170b465d5565505b21"
         },
         {
             "type": "Kumwe\\Extension\\Package\\ZipArchiveReader",
@@ -243,13 +243,13 @@
             "type": "Kumwe\\Extension\\Spi\\Application\\Automation\\IdempotencyKey",
             "kind": "class",
             "path": "src/Spi/Application/Automation/IdempotencyKey.php",
-            "source_sha256": "0f2bf8cc854a92ab142cfc12e035505b80a4a010f625f7eb468b43a58614d37b"
+            "source_sha256": "9b9efb5331cce31f58f4fda415729be5f1f01edf24e669f1c520abde7f139ae0"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Application\\Automation\\JobHandler",
             "kind": "interface",
             "path": "src/Spi/Application/Automation/JobHandler.php",
-            "source_sha256": "18eff208212c4a8841275083d76378c64c9fd8a6f1ed175e6c0f60e1a3fe71ec"
+            "source_sha256": "ccf0894c73d8e4d48ad9622753916521c761d18cedae8c4391ec76f9a2c12f00"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Application\\ExecutionContext",
@@ -273,7 +273,7 @@
             "type": "Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingRequirements",
             "kind": "class",
             "path": "src/Spi/Binding/ExecutableBindingRequirements.php",
-            "source_sha256": "77f6ed9558496dd24b35d56f312aa0dd3de9bec101c6ce6cae1110bc25fa4788"
+            "source_sha256": "a73c6ba9c338fa0225686713d1e9ae52f024a8905aee14f94311e6fe3c1ba2ef"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingProvider",
@@ -285,13 +285,13 @@
             "type": "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingRegistrar",
             "kind": "interface",
             "path": "src/Spi/Binding/ExtensionBindingRegistrar.php",
-            "source_sha256": "e6e93a6f901a0c26add374624641042c51848eca72c4465913f628ad7db116b5"
+            "source_sha256": "858db32aefadea2b1cbf9477751a8f8fcf3a3be1417f2d6ee15dc94792c2c427"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteHandlerFactory",
             "kind": "interface",
             "path": "src/Spi/Binding/Http/AdministratorRouteHandlerFactory.php",
-            "source_sha256": "a7365eb6d6ee5c4f1c1448c0a5196ab75b6031d0a58736603ede8a93ab3b8d2e"
+            "source_sha256": "6578e655b78e931e8b85c548cc774226f2d73820b2eb2c66f668f635bc887b4f"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteRenderer",
@@ -303,7 +303,7 @@
             "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteHandlerFactory",
             "kind": "interface",
             "path": "src/Spi/Binding/Http/PortalRouteHandlerFactory.php",
-            "source_sha256": "932cb6ca31dfd0dbc7b1211b8f9f9031dc3bbf43ecdd9a0c11ed65095c52b8ed"
+            "source_sha256": "b4dd7ae1d53c3431a7ccc0c5d3e0e466b7fcca3f206f96cdba02ef91b74ddd3f"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteRenderer",
@@ -315,19 +315,19 @@
             "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\DomainEventHandler",
             "kind": "interface",
             "path": "src/Spi/BusinessIntegration/Application/DomainEventHandler.php",
-            "source_sha256": "3af98127bb4de5fad224e70800e2bdf04c452a391b372d039be13178115c6b92"
+            "source_sha256": "aab1f9b280b3e4a739a7e69dc3fcf9e02562d9ecee0753520050924a9da17fd1"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventHandler",
             "kind": "interface",
             "path": "src/Spi/BusinessIntegration/Application/IntegrationEventHandler.php",
-            "source_sha256": "d19db5f9101280270bd84396e685041d63e6f121557277b0eca4fea844fa710c"
+            "source_sha256": "7043f60052077eb53e1fcb17445dc47afb2509927ffa5262942b67e1202411a6"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventTransport",
             "kind": "interface",
             "path": "src/Spi/BusinessIntegration/Application/IntegrationEventTransport.php",
-            "source_sha256": "0d134e8df4b70b9b194bdfda9ebfb6892ef6174775fc0f6a88f9580d0f8ffe23"
+            "source_sha256": "6ac9058743a24543bd1d88b404ca246b66f3974dee47ffcdea7bd441d8abfb33"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\ConsumerIdempotency",
@@ -345,13 +345,13 @@
             "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainListenerDefinition",
             "kind": "class",
             "path": "src/Spi/BusinessIntegration/Domain/DomainListenerDefinition.php",
-            "source_sha256": "e4370011e991b0816c4d48373db9d56d5d9d15da4ce3aec8bcf1a388e72b90e3"
+            "source_sha256": "8e04d454d8cee58bcc8d22e63882827ea37be0f168bde461b60f6291a1ab5a01"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventConsumerDefinition",
             "kind": "class",
             "path": "src/Spi/BusinessIntegration/Domain/EventConsumerDefinition.php",
-            "source_sha256": "40d964eb49fc86adcf10cbf5ecb61377949b34bab8122a3d991ae2c852338d5a"
+            "source_sha256": "699347d4dd56faf8d8a624e778d0a1bbbb1103cee7a38958caace646eb315036"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventEnvelope",
@@ -387,13 +387,13 @@
             "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\JobContributionDefinition",
             "kind": "class",
             "path": "src/Spi/BusinessIntegration/Domain/JobContributionDefinition.php",
-            "source_sha256": "78b092bb003e6fe563beb1d25522a3f68d62a0f325a1bde8f4c0e93237e9bb83"
+            "source_sha256": "f513bbbbeb26814dba9361f6cc8e7dcda4d5f1ca3bc8bf3bf9b0ece54ff90fb7"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\WebhookContributionDefinition",
             "kind": "class",
             "path": "src/Spi/BusinessIntegration/Domain/WebhookContributionDefinition.php",
-            "source_sha256": "4c7ad7a68efbfb760192d885d6c48d1118073e4682653483248f0b033ad59fad"
+            "source_sha256": "84fef2804288f1bd5fde4caaeac6bcdc1019b500c39f260af25b5adc44e755e8"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordPage",
@@ -417,13 +417,13 @@
             "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReader",
             "kind": "interface",
             "path": "src/Spi/BusinessRecord/Application/BusinessRecordReader.php",
-            "source_sha256": "063b40e517415bd956e26035c51c43bae637ea4bfe5cfe0f015345ba9b49019a"
+            "source_sha256": "100e4503aeaecdd0ad7015b392117688adb86ca7a7670473ccb5e5dbcebd0f92"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordRequestGuard",
             "kind": "class",
             "path": "src/Spi/BusinessRecord/Application/BusinessRecordRequestGuard.php",
-            "source_sha256": "51c37a9264afcd8f578f4a09b0edb61bf39d7bc539c816b0e95700476b41e35d"
+            "source_sha256": "c4d09f995b2438a6579bc25e05ca43b7f1c043063c3f5fffc1e45e37064978c7"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordView",
@@ -465,7 +465,7 @@
             "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\CursorPosition",
             "kind": "class",
             "path": "src/Spi/BusinessRecord/Query/CursorPosition.php",
-            "source_sha256": "1240e6ec33e3a546c4eaf620f37b8ecaaf1a2c02f703288f61ab1cfb33fe0477"
+            "source_sha256": "8d7692de8fb9f46be7d9e349a891c5a634371b060c0cc0461b15a6c4d23d48d2"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\NullFilter",
@@ -477,7 +477,7 @@
             "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryCanonicalizer",
             "kind": "class",
             "path": "src/Spi/BusinessRecord/Query/QueryCanonicalizer.php",
-            "source_sha256": "991ffe25bbcbc9a943e1a085558a35b9f211e7206b7995b3e62877aeac47671a"
+            "source_sha256": "345c907bfc83420d4e610d20dde4e7ca304caddaf0698189df27d9f296fdae71"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryIdentifier",
@@ -579,7 +579,7 @@
             "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionBuilder",
             "kind": "interface",
             "path": "src/Spi/BusinessReporting/Application/ProjectionBuilder.php",
-            "source_sha256": "387ff9c75adf74f6a888fd5b64612a63813f4991bddd913c71bb01d9b170fbe2"
+            "source_sha256": "4a9b6ee67a7625dff90812b094591a139d340df8f946d68311d66c37827460b6"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionEvent",
@@ -663,31 +663,31 @@
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionCommand",
             "kind": "class",
             "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionCommand.php",
-            "source_sha256": "6511374952acac053ea85d67543529ae79faa806acc08715fd386b475de25296"
+            "source_sha256": "67eb114bf7893a0434a1f2e44ed777a009a1fe7b1352810cac8f5dcb39374d43"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionDeclaration",
             "kind": "class",
             "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionDeclaration.php",
-            "source_sha256": "e4887ec5e01a5397371689c864b68f47d6f2cce0cd4a160a3046b71430b5c5c9"
+            "source_sha256": "7ff202fecdc7b242be1263e882a8e14040b45de99a1c347f9d153cfe65421739"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionHandler",
             "kind": "interface",
             "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionHandler.php",
-            "source_sha256": "e29dd51c53c21ebc09e8da56a801f04cb38007feed52aca5a5c657f6e3b8e840"
+            "source_sha256": "6334fb14282f489b5c23fdf063d50045f7240da90ebd1e789d042383a789429d"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionResult",
             "kind": "class",
             "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionResult.php",
-            "source_sha256": "17238be630494ac4cf4a96f1ab122c18083c91e0e76476bbcfa6bf45c0f131d4"
+            "source_sha256": "81a5b0d08f0340a73de33c1778cfb598704118b502987ec9f849c20210c0a1ad"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessPayload",
             "kind": "class",
             "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessPayload.php",
-            "source_sha256": "9e61a9145ccb01d1d540b9c6555d546cfe672f26ba21ae1754a451a4001c3971"
+            "source_sha256": "8a32ad91559f446852cfd12934ae975e7bf37027a880ea994550f8af7c13a054"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessReference",
@@ -705,19 +705,19 @@
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewDeclaration",
             "kind": "class",
             "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessViewDeclaration.php",
-            "source_sha256": "b7e9ef6df1ece0dbae5977bbb722d78299aab6d859edd2e0399ae185d66cfd71"
+            "source_sha256": "2a1eec36e2f23293aeed3c0b6042f02b8b2a360153ca9ea8561d0f1c119e884c"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewHandler",
             "kind": "interface",
             "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessViewHandler.php",
-            "source_sha256": "3aa77e5d12d31a20a251fd7b7405592b03a3e0133074f608f053e12c8288ab13"
+            "source_sha256": "67e0dc92c3801f4724a21a8064d71af6e3c1ec60d43551f531eece035e7de965"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewQuery",
             "kind": "class",
             "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessViewQuery.php",
-            "source_sha256": "7d72203e69ed5a2357864e93507ceb165f8451c0d0b21487ef6bccc8ee0aa592"
+            "source_sha256": "4075e76e0c02f5994a260970f14e2683e4e5b2d9b68c6c7358c6d3f74c64733e"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewResult",
@@ -753,13 +753,13 @@
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationModel",
             "kind": "class",
             "path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresentationModel.php",
-            "source_sha256": "69b41037425e5ee6180fb54d9cfaea1e93403c916f2c758e215916a1b909833b"
+            "source_sha256": "6ccf85c3d6b72eb932162576b7a268661dca1cc62bb03f21e3adfc42f3eaa6dd"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresenter",
             "kind": "interface",
             "path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresenter.php",
-            "source_sha256": "19c8f026f23b269a61edb132c4f10cc435c0a9124783e3abf5edcfa6a7688022"
+            "source_sha256": "6f962135ced6cdc38f4dc1a339203b561d0779964da82bec6b84cc25d9917fd3"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldWidget",
@@ -795,7 +795,7 @@
             "type": "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionDocument",
             "kind": "class",
             "path": "src/Spi/Contribution/CanonicalCompositionDocument.php",
-            "source_sha256": "bdd6886257eac52b272fb5d3f1253a3067c8f64f741890e6440368f01e0b4818"
+            "source_sha256": "1458889931d5230d956c25a3b4f888b70c5c7949d58d20e5eeb6c4a46b1f9c56"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionKind",
@@ -879,7 +879,7 @@
             "type": "Kumwe\\Extension\\Spi\\Http\\ExtensionRequest",
             "kind": "class",
             "path": "src/Spi/Http/ExtensionRequest.php",
-            "source_sha256": "0e24958e6de7b74a11f164ed6c0ec07cce74c17e966ccaa682b15905a4b8eaf4"
+            "source_sha256": "e15fedc853321f868a1682e28e5e143b97abd2fb2fcb043502b1427051b9de2f"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Identity\\Domain\\Capability",
@@ -891,13 +891,13 @@
             "type": "Kumwe\\Extension\\Spi\\Migration\\ExtensionMigration",
             "kind": "interface",
             "path": "src/Spi/Migration/ExtensionMigration.php",
-            "source_sha256": "e9003ab9e546c37cdcda1cd106eea068fb41cf40732c238d4d33c5191ba06480"
+            "source_sha256": "99823e8d33fbe41d834da37813919a5c4f077f946fea3db5c8ff8efc34327e05"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Migration\\ExtensionTableNames",
             "kind": "interface",
             "path": "src/Spi/Migration/ExtensionTableNames.php",
-            "source_sha256": "9a5dc87b5d684427b2652da9f32c567067e6dcb2e05bca19d8c4dd1a6640fbf1"
+            "source_sha256": "796a214f5ac6f1968df19c68dc343f1a39709a48fdff05221a110926e129d416"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalNavigationDefinition",
@@ -927,13 +927,37 @@
             "type": "Kumwe\\Extension\\Spi\\Runtime\\BootableExtension",
             "kind": "interface",
             "path": "src/Spi/Runtime/BootableExtension.php",
-            "source_sha256": "b186bc4f4f389684f238d9a3ccaf0c8230929066bb5e0e3f2d89ba104a2869f8"
+            "source_sha256": "83022bfdc5c6c32ade0384e605d898b90588fe3239ea08d601d0fc69ce73a2c7"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer",
             "kind": "interface",
             "path": "src/Spi/Runtime/ExtensionContainer.php",
-            "source_sha256": "47d5e77979fd848af5550d8c23063da8cb7b9dbdf9d54182de39f10caa82077d"
+            "source_sha256": "dbea75170721b409582103f57515cb4fdedbcbdc66ef4f8afd40c83ea1f211a2"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBindingResult",
+            "kind": "class",
+            "path": "src/Spi/Studio/Application/Preview/StudioPreviewBindingResult.php",
+            "source_sha256": "79ada535ac2c81ccaf53246c83e43323c43b03cd3ab63d6c94cf5ac129da3fe7"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlock",
+            "kind": "interface",
+            "path": "src/Spi/Studio/Application/Preview/StudioPreviewBlock.php",
+            "source_sha256": "1495200c95946aca09d278e80ca71b229b0ca89054d8f246972f8c78d4f88a00"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockFragment",
+            "kind": "class",
+            "path": "src/Spi/Studio/Application/Preview/StudioPreviewBlockFragment.php",
+            "source_sha256": "4fb725a956667d7a572e522d184edd9047601e6437d9c050633c9a0226cfbf5a"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockRenderer",
+            "kind": "interface",
+            "path": "src/Spi/Studio/Application/Preview/StudioPreviewBlockRenderer.php",
+            "source_sha256": "9a21311e0484d3a76f0aa0885e11f1b05db2ed38cf4eb1237b39cac6cff78f16"
         },
         {
             "type": "Kumwe\\Extension\\Toolchain\\ComponentScaffolder",
@@ -952,6 +976,18 @@
             "kind": "class",
             "path": "src/Toolchain/DeterministicPackageBuilder.php",
             "source_sha256": "05fc2260be8e427330691af84bcf994b0b9bdeb445534f0c8e2cf79144f786c8"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\ExtensionConformanceTestCase",
+            "kind": "class",
+            "path": "src/Toolchain/ExtensionConformanceTestCase.php",
+            "source_sha256": "8d5a9af95e3cc8364a244be665bdeb8851d74e368cdc393e27a4bddf082b8fd5"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\ExtensionLifecycleTestCase",
+            "kind": "class",
+            "path": "src/Toolchain/ExtensionLifecycleTestCase.php",
+            "source_sha256": "e9035466fb7835415e23eff95a9f356366afd09a61f81d5e119e25df9febb4ea"
         },
         {
             "type": "Kumwe\\Extension\\Toolchain\\ExtensionPackageConformance",

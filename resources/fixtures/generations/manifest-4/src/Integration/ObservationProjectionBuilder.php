@@ -20,17 +20,10 @@ final readonly class ObservationProjectionBuilder implements ProjectionBuilder
         ProjectionWriter $writer,
     ): void
     {
-        $accepted = false;
-        foreach ($declaration->sources as $source) {
-            if (
-                $source->eventType === $event->type()
-                && in_array($event->schemaVersion(), $source->schemaVersions, true)
-            ) {
-                $accepted = true;
-                break;
-            }
-        }
-        if ($declaration->identifier() !== 'kumwe.contract-manifest-four.activity' || !$accepted) {
+        if (
+            $declaration->identifier() !== 'kumwe.contract-manifest-four.activity'
+            || !$declaration->accepts($event)
+        ) {
             throw new InvalidArgumentException('The compatibility projection received an undeclared source event.');
         }
         $message = $event->payload()['message'] ?? null;

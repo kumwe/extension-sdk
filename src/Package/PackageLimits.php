@@ -48,20 +48,18 @@ final readonly class PackageLimits
         public int $maximumProvenanceBytes = 16_384,
         public int $readChunkBytes = 262_144,
     ) {
-        if (
-            min(
-                $maximumEntries,
-                $maximumEntryBytes,
-                $maximumExpandedBytes,
-                $maximumCompressedBytes,
-                $maximumArchiveBytes,
-                $maximumCompressionRatio,
-                $maximumManifestBytes,
-                $maximumBillOfMaterialsBytes,
-                $maximumProvenanceBytes,
-                $readChunkBytes,
-            ) < 1
-        ) {
+        if (min(
+            $maximumEntries,
+            $maximumEntryBytes,
+            $maximumExpandedBytes,
+            $maximumCompressedBytes,
+            $maximumArchiveBytes,
+            $maximumCompressionRatio,
+            $maximumManifestBytes,
+            $maximumBillOfMaterialsBytes,
+            $maximumProvenanceBytes,
+            $readChunkBytes,
+        ) < 1) {
             throw new InvalidArgumentException('Package limits must be positive integers.');
         }
         if ($maximumEntryBytes > $maximumExpandedBytes) {

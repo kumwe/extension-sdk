@@ -13,11 +13,6 @@ use Psr\Http\Server\RequestHandlerInterface;
  */
 interface PortalRouteHandlerFactory
 {
-    /**
-     * @param PortalRouteRenderer $renderer Host-issued capability bound to one validated signed route,
-     *        owner, template, and authenticated portal request surface.
-     *
-     * @since 0.2.0
-     */
+    /** @since 0.2.0 */
     public function create(PortalRouteRenderer $renderer): RequestHandlerInterface;
 }

@@ -49,7 +49,8 @@ final readonly class PackageEvidenceInspector
     public function inspect(
         InspectedPackage $package,
         PackageEvidenceScope $scope = PackageEvidenceScope::Authoring,
-    ): PackageEvidenceReport {
+    ): PackageEvidenceReport
+    {
         if (!$package->hasNoSafetyFindings()) {
             return new PackageEvidenceReport(
                 $scope,

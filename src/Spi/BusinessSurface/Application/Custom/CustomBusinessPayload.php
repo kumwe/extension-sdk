@@ -10,12 +10,7 @@ use JsonException;
 /** Structural budget shared by custom business inputs and outputs. @since 0.2.0 */
 final class CustomBusinessPayload
 {
-    /**
-     * @param array<string, mixed> $payload Candidate payload object.
-     * @param string $kind Payload kind used in refusal messages.
-     *
-     * @since 0.2.0
-     */
+    /** @param array<string, mixed> $payload @since 0.2.0 */
     public static function assertObject(array $payload, string $kind): void
     {
         if ($payload !== [] && array_is_list($payload)) {
@@ -40,14 +35,7 @@ final class CustomBusinessPayload
         }
     }
 
-    /**
-     * @param mixed $value Candidate exact-JSON member.
-     * @param string $kind Payload kind used in refusal messages.
-     * @param int $depth Current nesting depth.
-     * @param int $nodes Running node count, updated in place.
-     *
-     * @since 0.2.0
-     */
+    /** @since 0.2.0 */
     private static function assertValue(mixed $value, string $kind, int $depth, int &$nodes): void
     {
         ++$nodes;
@@ -93,9 +81,6 @@ final class CustomBusinessPayload
         }
     }
 
-    /**
-     * @since 0.2.0
-     */
     private function __construct()
     {
     }

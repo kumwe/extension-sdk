@@ -156,12 +156,8 @@ final readonly class ZipArchiveContentReader implements ArchiveContentReader
 
         try {
             $contents = '';
-            $readChunkBytes = $limits->readChunkBytes;
-            if ($readChunkBytes < 1) {
-                throw new RuntimeException('The package read chunk is not positive.');
-            }
             while (!feof($stream)) {
-                $chunk = fread($stream, $readChunkBytes);
+                $chunk = fread($stream, $limits->readChunkBytes);
                 if (!is_string($chunk)) {
                     throw new RuntimeException(sprintf(
                         'Package entry %s could not be read.',
@@ -188,4 +184,5 @@ final readonly class ZipArchiveContentReader implements ArchiveContentReader
             fclose($stream);
         }
     }
+
 }

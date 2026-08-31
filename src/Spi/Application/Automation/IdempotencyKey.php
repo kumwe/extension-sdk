@@ -10,11 +10,7 @@ use Stringable;
 /** Validated caller-supplied identity of one replay-protected operation. @since 0.2.0 */
 final readonly class IdempotencyKey implements Stringable
 {
-    /**
-     * @param string $key Already validated transport-safe replay identity.
-     *
-     * @since 0.2.0
-     */
+    /** @since 0.2.0 */
     private function __construct(private string $key)
     {
     }
@@ -22,7 +18,6 @@ final readonly class IdempotencyKey implements Stringable
     /**
      * @throws  InvalidArgumentException  When the value is not 8 to 128 transport-safe ASCII characters.
      *
-     * @param string $value Candidate caller-supplied replay identity.
      * @since   0.2.0
      */
     public static function fromString(string $value): self
@@ -42,11 +37,7 @@ final readonly class IdempotencyKey implements Stringable
         return $this->key;
     }
 
-    /**
-     * @param self $other Replay identity to compare in constant time.
-     *
-     * @since 0.2.0
-     */
+    /** Compare replay identities in constant time. @since 0.2.0 */
     public function equals(self $other): bool
     {
         return hash_equals($this->key, $other->key);

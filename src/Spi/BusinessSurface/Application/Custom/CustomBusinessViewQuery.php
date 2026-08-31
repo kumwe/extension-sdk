@@ -14,12 +14,6 @@ final readonly class CustomBusinessViewQuery
     /**
      * @param  array<string, mixed>  $parameters
      *
-     * @param ExecutionContext $context Host-issued invocation identity and trace context.
-     * @param string $definitionIdentifier Admitted business-definition identity.
-     * @param string $view Signed custom-view handle.
-     * @param RecordQuerySpecification $records Closed host-constrained record query.
-     * @param ?string $organizationIdentifier Optional active organization scope.
-     * @param ?string $recordId Optional target record identity for detail views.
      * @since  0.2.0
      */
     public function __construct(

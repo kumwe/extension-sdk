@@ -16,10 +16,6 @@ namespace Kumwe\Extension\Spi\BusinessRecord\Application;
  */
 interface BusinessRecordReader
 {
-    /**
-     * @param BusinessRecordReadRequest $query Host-issued context and closed canonical record query.
-     *
-     * @since 0.2.0
-     */
+    /** @since 0.2.0 */
     public function readPage(BusinessRecordReadRequest $query): BusinessRecordPage;
 }

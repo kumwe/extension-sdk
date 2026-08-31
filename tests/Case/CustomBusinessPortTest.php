@@ -168,30 +168,12 @@ final class CustomBusinessPortTest extends TestCase
                 return 'default';
             }
 
-            public function actorId(): string
-            {
-                return 'user:test';
-            }
-            public function organizationIdentifier(): ?string
-            {
-                return 'org:north';
-            }
-            public function workspaceIdentifier(): ?string
-            {
-                return null;
-            }
-            public function requestId(): string
-            {
-                return 'request-test';
-            }
-            public function correlationId(): string
-            {
-                return 'correlation-test';
-            }
-            public function deliverySurface(): string
-            {
-                return 'administrator';
-            }
+            public function actorId(): string { return 'user:test'; }
+            public function organizationIdentifier(): ?string { return 'org:north'; }
+            public function workspaceIdentifier(): ?string { return null; }
+            public function requestId(): string { return 'request-test'; }
+            public function correlationId(): string { return 'correlation-test'; }
+            public function deliverySurface(): string { return 'administrator'; }
         };
     }
 

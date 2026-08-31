@@ -15,7 +15,6 @@ interface BootableExtension extends ExtensionServiceProvider
      * Declarations are forbidden in this phase; all routes, events and contributions come from the manifest
      * and executable implementations are attached through the canonical binding provider.
      *
-     * @param ExtensionContainer $container Owner-scoped services after every provider has registered.
      * @since  0.2.0
      */
     public function boot(ExtensionContainer $container): void;

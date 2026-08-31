@@ -171,7 +171,10 @@ final readonly class PackageProvenance
         if (strlen($json) > self::MAXIMUM_BYTES) {
             throw new InvalidArgumentException('The package provenance statement exceeds 16 KiB.');
         }
-        $value = self::object(json_decode($json, true, 8, JSON_THROW_ON_ERROR), 'statement');
+        $value = json_decode($json, true, 8, JSON_THROW_ON_ERROR);
+        if (!is_array($value) || array_is_list($value)) {
+            throw new InvalidArgumentException('The package provenance statement must be a JSON object.');
+        }
         if (array_keys($value) !== ['format', 'build_type', 'builder', 'subject', 'materials', 'invocation']) {
             throw new InvalidArgumentException(
                 'The package provenance statement contains an unknown or missing key.',
@@ -183,29 +186,36 @@ final readonly class PackageProvenance
         if (($value['build_type'] ?? null) !== self::BUILD_TYPE) {
             throw new InvalidArgumentException('The package provenance build type is unsupported.');
         }
-        $builder = self::parseSection($value, 'builder', ['name', 'version']);
-        $subject = self::parseSection(
-            $value,
-            'subject',
-            ['name', 'version', 'extension_type', 'manifest_schema'],
-        );
-        $materials = self::parseSection(
-            $value,
-            'materials',
-            ['sbom_path', 'sbom_format', 'sbom_sha256', 'entry_count', 'expanded_bytes'],
-        );
-        $invocation = self::parseSection(
-            $value,
-            'invocation',
-            ['reproducible', 'entry_epoch', 'entry_mode', 'compression'],
-        );
+        $sectionKeys = [
+            'builder' => ['name', 'version'],
+            'subject' => ['name', 'version', 'extension_type', 'manifest_schema'],
+            'materials' => ['sbom_path', 'sbom_format', 'sbom_sha256', 'entry_count', 'expanded_bytes'],
+            'invocation' => ['reproducible', 'entry_epoch', 'entry_mode', 'compression'],
+        ];
+        foreach ($sectionKeys as $section => $expectedKeys) {
+            $content = $value[$section] ?? null;
+            if (!is_array($content) || array_is_list($content)) {
+                throw new InvalidArgumentException(sprintf(
+                    'The package provenance section %s must be a JSON object.',
+                    $section,
+                ));
+            }
+            if (array_keys($content) !== $expectedKeys) {
+                throw new InvalidArgumentException(sprintf(
+                    'The package provenance section %s contains an unknown or missing key.',
+                    $section,
+                ));
+            }
+        }
 
+        $builder = $value['builder'];
         if (
             ($builder['name'] ?? null) !== self::BUILDER_NAME
             || ($builder['version'] ?? null) !== self::BUILDER_VERSION
         ) {
             throw new InvalidArgumentException('The package provenance builder profile is unsupported.');
         }
+        $subject = $value['subject'];
         if (
             !is_string($subject['name'] ?? null)
             || !is_string($subject['version'] ?? null)
@@ -214,6 +224,7 @@ final readonly class PackageProvenance
         ) {
             throw new InvalidArgumentException('The package provenance subject has an invalid field type.');
         }
+        $materials = $value['materials'];
         if (
             ($materials['sbom_path'] ?? null) !== PackageBillOfMaterials::PATH
             || ($materials['sbom_format'] ?? null) !== 'CycloneDX/' . PackageBillOfMaterials::SPEC_VERSION
@@ -226,14 +237,13 @@ final readonly class PackageProvenance
         ) {
             throw new InvalidArgumentException('The package provenance materials are malformed or unsupported.');
         }
-        if (
-            $invocation !== [
+        $invocation = $value['invocation'];
+        if ($invocation !== [
             'reproducible' => true,
             'entry_epoch' => 315_532_800,
             'entry_mode' => '0100644',
             'compression' => 'store',
-            ]
-        ) {
+        ]) {
             throw new InvalidArgumentException('The package provenance invocation profile is unsupported.');
         }
 
@@ -244,62 +254,6 @@ final readonly class PackageProvenance
         }
 
         return $statement;
-    }
-
-    /**
-     * Read one exact nested statement section.
-     *
-     * @param array<string, mixed> $statement Validated top-level statement.
-     * @param string $name Section member name.
-     * @param list<string> $expectedKeys Exact canonical key order.
-     *
-     * @return array<string, mixed> Validated section.
-     *
-     * @since 0.2.0
-     */
-    private static function parseSection(array $statement, string $name, array $expectedKeys): array
-    {
-        $section = self::object($statement[$name] ?? null, 'section ' . $name);
-        if (array_keys($section) !== $expectedKeys) {
-            throw new InvalidArgumentException(sprintf(
-                'The package provenance section %s contains an unknown or missing key.',
-                $name,
-            ));
-        }
-
-        return $section;
-    }
-
-    /**
-     * Normalize one decoded JSON object and reject integer member names.
-     *
-     * @param mixed $value Candidate decoded value.
-     * @param string $context Object name used in the refusal message.
-     *
-     * @return array<string, mixed> Validated object.
-     *
-     * @since 0.2.0
-     */
-    private static function object(mixed $value, string $context): array
-    {
-        if (!is_array($value) || array_is_list($value)) {
-            throw new InvalidArgumentException(sprintf(
-                'The package provenance %s must be a JSON object.',
-                $context,
-            ));
-        }
-        $object = [];
-        foreach ($value as $key => $member) {
-            if (!is_string($key)) {
-                throw new InvalidArgumentException(sprintf(
-                    'The package provenance %s must use string keys.',
-                    $context,
-                ));
-            }
-            $object[$key] = $member;
-        }
-
-        return $object;
     }
 
     /**
@@ -319,7 +273,8 @@ final readonly class PackageProvenance
         string $sbomSha256,
         int $entryCount,
         int $expandedBytes,
-    ): array {
+    ): array
+    {
         $findings = [];
         $subject = $this->section('subject');
         if (($subject['name'] ?? null) !== $manifest->identifier()->value()) {

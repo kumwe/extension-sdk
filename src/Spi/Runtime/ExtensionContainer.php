@@ -11,9 +11,10 @@ namespace Kumwe\Extension\Spi\Runtime;
  * than the host container, so an extension reaches exactly the services the runtime chose to pass it,
  * plus the ones it registered itself. An implementation owes two guarantees: an identifier that was
  * never granted fails instead of resolving, and a factory the extension registers cannot take over the
- * name of a service it was handed. A host supplies one owner-scoped implementation per active extension.
- * This is an authority-minimization boundary, not a process sandbox: it bounds what trusted in-process
- * extension code can resolve through dependency injection, not the ambient authority of admitted PHP code.
+ * name of a service it was handed. `RestrictedExtensionContainer` is the implementation the runtime
+ * builds, one per active extension. This is an API compatibility boundary, not a security sandbox — it
+ * bounds what trusted in-process extension code can reach, not what hostile code could do. See
+ * `docs/architecture/extensions.md` for the ambient authority admitted code inherits regardless.
  *
  * @since  0.1.0
  */

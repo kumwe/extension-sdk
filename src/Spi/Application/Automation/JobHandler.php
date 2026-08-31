@@ -18,9 +18,8 @@ use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
 interface JobHandler
 {
     /**
-     * @param JobContributionDefinition $definition Canonical signed job definition selected by its bound type.
-     * @param array<string, mixed> $payload Payload already validated against the definition's schema.
-     * @param ExecutionContext $context Host-issued execution identity and correlation context.
+     * @param  array<string, mixed>  $payload  Payload validated against the signed job schema.
+     *
      * @since  0.2.0
      */
     public function handle(JobContributionDefinition $definition, array $payload, ExecutionContext $context): void;

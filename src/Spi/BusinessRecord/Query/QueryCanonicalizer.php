@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Spi\BusinessRecord\Query;
 
+
+
 /**
  * Reduces a query literal to the stable form a specification digest and a cursor payload are built on.
  *

@@ -9,14 +9,7 @@ use InvalidArgumentException;
 /** Immutable signed declaration for one custom business action handler. @since 0.2.0 */
 final readonly class CustomBusinessActionDeclaration
 {
-    /**
-     * @param string $handler Owner-scoped executable binding identifier.
-     * @param string $schema Owner-scoped action schema identifier.
-     * @param CustomBusinessSchema $commandSchema Closed accepted-command shape.
-     * @param CustomBusinessSchema $resultSchema Closed returned-result shape.
-     *
-     * @since 0.2.0
-     */
+    /** @since 0.2.0 */
     private function __construct(
         public string $handler,
         public string $schema,
@@ -60,12 +53,7 @@ final readonly class CustomBusinessActionDeclaration
         ];
     }
 
-    /**
-     * @param array<string, mixed> $document Validated declaration object.
-     * @param list<string> $expected Exact member names.
-     *
-     * @since 0.2.0
-     */
+    /** @param array<string, mixed> $document @param list<string> $expected @since 0.2.0 */
     private static function keys(array $document, array $expected): void
     {
         if (array_diff($expected, array_keys($document)) !== [] || array_diff(array_keys($document), $expected) !== []) {
@@ -73,11 +61,7 @@ final readonly class CustomBusinessActionDeclaration
         }
     }
 
-    /**
-     * @param array<string, mixed> $document Validated declaration object.
-     * @param string $key Required string member.
-     * @since 0.2.0
-     */
+    /** @param array<string, mixed> $document @since 0.2.0 */
     private static function string(array $document, string $key): string
     {
         $value = $document[$key] ?? null;

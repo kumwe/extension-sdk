@@ -51,7 +51,7 @@ final readonly class CanonicalCompositionDocument implements ContributionDefinit
         try {
             $decoded = CanonicalJson::decode($canonical);
             $expected = CanonicalJson::stringify($decoded);
-        } catch (JsonException | CanonicalEncodingException $exception) {
+        } catch (JsonException|CanonicalEncodingException $exception) {
             throw new InvalidArgumentException(
                 'A canonical composition document must use valid canonical JSON.',
                 0,

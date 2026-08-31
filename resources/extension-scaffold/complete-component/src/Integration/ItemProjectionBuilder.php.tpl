@@ -27,19 +27,9 @@ final readonly class ItemProjectionBuilder implements ProjectionBuilder
         $payload = $event->payload();
         $itemId = $payload['item_id'] ?? null;
         $title = $payload['title'] ?? null;
-        $accepted = false;
-        foreach ($declaration->sources as $source) {
-            if (
-                $source->eventType === $event->type()
-                && in_array($event->schemaVersion(), $source->schemaVersions, true)
-            ) {
-                $accepted = true;
-                break;
-            }
-        }
         if (
             $declaration->identifier() !== '@@EXTENSION_DOTTED@@.item_projection'
-            || !$accepted
+            || !$declaration->accepts($event)
             || !is_string($itemId)
             || $itemId === ''
             || mb_strlen($itemId) > 191

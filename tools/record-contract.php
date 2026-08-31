@@ -207,8 +207,7 @@ function recordGenerations(string $root): array
         'package' => 'kumwe/extension-sdk',
         'release_line' => '0.2',
         'authority' => 'resources/fixtures/generations and the canonical SDK manifest parser',
-        'note' => 'Canonical SDK generations. The signed manifest is the sole declaration source; '
-            . 'providers bind executable implementations only to validated identifiers.',
+        'note' => 'Canonical SDK generations. The signed manifest is the sole declaration source; providers bind executable implementations only to validated identifiers.',
         'classification' => 'contract/classification.json',
         'fixture_root' => 'fixtures/generations',
         'contribution_surfaces' => $surfaces,
