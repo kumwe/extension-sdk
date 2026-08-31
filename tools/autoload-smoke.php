@@ -14,7 +14,7 @@
 declare(strict_types=1);
 
 use Kumwe\Extension\Manifest\ExtensionManifest;
-use Kumwe\Extension\Package\PackageInspectionLimits;
+use Kumwe\Extension\Package\PackageLimits;
 use Kumwe\Extension\Spi\Application\Automation\IdempotencyKey;
 use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldPresentationConfiguration;
 use Kumwe\Extension\Toolchain\PackageInspector;
@@ -28,7 +28,7 @@ require $autoload;
 
 $types = [
     ExtensionManifest::class,
-    PackageInspectionLimits::class,
+    PackageLimits::class,
     IdempotencyKey::class,
     FieldPresentationConfiguration::class,
     PackageInspector::class,
