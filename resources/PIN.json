@@ -94,7 +94,7 @@
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/ItemProjectionBuilder.php.tpl",
-            "sha256": "f44459dd9ece4e6f51cb9f092a52458e1c03f4fef4b4c5d8d001acc18703cf74"
+            "sha256": "519f3349897486168e4364218d8becca180c2ba06f2e1e15aa0884f434e5e69e"
         },
         {
             "file": "extension-scaffold/complete-component/src/Migration/CreateComponentRecords.php.tpl",

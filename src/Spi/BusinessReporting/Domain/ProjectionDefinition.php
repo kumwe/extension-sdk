@@ -114,6 +114,27 @@ final readonly class ProjectionDefinition implements IntegrationContract
     }
 
     /**
+     * Determine whether this projection accepts the supplied event contract.
+     *
+     * @param   string  $eventType      Stable namespaced type of the event.
+     * @param   int     $schemaVersion  Exact payload schema version to test.
+     *
+     * @return  bool  Whether a declared source names this exact event contract.
+     *
+     * @since   0.2.3
+     */
+    public function accepts(string $eventType, int $schemaVersion): bool
+    {
+        foreach ($this->sources as $source) {
+            if ($source->eventType === $eventType && in_array($schemaVersion, $source->schemaVersions, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Export every rebuild-relevant choice in deterministic manifest shape.
      *
      * @return  array<string, mixed>  Canonically encodable projection document.

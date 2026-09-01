@@ -83,6 +83,9 @@ final class TypedDeclarationTest extends TestCase
         $this->assertSame('acme.sample.digest', $job->identifier(), 'Job identity is retained.');
         $this->assertSame('acme.sample.webhook', $webhook->identifier(), 'Webhook identity is retained.');
         $this->assertSame('acme.sample.activity', $projection->identifier(), 'Projection identity is retained.');
+        $this->assertTrue($projection->accepts('acme.sample.changed', 1), 'A declared source contract is accepted.');
+        $this->assertTrue(!$projection->accepts('acme.sample.changed', 2), 'An undeclared schema version is refused.');
+        $this->assertTrue(!$projection->accepts('acme.sample.removed', 1), 'An undeclared event type is refused.');
     }
 
     /** @since 0.2.0 */

@@ -3,6 +3,16 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## [0.2.3] - 2026-09-01
+
+### Fixed
+
+- Restored an exact-contract acceptance check on the projection declaration:
+  `ProjectionDefinition::accepts(string $eventType, int $schemaVersion)` mirrors the listener and
+  webhook definitions, so a builder can fail closed on an event outside its declared sources. The
+  scaffold's generated `ItemProjectionBuilder` called exactly this check but 0.2.0 shipped the
+  declaration without it, which made every scaffolded component crash on its first projected event.
+
 ## [0.2.2] - 2026-09-01
 
 ### Added
