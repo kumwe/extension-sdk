@@ -5,6 +5,14 @@ Notable changes to `kumwe/extension-sdk` are recorded here in
 
 ## [0.2.1] - 2026-09-01
 
+### Added
+
+- Graph validation for the declarative content-publication section: `content.translation_groups`
+  entries now prove closed shape, bounded unique locales, a fallback drawn from the declared
+  locales, and — critically — that no signed package claims a content set outside its own
+  namespace. The 0.2.0 validator only counted these declarations, so a manifest could claim a
+  foreign vendor's content group.
+
 ### Fixed
 
 - Admit executable event bindings — domain listeners, consumers, projection sources and webhook

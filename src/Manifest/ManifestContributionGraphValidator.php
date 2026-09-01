@@ -47,10 +47,12 @@ final class ManifestContributionGraphValidator
         $business = self::object($data['business'] ?? [], 'business');
         $integration = self::object($data['integration'] ?? [], 'integration');
         $interface = self::object($data['interface'] ?? [], 'interface');
+        $content = self::object($data['content'] ?? [], 'content');
         self::validateGraphical($owner, $capabilities, $administrator, $portal, $interface);
         self::validateResourcePolicies($owner, $capabilities, $data);
         [$definitionHandles, $fieldTypes] = self::validateBusiness($owner, $business);
         self::validateIntegration($owner, $capabilities, $definitionHandles, $integration);
+        self::validateContent($owner, $content);
         foreach (self::objects($business['field_presentations'] ?? [], 'business.field_presentations') as $item) {
             $presentation = FieldPresentationContribution::fromArray($item);
             $fieldType = $presentation->fieldType;
@@ -501,6 +503,37 @@ final class ManifestContributionGraphValidator
                 throw new InvalidArgumentException('A conversion provider priority is invalid.');
             }
             self::unique($seen, $identifier, $surface);
+        }
+    }
+
+    /**
+     * Validate the declarative content-publication section against its signed owner.
+     *
+     * Locale grammar and publication policy stay host semantics; the graph boundary proves closed
+     * shape, bounded unique locales, a fallback drawn from the declared locales, and that no signed
+     * package claims a content set outside its own namespace.
+     *
+     * @param  ContributionOwner     $owner    Signed package owner.
+     * @param  array<string, mixed>  $content  Content declaration section.
+     *
+     * @since  0.2.1
+     */
+    private static function validateContent(ContributionOwner $owner, array $content): void
+    {
+        $groups = [];
+        foreach (self::objects($content['translation_groups'] ?? [], 'content.translation_groups') as $item) {
+            self::keys($item, ['group_id', 'locales', 'fallback_locale'], [
+                'group_id', 'locales', 'fallback_locale',
+            ], 'translation group');
+            $groupId = self::owned($owner, $item, 'group_id', 'translation group');
+            $locales = self::stringList($item['locales'] ?? null, 'translation group locales', 64, false);
+            $fallback = self::requiredString($item, 'fallback_locale', 'translation group');
+            if (!in_array($fallback, $locales, true)) {
+                throw new InvalidArgumentException(
+                    'A translation group fallback locale must be one of its declared locales.',
+                );
+            }
+            self::unique($groups, $groupId, 'translation group');
         }
     }
 
