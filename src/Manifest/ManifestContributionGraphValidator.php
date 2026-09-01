@@ -30,11 +30,12 @@ use Kumwe\Extension\Spi\Contribution\ContributionOwner;
 final class ManifestContributionGraphValidator
 {
     /**
-     * @param  ContributionOwner     $owner   Signed package owner.
-     * @param  array<string, mixed>  $data    Complete contribution graph.
+     * @param  ContributionOwner     $owner           Signed package owner.
+     * @param  array<string, mixed>  $data            Complete contribution graph.
+     * @param  int                   $manifestSchema  Declaring manifest schema generation.
      * @since  0.2.0
      */
-    public static function validate(ContributionOwner $owner, array $data): void
+    public static function validate(ContributionOwner $owner, array $data, int $manifestSchema = 4): void
     {
         $capabilities = self::identities(
             self::objects($data['capabilities'] ?? [], 'capabilities'),
@@ -48,7 +49,7 @@ final class ManifestContributionGraphValidator
         $integration = self::object($data['integration'] ?? [], 'integration');
         $interface = self::object($data['interface'] ?? [], 'interface');
         $content = self::object($data['content'] ?? [], 'content');
-        self::validateGraphical($owner, $capabilities, $administrator, $portal, $interface);
+        self::validateGraphical($owner, $capabilities, $administrator, $portal, $interface, $manifestSchema);
         self::validateResourcePolicies($owner, $capabilities, $data);
         [$definitionHandles, $fieldTypes] = self::validateBusiness($owner, $business);
         self::validateIntegration($owner, $capabilities, $definitionHandles, $integration);
@@ -89,9 +90,10 @@ final class ManifestContributionGraphValidator
     /**
      * @param  ContributionOwner     $owner          Signed package owner.
      * @param  array<string, true>   $capabilities   Declared capability identities.
-     * @param  array<string, mixed>  $administrator  Administrator declarations.
-     * @param  array<string, mixed>  $portal         Portal declarations.
-     * @param  array<string, mixed>  $interface      KIS declarations.
+     * @param  array<string, mixed>  $administrator   Administrator declarations.
+     * @param  array<string, mixed>  $portal          Portal declarations.
+     * @param  array<string, mixed>  $interface       KIS declarations.
+     * @param  int                   $manifestSchema  Declaring manifest schema generation.
      *
      * @since  0.2.0
      */
@@ -101,6 +103,7 @@ final class ManifestContributionGraphValidator
         array $administrator,
         array $portal,
         array $interface,
+        int $manifestSchema,
     ): void {
         $workspaces = self::identities(
             self::objects($administrator['workspaces'] ?? [], 'administrator.workspaces'),
@@ -179,12 +182,80 @@ final class ManifestContributionGraphValidator
             if (isset($surfaces[$surface])) {
                 throw new InvalidArgumentException('An interface surface is declared more than once.');
             }
+            $declared = [];
             foreach (self::stringList($item['capabilities'] ?? null, 'interface capabilities', 32, false) as $capability) {
                 if (!isset($capabilities[$capability])) {
                     throw new InvalidArgumentException('An interface surface references an undeclared capability.');
                 }
+                $declared[$capability] = true;
             }
-            $surfaces[$surface] = true;
+            $surfaces[$surface] = [
+                'area' => self::requiredString($item, 'area', 'interface surface'),
+                'capabilities' => $declared,
+            ];
+        }
+        if ($manifestSchema >= 4) {
+            self::assertKisRouteCoverage(
+                $surfaces,
+                self::objects($administrator['routes'] ?? [], 'administrator.routes'),
+                self::objects($portal['routes'] ?? [], 'portal.routes'),
+            );
+        }
+    }
+
+    /**
+     * Bind every KIS-enabled graphical GET route to one semantic interface surface of its area.
+     *
+     * Every current-generation graphical route must have an area-matched surface with the same
+     * stable name whose declared capabilities include the route capability, and every
+     * administrator or portal surface must resolve to such an owned graphical GET route. Mutation
+     * routes remain actions of the GET surface rather than pretending to be separate pages. This
+     * is intentionally fail-closed for schema-4 and newer packages while retaining the frozen
+     * schema-2 and schema-3 compatibility grammars.
+     *
+     * @param  array<string, array{area: string, capabilities: array<string, true>}>  $surfaces  Declared
+     *         interface surfaces by stable identifier.
+     * @param  list<array<string, mixed>>  $administratorRoutes  Declared administrator routes.
+     * @param  list<array<string, mixed>>  $portalRoutes         Declared portal routes.
+     *
+     * @since  0.2.2
+     */
+    private static function assertKisRouteCoverage(
+        array $surfaces,
+        array $administratorRoutes,
+        array $portalRoutes,
+    ): void {
+        foreach ([['administrator', $administratorRoutes], ['portal', $portalRoutes]] as [$area, $routes]) {
+            $graphical = [];
+            foreach ($routes as $route) {
+                $name = self::requiredString($route, 'name', $area . ' route');
+                $methods = self::stringList($route['methods'] ?? null, $area . ' route methods', 16, false);
+                if (!in_array('GET', $methods, true)) {
+                    continue;
+                }
+                $graphical[$name] = self::requiredString($route, 'capability', $area . ' route');
+                $surface = $surfaces[$name] ?? null;
+                if ($surface === null || $surface['area'] !== $area) {
+                    throw new InvalidArgumentException(sprintf(
+                        'A KIS-enabled package must declare every %s graphical GET route as a surface.',
+                        $area,
+                    ));
+                }
+                if (!isset($surface['capabilities'][$graphical[$name]])) {
+                    throw new InvalidArgumentException(sprintf(
+                        'A KIS %s surface must include its route capability.',
+                        $area,
+                    ));
+                }
+            }
+            foreach ($surfaces as $name => $surface) {
+                if ($surface['area'] === $area && !isset($graphical[$name])) {
+                    throw new InvalidArgumentException(sprintf(
+                        'A KIS %s surface must match its owned graphical GET route name.',
+                        $area,
+                    ));
+                }
+            }
         }
     }
 

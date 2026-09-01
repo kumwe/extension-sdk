@@ -277,6 +277,67 @@ final class TypedDefinitionTest extends TestCase
         );
     }
 
+    /** @since 0.2.2 */
+    public function testGraphicalPackageCannotOmitItsInterfaceDeclaration(): void
+    {
+        $manifest = json_decode($this->fixture(), true, 64, JSON_THROW_ON_ERROR);
+        $prefix = 'kumwe.contract-manifest-four';
+        $manifest['contributions']['administrator']['views'] = [
+            ['name' => $prefix . '.administrator.index', 'template' => 'index.twig'],
+        ];
+        $manifest['contributions']['administrator']['routes'] = [[
+            'name' => $prefix . '.administrator.index',
+            'path' => '/',
+            'methods' => ['GET'],
+            'capability' => $prefix . '.view',
+            'view' => $prefix . '.administrator.index',
+        ]];
+        $manifest['contributions']['interface'] = ['surfaces' => [[
+            'surface' => $prefix . '.administrator.index',
+            'standard' => 'kis-1.0',
+            'area' => 'administrator',
+            'actor' => 'administrator',
+            'intent' => 'diagnostics',
+            'resource' => 'contract-manifest-four',
+            'purpose' => 'Inspect the manifest-four contract fixture.',
+            'pattern' => 'diagnostics-workspace',
+            'capabilities' => [$prefix . '.view'],
+            'states' => ['default', 'empty', 'error', 'permission-reduced'],
+        ]]];
+        $accepted = ExtensionManifest::fromJson(json_encode($manifest, JSON_THROW_ON_ERROR));
+        $declared = $accepted->contributions()->declarations()['interface'] ?? null;
+        $this->assertSame(
+            $prefix . '.administrator.index',
+            is_array($declared) ? ($declared['surfaces'][0]['surface'] ?? null) : null,
+            'A graphical GET route covered by an area-matched surface is admitted.',
+        );
+
+        $undeclared = $manifest;
+        unset($undeclared['contributions']['interface']);
+        $failure = $this->assertThrows(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(
+                json_encode($undeclared, JSON_THROW_ON_ERROR),
+            ),
+            InvalidArgumentException::class,
+            'A graphical package cannot omit its interface declaration.',
+        );
+        $this->assertStringContains(
+            'declare every administrator graphical GET route as a surface',
+            $failure->getMessage(),
+            'The refusal names the missing surface coverage.',
+        );
+
+        $foreignArea = $manifest;
+        $foreignArea['contributions']['interface']['surfaces'][0]['area'] = 'portal';
+        $this->assertThrows(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(
+                json_encode($foreignArea, JSON_THROW_ON_ERROR),
+            ),
+            InvalidArgumentException::class,
+            'An area-mismatched surface never covers a graphical route.',
+        );
+    }
+
     /** @return string Manifest-four JSON. @since 0.2.0 */
     private function fixture(int $generation = 4): string
     {
