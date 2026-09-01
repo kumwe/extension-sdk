@@ -57,7 +57,7 @@
             "type": "Kumwe\\Extension\\Manifest\\ManifestContributions",
             "kind": "class",
             "path": "src/Manifest/ManifestContributions.php",
-            "source_sha256": "f6475debcd92796d01ca8b0eebd43e4731010448801bc3328232a56212d17713"
+            "source_sha256": "603a08a54b1bd63cdf658f75068505a46d2c7fd9fef42ac452f07a4210212420"
         },
         {
             "type": "Kumwe\\Extension\\Manifest\\SemanticVersion",
