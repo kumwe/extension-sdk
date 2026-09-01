@@ -29,7 +29,7 @@ final readonly class ItemProjectionBuilder implements ProjectionBuilder
         $title = $payload['title'] ?? null;
         if (
             $declaration->identifier() !== '@@EXTENSION_DOTTED@@.item_projection'
-            || !$declaration->accepts($event)
+            || !$declaration->accepts($event->type(), $event->schemaVersion())
             || !is_string($itemId)
             || $itemId === ''
             || mb_strlen($itemId) > 191

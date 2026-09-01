@@ -639,7 +639,7 @@
             "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionDefinition",
             "kind": "class",
             "path": "src/Spi/BusinessReporting/Domain/ProjectionDefinition.php",
-            "source_sha256": "b96f4e38b3241a20daee2e94a5a0ffdae888aba8faf5f212948e2b4e09a7376a"
+            "source_sha256": "17fa73bc15d6e73ec40f4f9518b883e0384baff4b2f158980aaf7597842d08ba"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionFieldDefinition",
