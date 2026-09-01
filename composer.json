@@ -16,7 +16,7 @@
     "ext-zip": "*",
     "doctrine/dbal": "^4.3",
     "kumwe/conversion": "^0.1",
-    "kumwe/producer": "dev-main as 0.2.x-dev",
+    "kumwe/producer": "^0.2",
     "psr/http-message": "^1.1 || ^2.0",
     "psr/http-server-handler": "^1.0",
     "ramsey/uuid": "^4.7"

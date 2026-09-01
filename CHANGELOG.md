@@ -25,11 +25,11 @@ Notable changes to `kumwe/extension-sdk` are recorded here in
 - Made the manifest the sole declarative source; providers now bind executable behavior only to validated
   identifiers and hosts retain semantic admission policy.
 - Declared canonical library dependencies explicitly instead of copying or translating their types.
-- Pinned the Studio document-schema authority to the exact `kumwe/producer` 0.2 development line
-  (`dev-main as 0.2.x-dev`): Producer's governed 0.2.0 release is blocked until Studio publishes its
-  exact browser-archive assets, and this record keeps that dependency decision visible instead of
-  declaring a version that does not exist. The requirement returns to the released `^0.2` in the
-  release that adopts it.
+- Adopted the released `kumwe/producer ^0.2` line as the Studio document-schema authority. The
+  release chain completed in order — Studio's governed `studio-v0.1.0-beta.3` prerelease published
+  its verified browser archive and detached checksum, Producer re-pinned from those public
+  downloads and released 0.2.0 — so the requirement declares a published release rather than a
+  development pin.
 
 ### Removed
 

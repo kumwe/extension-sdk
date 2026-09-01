@@ -125,13 +125,7 @@ final class ConformanceRunnerTest extends TestCase
         $requirements = $composer['require'] ?? null;
         $this->assertTrue(is_array($requirements), 'Runtime requirements must be an object.');
         $this->assertSame('^0.1', $requirements['kumwe/conversion'] ?? null, 'Conversion is consumed directly.');
-        // The recorded release decision pins Producer's 0.2 development line while its governed
-        // 0.2.0 release stays blocked upstream; this returns to ^0.2 when that release exists.
-        $this->assertSame(
-            'dev-main as 0.2.x-dev',
-            $requirements['kumwe/producer'] ?? null,
-            'Producer schemas are consumed directly at the recorded 0.2 pin.',
-        );
+        $this->assertSame('^0.2', $requirements['kumwe/producer'] ?? null, 'Producer schemas are consumed directly.');
         $this->assertTrue(
             !isset($requirements['kumwe/' . 'app']),
             'A host application must not be a runtime dependency.',
