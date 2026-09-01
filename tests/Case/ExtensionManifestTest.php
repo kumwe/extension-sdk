@@ -11,9 +11,12 @@ declare(strict_types=1);
 namespace Kumwe\Extension\Tests\Case;
 
 use InvalidArgumentException;
+use Kumwe\Extension\Manifest\ExtensionIdentifier;
 use Kumwe\Extension\Manifest\ExtensionManifest;
 use Kumwe\Extension\Manifest\ExtensionType;
+use Kumwe\Extension\Manifest\ManifestContributions;
 use Kumwe\Extension\Manifest\SemanticVersion;
+use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldPresentationContext;
 use Kumwe\Extension\Tests\TestCase;
 
 /**
@@ -419,6 +422,177 @@ JSON),
             'must exactly match the ordered contributed capability identifiers',
             $failure->getMessage(),
             'The refusal names the reconciliation rule.',
+        );
+    }
+
+    /**
+     * Schema 3 parses and canonically round-trips a signed field-presentation declaration.
+     *
+     * @return  void
+     *
+     * @since   0.2.4
+     */
+    public function testSchemaThreeContributionsRoundTripAFieldPresentationDeclaration(): void
+    {
+        $document = $this->fieldPresentationContributions();
+        $declared = ManifestContributions::fromManifest(ExtensionIdentifier::fromString('acme/editor'), $document, 3);
+        $roundTrip = $declared->declarations();
+
+        $this->assertSame(
+            [['contexts' => ['update', 'detail'], 'field_type' => 'acme.editor.code']],
+            $roundTrip['business']['field_presentations'] ?? null,
+            'The declaration exports with canonical key ordering and the declared context order.',
+        );
+        $this->assertSame(
+            $roundTrip,
+            ManifestContributions::fromManifest(ExtensionIdentifier::fromString('acme/editor'), $roundTrip, 3)
+                ->declarations(),
+            'The exported declaration re-parses to itself.',
+        );
+        $this->assertSame(
+            ['detail', 'update'],
+            $this->contextValues($declared),
+            'The typed declaration exposes its contexts in canonical order.',
+        );
+    }
+
+    /**
+     * A published custom field with complete presentation coverage exposes its contexts sorted.
+     *
+     * Coverage itself is host admission policy; the structural boundary proves only that the
+     * declaration is admitted with every context in canonical order.
+     *
+     * @return  void
+     *
+     * @since   0.2.4
+     */
+    public function testPublishedCustomFieldWithCompleteCoverageExposesSortedContexts(): void
+    {
+        $document = $this->fieldPresentationContributions();
+        $document['business']['definitions'] = [[
+            'id' => '01912f8a-8c4b-7eb1-8f7d-c256efd39899',
+            'owner' => ['type' => 'extension', 'identifier' => 'acme/editor'],
+            'site' => 'default',
+            'handle' => 'acme.editor.asset',
+            'singular_label' => 'Asset',
+            'plural_label' => 'Assets',
+            'status' => 'published',
+            'definition_version' => 1,
+            'storage_mode' => 'relational',
+            'identity_strategy' => 'uuid',
+            'scope' => 'site',
+            'fields' => [['handle' => 'code', 'label' => 'Code', 'type' => 'acme.editor.code']],
+            'relationships' => [],
+            'views' => [],
+            'actions' => [],
+        ]];
+        $document['business']['field_presentations'][0]['contexts'] = ['relation', 'update', 'detail', 'create', 'list'];
+
+        $declared = ManifestContributions::fromManifest(ExtensionIdentifier::fromString('acme/editor'), $document, 3);
+
+        $this->assertSame(
+            ['create', 'detail', 'list', 'relation', 'update'],
+            $this->contextValues($declared),
+            'Complete coverage is exposed as the sorted context set.',
+        );
+        $this->assertSame(
+            1,
+            $declared->surfaceCounts()['business.definitions'] ?? null,
+            'The published definition is counted beside its presenter.',
+        );
+    }
+
+    /**
+     * Schema 2 still round-trips an unused custom field type without admitting a schema-3-only key.
+     *
+     * @return  void
+     *
+     * @since   0.2.4
+     */
+    public function testSchemaTwoRetainsTheUnusedCustomFieldTypeGrammar(): void
+    {
+        $document = $this->fieldPresentationContributions();
+        $failure = $this->assertThrows(
+            static fn (): ManifestContributions => ManifestContributions::fromManifest(
+                ExtensionIdentifier::fromString('acme/editor'),
+                $document,
+                2,
+            ),
+            InvalidArgumentException::class,
+            'A schema-2 contribution set naming field presentations must be refused.',
+        );
+        $this->assertStringContains('unknown key field_presentations', $failure->getMessage(), 'The key is named.');
+
+        unset($document['business']['field_presentations']);
+        $roundTrip = ManifestContributions::fromManifest(ExtensionIdentifier::fromString('acme/editor'), $document, 2)
+            ->declarations();
+        $expected = $document['business']['field_types'][0];
+        ksort($expected, SORT_STRING);
+
+        $this->assertSame([$expected], $roundTrip['business']['field_types'] ?? null, 'The field type survives sorted.');
+        $this->assertTrue(
+            !array_key_exists('field_presentations', $roundTrip['business'] ?? []),
+            'Schema 2 exports no presentation key.',
+        );
+    }
+
+    /**
+     * A manifest without a content section exports none.
+     *
+     * @return  void
+     *
+     * @since   0.2.4
+     */
+    public function testAManifestWithoutAContentSectionExportsNone(): void
+    {
+        $bare = ManifestContributions::fromManifest(ExtensionIdentifier::fromString('acme/blog'), ['version' => 2], 4);
+
+        $this->assertSame(['version' => 2], $bare->declarations(), 'The bare set exports only its SPI version.');
+        $this->assertSame([], $bare->surfaceCounts(), 'The bare set counts no surface.');
+    }
+
+    /**
+     * Build a strict contribution document declaring one extension-owned field type and its presenter.
+     *
+     * @return  array<string, mixed>  Valid schema-3 contribution payload.
+     *
+     * @since   0.2.4
+     */
+    private function fieldPresentationContributions(): array
+    {
+        return [
+            'version' => 1,
+            'business' => [
+                'field_types' => [[
+                    'id' => 'acme.editor.code',
+                    'label' => 'Code',
+                    'description' => 'A bounded extension-owned code.',
+                    'value_type' => 'string',
+                    'storage_type' => 'string',
+                ]],
+                'definitions' => [],
+                'field_presentations' => [[
+                    'field_type' => 'acme.editor.code',
+                    'contexts' => ['update', 'detail'],
+                ]],
+            ],
+        ];
+    }
+
+    /**
+     * Read the backing values of the first declared presenter's contexts.
+     *
+     * @param   ManifestContributions  $declared  Parsed contribution set.
+     *
+     * @return  list<string>  Context values in the order the declaration exposes them.
+     *
+     * @since   0.2.4
+     */
+    private function contextValues(ManifestContributions $declared): array
+    {
+        return array_map(
+            static fn (FieldPresentationContext $context): string => $context->value,
+            $declared->fieldPresentations()[0]->contexts,
         );
     }
 

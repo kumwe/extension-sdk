@@ -224,6 +224,67 @@ final class FieldPresentationSecurityTest extends TestCase
         }
     }
 
+    /** @since 0.2.4 */
+    public function testConvertedMoneyRefusalsFollowTheEditorStateInvariant(): void
+    {
+        $converted = self::convertedMoney();
+        $display = $converted->toPortableString();
+        $provenance = $converted->toArray();
+
+        foreach (
+            [
+                'retained input' => ['inputValue' => ['amount' => '1.00']],
+                'an enabled editor' => ['widget' => FieldWidget::Money, 'editable' => true],
+            ] as $case => $candidate
+        ) {
+            $failure = $this->assertThrows(
+                fn (): FieldPresentationModel => $this->model(
+                    ...$candidate + ['display' => $display, 'provenance' => $provenance],
+                ),
+                InvalidArgumentException::class,
+                sprintf('A converted amount presented with %s must be refused.', $case),
+            );
+            $this->assertStringContains('read-only', $failure->getMessage(), 'The refusal names the read-only rule.');
+        }
+
+        $inconsistent = $this->assertThrows(
+            fn (): FieldPresentationModel => $this->model(
+                display: $display,
+                widget: FieldWidget::Money,
+                provenance: $provenance,
+            ),
+            InvalidArgumentException::class,
+            'A read-only input widget must be refused before provenance is consulted.',
+        );
+        $this->assertStringContains(
+            'inconsistent editor state',
+            $inconsistent->getMessage(),
+            'The editor-state invariant runs first, so provenance never sees the inconsistent widget.',
+        );
+
+        $incomplete = $provenance;
+        unset($incomplete['rate']);
+        $missingRate = $this->assertThrows(
+            fn (): FieldPresentationModel => $this->model(display: $display, provenance: $incomplete),
+            InvalidArgumentException::class,
+            'Provenance that cannot be read back as a whole converted amount must be refused.',
+        );
+        $this->assertStringContains(
+            'incomplete conversion provenance',
+            $missingRate->getMessage(),
+            'The refusal names the missing evidence rather than trusting the figure.',
+        );
+    }
+
+    /** @since 0.2.4 */
+    public function testAnOrdinaryPresentationCarriesNoProvenance(): void
+    {
+        $model = $this->model(display: 'N$ 1,200.00');
+
+        $this->assertSame(null, $model->provenance, 'An ordinary presentation retains no conversion evidence.');
+        $this->assertSame(null, $model->toArray()['provenance'], 'The export carries the absent member as null.');
+    }
+
     /**
      * @param list<string>                              $errors
      * @param list<array{value: string, label: string}> $options

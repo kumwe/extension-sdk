@@ -211,6 +211,52 @@ final class PackageSafetyTest extends TestCase
     }
 
     /**
+     * Expanding a package costs the bytes it holds, not a per-entry ceiling allocation.
+     *
+     * The reader once asked the archive for the maximum entry size plus one on every entry, so a
+     * handful of kilobyte files cost hundreds of mebibytes and took package admission down under a
+     * bounded memory limit. Random bytes keep every entry inside the compression-ratio limit, so the
+     * snapshot is clean and the reader genuinely expands them.
+     *
+     * @return  void
+     *
+     * @since   0.2.4
+     */
+    public function testReaderGrowsMemoryByTheBytesItExpandsNotAPerEntryCeiling(): void
+    {
+        $work = $this->workspace();
+        $entries = ['kumwe.json' => $this->manifest()];
+        for ($index = 0; $index < 7; $index++) {
+            $entries[sprintf('blob-%d.bin', $index)] = random_bytes(4_096);
+        }
+        $archive = $this->archive($work, $entries);
+        $package = InspectedPackage::inspect($archive, new PackageLimits());
+        $this->assertTrue($package->hasNoSafetyFindings(), 'Random bytes stay inside the compression-ratio limit.');
+
+        $before = memory_get_usage(true);
+        $retained = [];
+        foreach ((new ZipArchiveContentReader())->contents($package) as $path => $contents) {
+            $retained[$path] = $contents;
+        }
+        $growth = memory_get_usage(true) - $before;
+
+        $this->assertSame(
+            array_map(static fn (string $bytes): int => strlen($bytes), $entries),
+            array_map(static fn (string $bytes): int => strlen($bytes), $retained),
+            'Every regular entry expands once, in order, to exactly its inspected size.',
+        );
+        $this->assertTrue(
+            $growth < 8 * 1024 * 1024,
+            sprintf(
+                'Retaining a manifest and seven random-bytes entries grew memory by %d bytes; the contract is under 8 MiB.'
+                    . ' The per-entry ceiling read that once cost 448 MiB here is what took the deployment down.',
+                $growth,
+            ),
+        );
+        $this->removeTree($work);
+    }
+
+    /**
      * Encryption and Unix special-file modes survive central-directory classification as findings.
      *
      * @return  void

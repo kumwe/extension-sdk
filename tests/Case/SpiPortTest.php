@@ -13,10 +13,14 @@ namespace Kumwe\Extension\Tests\Case;
 use InvalidArgumentException;
 use Kumwe\Extension\Contract\NameBasedUuid;
 use Kumwe\Extension\Manifest\ExtensionIdentifier;
+use Kumwe\Extension\Spi\Contribution\AdministratorRouteDefinition;
 use Kumwe\Extension\Spi\Contribution\AdministratorViewDefinition;
+use Kumwe\Extension\Spi\Contribution\AdministratorWorkspaceDefinition;
 use Kumwe\Extension\Spi\Contribution\ContributionOwner;
 use Kumwe\Extension\Spi\Contribution\TranslationSetItemAssociation;
+use Kumwe\Extension\Spi\Portal\Contribution\PortalRouteDefinition;
 use Kumwe\Extension\Spi\Portal\Contribution\PortalTemplateDefinition;
+use Kumwe\Extension\Spi\Portal\Contribution\PortalWorkspaceDefinition;
 use Kumwe\Extension\Tests\TestCase;
 
 /**
@@ -176,5 +180,163 @@ final class SpiPortTest extends TestCase
             $association->groupIdForSite('default'),
             'The derivation is deterministic across calls.',
         );
+    }
+
+    /**
+     * Neither graphical route definition admits a verb list that mixes safe and mutating methods.
+     *
+     * The registry decides once per route whether the CSRF guard sits in front of it, so a route
+     * answering both GET and POST would drag that guard onto the safe verb as well.
+     *
+     * @return  void
+     *
+     * @since   0.2.4
+     */
+    public function testRouteDefinitionsRefuseToMixSafeAndMutatingMethods(): void
+    {
+        $administrator = $this->assertThrows(
+            static fn (): AdministratorRouteDefinition => new AdministratorRouteDefinition(
+                'acme.editor.index',
+                '/',
+                ['GET', 'POST'],
+                'acme.editor.manage',
+                'acme.editor.index',
+            ),
+            InvalidArgumentException::class,
+            'An administrator route answering both GET and POST must be refused.',
+        );
+        $this->assertStringContains(
+            'cannot mix',
+            $administrator->getMessage(),
+            'The administrator refusal names the rule.',
+        );
+        $portal = $this->assertThrows(
+            static fn (): PortalRouteDefinition => new PortalRouteDefinition(
+                'acme.editor.status',
+                '/',
+                ['GET', 'POST'],
+                'acme.editor.manage',
+                'acme.editor.status',
+            ),
+            InvalidArgumentException::class,
+            'A portal route answering both GET and POST must be refused.',
+        );
+        $this->assertStringContains('cannot mix', $portal->getMessage(), 'The portal refusal names the rule.');
+
+        $mutating = new AdministratorRouteDefinition(
+            'acme.editor.save',
+            '/',
+            ['PUT', 'POST', 'PUT'],
+            'acme.editor.manage',
+            'acme.editor.index',
+        );
+        $this->assertSame(['POST', 'PUT'], $mutating->methods, 'Mutating verbs alone de-duplicate and byte-sort.');
+        $portalMutating = new PortalRouteDefinition(
+            'acme.editor.remove',
+            '/',
+            ['PATCH', 'DELETE'],
+            'acme.editor.manage',
+            'acme.editor.status',
+        );
+        $this->assertSame(['DELETE', 'PATCH'], $portalMutating->methods, 'Portal mutating verbs normalise the same way.');
+    }
+
+    /**
+     * Repeated dots outside the exact owner prefix cannot become an ambiguous core contribution suffix.
+     *
+     * @return  void
+     *
+     * @since   0.2.4
+     */
+    public function testOwnerBoundaryRejectsRepeatedDotsInTheContributionSuffix(): void
+    {
+        $failure = $this->assertThrows(
+            static fn () => ContributionOwner::core()->assertOwns('core..settings', 'interface surface'),
+            InvalidArgumentException::class,
+            'A repeated dot after the core boundary must be refused.',
+        );
+        $this->assertStringContains('core namespace', $failure->getMessage(), 'The refusal names the namespace rule.');
+    }
+
+    /**
+     * Historical package dots remain representable only as part of the exact declaring owner prefix.
+     *
+     * @return  void
+     *
+     * @since   0.2.4
+     */
+    public function testLegacyOwnerDotSpellingsRemainRepresentable(): void
+    {
+        foreach (['a../b' => 'a...b', 'a./b' => 'a..b', 'a/b.' => 'a.b.'] as $ownerIdentifier => $namespace) {
+            $owner = ContributionOwner::extension($ownerIdentifier);
+            $identifier = $namespace . '.workspace';
+
+            $owner->assertOwns($identifier, 'interface surface');
+            AdministratorWorkspaceDefinition::assertIdentifier($identifier, 'workspace');
+            PortalWorkspaceDefinition::assertIdentifier($identifier, 'workspace');
+
+            $this->assertSame(
+                $namespace,
+                $owner->namespace(),
+                sprintf('The %s owner keeps its historical dotted namespace.', $ownerIdentifier),
+            );
+        }
+    }
+
+    /**
+     * Every shared lexical parser rejects unsafe boundaries, path characters, casing drift and overlength values.
+     *
+     * @return  void
+     *
+     * @since   0.2.4
+     */
+    public function testSharedGrammarRejectsUnsafeOrAmbiguousIdentifiers(): void
+    {
+        foreach (
+            [
+                'leading separator' => '.acme.orders',
+                'trailing separator' => 'acme.orders.',
+                'uppercase' => 'Acme.orders',
+                'path separator' => 'acme/orders.index',
+                'overlength' => 'a.' . str_repeat('b', 190),
+            ] as $case => $identifier
+        ) {
+            $this->assertThrows(
+                static fn () => AdministratorWorkspaceDefinition::assertIdentifier($identifier, 'test'),
+                InvalidArgumentException::class,
+                sprintf('The administrator grammar must refuse a %s.', $case),
+            );
+            $this->assertThrows(
+                static fn () => PortalWorkspaceDefinition::assertIdentifier($identifier, 'test'),
+                InvalidArgumentException::class,
+                sprintf('The portal grammar must refuse a %s.', $case),
+            );
+        }
+    }
+
+    /**
+     * Both 63-character package segments remain representable inside the 191-character contribution bound.
+     *
+     * @return  void
+     *
+     * @since   0.2.4
+     */
+    public function testMaximumExtensionOwnerSegmentsRemainRepresentable(): void
+    {
+        $vendor = '9' . str_repeat('a', 62);
+        $package = '2' . str_repeat('b', 62);
+        $owner = ContributionOwner::extension($vendor . '/' . $package);
+        $identifier = $vendor . '.' . $package . '.workspace';
+
+        $owner->assertOwns($identifier, 'interface surface');
+        AdministratorWorkspaceDefinition::assertIdentifier($identifier, 'workspace');
+        PortalWorkspaceDefinition::assertIdentifier($identifier, 'workspace');
+
+        $this->assertSame(
+            $vendor . '.' . $package,
+            $owner->namespace(),
+            'The maximum owner namespace is its dotted identifier.',
+        );
+        $this->assertTrue(strlen($identifier) <= 191, 'The identifier stays inside the shared contribution bound.');
     }
 }
