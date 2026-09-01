@@ -3,6 +3,25 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## [0.2.1] - 2026-09-01
+
+### Added
+
+- Graph validation for the declarative content-publication section: `content.translation_groups`
+  entries now prove closed shape, bounded unique locales, a fallback drawn from the declared
+  locales, and — critically — that no signed package claims a content set outside its own
+  namespace. The 0.2.0 validator only counted these declarations, so a manifest could claim a
+  foreign vendor's content group.
+
+### Fixed
+
+- Admit executable event bindings — domain listeners, consumers, projection sources and webhook
+  event types — to platform events in the host's `core.` namespace, whose schemas the host owns and
+  enforces at activation. The 0.2.0 graph validator wrongly required every bound event type to be
+  declared and owned by the signed manifest itself, which refused the canonical platform pattern of
+  extensions observing `core.business_record.mutated`. Own events keep the full in-manifest schema
+  requirement, and foreign vendor events remain inadmissible from a signed manifest.
+
 ## [0.2.0] - 2026-08-29
 
 ### Added

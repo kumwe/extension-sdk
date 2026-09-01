@@ -194,6 +194,89 @@ final class TypedDefinitionTest extends TestCase
         return $integration;
     }
 
+    /** @since 0.2.1 */
+    public function testPlatformEventBindingsCrossTheOwnerBoundaryOnlyTowardCore(): void
+    {
+        $manifest = json_decode($this->fixture(), true, 64, JSON_THROW_ON_ERROR);
+        $integration = $manifest['contributions']['integration'];
+        $integration['domain_listeners'][0]['event_type'] = 'core.business_record.mutated';
+        $integration['consumers'][0]['event_type'] = 'core.business_record.mutated';
+        $integration['projections'][0]['sources'][0]['event_type'] = 'core.business_record.mutated';
+        $integration['webhooks'][0]['event_types'] = ['core.business_record.mutated'];
+        $manifest['contributions']['integration'] = $integration;
+        $accepted = ExtensionManifest::fromJson(json_encode($manifest, JSON_THROW_ON_ERROR));
+        $declared = $accepted->contributions()->declarations()['integration'] ?? null;
+        if (!is_array($declared)) {
+            throw new InvalidArgumentException('The platform-event fixture lost its integration section.');
+        }
+        $this->assertSame(
+            'core.business_record.mutated',
+            $declared['domain_listeners'][0]['event_type'] ?? null,
+            'A signed extension observes a platform core event without declaring its schema.',
+        );
+        $this->assertSame(
+            'core.business_record.mutated',
+            $declared['consumers'][0]['event_type'] ?? null,
+            'A signed extension consumes a platform core event through its own queue.',
+        );
+
+        $integration['domain_listeners'][0]['event_type'] = 'acme.rival.observed';
+        $manifest['contributions']['integration'] = $integration;
+        $failure = $this->assertThrows(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(
+                json_encode($manifest, JSON_THROW_ON_ERROR),
+            ),
+            InvalidArgumentException::class,
+            'A foreign vendor event binding is refused at the manifest boundary.',
+        );
+        $this->assertStringContains(
+            'cannot claim',
+            $failure->getMessage(),
+            'The refusal names the foreign claim, not a missing schema.',
+        );
+    }
+
+    /** @since 0.2.1 */
+    public function testContentTranslationGroupsStayInsideTheSignedNamespace(): void
+    {
+        $manifest = json_decode($this->fixture(), true, 64, JSON_THROW_ON_ERROR);
+        $group = [
+            'group_id' => 'kumwe.contract-manifest-four.articles',
+            'locales' => ['de', 'en-GB'],
+            'fallback_locale' => 'en-GB',
+        ];
+        $manifest['contributions']['content'] = ['translation_groups' => [$group]];
+        $accepted = ExtensionManifest::fromJson(json_encode($manifest, JSON_THROW_ON_ERROR));
+        $declared = $accepted->contributions()->declarations()['content'] ?? null;
+        $this->assertSame(
+            'kumwe.contract-manifest-four.articles',
+            is_array($declared) ? ($declared['translation_groups'][0]['group_id'] ?? null) : null,
+            'An owned content set with a declared fallback locale is admitted.',
+        );
+
+        $group['group_id'] = 'zeta.shop.products';
+        $manifest['contributions']['content'] = ['translation_groups' => [$group]];
+        $foreign = $this->assertThrows(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(
+                json_encode($manifest, JSON_THROW_ON_ERROR),
+            ),
+            InvalidArgumentException::class,
+            'A foreign content set claim is refused at the manifest boundary.',
+        );
+        $this->assertStringContains('cannot claim', $foreign->getMessage(), 'The refusal names the claim.');
+
+        $group['group_id'] = 'kumwe.contract-manifest-four.articles';
+        $group['fallback_locale'] = 'fr';
+        $manifest['contributions']['content'] = ['translation_groups' => [$group]];
+        $this->assertThrows(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(
+                json_encode($manifest, JSON_THROW_ON_ERROR),
+            ),
+            InvalidArgumentException::class,
+            'A fallback outside the declared locales is refused.',
+        );
+    }
+
     /** @return string Manifest-four JSON. @since 0.2.0 */
     private function fixture(int $generation = 4): string
     {

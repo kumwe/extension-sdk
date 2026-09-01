@@ -47,10 +47,12 @@ final class ManifestContributionGraphValidator
         $business = self::object($data['business'] ?? [], 'business');
         $integration = self::object($data['integration'] ?? [], 'integration');
         $interface = self::object($data['interface'] ?? [], 'interface');
+        $content = self::object($data['content'] ?? [], 'content');
         self::validateGraphical($owner, $capabilities, $administrator, $portal, $interface);
         self::validateResourcePolicies($owner, $capabilities, $data);
         [$definitionHandles, $fieldTypes] = self::validateBusiness($owner, $business);
         self::validateIntegration($owner, $capabilities, $definitionHandles, $integration);
+        self::validateContent($owner, $content);
         foreach (self::objects($business['field_presentations'] ?? [], 'business.field_presentations') as $item) {
             $presentation = FieldPresentationContribution::fromArray($item);
             $fieldType = $presentation->fieldType;
@@ -363,12 +365,7 @@ final class ManifestContributionGraphValidator
             ], 'domain listener');
             $declaration = DomainListenerDefinition::fromArray($item);
             $owner->assertOwns($declaration->identifier(), 'domain listener');
-            $owner->assertOwns($declaration->eventType(), 'event type');
-            foreach ($declaration->schemaVersions() as $version) {
-                if (!isset($eventSchemas[$declaration->eventType() . '@' . $version])) {
-                    throw new InvalidArgumentException('A domain listener references an undeclared event schema.');
-                }
-            }
+            self::assertEventBinding($owner, $eventSchemas, $declaration->eventType(), $declaration->schemaVersions());
             self::requiredString($item, 'handler_version', 'domain listener');
             if (!is_int($item['priority'] ?? null) || $item['priority'] < -1_000 || $item['priority'] > 1_000) {
                 throw new InvalidArgumentException('A domain listener priority is invalid.');
@@ -385,8 +382,7 @@ final class ManifestContributionGraphValidator
             ], 'event consumer');
             $declaration = EventConsumerDefinition::fromArray($item);
             $owner->assertOwns($declaration->identifier(), 'event consumer');
-            $owner->assertOwns($declaration->eventType(), 'event type');
-            self::assertEventReferences($eventSchemas, $declaration->eventType(), $declaration->schemaVersions());
+            self::assertEventBinding($owner, $eventSchemas, $declaration->eventType(), $declaration->schemaVersions());
             self::assertQueueReference($queues, $item, 'event consumer');
             self::requiredBoolean($item['aggregate_ordered'] ?? null, 'event consumer aggregate ordering');
             $idempotency = self::requiredString($item, 'idempotency', 'event consumer');
@@ -443,7 +439,7 @@ final class ManifestContributionGraphValidator
             $declaration = ProjectionDefinition::fromArray($item);
             $owner->assertOwns($declaration->identifier(), 'projection');
             foreach ($declaration->sources as $source) {
-                self::assertEventReferences($eventSchemas, $source->eventType, $source->schemaVersions);
+                self::assertEventBinding($owner, $eventSchemas, $source->eventType, $source->schemaVersions);
             }
             self::requiredString($item, 'handler_version', 'projection');
             self::requiredBoolean($item['rebuildable'] ?? null, 'projection rebuildable flag');
@@ -473,7 +469,7 @@ final class ManifestContributionGraphValidator
             $declaration = WebhookContributionDefinition::fromArray($item);
             $owner->assertOwns($declaration->identifier(), 'webhook');
             foreach ($declaration->eventTypes() as $eventType) {
-                self::assertEventReferences($eventSchemas, $eventType, $declaration->schemaVersions());
+                self::assertEventBinding($owner, $eventSchemas, $eventType, $declaration->schemaVersions());
             }
             self::assertQueueReference($queues, $item, 'webhook');
             self::positiveInteger($item['maximum_attempts'] ?? null, 'webhook attempts', 100);
@@ -511,6 +507,37 @@ final class ManifestContributionGraphValidator
     }
 
     /**
+     * Validate the declarative content-publication section against its signed owner.
+     *
+     * Locale grammar and publication policy stay host semantics; the graph boundary proves closed
+     * shape, bounded unique locales, a fallback drawn from the declared locales, and that no signed
+     * package claims a content set outside its own namespace.
+     *
+     * @param  ContributionOwner     $owner    Signed package owner.
+     * @param  array<string, mixed>  $content  Content declaration section.
+     *
+     * @since  0.2.1
+     */
+    private static function validateContent(ContributionOwner $owner, array $content): void
+    {
+        $groups = [];
+        foreach (self::objects($content['translation_groups'] ?? [], 'content.translation_groups') as $item) {
+            self::keys($item, ['group_id', 'locales', 'fallback_locale'], [
+                'group_id', 'locales', 'fallback_locale',
+            ], 'translation group');
+            $groupId = self::owned($owner, $item, 'group_id', 'translation group');
+            $locales = self::stringList($item['locales'] ?? null, 'translation group locales', 64, false);
+            $fallback = self::requiredString($item, 'fallback_locale', 'translation group');
+            if (!in_array($fallback, $locales, true)) {
+                throw new InvalidArgumentException(
+                    'A translation group fallback locale must be one of its declared locales.',
+                );
+            }
+            self::unique($groups, $groupId, 'translation group');
+        }
+    }
+
+    /**
      * @param array<string, true> $eventSchemas Declared event schema identities.
      * @param string $eventType Referenced event type.
      * @param list<int> $versions Referenced schema versions.
@@ -523,6 +550,35 @@ final class ManifestContributionGraphValidator
             if (!isset($eventSchemas[$eventType . '@' . $version])) {
                 throw new InvalidArgumentException('An executable integration declaration references an unknown event.');
             }
+        }
+    }
+
+    /**
+     * Admit one executable event-type binding without letting a package claim a foreign contract.
+     *
+     * A declarer binds executables to events it declares itself — schema and all — or observes
+     * platform events in the host's `core.` namespace, whose schemas the host owns, versions and
+     * enforces at activation. Foreign extension events are never admissible from a signed manifest.
+     *
+     * @param  ContributionOwner    $owner         Signed package owner.
+     * @param  array<string, true>  $eventSchemas  Event schema identities declared by this manifest.
+     * @param  string               $eventType     Event contract the executable binds to.
+     * @param  list<int>            $versions      Declared schema versions consumed by the executable.
+     *
+     * @since  0.2.1
+     */
+    private static function assertEventBinding(
+        ContributionOwner $owner,
+        array $eventSchemas,
+        string $eventType,
+        array $versions,
+    ): void {
+        if (
+            str_starts_with($eventType, $owner->namespace() . '.')
+            || !str_starts_with($eventType, ContributionOwner::CORE . '.')
+        ) {
+            $owner->assertOwns($eventType, 'event type');
+            self::assertEventReferences($eventSchemas, $eventType, $versions);
         }
     }
 
