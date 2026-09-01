@@ -17,10 +17,10 @@ use Kumwe\Extension\Manifest\ExtensionManifest;
  * to carry a signature from a build service that is a different trust domain than the publisher, and
  * here they are the same party running the same SDK. Embedding the statement in the package instead
  * puts it under the publisher's existing detached Ed25519 signature, which is the honest strength of
- * the claim: an installation can prove the publisher asserted it, not that an independent builder
+ * the claim: verification can prove the publisher asserted it, not that an independent builder
  * observed it.
  *
- * Two fields are load-bearing at admission. `materials.sbom_sha256` binds this statement to the exact
+ * Two fields are load-bearing during reconciliation. `materials.sbom_sha256` binds this statement to the exact
  * bill of materials in the same package, so the two documents cannot be mixed between builds, and
  * `subject` must name the manifest the package actually carries, so a statement cannot be lifted from
  * one release onto another. Everything else is recorded and shown, never believed.
@@ -77,7 +77,7 @@ final readonly class PackageProvenance
     public const string BUILDER_VERSION = '1';
 
     /**
-     * Largest provenance statement expanded during admission.
+     * Largest provenance statement expanded during bounded evidence inspection.
      *
      * @var    int
      * @since  0.1.0
@@ -153,7 +153,7 @@ final readonly class PackageProvenance
      * Decode a provenance statement read from a package, rejecting every unknown or missing key.
      *
      * Unlike the bill of materials this format is Kumwe's own, so it is parsed strictly in both
-     * directions: an unrecognised top-level key is a refusal rather than something to carry forward,
+     * directions: an unrecognised top-level key is invalid rather than something to carry forward,
      * which is what keeps the statement's meaning from drifting between builders.
      *
      * @param   string  $json  Raw statement bytes read from the package.
@@ -175,9 +175,7 @@ final readonly class PackageProvenance
         if (!is_array($value) || array_is_list($value)) {
             throw new InvalidArgumentException('The package provenance statement must be a JSON object.');
         }
-        $keys = array_keys($value);
-        sort($keys, SORT_STRING);
-        if ($keys !== ['build_type', 'builder', 'format', 'invocation', 'materials', 'subject']) {
+        if (array_keys($value) !== ['format', 'build_type', 'builder', 'subject', 'materials', 'invocation']) {
             throw new InvalidArgumentException(
                 'The package provenance statement contains an unknown or missing key.',
             );
@@ -185,10 +183,17 @@ final readonly class PackageProvenance
         if (($value['format'] ?? null) !== self::FORMAT) {
             throw new InvalidArgumentException('The package provenance statement format is unsupported.');
         }
-        if (!is_string($value['build_type'] ?? null)) {
-            throw new InvalidArgumentException('The package provenance build type must be a string.');
+        if (($value['build_type'] ?? null) !== self::BUILD_TYPE) {
+            throw new InvalidArgumentException('The package provenance build type is unsupported.');
         }
-        foreach (['builder', 'subject', 'materials', 'invocation'] as $section) {
+        $sectionKeys = [
+            'builder' => ['name', 'version'],
+            'subject' => ['name', 'version', 'extension_type', 'manifest_schema'],
+            'materials' => ['sbom_path', 'sbom_format', 'sbom_sha256', 'entry_count', 'expanded_bytes'],
+            'invocation' => ['reproducible', 'entry_epoch', 'entry_mode', 'compression'],
+        ];
+        $sections = [];
+        foreach ($sectionKeys as $section => $expectedKeys) {
             $content = $value[$section] ?? null;
             if (!is_array($content) || array_is_list($content)) {
                 throw new InvalidArgumentException(sprintf(
@@ -196,23 +201,84 @@ final readonly class PackageProvenance
                     $section,
                 ));
             }
+            if (array_keys($content) !== $expectedKeys) {
+                throw new InvalidArgumentException(sprintf(
+                    'The package provenance section %s contains an unknown or missing key.',
+                    $section,
+                ));
+            }
+            $sections[$section] = $content;
+        }
+
+        $builder = $sections['builder'];
+        if (
+            ($builder['name'] ?? null) !== self::BUILDER_NAME
+            || ($builder['version'] ?? null) !== self::BUILDER_VERSION
+        ) {
+            throw new InvalidArgumentException('The package provenance builder profile is unsupported.');
+        }
+        $subject = $sections['subject'];
+        if (
+            !is_string($subject['name'] ?? null)
+            || !is_string($subject['version'] ?? null)
+            || !is_string($subject['extension_type'] ?? null)
+            || !is_int($subject['manifest_schema'] ?? null)
+        ) {
+            throw new InvalidArgumentException('The package provenance subject has an invalid field type.');
+        }
+        $materials = $sections['materials'];
+        $sbomDigest = $materials['sbom_sha256'] ?? null;
+        $entryCount = $materials['entry_count'] ?? null;
+        $expandedBytes = $materials['expanded_bytes'] ?? null;
+        if (
+            ($materials['sbom_path'] ?? null) !== PackageBillOfMaterials::PATH
+            || ($materials['sbom_format'] ?? null) !== 'CycloneDX/' . PackageBillOfMaterials::SPEC_VERSION
+            || !is_string($sbomDigest)
+            || preg_match('/^[a-f0-9]{64}$/D', $sbomDigest) !== 1
+            || !is_int($entryCount)
+            || $entryCount < 0
+            || !is_int($expandedBytes)
+            || $expandedBytes < 0
+        ) {
+            throw new InvalidArgumentException('The package provenance materials are malformed or unsupported.');
+        }
+        $invocation = $sections['invocation'];
+        if ($invocation !== [
+            'reproducible' => true,
+            'entry_epoch' => 315_532_800,
+            'entry_mode' => '0100644',
+            'compression' => 'store',
+        ]) {
+            throw new InvalidArgumentException('The package provenance invocation profile is unsupported.');
         }
 
         /** @var array<string, mixed> $value */
-        return new self($value);
+        $statement = new self($value);
+        if (!hash_equals($statement->toJson(), $json)) {
+            throw new InvalidArgumentException('The package provenance statement is not canonical SDK JSON.');
+        }
+
+        return $statement;
     }
 
     /**
      * Check the statement against the package it travels in.
      *
-     * @param   ExtensionManifest  $manifest    Manifest the package actually carries.
-     * @param   string             $sbomSha256  SHA-256 of the bill of materials found beside it.
+     * @param   ExtensionManifest  $manifest       Manifest the package actually carries.
+     * @param   string             $sbomSha256     SHA-256 of the verified bill of materials beside it.
+     * @param   int                $entryCount     Actual inventoried regular-file count.
+     * @param   int                $expandedBytes  Actual inventoried expanded-byte count.
      *
      * @return  list<string>  Sorted mismatch descriptions; empty when the statement describes this package.
      *
      * @since   0.1.0
      */
-    public function reconcile(ExtensionManifest $manifest, string $sbomSha256): array
+    public function reconcile(
+        ExtensionManifest $manifest,
+        string $sbomSha256,
+        int $entryCount,
+        int $expandedBytes,
+    ): array
     {
         $findings = [];
         $subject = $this->section('subject');
@@ -225,6 +291,9 @@ final readonly class PackageProvenance
         if (($subject['extension_type'] ?? null) !== $manifest->type()->value) {
             $findings[] = 'The provenance statement names a different extension type than the manifest.';
         }
+        if (($subject['manifest_schema'] ?? null) !== $manifest->schemaVersion()) {
+            $findings[] = 'The provenance statement names a different manifest schema than the package.';
+        }
         $materials = $this->section('materials');
         $claimed = $materials['sbom_sha256'] ?? null;
         if (!is_string($claimed) || !hash_equals($claimed, $sbomSha256)) {
@@ -232,6 +301,15 @@ final readonly class PackageProvenance
         }
         if (($materials['sbom_path'] ?? null) !== PackageBillOfMaterials::PATH) {
             $findings[] = 'The provenance statement names a bill of materials the package does not carry.';
+        }
+        if (($materials['sbom_format'] ?? null) !== 'CycloneDX/' . PackageBillOfMaterials::SPEC_VERSION) {
+            $findings[] = 'The provenance statement names a different bill-of-materials format.';
+        }
+        if (($materials['entry_count'] ?? null) !== $entryCount) {
+            $findings[] = 'The provenance statement records a different package entry count.';
+        }
+        if (($materials['expanded_bytes'] ?? null) !== $expandedBytes) {
+            $findings[] = 'The provenance statement records a different expanded package size.';
         }
         sort($findings, SORT_STRING);
 

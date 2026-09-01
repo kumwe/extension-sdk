@@ -35,9 +35,10 @@ final readonly class PackagePath implements Stringable
      *
      * Normalisation is deliberately minimal: only trailing slashes are dropped, so a directory entry
      * and a reference to that same directory settle on one value and nothing else is rewritten.
-     * Everything unsafe is refused instead of sanitised — an empty or over-long path, a NUL or
-     * backslash anywhere in it, an absolute or drive-qualified path, an empty, `.`, `..`, or
-     * over-long segment, and any control character inside a segment.
+     * Everything unsafe is refused instead of sanitised. Package paths use a portable ASCII profile so
+     * case folding and filesystem normalization have the same result on every supported host. Empty,
+     * absolute, drive-qualified, control-bearing and over-long paths are refused, as are dot segments,
+     * trailing dots, Windows device names and characters whose filesystem meaning varies by platform.
      *
      * @param   string  $path  Entry name exactly as the archive records it.
      *
@@ -60,12 +61,23 @@ final readonly class PackagePath implements Stringable
         $segments = explode('/', rtrim($path, '/'));
 
         foreach ($segments as $segment) {
-            if ($segment === '' || $segment === '.' || $segment === '..' || strlen($segment) > 191) {
+            if (
+                $segment === ''
+                || $segment === '.'
+                || $segment === '..'
+                || strlen($segment) > 191
+                || preg_match('/^[A-Za-z0-9._@+\-]+$/D', $segment) !== 1
+                || str_ends_with($segment, '.')
+            ) {
                 throw new InvalidArgumentException('A package path contains an unsafe segment.');
             }
 
-            if (preg_match('/[\x00-\x1F\x7F]/', $segment) === 1) {
-                throw new InvalidArgumentException('A package path cannot contain control characters.');
+            $stem = strtoupper(explode('.', $segment, 2)[0]);
+            if (
+                in_array($stem, ['CON', 'PRN', 'AUX', 'NUL'], true)
+                || preg_match('/^(?:COM|LPT)[1-9]$/D', $stem) === 1
+            ) {
+                throw new InvalidArgumentException('A package path cannot use a reserved device name.');
             }
         }
 

@@ -1,6 +1,6 @@
 {
   "name": "kumwe/extension-sdk",
-  "description": "The Kumwe extension SDK: the manifest contract, SPI interfaces, classification data and signed compatibility fixtures, plus the author toolchain - scaffold, deterministic build, sign, inspect and conformance-test - sharing one inspection implementation with Kumwe App's admission.",
+  "description": "Canonical Kumwe extension contracts, manifest parsing, author SPI and neutral package inspection tooling.",
   "type": "library",
   "license": "Apache-2.0",
   "homepage": "https://github.com/kumwe/extension-sdk",
@@ -11,12 +11,23 @@
   "require": {
     "php": "^8.5",
     "ext-json": "*",
+    "ext-mbstring": "*",
     "ext-sodium": "*",
-    "ext-zip": "*"
+    "ext-zip": "*",
+    "doctrine/dbal": "^4.3",
+    "kumwe/conversion": "^0.1",
+    "kumwe/producer": "^0.2",
+    "psr/http-message": "^1.1 || ^2.0",
+    "psr/http-server-handler": "^1.0",
+    "ramsey/uuid": "^4.7"
   },
-  "suggest": {
-    "phpunit/phpunit": "Activates the ExtensionConformanceTestCase and ExtensionLifecycleTestCase bridges in a consuming suite."
+  "require-dev": {
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^12.0"
   },
+  "bin": [
+    "bin/kumwe-extension"
+  ],
   "autoload": {
     "psr-4": {
       "Kumwe\\Extension\\": "src/"
@@ -28,15 +39,24 @@
     }
   },
   "scripts": {
+    "validate-package": "@composer validate --strict --no-check-publish",
+    "autoload": "@composer dump-autoload --optimize --strict-psr --no-interaction",
     "lint": "php tools/lint.php",
     "docs": "php tools/check-docblocks.php",
     "contract": "php tools/verify-contract.php",
     "test": "php tests/run.php",
+    "analyse": "phpstan analyse --configuration=phpstan.neon --no-progress",
+    "audit-dependencies": "@composer audit --no-interaction",
+    "smoke": "php tools/autoload-smoke.php",
     "check": [
+      "@validate-package",
+      "@autoload",
       "@lint",
       "@docs",
       "@contract",
-      "@test"
+      "@test",
+      "@analyse",
+      "@audit-dependencies"
     ]
   },
   "config": {

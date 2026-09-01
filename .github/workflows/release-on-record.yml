@@ -1,25 +1,12 @@
 name: Release on record
 
-# Merging a change whose changelog records a new version IS the release.
-# Every push to main re-proves the check lane across every supported PHP
-# version, and when the newest recorded version has no tag yet, this
-# workflow creates the tag through the repository API and publishes the
-# GitHub release itself - a tag created by a workflow token triggers no
-# other workflow, so publication happens here. Runs are idempotent: an
-# already-tagged, already-released version makes this a verification-only
-# run. Packagist follows tags through its GitHub integration, so no
-# registry credential ever enters this repository's workflows.
-
 on:
   push:
-    branches:
-      - main
+    branches: [main]
 
 permissions:
-  contents: write
+  contents: read
 
-# Serialized so two pushes cannot race past the tag-existence check; the
-# later run then finds the tag and verifies instead of colliding.
 concurrency:
   group: release-on-record
   cancel-in-progress: false
@@ -43,36 +30,37 @@ jobs:
         uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # v2.35.5
         with:
           php-version: ${{ matrix.php }}
-          extensions: json, mbstring, zip, sodium
+          extensions: dom, json, mbstring, sodium, xml, xmlwriter, zip
           coverage: none
-          tools: none
+          tools: composer:v2
 
-      - name: Lint
-        run: php tools/lint.php
+      - name: Validate Composer metadata
+        run: composer validate --strict --no-check-publish
 
-      - name: Verify member documentation
-        run: php tools/check-docblocks.php
+      - name: Install package QA dependencies
+        run: composer install --prefer-dist --no-interaction --no-progress
 
-      - name: Verify the pinned extension contract
-        run: php tools/verify-contract.php
+      - name: Run complete package gate
+        run: composer check
 
-      - name: Run the suite
-        run: php tests/run.php
+      - name: Verify production-only installation
+        run: |
+          composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
+          composer smoke
 
   release:
     name: Release the recorded version
     needs: check
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    permissions:
+      contents: write
     steps:
       - name: Check out the pushed commit
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
 
-      # The newest release record is the FIRST second-level heading, so a
-      # malformed record fails this run loudly instead of silently
-      # releasing nothing or re-reading an older heading.
       - name: Read the newest recorded version
         id: record
         shell: bash
@@ -83,20 +71,18 @@ jobs:
             first="$(grep -E '^## ' CHANGELOG.md | sed -n 2p)"
           fi
           if [ -z "$first" ]; then
-            echo "::notice::CHANGELOG.md records no released version yet; nothing to release."
+            echo "::notice::CHANGELOG.md records no release; nothing to publish."
             echo "version=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           version="$(sed -nE 's/^## \[?([0-9]+\.[0-9]+\.[0-9]+)\]?( .*)?$/\1/p' <<<"$first")"
           if [ -z "$version" ]; then
-            echo "::error::The newest changelog heading does not parse as a release record: $first"
+            echo "::error::Newest changelog heading is not a release record: $first"
             exit 1
           fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
-      # Only a confirmed 404 means the tag is missing; any other probe
-      # failure stops the run rather than colliding with an existing tag.
-      - name: Create the version tag when it is missing
+      - name: Create or verify the version tag
         if: steps.record.outputs.version != ''
         env:
           GH_TOKEN: ${{ github.token }}
@@ -104,56 +90,46 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          probe_status=0
-          probe="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/v$VERSION" 2>&1)" || probe_status=$?
-          if [ "$probe_status" -eq 0 ]; then
-            echo "Tag v$VERSION already exists; leaving it untouched."
-          elif grep -q 'HTTP 404' <<<"$probe"; then
+          status=0
+          response="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/v$VERSION" 2>&1)" || status=$?
+          if [ "$status" -eq 0 ]; then
+            echo "Tag v$VERSION already exists; verifying its target."
+          elif grep -q 'HTTP 404' <<<"$response"; then
             gh api "repos/$GITHUB_REPOSITORY/git/refs" \
               --field ref="refs/tags/v$VERSION" \
-              --field sha="$GITHUB_SHA"
+              --field sha="$GITHUB_SHA" >/dev/null
             echo "Created tag v$VERSION at $GITHUB_SHA."
           else
-            echo "$probe"
+            echo "$response"
             echo "::error::Could not determine whether tag v$VERSION exists."
             exit 1
           fi
 
-      # The pin is read from the tagged commit, not this run's checkout,
-      # so a heal-path release can never name a pin the tag does not carry.
-      - name: Read the App contract pin at the tagged commit
-        if: steps.record.outputs.version != ''
-        id: pin
-        env:
-          GH_TOKEN: ${{ github.token }}
-          VERSION: ${{ steps.record.outputs.version }}
-        shell: bash
-        run: |
-          set -euo pipefail
-          pin="$(gh api "repos/$GITHUB_REPOSITORY/contents/resources/PIN.json?ref=v$VERSION" --jq .content \
-            | base64 -d | jq -r '.source.commit // "unknown"')"
-          echo "app_pin=$pin" >> "$GITHUB_OUTPUT"
+          target="$(gh api "repos/$GITHUB_REPOSITORY/commits/v$VERSION" --jq .sha)"
+          if [ "$target" != "$GITHUB_SHA" ]; then
+            echo "::error::Tag v$VERSION targets $target, not checked commit $GITHUB_SHA."
+            exit 1
+          fi
 
-      - name: Publish the GitHub release when it is missing
+      - name: Publish or verify the GitHub release
         if: steps.record.outputs.version != ''
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.record.outputs.version }}
-          APP_PIN: ${{ steps.pin.outputs.app_pin }}
         shell: bash
         run: |
           set -euo pipefail
-          probe_status=0
-          probe="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" 2>&1)" || probe_status=$?
-          if [ "$probe_status" -eq 0 ]; then
-            echo "Release v$VERSION already exists; leaving it untouched."
-          elif grep -q 'HTTP 404' <<<"$probe"; then
+          status=0
+          response="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" 2>&1)" || status=$?
+          if [ "$status" -eq 0 ]; then
+            echo "Release v$VERSION already exists; leaving it unchanged."
+          elif grep -q 'HTTP 404' <<<"$response"; then
             gh release create "v$VERSION" \
               --verify-tag \
               --title "v$VERSION" \
-              --notes "Carries the frozen Kumwe App extension contract at pin \`$APP_PIN\` (see resources/PIN.json). Changelog: CHANGELOG.md section $VERSION."
+              --notes "Canonical kumwe/extension-sdk v$VERSION. See CHANGELOG.md for the reviewed release record."
           else
-            echo "$probe"
+            echo "$response"
             echo "::error::Could not determine whether release v$VERSION exists."
             exit 1
           fi

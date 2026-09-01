@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace @@PHP_NAMESPACE@@\Integration;
 
 use InvalidArgumentException;
-use Kumwe\App\Application\Authorization\ExecutionContext;
-use Kumwe\App\BusinessIntegration\Application\IntegrationEventHandler;
-use Kumwe\App\BusinessIntegration\Domain\EventConsumerDefinition;
-use Kumwe\App\BusinessIntegration\Domain\IntegrationEvent;
+use Kumwe\Extension\Spi\Application\ExecutionContext;
+use Kumwe\Extension\Spi\BusinessIntegration\Application\IntegrationEventHandler;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventConsumerDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\IntegrationEvent;
 
 /**
  * Performs an idempotent process-local observation of durable item events.
@@ -20,27 +20,12 @@ final readonly class ItemIntegrationConsumer implements IntegrationEventHandler
     /**
      * Bind the executable consumer to its signed declaration and diagnostic ledger.
      *
-     * @param  EventConsumerDefinition  $definition  Exact signed durable-consumer contract.
-     * @param  IntegrationLedger        $ledger      Bounded diagnostic event ledger.
+     * @param  IntegrationLedger  $ledger  Bounded diagnostic event ledger.
      *
      * @since  2.0.0
      */
-    public function __construct(
-        private EventConsumerDefinition $definition,
-        private IntegrationLedger $ledger,
-    ) {
-    }
-
-    /**
-     * Return the exact signed contract implemented by this consumer.
-     *
-     * @return  EventConsumerDefinition  Immutable consumer declaration.
-     *
-     * @since   2.0.0
-     */
-    public function definition(): EventConsumerDefinition
+    public function __construct(private IntegrationLedger $ledger)
     {
-        return $this->definition;
     }
 
     /**
@@ -55,13 +40,13 @@ final readonly class ItemIntegrationConsumer implements IntegrationEventHandler
      *
      * @since   2.0.0
      */
-    public function handle(IntegrationEvent $event, ExecutionContext $context): void
+    public function handle(
+        EventConsumerDefinition $declaration,
+        IntegrationEvent $event,
+        ExecutionContext $context,
+    ): void
     {
-        if (
-            $event->eventType() !== '@@EXTENSION_DOTTED@@.item_observed'
-            || !$this->definition->acceptsVersion($event->schemaVersion())
-            || !$event->sensitivity()->allowedBy($this->definition->sensitivityCeiling())
-        ) {
+        if (!$declaration->accepts($event)) {
             throw new InvalidArgumentException('The item consumer received an unsupported event contract.');
         }
         $this->ledger->recordIntegration($event);

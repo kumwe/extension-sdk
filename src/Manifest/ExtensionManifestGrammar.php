@@ -50,8 +50,6 @@ final class ExtensionManifestGrammar
             'migrations',
             'configuration',
             'permissions',
-            'routes',
-            'events',
             'assets',
             'contributions',
             'template',

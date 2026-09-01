@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace @@PHP_NAMESPACE@@\Integration;
 
 use InvalidArgumentException;
-use Kumwe\App\Application\Automation\JobHandler;
-use Kumwe\App\Application\Authorization\ExecutionContext;
+use Kumwe\Extension\Spi\Application\Automation\JobHandler;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
+use Kumwe\Extension\Spi\Application\ExecutionContext;
 
 /**
  * Validates scheduled digest work and retains only a non-reversible diagnostic digest.
@@ -27,18 +28,6 @@ final readonly class DigestJobHandler implements JobHandler
     }
 
     /**
-     * Return the exact job type declared by the signed manifest.
-     *
-     * @return  string  Owned digest job type.
-     *
-     * @since   2.0.0
-     */
-    public function type(): string
-    {
-        return '@@EXTENSION_DOTTED@@.digest';
-    }
-
-    /**
      * Validate the closed payload and record its digest without retaining message content.
      *
      * @param   array<string, mixed>  $payload  Decoded version-one digest payload.
@@ -50,11 +39,13 @@ final readonly class DigestJobHandler implements JobHandler
      *
      * @since   2.0.0
      */
-    public function handle(array $payload, ExecutionContext $context): void
+    public function handle(JobContributionDefinition $declaration, array $payload, ExecutionContext $context): void
     {
         $message = $payload['message'] ?? null;
         if (
-            array_keys($payload) !== ['message']
+            $declaration->type() !== '@@EXTENSION_DOTTED@@.digest'
+            || $declaration->schemaVersion() !== 1
+            || array_keys($payload) !== ['message']
             || !is_string($message)
             || $message === ''
             || mb_strlen($message) > 191

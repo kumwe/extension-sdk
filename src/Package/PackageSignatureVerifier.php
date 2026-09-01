@@ -11,10 +11,9 @@ use Kumwe\Extension\Package\PackageSignature;
  * Port answering the purely cryptographic half of the package trust question.
  *
  * It reports whether a detached signature verifies over a package digest under the key the signature
- * names, and nothing else. Whether that key is one this installation accepts is `PackageTrustPolicy`'s
- * decision, which is why this port returns a boolean instead of throwing. Because it holds the keys
- * itself, it suits an installation whose trusted keys are configured rather than administered;
- * `TrustKeySignatureVerifier` is the sibling port for keys that live in the trust store.
+ * names, and nothing else. Whether that key is one a host accepts remains host policy, which is why this
+ * port returns a boolean instead of throwing. It suits configured key maps; dynamic trust stores can
+ * consume `PublicKeyPackageSignatureVerifier` after selecting a key under their own rules.
  *
  * @since  0.1.0
  */

@@ -1,18 +1,25 @@
 <?php
 
 /**
- * Dependency-free test runner: discovers tests/Case/*Test.php, runs every
- * public method beginning with "test", and reports one line per file.
+ * Package test runner: loads Composer dependencies, discovers
+ * tests/Case/*Test.php, runs every public method beginning with "test", and
+ * reports one line per file.
  *
- * Assertions come from Kumwe\Extension\Tests\TestCase. No framework, so the
- * suite runs on any supported PHP with no composer install. Zero discovered
- * test files is a passing state — the founding repository ships the harness
- * before the first extracted class — and the summary line says so honestly.
+ * Assertions come from Kumwe\Extension\Tests\TestCase. Composer installation
+ * is part of the package gate because the SDK deliberately consumes canonical
+ * library contracts instead of copying them.
  *
  * @since 0.1.0
  */
 
 declare(strict_types=1);
+
+$autoload = dirname(__DIR__) . '/vendor/autoload.php';
+if (!is_file($autoload)) {
+    fwrite(STDERR, "Composer dependencies are not installed; run composer install.\n");
+    exit(2);
+}
+require $autoload;
 
 spl_autoload_register(static function (string $class): void {
     $prefixes = [

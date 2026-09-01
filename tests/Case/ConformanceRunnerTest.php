@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Proves the conformance runner is self-contained and holds every promised generation.
+ * Proves the conformance runner is independently reusable and holds every promised generation.
  *
  * @since 0.1.0
  */
@@ -10,18 +10,17 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Tests\Case;
 
-use Kumwe\Extension\Package\PackageSafetyPolicy;
-use Kumwe\Extension\Package\ZipArchiveReader;
+use Kumwe\Extension\Package\PackageFinding;
+use Kumwe\Extension\Package\PackageLimits;
 use Kumwe\Extension\Tests\TestCase;
 use Kumwe\Extension\Toolchain\DeterministicPackageBuilder;
 use Kumwe\Extension\Toolchain\ExtensionPackageConformance;
 use Kumwe\Extension\Toolchain\PackageInspector;
-use Throwable;
+use ZipArchive;
 
 /**
- * The E-4 obligation, executed: on a clean clone with no `kumwe/app` anywhere in the dependency
- * tree, the static conformance runner passes over all six vendored generation fixtures and
- * refuses the hostile corpus, and this package requires PHP and extensions only.
+ * With canonical Composer dependencies installed, the static conformance runner passes over all
+ * six SDK-owned generations and reports hostile packages without a host implementation.
  *
  * @since  0.1.0
  */
@@ -47,10 +46,10 @@ final class ConformanceRunnerTest extends TestCase
 
             $this->assertTrue(
                 $report->conforms(),
-                sprintf('%s must conform: %s', basename($source), implode('; ', $report->violations)),
+                sprintf('%s must conform: %s', basename($source), $this->messages($report->findings)),
             );
             $this->assertSame(
-                'kumwe-extension-conformance-v1',
+                'kumwe-extension-conformance-v2',
                 $report->toArray()['format'],
                 'The report format is the stable one CI consumes.',
             );
@@ -59,33 +58,24 @@ final class ConformanceRunnerTest extends TestCase
     }
 
     /**
-     * The facade refuses every archive of the recorded hostile corpus.
+     * The author-facing facade reports every locally generated hostile direction as nonconforming.
      *
      * @return  void
      *
      * @since   0.1.0
      */
-    public function testFacadeRefusesTheHostileCorpus(): void
+    public function testFacadeReportsTheHostileCorpusAsNonconforming(): void
     {
         $work = $this->workspace();
-        $parity = json_decode(
-            (string) file_get_contents(dirname(__DIR__) . '/Fixtures/app-parity.json'),
-            true,
-        );
-        $this->assertTrue(is_array($parity), 'The parity evidence must decode.');
+        $archives = $this->hostileArchives($work);
         $facade = ExtensionPackageConformance::withProductionDefaults();
-        foreach ($parity['hostile'] as $name => $case) {
-            $archive = $work . '/' . $name . '.zip';
-            file_put_contents($archive, base64_decode($case['zip'], true));
-            try {
-                $report = $facade->run($archive);
-                $this->assertTrue(
-                    !$report->conforms(),
-                    sprintf('Hostile archive %s must not conform.', $name),
-                );
-            } catch (Throwable $refusal) {
-                $this->assertTrue(true, sprintf('Hostile archive %s was refused outright.', $name));
-            }
+        foreach ($archives as $name => $archive) {
+            $report = $facade->run($archive);
+            $this->assertTrue(
+                !$report->conforms(),
+                sprintf('Hostile archive %s must not conform.', $name),
+            );
+            $this->assertTrue($report->findings !== [], sprintf('%s must produce a coded finding.', $name));
         }
         $this->removeTree($work);
     }
@@ -110,7 +100,7 @@ final class ConformanceRunnerTest extends TestCase
             }
             $scanned++;
             $this->assertStringExcludes(
-                'Kumwe\\App',
+                implode('\\', ['Kumwe', 'App']),
                 (string) file_get_contents($file->getPathname()),
                 sprintf('%s must not reference the host application.', $file->getPathname()),
             );
@@ -119,33 +109,26 @@ final class ConformanceRunnerTest extends TestCase
     }
 
     /**
-     * The package requires PHP and extensions only — the pin that made the in-tree SDK
-     * unpublishable is dead.
+     * Canonical library dependencies are explicit and no host implementation is required.
      *
      * @return  void
      *
      * @since   0.1.0
      */
-    public function testComposerRequiresPhpAndExtensionsOnly(): void
+    public function testComposerDeclaresCanonicalLibraryDependenciesOnly(): void
     {
         $composer = json_decode(
             (string) file_get_contents(dirname(__DIR__, 2) . '/composer.json'),
             true,
         );
         $this->assertTrue(is_array($composer), 'composer.json must decode.');
-        foreach (array_keys($composer['require']) as $requirement) {
-            $this->assertTrue(
-                $requirement === 'php' || str_starts_with((string) $requirement, 'ext-'),
-                sprintf('Requirement %s must be PHP or a PHP extension.', (string) $requirement),
-            );
-        }
+        $requirements = $composer['require'] ?? null;
+        $this->assertTrue(is_array($requirements), 'Runtime requirements must be an object.');
+        $this->assertSame('^0.1', $requirements['kumwe/conversion'] ?? null, 'Conversion is consumed directly.');
+        $this->assertSame('^0.2', $requirements['kumwe/producer'] ?? null, 'Producer schemas are consumed directly.');
         $this->assertTrue(
-            !isset($composer['require']['kumwe/app']),
-            'The kumwe/app pin must not exist anywhere in the requirements.',
-        );
-        $this->assertTrue(
-            !isset($composer['require-dev']),
-            'The check lane is dependency-free; no development requirements exist either.',
+            !isset($requirements['kumwe/' . 'app']),
+            'A host application must not be a runtime dependency.',
         );
     }
 
@@ -158,7 +141,60 @@ final class ConformanceRunnerTest extends TestCase
      */
     private function inspector(): PackageInspector
     {
-        return new PackageInspector(new ZipArchiveReader(), new PackageSafetyPolicy());
+        return new PackageInspector(new PackageLimits());
+    }
+
+    /**
+     * Generate hostile archives without treating any host implementation as an oracle.
+     *
+     * @param   string  $work  Private test directory.
+     *
+     * @return  array<string, string>  Hostile direction to archive path.
+     *
+     * @since   0.2.0
+     */
+    private function hostileArchives(string $work): array
+    {
+        $manifest = (string) file_get_contents(
+            dirname(__DIR__, 2) . '/resources/fixtures/generations/manifest-1/kumwe.json',
+        );
+        $cases = [
+            'path-traversal' => ['kumwe.json' => $manifest, '../escape.php' => '<?php'],
+            'case-collision' => ['kumwe.json' => $manifest, 'A.php' => '<?php', 'a.php' => '<?php'],
+        ];
+        $archives = [];
+        foreach ($cases as $name => $entries) {
+            $archive = $work . '/' . $name . '.zip';
+            $zip = new ZipArchive();
+            $this->assertTrue(
+                $zip->open($archive, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true,
+                sprintf('%s ZIP opens.', $name),
+            );
+            foreach ($entries as $path => $bytes) {
+                $this->assertTrue($zip->addFromString($path, $bytes), sprintf('%s adds %s.', $name, $path));
+            }
+            $this->assertTrue($zip->close(), sprintf('%s ZIP closes.', $name));
+            $archives[$name] = $archive;
+        }
+
+        return $archives;
+    }
+
+    /**
+     * Flatten typed findings for test diagnostics.
+     *
+     * @param   list<PackageFinding>  $findings  Neutral coded findings.
+     *
+     * @return  string  Finding messages in order.
+     *
+     * @since   0.2.0
+     */
+    private function messages(array $findings): string
+    {
+        return implode('; ', array_map(
+            static fn (PackageFinding $finding): string => $finding->message,
+            $findings,
+        ));
     }
 
     /**

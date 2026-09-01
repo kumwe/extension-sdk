@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Toolchain;
 
+use Kumwe\Extension\Package\PackageFinding;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -11,8 +12,8 @@ use PHPUnit\Framework\TestCase;
  *
  * This bridge activates only where an author's own suite already installs `phpunit/phpunit`
  * (suggested, deliberately never required — the SDK's own check lane stays dependency-free); the
- * class is simply never autoloaded otherwise. The assertion runs the same self-contained static
- * conformance the platform's admission enforces.
+ * class is simply never autoloaded otherwise. The assertion runs the SDK's self-contained author
+ * conformance over neutral package findings.
  *
  * @since  0.1.0
  */
@@ -31,6 +32,9 @@ abstract class ExtensionConformanceTestCase extends TestCase
     {
         $report = ExtensionPackageConformance::withProductionDefaults()->run($archiveFile);
 
-        self::assertTrue($report->conforms(), implode("\n", $report->violations));
+        self::assertTrue($report->conforms(), implode("\n", array_map(
+            static fn (PackageFinding $finding): string => $finding->message,
+            $report->findings,
+        )));
     }
 }

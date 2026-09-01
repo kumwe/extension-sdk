@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Proves the ported manifest and package value types keep the App's tested behaviour.
+ * Proves the canonical manifest and package value types keep their published behaviour.
  *
  * @since 0.1.0
  */
@@ -22,7 +22,7 @@ use Kumwe\Extension\Package\PackageSignature;
 use Kumwe\Extension\Tests\TestCase;
 
 /**
- * Assertions carried over from the App's own value-type suites, unchanged in what they prove.
+ * Canonical value-type boundary and refusal assertions.
  *
  * @since  0.1.0
  */
@@ -191,7 +191,7 @@ final class ManifestValueTest extends TestCase
     }
 
     /**
-     * The legacy KIS declaration is an exact compatibility point, not an open range.
+     * The schema-one KIS declaration is an exact compatibility point, not an open range.
      *
      * @return  void
      *
@@ -199,21 +199,21 @@ final class ManifestValueTest extends TestCase
      */
     public function testLegacyKisOneCompatibilityIsExact(): void
     {
-        $compatibility = TemplateKisCompatibility::legacyKisOne();
+        $compatibility = TemplateKisCompatibility::schemaOneKis();
 
-        $this->assertSame(1, $compatibility->contract(), 'The legacy declaration is contract version 1.');
-        $this->assertSame('kis-1.0', $compatibility->standard(), 'The legacy standard is KIS 1.0.');
+        $this->assertSame(1, $compatibility->contract(), 'The schema-one declaration is contract version 1.');
+        $this->assertSame('kis-1.0', $compatibility->standard(), 'The schema-one standard is KIS 1.0.');
         $this->assertTrue(
             $compatibility->supportsComponents(SemanticVersion::fromString('1.0.0')),
             'Exactly 1.0.0 components are supported.',
         );
         $this->assertTrue(
             !$compatibility->supportsComponents(SemanticVersion::fromString('1.0.1')),
-            'The legacy point does not widen upward.',
+            'The schema-one point does not widen upward.',
         );
         $this->assertTrue(
             !$compatibility->supportsTokens(SemanticVersion::fromString('0.9.9')),
-            'The legacy point does not widen downward.',
+            'The schema-one point does not widen downward.',
         );
     }
 

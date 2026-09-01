@@ -7,12 +7,10 @@ namespace Kumwe\Extension\Package;
 /**
  * Port that streams an extension archive's file contents without writing any of them to disk.
  *
- * `ArchiveReader` answers what an archive claims to contain; this answers what it actually contains,
- * and it exists because install-time admission has to read packaged bytes before extraction rather
- * than after it. Nothing an implementation yields has touched the filesystem, so a package refused by
- * `PackageAdmissionScanner` leaves no tree behind to clean up. Reading is deliberately separate from
- * listing: the safety policy must have accepted the entry table, and therefore the per-entry and total
- * expansion budgets, before a single entry is expanded through this port.
+ * `ArchiveReader` answers what an archive claims to contain; this answers what the immutable inspected
+ * snapshot actually contains. Nothing an implementation yields is written to disk. Reading is separate
+ * from listing so neutral safety findings and all expansion budgets are established before any entry is
+ * expanded, and the snapshot checksum prevents a second set of bytes being substituted later.
  *
  * @since  0.1.0
  */
@@ -24,12 +22,11 @@ interface ArchiveContentReader
      * Directory entries are skipped, since they carry no content to inspect. Implementations expand one
      * entry at a time so peak memory tracks the largest entry rather than the whole archive.
      *
-     * @param   string  $archiveFile  Path of the staged archive to read; must be the same bytes the
-     *          entry table was judged from.
+     * @param   InspectedPackage  $package  Immutable package identity, entry table and shared limits.
      *
      * @return  iterable<string, string>  Complete entry bytes keyed by package path, in listing order.
      *
      * @since   0.1.0
      */
-    public function contents(string $archiveFile): iterable;
+    public function contents(InspectedPackage $package): iterable;
 }

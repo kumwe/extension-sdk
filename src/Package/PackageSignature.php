@@ -10,8 +10,8 @@ use InvalidArgumentException;
  * Detached Ed25519 signature offered with an extension package, paired with the key that made it.
  *
  * Both halves are needed to answer the trust question, and each half is answered by a different
- * collaborator: `PackageTrustPolicy` and `TrustStore` decide whether the named key is one this
- * installation accepts, while a `PackageSignatureVerifier` checks the bytes against the package
+ * collaborator: a consuming host decides whether the named key is accepted, while a
+ * `PackageSignatureVerifier` checks the bytes against the package
  * digest. Decoding and length validation happen once, here, so no malformed signature ever reaches
  * the cryptographic call.
  *
@@ -56,7 +56,11 @@ final readonly class PackageSignature
 
         $bytes = base64_decode($base64Signature, true);
 
-        if (!is_string($bytes) || strlen($bytes) !== SODIUM_CRYPTO_SIGN_BYTES) {
+        if (
+            !is_string($bytes)
+            || strlen($bytes) !== SODIUM_CRYPTO_SIGN_BYTES
+            || !hash_equals(base64_encode($bytes), $base64Signature)
+        ) {
             throw new InvalidArgumentException('An Ed25519 signature must contain exactly 64 bytes.');
         }
 

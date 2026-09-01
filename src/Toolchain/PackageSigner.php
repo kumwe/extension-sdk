@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kumwe\Extension\Toolchain;
 
 use InvalidArgumentException;
+use Kumwe\Extension\Package\PackageSignatureMessage;
 use RuntimeException;
 
 /**
@@ -27,9 +28,9 @@ final readonly class PackageSigner
     }
 
     /**
-     * Sign the lowercase hexadecimal package digest expected by Kumwe's trust verifier.
+     * Sign the SDK's versioned, domain-separated message for the inspected package digest.
      *
-     * @param   string  $archiveFile  Canonical absolute installable ZIP path.
+     * @param   string  $archiveFile  Canonical absolute package ZIP path.
      * @param   string  $keyId        Trust-store identifier of the matching public key.
      * @param   string  $keyFile      Canonical absolute protected secret-key path.
      *
@@ -42,20 +43,26 @@ final readonly class PackageSigner
     public function sign(string $archiveFile, string $keyId, string $keyFile): SignatureDocument
     {
         $inspection = $this->inspector->inspect($archiveFile);
+        if (!$inspection->package->hasNoSafetyFindings()) {
+            throw new InvalidArgumentException('A package with archive safety findings cannot be signed.');
+        }
         $secretKey = $this->keys->read($keyFile);
         try {
-            $signature = sodium_crypto_sign_detached((string) $inspection->checksum, $secretKey);
+            $signature = sodium_crypto_sign_detached(
+                PackageSignatureMessage::forChecksum($inspection->package->checksum),
+                $secretKey,
+            );
         } finally {
             sodium_memzero($secretKey);
         }
 
         $document = new SignatureDocument(
             $keyId,
-            (string) $inspection->checksum,
+            (string) $inspection->package->checksum,
             base64_encode($signature),
         );
         $confirmed = $this->inspector->inspect($archiveFile);
-        if (!hash_equals($document->packageSha256, (string) $confirmed->checksum)) {
+        if (!hash_equals($document->packageSha256, (string) $confirmed->package->checksum)) {
             throw new RuntimeException('The extension package changed while its signature was created.');
         }
 

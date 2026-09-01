@@ -9,11 +9,11 @@ use Kumwe\Extension\Spi\Runtime\ExtensionContainer;
 /**
  * The single entry point an extension package exposes to Kumwe.
  *
- * A manifest names one class under `service_provider`, and the host's runtime loader instantiates it
+ * A manifest names one class under `provider`, and the host's runtime loader instantiates it
  * with no arguments and rejects the extension outright when it does not implement this interface — so
  * this contract, not file scanning, is how an extension gets to run at all. Registration is the only
- * phase every extension takes part in; an extension that also needs the container to be complete, or
- * that serves routes, implements `RuntimeExtension` on top of this.
+ * phase every extension takes part in. Executable implementations are attached to already-validated
+ * manifest identifiers through `ExtensionBindingProvider`; code cannot add declarations.
  *
  * @since  0.1.0
  */
@@ -24,7 +24,7 @@ interface ExtensionServiceProvider
      *
      * Runs during the pass over every active provider, while the container is still being filled, so a
      * service another extension registers may not be resolvable yet — resolve collaborators lazily
-     * inside the factories registered here, or move the work to `RuntimeExtension::boot()`. The
+     * inside the factories registered here, or move behavior-only startup to `BootableExtension::boot()`. The
      * container is restricted to this extension: it exposes only the host services allowlisted to the
      * package plus whatever the package shares itself, and it cannot be retained as a global registry.
      *

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Proves every moved pinned type still carries its byte-pinned member surface.
+ * Proves every canonical pinned type carries its byte-pinned member surface.
  *
  * @since 0.1.0
  */
@@ -22,89 +22,88 @@ use ReflectionType;
 use ReflectionUnionType;
 
 /**
- * Compares each moved type against the vendored compatibility pin that froze its members.
+ * Holds each canonical type directly to the vendored compatibility pin that froze its members.
  *
- * The pin fixtures record method signatures and enum cases under the historical `Kumwe\App` names;
- * this test translates every name through the migration map's moved set and holds the canonical
- * `Kumwe\Extension` type to exactly those members, using the same signature grammar the App's own
- * compatibility gate renders. A pinned type the migration map retains stays the App's to assert and
- * is passed over here; the test fails if that ever leaves nothing to prove.
+ * The pin fixtures record method signatures and enum cases under the canonical `Kumwe\Extension`
+ * names, freezing the member surface the App adopted; every fixture key is asserted as-is, with no
+ * translation step, using the same signature grammar the App's own compatibility gate renders. Pins
+ * whose surfaces the canonical reset withdrew, or ceded to an already-extracted canonical library
+ * such as `kumwe/conversion`, are no longer vendored — the adoption map's replaced records document
+ * where each went. The migration record in docs/ carries no authority over these pins; the test
+ * fails if the fixtures ever leave nothing to prove.
  *
  * @since  0.1.0
  */
 final class PinnedSurfaceTest extends TestCase
 {
     /**
-     * Every moved pinned interface keeps its exact method signatures under its canonical name.
+     * Every canonical pinned interface keeps its exact method signatures.
      *
      * @return  void
      *
      * @since   0.1.0
      */
-    public function testMovedPinnedInterfacesKeepTheirSignatures(): void
+    public function testPinnedInterfacesKeepTheirSignatures(): void
     {
-        $moved = $this->movedNames();
         $checked = 0;
         foreach ($this->pinFixtures() as $file => $fixture) {
             $interfaces = $fixture['interfaces'] ?? [];
             if (is_string($fixture['interface'] ?? null) && is_array($fixture['methods'] ?? null)) {
                 $interfaces[$fixture['interface']] = $fixture['methods'];
             }
-            foreach ($interfaces as $appName => $expected) {
-                $target = $moved[$appName] ?? null;
-                if ($target === null) {
-                    continue;
-                }
+            foreach ($interfaces as $name => $expected) {
                 $this->assertTrue(
-                    interface_exists($target),
-                    sprintf('Moved pinned interface %s must exist (%s).', $target, $file),
+                    is_string($name) && is_array($expected),
+                    sprintf('Pin fixture %s must map interface names to signature lists.', $file),
+                );
+                $this->assertTrue(
+                    interface_exists($name),
+                    sprintf('Pinned interface %s must exist (%s).', $name, $file),
                 );
                 $actual = [];
-                foreach ((new ReflectionClass($target))->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
-                    if ($method->getDeclaringClass()->getName() === $target) {
+                foreach ((new ReflectionClass($name))->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
+                    if ($method->getDeclaringClass()->getName() === $name) {
                         $actual[] = $this->signature($method);
                     }
                 }
-                $translated = array_map(fn (string $line): string => $this->translate($line, $moved), $expected);
                 sort($actual, SORT_STRING);
-                sort($translated, SORT_STRING);
+                sort($expected, SORT_STRING);
                 $this->assertSame(
-                    $translated,
+                    $expected,
                     $actual,
-                    sprintf('Moved interface %s must match its pin %s.', $target, $file),
+                    sprintf('Interface %s must match its pin %s.', $name, $file),
                 );
                 $checked++;
             }
         }
-        $this->assertSame(9, $checked, sprintf('Expected exactly 9 moved pinned interfaces, got %d.', $checked));
+        $this->assertSame(2, $checked, sprintf('Expected exactly 2 pinned interfaces, got %d.', $checked));
     }
 
     /**
-     * Every moved pinned enum keeps its exact case names and backed values.
+     * Every canonical pinned enum keeps its exact case names and backed values.
      *
      * @return  void
      *
      * @since   0.1.0
      */
-    public function testMovedPinnedEnumsKeepTheirCases(): void
+    public function testPinnedEnumsKeepTheirCases(): void
     {
-        $moved = $this->movedNames();
         $checked = 0;
         foreach ($this->pinFixtures() as $file => $fixture) {
-            foreach ($fixture['enums'] ?? [] as $appName => $expected) {
-                $target = $moved[$appName] ?? null;
-                if ($target === null) {
-                    continue;
-                }
+            foreach ($fixture['enums'] ?? [] as $name => $expected) {
                 $this->assertTrue(
-                    enum_exists($target),
-                    sprintf('Moved pinned enum %s must exist (%s).', $target, $file),
+                    is_string($name) && is_array($expected),
+                    sprintf('Pin fixture %s must map enum names to case records.', $file),
+                );
+                $this->assertTrue(
+                    enum_exists($name),
+                    sprintf('Pinned enum %s must exist (%s).', $name, $file),
                 );
                 $actual = [];
-                foreach ((new ReflectionEnum($target))->getCases() as $case) {
+                foreach ((new ReflectionEnum($name))->getCases() as $case) {
                     $this->assertTrue(
                         $case instanceof ReflectionEnumBackedCase,
-                        sprintf('Pinned enum %s must stay backed.', $target),
+                        sprintf('Pinned enum %s must stay backed.', $name),
                     );
                     $actual[$case->getName()] = $case->getBackingValue();
                 }
@@ -117,7 +116,7 @@ final class PinnedSurfaceTest extends TestCase
                     $this->assertSame(
                         $expected,
                         $values,
-                        sprintf('Moved enum %s must match its pinned backed values in %s.', $target, $file),
+                        sprintf('Enum %s must match its pinned backed values in %s.', $name, $file),
                     );
                 } else {
                     ksort($actual, SORT_STRING);
@@ -125,32 +124,30 @@ final class PinnedSurfaceTest extends TestCase
                     $this->assertSame(
                         $expected,
                         $actual,
-                        sprintf('Moved enum %s must match its pin %s.', $target, $file),
+                        sprintf('Enum %s must match its pin %s.', $name, $file),
                     );
                 }
                 $checked++;
             }
         }
-        $this->assertSame(4, $checked, sprintf('Expected exactly 4 moved pinned enums, got %d.', $checked));
+        $this->assertSame(2, $checked, sprintf('Expected exactly 2 pinned enums, got %d.', $checked));
     }
 
     /**
-     * The moved association keeps its pinned members and its frozen group derivation, value for value.
+     * The canonical association keeps its pinned members and its frozen group derivation, value for value.
      *
      * @return  void
      *
      * @since   0.1.0
      */
-    public function testMovedAssociationKeepsItsPinnedDerivation(): void
+    public function testAssociationKeepsItsPinnedDerivation(): void
     {
         $fixtures = $this->pinFixtures();
         $fixture = $fixtures['content-translation-association-v1.json'];
-        $moved = $this->movedNames();
-        $target = $moved[$fixture['association_class']] ?? null;
         $this->assertSame(
             \Kumwe\Extension\Spi\Contribution\TranslationSetItemAssociation::class,
-            $target,
-            'The association class must be moved by the migration map.',
+            $fixture['association_class'],
+            'The pin must name the canonical association class.',
         );
 
         $example = $fixture['group_derivation']['example'];
@@ -192,43 +189,9 @@ final class PinnedSurfaceTest extends TestCase
             $this->assertTrue(is_array($decoded), sprintf('Pin fixture %s must decode.', basename($path)));
             $fixtures[basename($path)] = $decoded;
         }
-        $this->assertSame(10, count($fixtures), 'All ten pin fixtures must be vendored.');
+        $this->assertSame(5, count($fixtures), 'All five pin fixtures must be vendored.');
 
         return $fixtures;
-    }
-
-    /**
-     * Load the migration map's moved-name translations.
-     *
-     * @return  array<string, string>  Canonical name by historical `Kumwe\App` name.
-     *
-     * @since   0.1.1
-     */
-    private function movedNames(): array
-    {
-        $map = json_decode((string) file_get_contents(dirname(__DIR__, 2) . '/docs/migration-map.json'), true);
-        $this->assertTrue(is_array($map) && is_array($map['moved'] ?? null), 'The migration map must decode.');
-
-        return $map['moved'];
-    }
-
-    /**
-     * Rewrite the `Kumwe\App` names inside one pinned signature line to their canonical names.
-     *
-     * @param   string                 $line   Signature line as the pin fixture records it.
-     * @param   array<string, string>  $moved  Canonical name by historical name.
-     *
-     * @return  string  The line with every moved name translated.
-     *
-     * @since   0.1.0
-     */
-    private function translate(string $line, array $moved): string
-    {
-        return (string) preg_replace_callback(
-            '/Kumwe\\\\App\\\\[A-Za-z0-9_\\\\]+/',
-            static fn (array $match): string => $moved[$match[0]] ?? $match[0],
-            $line,
-        );
     }
 
     /**

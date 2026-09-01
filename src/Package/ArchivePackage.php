@@ -9,10 +9,10 @@ use InvalidArgumentException;
 /**
  * Immutable description of what an extension archive contains, built without extracting it.
  *
- * `ArchiveReader` assembles one from an archive's directory listing and `PackageSafetyPolicy` judges
- * it, so the install path can decide whether an upload is fit to unpack while none of its bytes have
- * reached the filesystem. The constructor is the only place the entry table is validated, so every
- * reader of `entries()` may assume a non-empty list of `ArchiveEntry`.
+ * `ArchiveReader` assembles one from an archive's directory listing and `PackageSafetyInspector` reports
+ * objective discrepancies while none of its bytes have reached the filesystem. The constructor
+ * shape-validates the entry table, so every reader of `entries()` may assume a non-empty list of
+ * `ArchiveEntry`.
  *
  * @since  0.1.0
  */

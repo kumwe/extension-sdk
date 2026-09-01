@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Proves the SDK manifest parser keeps the App parser's accepted and refused surface.
+ * Proves the canonical SDK manifest parser's accepted and refused surface.
  *
  * @since 0.1.0
  */
@@ -17,8 +17,7 @@ use Kumwe\Extension\Manifest\SemanticVersion;
 use Kumwe\Extension\Tests\TestCase;
 
 /**
- * Assertions carried over from the App's manifest suite, adapted only where the App reads the
- * deep contribution export this package deliberately bounds.
+ * Canonical manifest grammar, bounded values and contribution graph assertions.
  *
  * @since  0.1.0
  */
@@ -40,17 +39,17 @@ final class ExtensionManifestTest extends TestCase
         ));
         $compatibility = $manifest->templateCompatibility();
 
-        $this->assertTrue($compatibility !== null, 'A schema-one template receives the legacy declaration.');
-        $this->assertSame('kis-1.0', $compatibility->standard(), 'The legacy standard is KIS 1.0.');
+        $this->assertTrue($compatibility !== null, 'A schema-one template receives the frozen declaration.');
+        $this->assertSame('kis-1.0', $compatibility->standard(), 'The schema-one standard is KIS 1.0.');
         $this->assertTrue(
             $compatibility->supportsComponents(SemanticVersion::fromString('1.0.0'))
                 && !$compatibility->supportsComponents(SemanticVersion::fromString('1.0.1')),
-            'The legacy component point is exact.',
+            'The schema-one component point is exact.',
         );
         $this->assertTrue(
             $compatibility->supportsTokens(SemanticVersion::fromString('1.0.0'))
                 && !$compatibility->supportsTokens(SemanticVersion::fromString('0.9.9')),
-            'The legacy token point is exact.',
+            'The schema-one token point is exact.',
         );
     }
 
@@ -210,7 +209,7 @@ JSON);
         );
         $this->assertSame(
             'index.twig',
-            $manifest->contributions()->views()[0]->template,
+            $manifest->contributions()->administratorViews()[0]->template,
             'The declared view template is exposed for reference checks.',
         );
         $this->assertSame(
@@ -256,7 +255,7 @@ JSON);
     {
         $manifest = ExtensionManifest::fromJson(str_replace(
             '"schema": 1,',
-            '"schema": 1, "legacy_package_metadata": true,',
+            '"schema": 1, "unknown_package_metadata": true,',
             $this->manifestJson(),
         ));
 
@@ -264,9 +263,9 @@ JSON);
         $this->assertSame(
             [],
             $manifest->contributions()->capabilityIdentifiers(),
-            'The legacy set declares no capabilities.',
+            'The schema-one set declares no capabilities.',
         );
-        $this->assertSame([], $manifest->contributions()->surfaceCounts(), 'The legacy set declares nothing.');
+        $this->assertSame([], $manifest->contributions()->surfaceCounts(), 'The schema-one set declares nothing.');
     }
 
     /**
@@ -424,7 +423,7 @@ JSON),
     }
 
     /**
-     * Build the canonical schema-one fixture manifest the App suite uses.
+     * Build the canonical schema-one fixture manifest this package owns.
      *
      * @return  string  JSON manifest document.
      *

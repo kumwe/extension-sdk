@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Proves the ported SPI value types behave exactly as their App originals.
+ * Proves the canonical SPI values enforce their published behavior.
  *
  * @since 0.1.0
  */
@@ -20,11 +20,8 @@ use Kumwe\Extension\Spi\Portal\Contribution\PortalTemplateDefinition;
 use Kumwe\Extension\Tests\TestCase;
 
 /**
- * Behavioral checks for the moved value types, assertions carried over from the App's own suite.
- *
- * The port changes namespaces and nothing else, so what the App's tests proved about identifier
- * normalisation, ownership boundaries, and the frozen translation-group derivation must hold here
- * word for word — including the dependency-free UUIDv5 that replaced `ramsey/uuid`.
+ * Behavioral checks for identifier normalization, ownership boundaries and stable translation-group
+ * derivation.
  *
  * @since  0.1.0
  */
@@ -144,8 +141,8 @@ final class SpiPortTest extends TestCase
     /**
      * The association keeps its ownership boundary and refuses an unsupported generation.
      *
-     * The derivation value itself is proven against the pinned example in `PinnedSurfaceTest`; this
-     * covers the refusal paths the pin cannot exercise.
+     * It also covers malformed and unsupported input paths that a valid canonical example cannot
+     * exercise.
      *
      * @return  void
      *

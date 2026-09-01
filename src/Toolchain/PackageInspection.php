@@ -4,65 +4,61 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Toolchain;
 
-use Kumwe\Extension\Manifest\ExtensionManifest;
-use Kumwe\Extension\Package\PackageChecksum;
+use Kumwe\Extension\Package\InspectedPackage;
+use Kumwe\Extension\Package\PackageFinding;
 
 /**
- * Safe, code-free description of an inspected extension archive.
+ * Toolchain view over one immutable, host-neutral inspected package snapshot.
  *
- * @since  0.1.0
+ * @since  0.2.0
  */
 final readonly class PackageInspection
 {
     /**
-     * Record archive identity, bounded size totals, paths, and the parsed manifest.
+     * Retain the canonical package snapshot without copying its fields into a second authority.
      *
-     * @param  string             $archive        Canonical absolute archive path.
-     * @param  PackageChecksum    $checksum       SHA-256 identity of the exact archive bytes.
-     * @param  int                $expandedBytes  Sum of declared expanded regular-file bytes.
-     * @param  list<string>       $paths          Archive paths in central-directory order.
-     * @param  ExtensionManifest  $manifest       Strict parsed package manifest.
+     * @param  InspectedPackage  $package  Stable archive, manifest, limits and neutral safety findings.
      *
-     * @since  0.1.0
+     * @since  0.2.0
      */
-    public function __construct(
-        public string $archive,
-        public PackageChecksum $checksum,
-        public int $expandedBytes,
-        public array $paths,
-        public ExtensionManifest $manifest,
-    ) {
+    public function __construct(public InspectedPackage $package)
+    {
     }
 
     /**
-     * Export the stable package description used by console and conformance tooling.
+     * Export the stable package description used by author tooling.
+     *
+     * Root routes and events are intentionally absent: they are not an executable or advisory package
+     * channel. Executable contribution authority remains solely in the typed manifest contribution graph.
      *
      * @return  array<string, mixed>  JSON-compatible package and manifest inventory.
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
     public function toArray(): array
     {
         return [
-            'format' => 'kumwe-extension-inspection-v1',
-            'archive' => $this->archive,
-            'package_sha256' => (string) $this->checksum,
-            'entry_count' => count($this->paths),
-            'expanded_bytes' => $this->expandedBytes,
-            'paths' => $this->paths,
+            'format' => 'kumwe-extension-inspection-v2',
+            'archive' => $this->package->archive,
+            'package_sha256' => (string) $this->package->checksum,
+            'entry_count' => count($this->package->paths()),
+            'expanded_bytes' => $this->package->expandedBytes(),
+            'paths' => $this->package->paths(),
+            'archive_findings' => array_map(
+                static fn (PackageFinding $finding): array => $finding->toArray(),
+                $this->package->safetyFindings,
+            ),
             'manifest' => [
-                'schema' => $this->manifest->schemaVersion(),
-                'name' => $this->manifest->identifier()->value(),
-                'type' => $this->manifest->type()->value,
-                'version' => (string) $this->manifest->version(),
-                'provider' => $this->manifest->serviceProvider(),
-                'autoload' => ['psr-4' => $this->manifest->autoload()],
-                'migrations' => $this->manifest->migrations(),
-                'permissions' => $this->manifest->permissions(),
-                'routes' => $this->manifest->routes(),
-                'events' => $this->manifest->events(),
-                'assets' => $this->manifest->assets(),
-                'contributions' => $this->manifest->contributions()->toArray(),
+                'schema' => $this->package->manifest->schemaVersion(),
+                'name' => $this->package->manifest->identifier()->value(),
+                'type' => $this->package->manifest->type()->value,
+                'version' => (string) $this->package->manifest->version(),
+                'provider' => $this->package->manifest->serviceProvider(),
+                'autoload' => ['psr-4' => $this->package->manifest->autoload()],
+                'migrations' => $this->package->manifest->migrations(),
+                'permissions' => $this->package->manifest->permissions(),
+                'assets' => $this->package->manifest->assets(),
+                'contributions' => $this->package->manifest->contributions()->toArray(),
             ],
         ];
     }

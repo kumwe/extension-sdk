@@ -21,12 +21,12 @@ use Kumwe\Extension\Manifest\ExtensionIdentifier;
 final readonly class ContributionOwner
 {
     /**
-     * Kinds whose identifiers follow the Studio identity grammar rather than the dotted App rule.
+     * Kinds whose identifiers follow the Studio identity grammar rather than dotted contribution IDs.
      *
      * A canonical composition identity lives inside the portable Studio document as
      * `<namespace>/<local-name>`, and its kind-scoped index form prefixes the document kind and one
      * space. Ownership therefore means the slash-form namespace matches the owner, not the dotted
-     * prefix every App-side identifier carries.
+     * prefix other host-neutral contribution identifiers carry.
      *
      * @var    list<string>
      * @since  0.1.0
@@ -175,10 +175,13 @@ final readonly class ContributionOwner
             $studioNamespaces = $this->identifier === self::CORE
                 ? ['core/', 'studio.core/']
                 : [$this->namespace() . '/'];
-            $ownsStudioIdentity = array_any(
-                $studioNamespaces,
-                static fn (string $prefix): bool => str_starts_with($identity, $prefix),
-            );
+            $ownsStudioIdentity = false;
+            foreach ($studioNamespaces as $prefix) {
+                if (str_starts_with($identity, $prefix)) {
+                    $ownsStudioIdentity = true;
+                    break;
+                }
+            }
             if (!$ownsStudioIdentity) {
                 throw new InvalidArgumentException(sprintf(
                     '%s cannot claim %s identifier %s.',

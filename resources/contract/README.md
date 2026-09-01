@@ -1,197 +1,87 @@
-# The extension contract
+# Kumwe Extension SDK 0.2 contract
 
-This is the answer to the question an extension author has to ask before writing a line of code: **what
-can I depend on, and what will be taken away from me?**
+This directory records the canonical author-facing contract owned by `kumwe/extension-sdk`. It is
+generated and verified from this repository. No host repository, copied namespace, compatibility alias,
+or remapping table is an authority for this API.
 
-Two machine-readable documents answer it, and this page explains them:
+## One declaration authority
 
-| Document | What it settles |
-| --- | --- |
-| [`classification.json`](classification.json) | Which types are public, which are internal, and what you do with each. |
-| [`generations.json`](generations.json) | What each supported manifest and contribution-SPI generation promises, which compatibility package proves it, and what has been withdrawn. |
+`kumwe.json` is the sole declaration source for an extension package. A strict manifest declares every
+capability, route, presentation surface, business contribution, integration callback, and Studio
+document. PHP code cannot add a second route, event, job, report, or composition declaration.
 
-Both are checked on every build by `composer extension:contract`, which runs inside `composer qa`. The
-check is dependency-free, so it runs before `composer install`.
+The SDK parses the manifest once into `Kumwe\Extension\Manifest\ExtensionManifest` and its canonical
+`ManifestContributions` graph. The graph owns validated, immutable definition objects and exact
+identifier lookups. Its exported declaration bytes are deterministic and parse-idempotent.
 
-## Public and internal
+## Executable binding
 
-Everything under `Kumwe\App\` is **internal** unless `classification.json` lists it. That is the default
-and it is deliberate: the absence of a type from that file is the answer, not an omission. Internal code
-may be renamed, split or deleted at any time, and a package that reaches for it will break without
-warning and without recourse.
+An extension provider implements `Kumwe\Extension\Spi\Binding\ExtensionBindingProvider`. Registration
+adds private services to the restricted extension container. Binding supplies executable implementations
+for identifiers already present in the signed manifest.
 
-A type that *is* listed is **public**. It belongs to a generation, and it changes only by that generation
-gaining a successor beside it.
+`ManifestContributions::executableBindingRequirements()` is the exact executable inventory. A host must
+refuse an undeclared identifier, a wrong-kind binding, a duplicate, an omitted required binding, or an
+extra binding. Route renderers are per-route object capabilities under
+`Kumwe\Extension\Spi\Binding\Http`; they close over the validated owner and view/template and expose no
+selector that extension code can redirect.
 
-Each entry says what you do with the type:
+Declarative contributions are activated from the parsed manifest, never reconstructed from provider
+callbacks. Optional lifecycle boot behavior may run only after admission and exact binding
+reconciliation; boot does not declare routes or events.
 
-| Role | Meaning |
-| --- | --- |
-| `implement` | You write a class that satisfies the contract. |
-| `call` | Core hands you an instance and you call it. |
-| `construct` | You build instances and hand them to core. |
-| `receive` | Core hands you an instance to read. |
-| `resolve` | You resolve it from the restricted container you are handed. |
+## Host authority
 
-`pinned_by` names the compatibility fixture whose committed bytes hold that type's exact member
-signatures. Where it is set, the shape is frozen to the byte — adding a method to a pinned interface is
-treated as a breaking change, because every existing implementation would stop loading. Where it is
-null, the type is public and governed by its generation, but its members are not byte-pinned at this
-release; treat it as stable, and expect the pin to arrive rather than the promise to leave.
+The SDK validates portable structure, ownership, bounds, cross-references, executable completeness,
+archive evidence, and canonical protocol documents. The host remains solely responsible for admission
+policy, trust decisions, authorization, lifecycle state, storage, transaction ownership, request/session
+provenance, organization scope, capability enforcement, and operator-facing refusal decisions.
 
-### What you may resolve from the container
+Extension code receives narrow SDK ports and already admitted values. `ExecutionContext` exposes stable
+identity and correlation facts, not grants or authorization decisions. A host-issued context must be
+verified at the boundary before any record read or executable callback.
 
-The container your provider is handed is not the application container. It carries your own registered
-services plus a fixed allowlist of host services, and nothing else — resolving anything outside the list
-fails closed at runtime. The allowlist is in `generations.json` under `host_services`, and it is short on
-purpose. Their identifiers are frozen; the method surface behind each is public but not byte-pinned yet.
+## Manifest generations
 
-One of those services hands objects back: a listener attached through `ExtensionEventRegistrar` receives
-each dispatched event as `Kumwe\App\Extension\Runtime\ExtensionEvent` — a Kumwe-owned contract carrying
-the event's name, its named arguments and the propagation flag, deliberately naming no vendor type so the
-dispatch engine behind it can change without the extension surface moving again. Unlike the registrar
-itself, that interface **is** byte-pinned, by `tests/Fixtures/ExtensionApi/extension-event-v1.json`. The
-event names — the eight `onKumweExtension*` lifecycle events — and their argument maps are versioned
-extension API and did not move with it.
+- Schema 1 is an inert package-description generation. It has no typed contribution graph and cannot
+  mount executable routes or subscriptions through historical root arrays.
+- Schemas 2 and 3 use contribution SPI 1 for shell, portal, field, and business declarations.
+- Schema 4 uses contribution SPI 2 and adds durable event, automation, conversion, projection, report,
+  webhook, interface, and multilingual-content declarations.
+- Schema 5 uses contribution SPI 3 and carries the frozen typed composition declaration vocabulary.
+- Schema 6 uses contribution SPI 4 and replaces the schema-5 composition vocabulary with exact canonical
+  Studio documents plus separate bounded host bindings.
 
-## Generations
+Every retained fixture under `resources/fixtures/generations/` is an SDK-native package. Its provider,
+tests, and templates import canonical dependency namespaces only. `generations.json` records the exact
+fixture digest, contribution inventory, and executable binding set for each generation.
 
-A **manifest generation** is a `schema` number in `kumwe.json`. A **contribution SPI generation** is the
-`contributions.version` number inside it. They move together but are versioned separately, because the
-manifest grammar and the runtime registrar are two different things to break.
+## Canonical Studio documents
 
-| Manifest | SPI | What it added |
-| --- | --- | --- |
-| `schema: 1` | — | Identity, requirements, autoload, migrations, assets, and a provider that registers its own services, boots and declares its own routes. No typed contributions. |
-| `schema: 2` | `1` | Typed contributions: capabilities, resource policies and the administrator shell. The manifest becomes closed to unknown keys. |
-| `schema: 3` | `1` | The portal surface, safe field presentation, and custom business view and action handlers. |
-| `schema: 4` | `2` | Durable integration — event contracts, listeners, consumers, jobs, queues, schedules, projections, reports, webhooks, money rate providers and unit converters — multilingual content groups, and KIS semantic surfaces bound to every graphical route. |
-| `schema: 5` | `3` | The declarative composition contract, frozen at Gate A ahead of the Gate B surface that consumes it: blocks with bounded property schemas, slots and renderer bindings, patterns, field controls, inspectors, design vocabularies including size roles, and composition migrations. |
+Schema 6 carries exact canonical document bytes. `CanonicalCompositionDocument` preserves kind, decoded
+value, identity, and the signed canonical bytes. `kumwe/producer` supplies the pinned Studio schema corpus
+and validates each document against its exact kind; block property schemas also pass the Producer schema
+property profile. Host bindings reference an admitted document by kind and identity. Every block
+definition requires a non-empty owner-scoped preview renderer binding; non-rendered document kinds do
+not create executable requirements.
 
-Every one of those five is still promised. A package on schema 1 installs on this release exactly as it
-did, and nothing obliges you to move.
+## Package inspection
 
-### What a generation guarantees
+Archive inspection produces stable typed findings over one immutable inspected snapshot. Findings are
+policy-neutral evidence; expected hostile package data does not become an SDK install decision. A host
+maps the report to its own admission outcome.
 
-1. **It parses.** A manifest declaring that schema is accepted, with the key set that generation
-   declared and no other. From schema 2 onward an unknown key is a refused install, not a shrug.
-2. **It installs, activates, upgrades, disables, reactivates and uninstalls.** Each generation ships a
-   signed compatibility package that is driven through the whole sequence on every build.
-3. **Its surface does not shrink.** What the package contributed before an upgrade is what it contributes
-   after, entry for entry.
-4. **Its types stay classified public.** A type reachable from a generation is not quietly demoted.
+The same snapshot binds entry metadata, actual content reads, manifest bytes, checksum, SBOM,
+provenance, and signature evidence. Signatures use the versioned SDK package-message domain. Builder and
+inspector share one limit object, including source files plus generated attestations.
 
-The guarantee is about the generation, not about the release: core will add generations, and a later
-generation may promise more. It will not promise less under the same number.
+## Published records
 
-### How to target one
+- `classification.json` is the SDK-owned public API profile. It lists every canonical public type and
+  pins its source digest. `Kumwe\Extension\Support` remains internal.
+- `generations.json` is the canonical manifest/SPI generation profile and fixture inventory.
+- `resources/PIN.json` pins every shipped resource byte without naming another repository as authority.
 
-Declare the schema you want, and the SPI it binds to:
-
-```json
-{
-  "schema": 3,
-  "name": "acme/orders",
-  "type": "component",
-  "version": "1.0.0",
-  "provider": "Acme\\Orders\\Provider",
-  "autoload": {"psr-4": {"Acme\\Orders\\": "src/"}},
-  "requires": {"kumwe": "^2.0.0", "php": "^8.5.0"},
-  "contributions": {"version": 1, "capabilities": []}
-}
-```
-
-Declaring the wrong SPI for the schema is refused rather than corrected: schema 2 and 3 require
-`contributions.version` 1, schema 4 requires 2, schema 5 requires 3, and schema 6 requires 4. That is
-the point of the pairing — a package built against a later runtime cannot install itself into an older
-one by accident. Schema 6 replaces the frozen schema-5 composition paraphrases with canonical Studio
-documents: each entry in `contributions.composition.documents` is the exact canonical JSON string of
-one published `@kumwe/studio-protocol` document, validated at admission and at install against the
-pinned release (and, for a block definition's `propertySchema`, against the complete
-`studio.profile/schema-property` grammar), while renderer bindings, authority and host references
-live in the separate bounded `host_bindings` section — never inside the portable document.
-
-At Gate B, a block host binding becomes executable only when the verified provider explicitly shares a
-`StudioPreviewBlockRenderer` under `extension.<binding renderer>`. For example, renderer binding
-`acme.shop.renderer.grid` resolves only the owner-local service
-`extension.acme.shop.renderer.grid`; the binding is never read as a PHP class, file, template, or factory.
-The host derives the block type, version, revision, document owner and package version from the reconciled
-canonical document and signed runtime entry, then rechecks the exact runtime generation and live package
-trust before each call. A missing or wrong service, stale lock, owner drift, replaced package, revoked trust,
-or renderer exception stays visible only as the inert `studio-preview-unresolved` fragment.
-The service binding is not a renderer capability. An executable block must also declare exactly one
-`rendererRequirements` entry for the `preview` surface. Runtime catalogues advertise that signed
-capability (for example `acme.shop/grid`) only while its exact executable registry entry is live; they
-never advertise the owner-local service identifier (`acme.shop.renderer.grid`) as a capability.
-
-Pick the **lowest** generation that carries what you need. Nothing is gained by moving to schema 4 for a
-package that only contributes an administrator workspace, and staying low keeps your package installable
-on more sites.
-
-Several registrars are **additive** and must be feature-detected rather than assumed — the KIS surface,
-money rate, content translation, unit conversion, and composition registrars all arrived this way:
-
-```php
-if ($contributions instanceof InterfaceSurfaceRegistrar) {
-    $contributions->interfaceSurface($surface);
-}
-```
-
-That is how a provider written against the base registrar keeps working when a new registrar appears
-beside it.
-
-### Manifest keys that are not what they look like
-
-Three keys are accepted and do nothing, and they are recorded that way rather than removed, because
-removing them would break packages that already ship them:
-
-| Key | Status | What actually happens |
-| --- | --- | --- |
-| `routes` | advisory | Reported by `extension:inspect`. It mounts nothing. Mount routes from `RuntimeExtension::registerRoutes()` or contribute `administrator.routes`. |
-| `events` | advisory | Labels one line in the contribution summary. It subscribes nothing. Register listeners through `ExtensionEventRegistrar` in `boot()`; each listener receives an `ExtensionEvent`. |
-| `configuration` | accepted, uninterpreted | Nothing reads it. |
-| `permissions` (schema 1 only) | advisory | Nothing grants it. From schema 2 it must match the contributed capability identifiers exactly, order included. |
-
-## What has been withdrawn
-
-`generations.json` carries a `withdrawn` list. An entry there names a type that was once part of the
-extension-facing surface, the commit that removed it, and why. The build check refuses to let a withdrawn
-type quietly come back, and refuses to let one be recorded as withdrawn while it still exists.
-
-If you built against something on that list, the entry tells you what to do instead.
-
-## The compatibility packages
-
-Each generation names a compatibility package under
-[`tests/Fixtures/ExtensionApi/generations/`](../../tests/Fixtures/ExtensionApi/generations). They are
-not examples to copy — [`examples/extensions`](../../examples/extensions) holds those. They are probes:
-each declares the smallest thing its generation is *for*, and every build
-
-1. builds it twice and requires the same bytes,
-2. runs the code-free static conformance gate over the archive,
-3. signs the package digest with `PackageSigner` and the fixture key published in `generations.json`,
-4. admits it through `PackageTrustPolicy` over `SodiumEd25519Verifier` — the production trust path,
-5. drives the install plan to commit, then activates, upgrades, disables, reactivates and uninstalls,
-6. and compares the contributed surface at every step against what the generation promises.
-
-The signing key is a fixture key and is deliberately derivable from a written stem, so nothing secret is
-committed and anyone can rebuild and re-sign the packages. It proves the signing and admission path, not
-provenance; a release key proves provenance and lives outside the repository.
-
-One detail of the lifecycle is worth knowing before you meet it in production: **an upgrade leaves the
-extension disabled**, even if it was active. That is not a bug in the fixture. An operator re-activates
-against the new code deliberately, so a bad release cannot re-enter service unattended.
-
-## Changing the contract
-
-- **Adding a generation** is the ordinary way forward. Add an entry to `generations.json`, ship its
-  compatibility package, and leave every existing entry alone.
-- **Changing a frozen generation** fails the build. Each entry carries a `surface_digest` over its own
-  canonical bytes; the check recomputes it. The recorded closed key sets are also compared with the
-  `ExtensionManifestGrammar` arrays consumed by the live parser, so changing both the record and its digest
-  cannot conceal parser drift. If a change really is deliberate, publish a successor generation rather than
-  widening one existing generation in place.
-- **Withdrawing something** means moving it to the `withdrawn` list with a reason, not deleting the line.
-
-Internal code needs none of this. That is the trade the classification exists to make: a small surface
-that is genuinely fixed, and everything else free to move.
+Run `php tools/record-contract.php` only for a deliberate API/resource recording change. Run
+`php tools/verify-contract.php` (or `composer contract`) to prove exact type membership, source digests,
+generation digests, fixture manifests, executable inventories, resource pins, and namespace purity.

@@ -7,26 +7,25 @@ namespace Kumwe\Extension\Package;
 /**
  * Port that lists an extension archive's contents without unpacking any of them.
  *
- * Every install begins here: `DoctrineExtensionManager` inspects the staged upload, hands the result
- * to `PackageSafetyPolicy`, and only then extracts. Keeping inspection behind this port is what lets
- * the size, link, and layout rules be decided in application code while the archive format stays an
- * infrastructure concern — `ZipArchiveReader` is the shipped binding.
+ * Hosts and author tooling begin package inspection here. Keeping central-directory access behind this
+ * port lets neutral safety inspection remain archive-format independent; `ZipArchiveReader` is the
+ * shipped binding.
  *
  * @since  0.1.0
  */
 interface ArchiveReader
 {
     /**
-     * Read an archive's directory listing into a description the safety policy can judge.
+     * Read an archive's directory listing into a description neutral safety inspection can judge.
      *
-     * Implementations inspect into non-public staging and must not extract before
-     * PackageSafetyPolicy has accepted the returned descriptor.
+     * Implementations inspect a non-public snapshot and never extract while producing the descriptor.
      *
-     * @param   string  $archiveFile  Path of the staged archive file to inspect.
+     * @param   string         $archiveFile  Path of the staged archive file to inspect.
+     * @param   PackageLimits  $limits       Exact resource budget for this inspection.
      *
      * @return  ArchivePackage  Every entry with its type and its compressed and expanded sizes.
      *
      * @since   0.1.0
      */
-    public function inspect(string $archiveFile): ArchivePackage;
+    public function inspect(string $archiveFile, PackageLimits $limits): ArchivePackage;
 }

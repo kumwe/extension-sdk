@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace KumweContract\ManifestSix;
 
-use Kumwe\App\Studio\Application\Preview\StudioPreviewBindingResult;
-use Kumwe\App\Studio\Application\Preview\StudioPreviewBlock;
-use Kumwe\App\Studio\Application\Preview\StudioPreviewBlockFragment;
-use Kumwe\App\Studio\Application\Preview\StudioPreviewBlockRenderer;
+use Kumwe\Extension\Spi\Studio\Application\Preview\StudioPreviewBindingResult;
+use Kumwe\Extension\Spi\Studio\Application\Preview\StudioPreviewBlock;
+use Kumwe\Extension\Spi\Studio\Application\Preview\StudioPreviewBlockFragment;
+use Kumwe\Extension\Spi\Studio\Application\Preview\StudioPreviewBlockRenderer;
 
 /**
  * Safe executable preview half of the fixture's signed grid host binding.

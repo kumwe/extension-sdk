@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace KumweContract\ManifestFour\Integration;
 
-use Kumwe\App\BusinessIntegration\Application\IntegrationEventTransport;
-use Kumwe\App\BusinessIntegration\Domain\EventSensitivity;
-use Kumwe\App\BusinessIntegration\Domain\IntegrationEvent;
+use Kumwe\Extension\Spi\BusinessIntegration\Application\IntegrationEventTransport;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\IntegrationEvent;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\WebhookContributionDefinition;
 
 /**
  * Outbound adapter half of the manifest-4 compatibility package.
@@ -31,18 +31,6 @@ final readonly class ObservationWebhookTransport implements IntegrationEventTran
     }
 
     /**
-     * Return the adapter identifier the manifest declares.
-     *
-     * @return  string  The package-namespaced outbound adapter identifier.
-     *
-     * @since   2.0.0
-     */
-    public function identifier(): string
-    {
-        return 'kumwe.contract-manifest-four.observed-webhook';
-    }
-
-    /**
      * Record that delivery was attempted, without leaving the process.
      *
      * @param   IntegrationEvent  $event  Event offered for outbound delivery.
@@ -51,20 +39,12 @@ final readonly class ObservationWebhookTransport implements IntegrationEventTran
      *
      * @since   2.0.0
      */
-    public function publish(IntegrationEvent $event): void
+    public function publish(WebhookContributionDefinition $declaration, IntegrationEvent $event): void
     {
+        if (!$declaration->accepts($event)) {
+            throw new \InvalidArgumentException('The fixture webhook received an undeclared event.');
+        }
         $this->ledger->record('webhook');
     }
 
-    /**
-     * Report the highest sensitivity this adapter may ever be offered.
-     *
-     * @return  EventSensitivity  Public, which is the only class this fixture handles.
-     *
-     * @since   2.0.0
-     */
-    public function sensitivityCeiling(): EventSensitivity
-    {
-        return EventSensitivity::PUBLIC;
-    }
 }

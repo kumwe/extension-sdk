@@ -9,9 +9,9 @@ use InvalidArgumentException;
 /**
  * Validated declaration binding a contributed administrator view name to its Twig template.
  *
- * An extension template is never named directly by a handler. `AdministratorRenderer` takes a view
- * name, resolves it through `AdministratorViewRegistry`, and prefixes the template with the Twig
- * namespace isolated to that extension. Constraining the template path here — relative, ending in
+ * An extension template is never named directly by a handler. `AdministratorRouteRenderer` is already view-bound;
+ * a host registry resolves that signed view and prefixes the template with the Twig namespace isolated to the
+ * extension. Constraining the template path here — relative, ending in
  * `.twig`, free of `..` — is what keeps that indirection from reaching outside the namespace.
  *
  * @since  0.1.0

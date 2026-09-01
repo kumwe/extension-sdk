@@ -8,9 +8,8 @@ namespace Kumwe\Extension\Spi\Contribution;
  * The canonical Studio contribution kinds a manifest schema 6 package may declare.
  *
  * Each case names one published `@kumwe/studio-protocol` document schema, vendored at the exact
- * pinned release under `resources/studio-contract/protocol/schemas/`. Schema 6 carries these
- * canonical documents instead of the App paraphrases manifest 5 froze, per decision D16 and
- * kumwe/app#104; the frozen schema-5 vocabulary stays exactly as released beside them.
+ * pinned release owned by `kumwe/producer`. Schema 6 carries these canonical documents while the
+ * frozen schema-5 vocabulary stays exactly as released beside them.
  *
  * @since  0.1.0
  */

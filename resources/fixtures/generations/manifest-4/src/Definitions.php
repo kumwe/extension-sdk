@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace KumweContract\ManifestFour;
 
-use Kumwe\App\BusinessIntegration\Domain\DomainListenerDefinition;
-use Kumwe\App\BusinessIntegration\Domain\EventConsumerDefinition;
-use Kumwe\App\BusinessIntegration\Domain\EventSchemaDefinition;
-use Kumwe\App\BusinessIntegration\Domain\JobContributionDefinition;
-use Kumwe\App\BusinessIntegration\Domain\QueueContributionDefinition;
-use Kumwe\App\BusinessIntegration\Domain\ScheduleContributionDefinition;
-use Kumwe\App\BusinessIntegration\Domain\WebhookContributionDefinition;
-use Kumwe\App\BusinessReporting\Domain\ProjectionDefinition;
-use Kumwe\App\BusinessReporting\Domain\ReportDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainListenerDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventConsumerDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventSchemaDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\QueueContributionDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\ScheduleContributionDefinition;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\WebhookContributionDefinition;
+use Kumwe\Extension\Spi\BusinessReporting\Domain\ProjectionDefinition;
+use Kumwe\Extension\Spi\BusinessReporting\Domain\ReportDefinition;
 
 /**
  * The manifest-4 compatibility package's SPI-2 declarations, built through the public array contracts.

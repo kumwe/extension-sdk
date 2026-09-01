@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Kumwe\Extension\Spi\BusinessSurface\Presentation\Field;
 
 use InvalidArgumentException;
+use Kumwe\Extension\Spi\Contribution\ContributionDefinition;
 
 /**
  * Signed declaration of the presentation contexts one contributed field type implements.
@@ -14,7 +15,7 @@ use InvalidArgumentException;
  *
  * @since  0.1.0
  */
-final readonly class FieldPresentationContribution
+final readonly class FieldPresentationContribution implements ContributionDefinition
 {
     /**
      * Canonically ordered contexts implemented by the contributed presenter.
@@ -91,6 +92,12 @@ final readonly class FieldPresentationContribution
         }
 
         return new self($fieldType, $mapped);
+    }
+
+    /** @return string Declared field-type identifier. @since 0.2.0 */
+    public function identifier(): string
+    {
+        return $this->fieldType;
     }
 
     /**

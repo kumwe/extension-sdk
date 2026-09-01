@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace @@PHP_NAMESPACE@@\Delivery\Portal;
 
 use @@PHP_NAMESPACE@@\Application\OverviewService;
-use Kumwe\App\Portal\Contribution\PortalRouteHandlerFactory;
-use Kumwe\App\Portal\Presentation\PortalContributionRenderer;
+use Kumwe\Extension\Spi\Binding\Http\PortalRouteRenderer;
+use Kumwe\Extension\Spi\Binding\Http\PortalRouteHandlerFactory;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**
@@ -30,13 +30,13 @@ final readonly class OverviewHandlerFactory implements PortalRouteHandlerFactory
     /**
      * Build a handler using the object-capability renderer granted by the route registry.
      *
-     * @param   PortalContributionRenderer  $renderer  Owner-and-template-bound portal renderer.
+     * @param   PortalRouteRenderer  $renderer  Owner-and-template-bound portal renderer.
      *
      * @return  RequestHandlerInterface  Ready portal overview handler.
      *
      * @since   2.0.0
      */
-    public function create(PortalContributionRenderer $renderer): RequestHandlerInterface
+    public function create(PortalRouteRenderer $renderer): RequestHandlerInterface
     {
         return new OverviewHandler($this->overview, $renderer);
     }

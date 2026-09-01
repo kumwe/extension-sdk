@@ -53,7 +53,7 @@
                 {
                     "kind": "block-definition",
                     "id": "kumwe.contract-manifest-six/grid",
-                    "renderer": "kumwe.contract-manifest-six.renderer.grid"
+                    "renderer": "kumwe.contract-manifest-six/grid-preview"
                 },
                 {
                     "kind": "inspector",

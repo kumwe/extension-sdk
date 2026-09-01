@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace KumweContract\ManifestFour\Integration;
 
-use Kumwe\App\Application\Authorization\ExecutionContext;
-use Kumwe\App\Application\Automation\JobHandler;
+use Kumwe\Extension\Spi\Application\Automation\JobHandler;
+use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
+use Kumwe\Extension\Spi\Application\ExecutionContext;
 
 /**
  * Background job half of the manifest-4 compatibility package.
@@ -26,18 +27,6 @@ final readonly class SummarizeJob implements JobHandler
     }
 
     /**
-     * Return the declared job type this handler answers for.
-     *
-     * @return  string  The package-namespaced job type its manifest declares.
-     *
-     * @since   2.0.0
-     */
-    public function type(): string
-    {
-        return 'kumwe.contract-manifest-four.summarize';
-    }
-
-    /**
      * Record that the job ran, without any external effect.
      *
      * @param   array<string, mixed>  $payload  Decoded job arguments, in the shape the type's schema declares.
@@ -47,8 +36,11 @@ final readonly class SummarizeJob implements JobHandler
      *
      * @since   2.0.0
      */
-    public function handle(array $payload, ExecutionContext $context): void
+    public function handle(JobContributionDefinition $declaration, array $payload, ExecutionContext $context): void
     {
+        if ($declaration->type() !== 'kumwe.contract-manifest-four.summarize') {
+            throw new \InvalidArgumentException('The fixture job received the wrong declaration.');
+        }
         $this->ledger->record('job');
     }
 }

@@ -9,9 +9,9 @@ use InvalidArgumentException;
 /**
  * The bounded host metadata binding one canonical composition document into this application.
  *
- * A canonical document is portable Studio JSON and never carries Kumwe-specific data: renderer
- * bindings, authority and host references live here instead, exactly as kumwe/app#104 requires —
- * never as a proprietary JSON Schema keyword inside the document. A binding names the document it
+ * A canonical document is portable Studio JSON and never carries host-specific data: renderer
+ * bindings, authority and host references live here instead, never as a proprietary JSON Schema
+ * keyword inside the document. A binding names the document it
  * belongs to by kind and identity, the owner-namespaced renderer the Gate B surface resolves for a
  * block, and optionally the declared capability an authoring surface must hold before offering it.
  *

@@ -1,0 +1,140 @@
+#!/usr/bin/env php
+<?php
+
+/**
+ * Host-independent command line entry point for the Kumwe extension SDK.
+ *
+ * @since 0.2.0
+ */
+
+declare(strict_types=1);
+
+use Kumwe\Extension\Package\PackageCodeConformance;
+use Kumwe\Extension\Package\PackageEvidenceInspector;
+use Kumwe\Extension\Package\PackageSafetyPolicy;
+use Kumwe\Extension\Package\ZipArchiveContentReader;
+use Kumwe\Extension\Package\ZipArchiveReader;
+use Kumwe\Extension\Toolchain\DeterministicPackageBuilder;
+use Kumwe\Extension\Toolchain\PackageInspector;
+use Kumwe\Extension\Toolchain\StaticConformanceRunner;
+
+$root = dirname(__DIR__);
+$composerAutoload = $GLOBALS['_composer_autoload_path'] ?? $root . '/vendor/autoload.php';
+if (is_string($composerAutoload) && is_file($composerAutoload)) {
+    require $composerAutoload;
+} else {
+    spl_autoload_register(static function (string $class) use ($root): void {
+        $prefix = 'Kumwe\\Extension\\';
+        if (!str_starts_with($class, $prefix)) {
+            return;
+        }
+        $path = $root . '/src/' . str_replace('\\', '/', substr($class, strlen($prefix))) . '.php';
+        if (is_file($path)) {
+            require $path;
+        }
+    });
+}
+
+$arguments = array_slice($argv, 1);
+$command = array_shift($arguments);
+if (!is_string($command) || in_array($command, ['help', '--help', '-h'], true)) {
+    fwrite(STDOUT, <<<'HELP'
+Kumwe extension SDK
+
+Usage:
+  kumwe-extension build ABSOLUTE_SOURCE --output=ABSOLUTE_ARCHIVE
+  kumwe-extension inspect ABSOLUTE_ARCHIVE
+  kumwe-extension evidence ABSOLUTE_ARCHIVE
+  kumwe-extension conformance ABSOLUTE_ARCHIVE
+
+The commands report facts only. Installation and activation policy belongs to the consuming host.
+HELP . "\n");
+    exit($command === null ? 2 : 0);
+}
+
+$target = array_shift($arguments);
+if (!is_string($target) || $target === '' || !str_starts_with($target, '/')) {
+    fwrite(STDERR, "The command target must be a canonical absolute path.\n");
+    exit(2);
+}
+
+$archiveInspector = new PackageInspector(new ZipArchiveReader(), new PackageSafetyPolicy());
+
+try {
+    $result = match ($command) {
+        'build' => buildPackage($target, $arguments, $archiveInspector),
+        'inspect' => $archiveInspector->inspect($target)->toArray(),
+        'evidence' => inspectEvidence($target, $archiveInspector),
+        'conformance' => runConformance($target, $archiveInspector),
+        default => throw new InvalidArgumentException(sprintf('Unknown command %s.', $command)),
+    };
+    fwrite(STDOUT, json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR) . "\n");
+    if ($command === 'conformance' && ($result['conforms'] ?? false) !== true) {
+        exit(1);
+    }
+} catch (Throwable $failure) {
+    fwrite(STDERR, $failure->getMessage() . "\n");
+    exit(1);
+}
+
+/**
+ * Build one deterministic package.
+ *
+ * @param   string            $source     Canonical absolute source directory.
+ * @param   list<string>      $arguments  Remaining command arguments.
+ * @param   PackageInspector  $inspector  Safe package inspector.
+ *
+ * @return  array<string, mixed>  Build result.
+ *
+ * @since   0.2.0
+ */
+function buildPackage(string $source, array $arguments, PackageInspector $inspector): array
+{
+    $output = null;
+    foreach ($arguments as $argument) {
+        if (str_starts_with($argument, '--output=')) {
+            $output = substr($argument, strlen('--output='));
+            continue;
+        }
+        throw new InvalidArgumentException(sprintf('Unknown build argument %s.', $argument));
+    }
+    if (!is_string($output) || !str_starts_with($output, '/')) {
+        throw new InvalidArgumentException('Build requires --output=ABSOLUTE_ARCHIVE.');
+    }
+
+    return (new DeterministicPackageBuilder($inspector))->build($source, $output)->toArray();
+}
+
+/**
+ * Produce neutral evidence after safe archive inspection.
+ *
+ * @param   string            $archive    Canonical archive path.
+ * @param   PackageInspector  $inspector  Safe package inspector.
+ *
+ * @return  array<string, mixed>  Evidence report.
+ *
+ * @since   0.2.0
+ */
+function inspectEvidence(string $archive, PackageInspector $inspector): array
+{
+    $package = $inspector->inspect($archive);
+
+    return (new PackageEvidenceInspector(new ZipArchiveContentReader(), new PackageCodeConformance()))
+        ->inspect($archive, $package->manifest)
+        ->toArray();
+}
+
+/**
+ * Run complete static conformance.
+ *
+ * @param   string            $archive    Canonical archive path.
+ * @param   PackageInspector  $inspector  Safe package inspector.
+ *
+ * @return  array<string, mixed>  Conformance report.
+ *
+ * @since   0.2.0
+ */
+function runConformance(string $archive, PackageInspector $inspector): array
+{
+    return (new StaticConformanceRunner($inspector))->run($archive)->toArray();
+}

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Proves the author toolchain behaves exactly as the App's in-tree implementation did.
+ * Proves the host-neutral author toolchain produces safe, deterministic packages.
  *
  * @since 0.1.0
  */
@@ -12,9 +12,11 @@ namespace Kumwe\Extension\Tests\Case;
 
 use ArrayObject;
 use InvalidArgumentException;
-use Kumwe\Extension\Package\PackageSafetyPolicy;
+use Kumwe\Extension\Package\PackageChecksum;
+use Kumwe\Extension\Package\PackageFinding;
+use Kumwe\Extension\Package\PackageLimits;
 use Kumwe\Extension\Package\PackageSignature;
-use Kumwe\Extension\Package\ZipArchiveReader;
+use Kumwe\Extension\Package\SodiumPublicKeyPackageSignatureVerifier;
 use Kumwe\Extension\Tests\TestCase;
 use Kumwe\Extension\Toolchain\ComponentScaffolder;
 use Kumwe\Extension\Toolchain\ConformanceReport;
@@ -30,8 +32,7 @@ use Kumwe\Extension\Toolchain\StaticConformanceRunner;
 use RuntimeException;
 
 /**
- * The complete scaffold, deterministic build, inspection, conformance, and signing path,
- * with the App suite's own assertions.
+ * The complete scaffold, deterministic build, inspection, conformance and signing path.
  *
  * @since  0.1.0
  */
@@ -62,20 +63,20 @@ final class ToolchainTest extends TestCase
         $second = $builder->build($source, $work . '/second.zip');
 
         $this->assertSame(
-            (string) $first->inspection->checksum,
-            (string) $second->inspection->checksum,
+            (string) $first->inspection->package->checksum,
+            (string) $second->inspection->package->checksum,
             'Two builds of the same tree produce the same digest.',
         );
         $this->assertSame(
             'acme/quality-component',
-            $first->inspection->manifest->identifier()->value(),
+            $first->inspection->package->manifest->identifier()->value(),
             'The built package parses back to its identity.',
         );
         $report = (new StaticConformanceRunner($inspector))->run($first->archive);
-        $this->assertTrue($report->conforms(), 'A scaffolded build passes: ' . implode('; ', $report->violations));
+        $this->assertTrue($report->conforms(), 'A scaffolded build passes: ' . $this->messages($report->findings));
         $this->assertTrue(
             !(new ConformanceReport($report->inspection, ['forced_failure' => false], []))->conforms(),
-            'A failed named check refuses conformance even without violations.',
+            'A failed named check prevents author conformance even without findings.',
         );
         $this->removeTree($work);
     }
@@ -123,11 +124,11 @@ final class ToolchainTest extends TestCase
         $result = $builder->build($source, $work . '/without-cache.zip');
 
         $this->assertTrue(
-            !in_array('.gitignore', $result->inspection->paths, true),
+            !in_array('.gitignore', $result->inspection->package->paths(), true),
             'Version-control material stays out of the archive.',
         );
         $this->assertTrue(
-            !in_array('.phpunit.cache/results', $result->inspection->paths, true),
+            !in_array('.phpunit.cache/results', $result->inspection->package->paths(), true),
             'Cache material stays out of the archive.',
         );
 
@@ -172,7 +173,7 @@ final class ToolchainTest extends TestCase
         $this->assertTrue(
             in_array(
                 'PHP file src/Application/OverviewService.php must declare strict_types=1.',
-                $report->violations,
+                $this->messagesList($report->findings),
                 true,
             ),
             'The violation names the file with the stable message.',
@@ -211,13 +212,18 @@ final class ToolchainTest extends TestCase
         $decoded = SignatureDocument::fromJson((string) file_get_contents($sidecar));
         $public = sodium_crypto_sign_publickey(sodium_crypto_sign_seed_keypair($seed));
 
+        $signature = PackageSignature::ed25519($decoded->keyId, $decoded->base64Signature);
         $this->assertTrue(
-            sodium_crypto_sign_verify_detached(
-                PackageSignature::ed25519($decoded->keyId, $decoded->base64Signature)->bytes(),
-                $decoded->packageSha256,
-                $public,
+            (new SodiumPublicKeyPackageSignatureVerifier())->verify(
+                base64_encode($public),
+                PackageChecksum::sha256($decoded->packageSha256),
+                $signature,
             ),
-            'The written sidecar verifies against the seed-derived public key.',
+            'The written sidecar verifies through the canonical SDK primitive.',
+        );
+        $this->assertTrue(
+            !sodium_crypto_sign_verify_detached($signature->bytes(), $decoded->packageSha256, $public),
+            'The signature is domain separated from a bare checksum signature.',
         );
         $this->removeTree($work);
     }
@@ -239,7 +245,7 @@ final class ToolchainTest extends TestCase
         $this->assertThrows(
             static fn (): string => (new ProtectedSigningKeyReader())->read($keyFile),
             InvalidArgumentException::class,
-            'A group-readable signing key must be refused.',
+            'A group-readable signing key must be rejected.',
         );
         $this->removeTree($work);
     }
@@ -659,7 +665,38 @@ final class ToolchainTest extends TestCase
      */
     private function inspector(): PackageInspector
     {
-        return new PackageInspector(new ZipArchiveReader(), new PackageSafetyPolicy());
+        return new PackageInspector(new PackageLimits());
+    }
+
+    /**
+     * Flatten typed findings for test diagnostics.
+     *
+     * @param   list<PackageFinding>  $findings  Neutral coded findings.
+     *
+     * @return  string  Finding messages in order.
+     *
+     * @since   0.2.0
+     */
+    private function messages(array $findings): string
+    {
+        return implode('; ', $this->messagesList($findings));
+    }
+
+    /**
+     * Select messages from typed findings.
+     *
+     * @param   list<PackageFinding>  $findings  Neutral coded findings.
+     *
+     * @return  list<string>  Finding messages in order.
+     *
+     * @since   0.2.0
+     */
+    private function messagesList(array $findings): array
+    {
+        return array_map(
+            static fn (PackageFinding $finding): string => $finding->message,
+            $findings,
+        );
     }
 
     /**

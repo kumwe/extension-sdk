@@ -4,40 +4,41 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Toolchain;
 
-use Kumwe\Extension\Package\PackageBillOfMaterials;
+use Kumwe\Extension\Package\InvalidPackage;
+use Kumwe\Extension\Package\PackageAttestationState;
 use Kumwe\Extension\Package\PackageCodeConformance;
-use Kumwe\Extension\Package\PackageProvenance;
+use Kumwe\Extension\Package\PackageEvidenceInspector;
+use Kumwe\Extension\Package\PackageEvidenceScope;
+use Kumwe\Extension\Package\PackageFinding;
+use Kumwe\Extension\Package\ZipArchiveContentReader;
 use RuntimeException;
 use ZipArchive;
 
 /**
- * Performs bounded static conformance checks without loading or executing extension code.
+ * Performs bounded, code-free author conformance over the same neutral evidence a host can inspect.
  *
- * The per-file checks are not implemented here: they live in `PackageCodeConformance`, which
- * install-time admission runs as well, so what an author sees from `extension:conformance` and what an
- * installation refuses are the same findings produced by the same code. What stays here is everything
- * only a publisher cares about — deterministic entry order, ZIP metadata normalization, and the
- * authoring README — plus the report shape the SDK's own tests are written against.
+ * Invalid package data is represented as coded findings. Filesystem and transport failures still throw,
+ * because a tool cannot honestly report package facts when the staged bytes cannot be read stably.
  *
- * @since  0.1.0
+ * @since  0.2.0
  */
 final readonly class StaticConformanceRunner
 {
     /**
-     * Timestamp assigned by the reproducible package builder to every entry.
+     * Timestamp assigned by the deterministic package builder.
      *
      * @var    int
-     * @since  0.1.0
+     * @since  0.2.0
      */
-    private const ZIP_EPOCH = 315532800;
+    private const int ZIP_EPOCH = 315_532_800;
 
     /**
-     * Bind conformance to the production package inspector and the shared static checks.
+     * Bind conformance to package inspection and shared static checks.
      *
-     * @param  PackageInspector        $inspector    Safe archive and manifest inspection boundary.
-     * @param  PackageCodeConformance  $conformance  Per-file checks shared with install-time admission.
+     * @param  PackageInspector        $inspector    Immutable package snapshot producer.
+     * @param  PackageCodeConformance  $conformance  Neutral code and reference checks.
      *
-     * @since  0.1.0
+     * @since  0.2.0
      */
     public function __construct(
         private PackageInspector $inspector,
@@ -46,124 +47,135 @@ final readonly class StaticConformanceRunner
     }
 
     /**
-     * Inspect and statically validate one installable package.
+     * Inspect and statically validate one package.
      *
      * @param   string  $archiveFile  Canonical absolute package path.
      *
-     * @return  ConformanceReport  Stable report containing every violation found.
+     * @return  ConformanceReport  Author-facing outcome over neutral coded findings.
      *
-     * @throws  RuntimeException  When an inspected entry cannot be read within its safety bound.
+     * @throws  RuntimeException  When stable archive bytes or metadata cannot be read.
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
     public function run(string $archiveFile): ConformanceReport
     {
-        $inspection = $this->inspector->inspect($archiveFile);
-        $violations = [];
-        $paths = $inspection->paths;
-        $sorted = $paths;
-        sort($sorted, SORT_STRING);
-        if ($paths !== $sorted) {
-            $violations[] = 'Archive entries must be sorted bytewise for deterministic packaging.';
+        try {
+            $inspection = $this->inspector->inspect($archiveFile);
+        } catch (InvalidPackage $failure) {
+            return new ConformanceReport(
+                null,
+                ['package_snapshot' => false],
+                [$failure->finding],
+            );
         }
 
+        $package = $inspection->package;
+        if (!$package->hasNoSafetyFindings()) {
+            return new ConformanceReport(
+                $inspection,
+                ['package_snapshot' => true, 'archive_safety' => false],
+                $package->safetyFindings,
+            );
+        }
+
+        $findings = [];
+        $paths = $package->paths();
+        $sortedPaths = $paths;
+        sort($sortedPaths, SORT_STRING);
+        if ($paths !== $sortedPaths) {
+            $findings[] = new PackageFinding(
+                'archive.metadata.entry_order',
+                'Archive entries are not sorted bytewise for deterministic packaging.',
+            );
+        }
+
+        $metadataNormalized = $this->metadataFindings($package->archive, $paths, $findings);
+        $package->assertCurrentArchiveIdentity();
+
+        $evidence = (new PackageEvidenceInspector(
+            new ZipArchiveContentReader(),
+            $this->conformance,
+        ))->inspect($package, PackageEvidenceScope::Authoring);
+        $findings = [...$findings, ...$evidence->findings];
+        if ($evidence->sbomState === PackageAttestationState::Absent) {
+            $findings[] = new PackageFinding(
+                'attestation.sbom.missing',
+                'The package bill of materials is missing; rebuild with the SDK package builder.',
+                'kumwe.sbom.json',
+            );
+        }
+        if ($evidence->provenanceState === PackageAttestationState::Absent) {
+            $findings[] = new PackageFinding(
+                'attestation.provenance.missing',
+                'The package provenance statement is missing; rebuild with the SDK package builder.',
+                'kumwe.provenance.json',
+            );
+        }
+        $this->sortFindings($findings);
+
+        return new ConformanceReport(
+            $inspection,
+            [
+                'package_snapshot' => true,
+                'archive_safety' => true,
+                'manifest_schema' => true,
+                'deterministic_entry_order' => $paths === $sortedPaths,
+                'deterministic_entry_metadata' => $metadataNormalized,
+                ...$evidence->checks,
+                'package_bill_of_materials' => $evidence->sbomState === PackageAttestationState::Verified,
+                'package_provenance' => $evidence->provenanceState === PackageAttestationState::Verified,
+            ],
+            $findings,
+        );
+    }
+
+    /**
+     * Check deterministic ZIP metadata without expanding entry contents.
+     *
+     * @param   string                $archiveFile  Stable inspected archive path.
+     * @param   list<string>          $paths        Expected central-directory paths.
+     * @param   list<PackageFinding>  $findings     Finding list appended in place.
+     *
+     * @return  bool  True when every entry has canonical metadata.
+     *
+     * @throws  RuntimeException  When the archive cannot be reopened or its directory changed.
+     *
+     * @since   0.2.0
+     */
+    private function metadataFindings(string $archiveFile, array $paths, array &$findings): bool
+    {
         $zip = new ZipArchive();
-        if ($zip->open($inspection->archive, ZipArchive::RDONLY) !== true) {
+        if ($zip->open($archiveFile, ZipArchive::RDONLY) !== true) {
             throw new RuntimeException('The inspected extension package could not be reopened.');
         }
         if ($zip->numFiles !== count($paths)) {
             $zip->close();
-            throw new RuntimeException('The extension package changed before conformance checks began.');
+            throw new RuntimeException('The extension package changed before metadata checks began.');
         }
-        $metadataNormalized = true;
+
+        $valid = true;
         try {
             foreach ($paths as $index => $path) {
-                $metadataNormalized = $this->checkMetadata($zip, $index, $path, $violations)
-                    && $metadataNormalized;
-                if (str_ends_with($path, '/')) {
-                    continue;
+                $stat = $zip->statIndex($index, ZipArchive::FL_UNCHANGED);
+                $attributes = $this->externalAttributes($zip, $index);
+                $entryValid = is_array($stat)
+                    && ($stat['name'] ?? null) === $path
+                    && ($stat['comp_method'] ?? null) === ZipArchive::CM_STORE
+                    && ($stat['mtime'] ?? null) === self::ZIP_EPOCH
+                    && $attributes !== null
+                    && $attributes['operating_system'] === ZipArchive::OPSYS_UNIX
+                    && (($attributes['attributes'] >> 16) & 0xFFFF) === 0100644;
+                if (!$entryValid) {
+                    $findings[] = new PackageFinding(
+                        'archive.metadata.entry',
+                        sprintf('Archive metadata for %s is not deterministic.', $path),
+                        $path,
+                    );
                 }
-                $contents = $zip->getFromIndex($index, 67_108_865, ZipArchive::FL_UNCHANGED);
-                if (!is_string($contents)) {
-                    throw new RuntimeException(sprintf('Package entry %s could not be read.', $path));
-                }
-                if ($this->conformance->isTextPath($path)) {
-                    $violations = [...$violations, ...$this->conformance->markerViolations($path, $contents)];
-                }
-                if ($this->conformance->isPhpPath($path)) {
-                    $violations = [...$violations, ...$this->conformance->phpViolations($path, $contents)];
-                }
+                $valid = $valid && $entryValid;
             }
         } finally {
             $zip->close();
-        }
-        $digest = hash_file('sha256', $inspection->archive);
-        if (!is_string($digest) || !hash_equals((string) $inspection->checksum, $digest)) {
-            throw new RuntimeException('The extension package changed during conformance checks.');
-        }
-
-        $violations = [
-            ...$violations,
-            ...$this->conformance->referenceViolations($inspection->manifest, $inspection->paths),
-        ];
-        sort($violations, SORT_STRING);
-        $checks = [
-            'production_package_safety' => true,
-            'manifest_schema' => true,
-            'deterministic_entry_order' => $paths === $sorted,
-            'deterministic_entry_metadata' => $metadataNormalized,
-            'static_php_syntax' => !$this->containsPrefix($violations, 'PHP syntax failure'),
-            'strict_types' => !$this->containsPrefix($violations, 'PHP file'),
-            'complete_sources' => !$this->containsPrefix($violations, 'Unresolved marker'),
-            'manifest_references' => !$this->containsPrefix($violations, 'Manifest reference'),
-            'authoring_readme' => in_array('README.md', $paths, true),
-            'package_bill_of_materials' => in_array(PackageBillOfMaterials::PATH, $paths, true),
-            'package_provenance' => in_array(PackageProvenance::PATH, $paths, true),
-        ];
-        foreach (
-            [
-                'package_bill_of_materials' => PackageBillOfMaterials::PATH,
-                'package_provenance' => PackageProvenance::PATH,
-            ] as $check => $path
-        ) {
-            if (!$checks[$check]) {
-                $violations[] = sprintf('Attestation document %s is missing; rebuild with extension:build.', $path);
-            }
-        }
-        if (!$checks['authoring_readme']) {
-            $violations[] = 'Manifest reference README.md is missing.';
-            sort($violations, SORT_STRING);
-        }
-
-        return new ConformanceReport($inspection, $checks, $violations);
-    }
-
-    /**
-     * Verify one entry carries the compression, timestamp, and Unix mode emitted by the builder.
-     *
-     * @param   ZipArchive    $zip         Open inspected package.
-     * @param   int           $index       Central-directory index.
-     * @param   string        $path        Expected entry path.
-     * @param   list<string>  $violations  Accumulated violations.
-     *
-     * @return  bool  True when every deterministic metadata field matches.
-     *
-     * @since   0.1.0
-     */
-    private function checkMetadata(ZipArchive $zip, int $index, string $path, array &$violations): bool
-    {
-        $stat = $zip->statIndex($index, ZipArchive::FL_UNCHANGED);
-        $externalAttributes = $this->externalAttributes($zip, $index);
-        $valid = is_array($stat)
-            && ($stat['name'] ?? null) === $path
-            && ($stat['comp_method'] ?? null) === ZipArchive::CM_STORE
-            && ($stat['mtime'] ?? null) === self::ZIP_EPOCH
-            && $externalAttributes !== null
-            && $externalAttributes['operating_system'] === ZipArchive::OPSYS_UNIX
-            && (($externalAttributes['attributes'] >> 16) & 0xFFFF) === 0100644
-            && !str_ends_with($path, '/');
-        if (!$valid) {
-            $violations[] = sprintf('Archive metadata for %s is not deterministic.', $path);
         }
 
         return $valid;
@@ -172,12 +184,12 @@ final readonly class StaticConformanceRunner
     /**
      * Read external attributes through the mutation-based ZipArchive API.
      *
-     * @param   ZipArchive  $zip    Open inspected package.
-     * @param   int         $index  Central-directory index.
+     * @param   ZipArchive  $zip    Open archive handle.
+     * @param   int         $index  Central-directory position.
      *
      * @return  ?array{operating_system: int, attributes: int}  Attributes, or null when unavailable.
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
     private function externalAttributes(ZipArchive $zip, int $index): ?array
     {
@@ -194,23 +206,24 @@ final readonly class StaticConformanceRunner
     }
 
     /**
-     * Determine whether any violation starts with a stable category prefix.
+     * Sort neutral findings deterministically.
      *
-     * @param   list<string>  $violations  Sorted or unsorted violation messages.
-     * @param   string        $prefix      Category prefix.
+     * @param   list<PackageFinding>  $findings  Finding list sorted in place.
      *
-     * @return  bool  True when at least one violation belongs to the category.
+     * @return  void
      *
-     * @since   0.1.0
+     * @since   0.2.0
      */
-    private function containsPrefix(array $violations, string $prefix): bool
+    private function sortFindings(array &$findings): void
     {
-        foreach ($violations as $violation) {
-            if (str_starts_with($violation, $prefix)) {
-                return true;
-            }
-        }
-
-        return false;
+        usort($findings, static fn (PackageFinding $left, PackageFinding $right): int => [
+            $left->code,
+            $left->path ?? '',
+            $left->message,
+        ] <=> [
+            $right->code,
+            $right->path ?? '',
+            $right->message,
+        ]);
     }
 }

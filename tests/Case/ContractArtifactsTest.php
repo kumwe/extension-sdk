@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Proves the vendored contract artifacts and their verifier hold the frozen surface.
+ * Proves canonical SDK contract records match source, fixtures and shipped resources.
  *
- * @since 0.1.0
+ * @since 0.2.0
  */
 
 declare(strict_types=1);
@@ -12,148 +12,120 @@ namespace Kumwe\Extension\Tests\Case;
 
 use Kumwe\Extension\Tests\TestCase;
 
-/**
- * Exercises `tools/verify-contract.php` in both directions over the vendored artifacts.
- *
- * The green path proves a clean clone carries exactly the pinned bytes; the tampered paths prove
- * the verifier fails closed for the drift classes that matter — a changed artifact byte, a widened
- * frozen generation, a file the pin does not know, and a pinned file that went missing.
- *
- * @since  0.1.0
- */
+/** @since 0.2.0 */
 final class ContractArtifactsTest extends TestCase
 {
-    /**
-     * The committed artifacts verify green, and the summary names every promised surface.
-     *
-     * @return  void
-     *
-     * @since   0.1.0
-     */
-    public function testCommittedArtifactsVerify(): void
+    /** @since 0.2.0 */
+    public function testCommittedCanonicalArtifactsVerify(): void
     {
         [$status, $output] = $this->verify(dirname(__DIR__, 2) . '/resources');
 
-        $this->assertSame(0, $status, 'The committed contract artifacts must verify. ' . $output);
-        $this->assertStringContains('6 manifest generations', $output, 'The verifier must count the generations.');
-        $this->assertStringContains('4 SPI generations', $output, 'The verifier must count the SPI generations.');
-        $this->assertStringContains('122 public types', $output, 'The verifier must count the classified types.');
+        $this->assertSame(0, $status, 'The canonical SDK artifacts must verify. ' . $output);
+        $this->assertStringContains('Canonical SDK contract verified:', $output, 'The verifier identifies its authority.');
+        $this->assertStringContains('6 manifest generations', $output, 'All manifest generations are recorded.');
+        $this->assertStringContains('4 SPI generations', $output, 'All contribution SPI generations are recorded.');
     }
 
-    /**
-     * A changed artifact byte fails the digest sweep and names the drifted file.
-     *
-     * @return  void
-     *
-     * @since   0.1.0
-     */
-    public function testTamperedArtifactByteFailsTheSweep(): void
+    /** @since 0.2.0 */
+    public function testTamperedMissingAndUnpinnedResourcesFailClosed(): void
     {
-        $root = $this->copyResources();
-        $target = $root . '/fixtures/generations/manifest-1/kumwe.json';
-        $bytes = (string) file_get_contents($target);
-        file_put_contents($target, $bytes . "\n");
-
-        [$status, $output] = $this->verify($root);
-
-        $this->assertSame(1, $status, 'A tampered artifact must fail verification.');
+        $tampered = $this->copyResources();
+        $manifest = $tampered . '/fixtures/generations/manifest-1/kumwe.json';
+        file_put_contents($manifest, (string) file_get_contents($manifest) . "\n");
+        [$status, $output] = $this->verify($tampered);
+        $this->assertSame(1, $status, 'A changed canonical resource must fail.');
         $this->assertStringContains(
-            'Digest mismatch against the recorded source digest: fixtures/generations/manifest-1/kumwe.json',
+            'Canonical resource digest mismatch: fixtures/generations/manifest-1/kumwe.json',
             $output,
-            'The sweep must name the drifted artifact.',
+            'The changed resource is named.',
         );
-        $this->removeTree($root);
+        $this->removeTree($tampered);
+
+        $missing = $this->copyResources();
+        unlink($missing . '/fixtures/generations/manifest-1/src/Greeting.php');
+        [$status, $output] = $this->verify($missing);
+        $this->assertSame(1, $status, 'A missing canonical resource must fail.');
+        $this->assertStringContains(
+            'Pinned canonical resource is missing: fixtures/generations/manifest-1/src/Greeting.php',
+            $output,
+            'The missing resource is named.',
+        );
+        $this->removeTree($missing);
+
+        $unpinned = $this->copyResources();
+        file_put_contents($unpinned . '/fixtures/generations/uninvited.php', "<?php\n");
+        [$status, $output] = $this->verify($unpinned);
+        $this->assertSame(1, $status, 'An unpinned canonical resource must fail.');
+        $this->assertStringContains(
+            'Unpinned file in the canonical resource tree: fixtures/generations/uninvited.php',
+            $output,
+            'The unpinned resource is named.',
+        );
+        $this->removeTree($unpinned);
     }
 
-    /**
-     * Widening a frozen generation entry fails the recomputed surface digest.
-     *
-     * The tampered copy re-pins the document's own file digest, so only the frozen-surface
-     * recomputation can catch the widening — which is exactly the check being proven.
-     *
-     * @return  void
-     *
-     * @since   0.1.0
-     */
-    public function testWidenedFrozenGenerationFailsItsSurfaceDigest(): void
+    /** @since 0.2.0 */
+    public function testRepinnedHostNamespaceAndApiDriftStillFail(): void
+    {
+        $hostCoupling = $this->copyResources();
+        $readme = $hostCoupling . '/contract/README.md';
+        $historical = implode('\\', ['Kumwe', 'App', 'Forbidden']);
+        file_put_contents($readme, (string) file_get_contents($readme) . "\n{$historical}\n");
+        $this->repin($hostCoupling, 'contract/README.md');
+        [$status, $output] = $this->verify($hostCoupling);
+        $this->assertSame(1, $status, 'A repinned private host namespace must still fail.');
+        $this->assertStringContains(
+            'Historical host namespace is published by resource: contract/README.md',
+            $output,
+            'Namespace purity is independent of resource digests.',
+        );
+        $this->removeTree($hostCoupling);
+
+        $apiDrift = $this->copyResources();
+        $classificationPath = $apiDrift . '/contract/classification.json';
+        $classification = json_decode((string) file_get_contents($classificationPath), true, 64, JSON_THROW_ON_ERROR);
+        $this->assertTrue(is_array($classification), 'The public API record decodes.');
+        array_pop($classification['types']);
+        file_put_contents(
+            $classificationPath,
+            json_encode($classification, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR) . "\n",
+        );
+        $this->repin($apiDrift, 'contract/classification.json');
+        [$status, $output] = $this->verify($apiDrift);
+        $this->assertSame(1, $status, 'A repinned narrowed API record must still fail.');
+        $this->assertStringContains(
+            'classification.json differs from the SDK-owned canonical public API',
+            $output,
+            'Source type membership is the API authority.',
+        );
+        $this->removeTree($apiDrift);
+    }
+
+    /** @since 0.2.0 */
+    public function testRepinnedGenerationDriftStillFails(): void
     {
         $root = $this->copyResources();
         $path = $root . '/contract/generations.json';
-        $document = json_decode((string) file_get_contents($path), true);
-        $this->assertTrue(is_array($document), 'The vendored generations document must decode.');
-        $document['manifest_generations'][0]['types'][] = 'sneaky-new-type';
+        $document = json_decode((string) file_get_contents($path), true, 64, JSON_THROW_ON_ERROR);
+        $this->assertTrue(is_array($document), 'The generation record decodes.');
+        $document['manifest_generations'][0]['executable_bindings']['job_handler'] = ['kumwe.hidden.job'];
         file_put_contents(
             $path,
-            json_encode($document, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . "\n",
+            json_encode($document, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR) . "\n",
         );
-        $this->repin($root);
+        $this->repin($root, 'contract/generations.json');
 
         [$status, $output] = $this->verify($root);
-
-        $this->assertSame(1, $status, 'A widened frozen generation must fail verification.');
+        $this->assertSame(1, $status, 'A repinned generation mutation must fail.');
         $this->assertStringContains(
-            'promises something other than its recorded frozen surface',
+            'generations.json differs from canonical SDK fixtures',
             $output,
-            'The failure must name the frozen-surface drift.',
+            'The fixture-derived generation authority catches the mutation.',
         );
         $this->removeTree($root);
     }
 
-    /**
-     * A file the pin does not record is refused, so nothing can hide inside the artifact tree.
-     *
-     * @return  void
-     *
-     * @since   0.1.0
-     */
-    public function testUnpinnedFileIsRefused(): void
-    {
-        $root = $this->copyResources();
-        file_put_contents($root . '/fixtures/pins/uninvited.json', "{}\n");
-
-        [$status, $output] = $this->verify($root);
-
-        $this->assertSame(1, $status, 'An unpinned file must fail verification.');
-        $this->assertStringContains(
-            'Unpinned file in the vendored contract: fixtures/pins/uninvited.json',
-            $output,
-            'The sweep must name the unpinned file.',
-        );
-        $this->removeTree($root);
-    }
-
-    /**
-     * A pinned file that disappears is reported missing rather than silently skipped.
-     *
-     * @return  void
-     *
-     * @since   0.1.0
-     */
-    public function testMissingPinnedArtifactIsReported(): void
-    {
-        $root = $this->copyResources();
-        unlink($root . '/fixtures/pins/extension-event-v1.json');
-
-        [$status, $output] = $this->verify($root);
-
-        $this->assertSame(1, $status, 'A missing pinned artifact must fail verification.');
-        $this->assertStringContains(
-            'Pinned artifact is missing: fixtures/pins/extension-event-v1.json',
-            $output,
-            'The sweep must name the missing artifact.',
-        );
-        $this->removeTree($root);
-    }
-
-    /**
-     * Run the verifier against one artifact root and capture status plus combined output.
-     *
-     * @param   string  $root  Absolute artifact root to verify.
-     *
-     * @return  array{int, string}  Exit status and combined stdout/stderr.
-     *
-     * @since   0.1.0
-     */
+    /** @return array{int, string} Process status and combined output. @since 0.2.0 */
     private function verify(string $root): array
     {
         $tool = dirname(__DIR__, 2) . '/tools/verify-contract.php';
@@ -166,13 +138,7 @@ final class ContractArtifactsTest extends TestCase
         return [$status, implode("\n", $lines)];
     }
 
-    /**
-     * Copy the committed artifacts into a private temporary root a test may tamper with.
-     *
-     * @return  string  Absolute path of the writable copy.
-     *
-     * @since   0.1.0
-     */
+    /** @return string Writable resource copy. @since 0.2.0 */
     private function copyResources(): string
     {
         $source = dirname(__DIR__, 2) . '/resources';
@@ -195,48 +161,37 @@ final class ContractArtifactsTest extends TestCase
         return $root;
     }
 
-    /**
-     * Rewrite the copied pin so only the intended check can catch a document tamper.
-     *
-     * @param   string  $root  Writable artifact copy whose PIN.json is regenerated.
-     *
-     * @return  void
-     *
-     * @since   0.1.0
-     */
-    private function repin(string $root): void
+    /** @since 0.2.0 */
+    private function repin(string $root, string $relative): void
     {
-        $pin = json_decode((string) file_get_contents($root . '/PIN.json'), true);
-        $this->assertTrue(is_array($pin), 'The copied pin must decode.');
-        foreach ($pin['files'] as $index => $entry) {
-            $pin['files'][$index]['sha256'] = hash_file('sha256', $root . '/' . $entry['file']);
+        $path = $root . '/PIN.json';
+        $pin = json_decode((string) file_get_contents($path), true, 64, JSON_THROW_ON_ERROR);
+        $this->assertTrue(is_array($pin), 'The resource pin decodes.');
+        foreach ($pin['files'] as &$entry) {
+            if (($entry['file'] ?? null) === $relative) {
+                $entry['sha256'] = hash_file('sha256', $root . '/' . $relative);
+            }
         }
-        file_put_contents($root . '/PIN.json', json_encode($pin, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES) . "\n");
+        unset($entry);
+        file_put_contents(
+            $path,
+            json_encode($pin, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR) . "\n",
+        );
     }
 
-    /**
-     * Remove one private temporary tree created by this test.
-     *
-     * @param   string  $root  Absolute path of the tree to remove.
-     *
-     * @return  void
-     *
-     * @since   0.1.0
-     */
+    /** @since 0.2.0 */
     private function removeTree(string $root): void
     {
-        if (!str_starts_with($root, sys_get_temp_dir() . '/kumwe-sdk-contract-')) {
-            return;
-        }
         $iterator = new \RecursiveIteratorIterator(
             new \RecursiveDirectoryIterator($root, \FilesystemIterator::SKIP_DOTS),
             \RecursiveIteratorIterator::CHILD_FIRST,
         );
         foreach ($iterator as $entry) {
-            if (!$entry instanceof \SplFileInfo) {
-                continue;
+            if ($entry->isDir()) {
+                rmdir($entry->getPathname());
+            } else {
+                unlink($entry->getPathname());
             }
-            $entry->isDir() && !$entry->isLink() ? rmdir($entry->getPathname()) : unlink($entry->getPathname());
         }
         rmdir($root);
     }

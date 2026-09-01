@@ -15,7 +15,7 @@ final readonly class PackageBuildResult
      * Retain the output path and its post-publication production inspection.
      *
      * @param  string             $archive     Canonical absolute output path.
-     * @param  PackageInspection  $inspection  Inspection proving the published package is install-safe.
+     * @param  PackageInspection  $inspection  Immutable inspection of the published package.
      *
      * @since  0.1.0
      */
@@ -34,8 +34,8 @@ final readonly class PackageBuildResult
     {
         return [
             'archive' => $this->archive,
-            'package_sha256' => (string) $this->inspection->checksum,
-            'entry_count' => count($this->inspection->paths),
+            'package_sha256' => (string) $this->inspection->package->checksum,
+            'entry_count' => count($this->inspection->package->paths()),
         ];
     }
 }

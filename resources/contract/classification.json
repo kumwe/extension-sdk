@@ -1,1289 +1,1149 @@
 {
-  "format": "kumwe-extension-contract-classification-v1",
-  "authority": "docs/extension-contract/README.md",
-  "generations": "docs/extension-contract/generations.json",
-  "note": "Which types an extension may build against, as data rather than as prose. Everything under `Kumwe\\App\\` is internal unless it is listed here, so the absence of a type from this file is itself the answer: core may decompose it freely and a package that reaches for it will break. A type listed here is public \u2014 it is part of a promised generation, and it changes only by a generation gaining a successor. `pinned_by` names the compatibility fixture whose committed bytes hold the type's exact member signatures; where it is null the type is public and governed by its generation, but its members are not byte-pinned at this release.",
-  "default_visibility": "internal",
-  "visibilities": {
-    "public": "Part of a promised generation. An extension may depend on it.",
-    "internal": "Not promised to anyone. It may be renamed, split or deleted without a generation bump."
-  },
-  "roles": {
-    "implement": "The package writes a class that satisfies the contract.",
-    "call": "Core hands the package an instance and the package calls it.",
-    "construct": "The package builds instances and hands them to core.",
-    "receive": "Core hands the package an instance to read.",
-    "resolve": "The package resolves it from the restricted container it is handed."
-  },
-  "namespaces": [
-    {
-      "prefix": "Kumwe\\App\\Extension\\Infrastructure\\",
-      "visibility": "internal",
-      "reason": "Adapters. Doctrine, Redis and sodium bindings behind the application contracts."
-    },
-    {
-      "prefix": "Kumwe\\App\\Extension\\Domain\\Internal\\",
-      "visibility": "internal",
-      "reason": "Parser grammar control used to keep retained manifest generations aligned with runtime acceptance."
-    },
-    {
-      "prefix": "Kumwe\\App\\Extension\\Application\\Install\\",
-      "visibility": "internal",
-      "reason": "The install plan and its states belong to the platform; a package never drives them."
-    },
-    {
-      "prefix": "Kumwe\\App\\Extension\\Application\\Package\\",
-      "visibility": "internal",
-      "reason": "Admission, safety and attestation of a package are done to it, not by it."
-    },
-    {
-      "prefix": "Kumwe\\App\\Extension\\Application\\Trust\\",
-      "visibility": "internal",
-      "reason": "The trust store and its policy are operator surfaces, reached through the console."
-    },
-    {
-      "prefix": "Kumwe\\App\\Kernel\\",
-      "visibility": "internal",
-      "reason": "The composition root. What it exposes to a package is the allowlist in generations.json."
-    },
-    {
-      "prefix": "Kumwe\\App\\Infrastructure\\",
-      "visibility": "internal",
-      "reason": "Persistence, migration and driver code. A package uses its own migrations instead."
-    }
-  ],
-  "external_types": [
-    {
-      "type": "Psr\\Http\\Server\\RequestHandlerInterface",
-      "package": "psr/http-server-handler",
-      "reason": "Route handler contracts are PSR-15; core does not wrap them in a Kumwe type."
-    },
-    {
-      "type": "Doctrine\\DBAL\\Connection",
-      "package": "doctrine/dbal",
-      "reason": "An extension migration receives the live connection so it writes its own schema."
-    }
-  ],
-  "types": [
-    {
-      "type": "Kumwe\\App\\Administrator\\Http\\AdministratorRequest",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Administrator/Http/AdministratorRequest.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Administrator\\Presentation\\AdministratorRenderer",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Administrator/Presentation/AdministratorRenderer.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Application\\Authorization\\ExecutionContext",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Application/Authorization/ExecutionContext.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Application\\Authorization\\ResourcePolicyTarget",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Application/Authorization/ResourcePolicyTarget.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Application\\Automation\\JobHandler",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/Application/Automation/JobHandler.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessDefinition\\Domain\\CanonicalDefinitionJson",
-      "kind": "class",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessDefinition/Domain/CanonicalDefinitionJson.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessDefinition\\Domain\\EntityTypeDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessDefinition/Domain/EntityTypeDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessDefinition\\Domain\\FieldTypeDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessDefinition/Domain/FieldTypeDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Application\\DomainEventHandler",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Application/DomainEventHandler.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Application\\IntegrationEventHandler",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Application/IntegrationEventHandler.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Application\\IntegrationEventTransport",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Application/IntegrationEventTransport.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\ConsumerIdempotency",
-      "kind": "enum",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/ConsumerIdempotency.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\DomainEvent",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/DomainEvent.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\DomainListenerDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/DomainListenerDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\EventConsumerDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/EventConsumerDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\EventEnvelope",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/EventEnvelope.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\EventSchemaDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/EventSchemaDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\EventSensitivity",
-      "kind": "enum",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/EventSensitivity.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\IntegrationContract",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/IntegrationContract.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\IntegrationEvent",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/IntegrationEvent.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\JobContributionDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/JobContributionDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\QueueContributionDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/QueueContributionDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\ScheduleContributionDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/ScheduleContributionDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessIntegration\\Domain\\WebhookContributionDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessIntegration/Domain/WebhookContributionDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Application\\BusinessRecordService",
-      "kind": "class",
-      "visibility": "public",
-      "role": "resolve",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/BusinessRecord/Application/BusinessRecordService.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Application\\MoneyRateProvider",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessRecord/Application/MoneyRateProvider.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/money-rate-provider-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Application\\Query\\BrowseRecordsQuery",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessRecord/Application/Query/BrowseRecordsQuery.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Application\\UnitConversionProvider",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessRecord/Application/UnitConversionProvider.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/unit-conversion-provider-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Domain\\MoneyConversionRequest",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessRecord/Domain/MoneyConversionRequest.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Domain\\MoneyExchangeRate",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessRecord/Domain/MoneyExchangeRate.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Domain\\MoneyRateProviderDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessRecord/Domain/MoneyRateProviderDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Domain\\MoneyRoundingMode",
-      "kind": "enum",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessRecord/Domain/MoneyRoundingMode.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/money-rate-provider-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Domain\\QuantityRoundingMode",
-      "kind": "enum",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessRecord/Domain/QuantityRoundingMode.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/unit-conversion-provider-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Domain\\UnitConversionFactor",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessRecord/Domain/UnitConversionFactor.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Domain\\UnitConversionRequest",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessRecord/Domain/UnitConversionRequest.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Query\\RecordProjection",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessRecord/Query/RecordProjection.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessRecord\\Query\\RecordQuerySpecification",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessRecord/Query/RecordQuerySpecification.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessReporting\\Application\\ProjectionBuilder",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessReporting/Application/ProjectionBuilder.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessReporting\\Application\\ProjectionEvent",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessReporting/Application/ProjectionEvent.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessReporting\\Application\\ProjectionWriter",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessReporting/Application/ProjectionWriter.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\BusinessReporting\\Domain\\ProjectionDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessReporting/Domain/ProjectionDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessReporting\\Domain\\ReportDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/BusinessReporting/Domain/ReportDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSecurity\\Application\\FieldAccessUsage",
-      "kind": "enum",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessSecurity/Application/FieldAccessUsage.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSecurity\\Application\\FieldDisclosurePlan",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessSecurity/Application/FieldDisclosurePlan.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSecurity\\Policy\\RecordPolicyComparison",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessSecurity/Policy/RecordPolicyComparison.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSecurity\\Policy\\RecordPolicyComparisonOperator",
-      "kind": "enum",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessSecurity/Policy/RecordPolicyComparisonOperator.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSecurity\\Policy\\RecordPolicyPredicate",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessSecurity/Policy/RecordPolicyPredicate.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSecurity\\Policy\\RecordPolicySchema",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessSecurity/Policy/RecordPolicySchema.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSecurity\\Policy\\RecordPolicySet",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessSecurity/Policy/RecordPolicySet.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSecurity\\Policy\\RecordPolicyValueType",
-      "kind": "enum",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/BusinessSecurity/Policy/RecordPolicyValueType.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Application\\Custom\\CustomBusinessActionContract",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Application/Custom/CustomBusinessActionContract.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Application\\Custom\\CustomBusinessActionHandler",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Application/Custom/CustomBusinessActionHandler.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Application\\Custom\\CustomBusinessViewContract",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Application/Custom/CustomBusinessViewContract.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Application\\Custom\\CustomBusinessViewHandler",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Application/Custom/CustomBusinessViewHandler.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Application\\Custom\\CustomBusinessViewQuery",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Application/Custom/CustomBusinessViewQuery.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Application\\Custom\\CustomBusinessViewResult",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Application/Custom/CustomBusinessViewResult.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Presentation\\Field\\FieldPresentation",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Presentation/Field/FieldPresentation.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Presentation\\Field\\FieldPresentationContext",
-      "kind": "enum",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Presentation/Field/FieldPresentationContext.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Presentation\\Field\\FieldPresentationContribution",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Presentation/Field/FieldPresentationContribution.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Presentation\\Field\\FieldPresentationRequest",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Presentation/Field/FieldPresentationRequest.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Presentation\\Field\\FieldPresenter",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Presentation/Field/FieldPresenter.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\BusinessSurface\\Presentation\\Field\\FieldWidget",
-      "kind": "enum",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-3",
-      "spi": 1,
-      "path": "src/BusinessSurface/Presentation/Field/FieldWidget.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Content\\Application\\ContentService",
-      "kind": "class",
-      "visibility": "public",
-      "role": "resolve",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Content/Application/ContentService.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Application\\ExtensionServiceProvider",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Extension/Application/ExtensionServiceProvider.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Application\\Migration\\ExtensionMigration",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Extension/Application/Migration/ExtensionMigration.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Application\\Migration\\ExtensionTableNames",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Extension/Application/Migration/ExtensionTableNames.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\AdministratorNavigationDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/AdministratorNavigationDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\AdministratorRouteDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/AdministratorRouteDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\AdministratorRouteHandlerFactory",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/AdministratorRouteHandlerFactory.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\AdministratorViewDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/AdministratorViewDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\AdministratorWorkspaceDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/AdministratorWorkspaceDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CapabilityDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/CapabilityDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CompositionBlockDeclaration",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-5",
-      "spi": 3,
-      "path": "src/Extension/Contribution/CompositionBlockDeclaration.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CompositionContributionRegistrar",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-5",
-      "spi": 3,
-      "path": "src/Extension/Contribution/CompositionContributionRegistrar.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/composition-contribution-registrar-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CompositionDesignVocabularyDeclaration",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-5",
-      "spi": 3,
-      "path": "src/Extension/Contribution/CompositionDesignVocabularyDeclaration.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CompositionFieldControlDeclaration",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-5",
-      "spi": 3,
-      "path": "src/Extension/Contribution/CompositionFieldControlDeclaration.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CompositionInspectorDeclaration",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-5",
-      "spi": 3,
-      "path": "src/Extension/Contribution/CompositionInspectorDeclaration.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CompositionMigrationDeclaration",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-5",
-      "spi": 3,
-      "path": "src/Extension/Contribution/CompositionMigrationDeclaration.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CompositionPatternDeclaration",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-5",
-      "spi": 3,
-      "path": "src/Extension/Contribution/CompositionPatternDeclaration.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CompositionPropertySchema",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-5",
-      "spi": 3,
-      "path": "src/Extension/Contribution/CompositionPropertySchema.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CompositionPropertyType",
-      "kind": "enum",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-5",
-      "spi": 3,
-      "path": "src/Extension/Contribution/CompositionPropertyType.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/composition-contribution-registrar-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\ContentTranslationRegistrar",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/Extension/Contribution/ContentTranslationRegistrar.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/content-translation-registrar-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\ContributionDefinition",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/ContributionDefinition.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\ContributionOwner",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/ContributionOwner.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\ExtensionContributionProvider",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/ExtensionContributionProvider.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\ExtensionContributionRegistrar",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/ExtensionContributionRegistrar.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\InterfaceSurfaceRegistrar",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/Extension/Contribution/InterfaceSurfaceRegistrar.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/interface-surface-registrar-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\ManifestContributionSet",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/ManifestContributionSet.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\MoneyRateProviderRegistrar",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/Extension/Contribution/MoneyRateProviderRegistrar.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/money-rate-provider-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\ResourcePolicyDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Extension/Contribution/ResourcePolicyDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\TranslationGroupDeclaration",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/Extension/Contribution/TranslationGroupDeclaration.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\TranslationSetItemAssociation",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/Extension/Contribution/TranslationSetItemAssociation.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\UnitConversionProviderDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/Extension/Contribution/UnitConversionProviderDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\UnitConversionProviderRegistrar",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/Extension/Contribution/UnitConversionProviderRegistrar.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/unit-conversion-provider-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Development\\LifecycleConformanceAdapter",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Extension/Development/LifecycleConformanceAdapter.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Domain\\ExtensionManifest",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Extension/Domain/ExtensionManifest.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Runtime\\ExtensionContainer",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Extension/Runtime/ExtensionContainer.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Runtime\\ExtensionEventRegistrar",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "resolve",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Extension/Runtime/ExtensionEventRegistrar.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Runtime\\ExtensionRouteRegistrar",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Extension/Runtime/ExtensionRouteRegistrar.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Runtime\\RuntimeExtension",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Extension/Runtime/RuntimeExtension.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\Identity\\Domain\\Capability",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Identity/Domain/Capability.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\InterfaceStandard\\SurfaceDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-4",
-      "spi": 2,
-      "path": "src/InterfaceStandard/SurfaceDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Navigation\\Application\\NavigationService",
-      "kind": "class",
-      "visibility": "public",
-      "role": "resolve",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Navigation/Application/NavigationService.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Portal\\Contribution\\PortalNavigationDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Portal/Contribution/PortalNavigationDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Portal\\Contribution\\PortalRouteDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Portal/Contribution/PortalRouteDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Portal\\Contribution\\PortalRouteHandlerFactory",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Portal/Contribution/PortalRouteHandlerFactory.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/public-interfaces-v2.json"
-    },
-    {
-      "type": "Kumwe\\App\\Portal\\Contribution\\PortalTemplateDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Portal/Contribution/PortalTemplateDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Portal\\Contribution\\PortalWorkspaceDefinition",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Portal/Contribution/PortalWorkspaceDefinition.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Portal\\Http\\PortalRequest",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Portal/Http/PortalRequest.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Portal\\Presentation\\PortalContributionRenderer",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-2",
-      "spi": 1,
-      "path": "src/Portal/Presentation/PortalContributionRenderer.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Site\\Application\\SiteSettings",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "resolve",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Site/Application/SiteSettings.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CanonicalCompositionRegistrar",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-6",
-      "spi": 4,
-      "path": "src/Extension/Contribution/CanonicalCompositionRegistrar.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/canonical-composition-registrar-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CanonicalCompositionKind",
-      "kind": "enum",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-6",
-      "spi": 4,
-      "path": "src/Extension/Contribution/CanonicalCompositionKind.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/canonical-composition-registrar-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CanonicalCompositionDocument",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-6",
-      "spi": 4,
-      "path": "src/Extension/Contribution/CanonicalCompositionDocument.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\CompositionHostBinding",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-6",
-      "spi": 4,
-      "path": "src/Extension/Contribution/CompositionHostBinding.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\Manifest5CompositionAdapter",
-      "kind": "class",
-      "visibility": "public",
-      "role": "call",
-      "reachable_from": "manifest-6",
-      "spi": 4,
-      "path": "src/Extension/Contribution/Manifest5CompositionAdapter.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Contribution\\Manifest5AdapterResult",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-6",
-      "spi": 4,
-      "path": "src/Extension/Contribution/Manifest5AdapterResult.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Studio\\Application\\Preview\\StudioPreviewBindingResult",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-6",
-      "spi": 4,
-      "path": "src/Studio/Application/Preview/StudioPreviewBindingResult.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Studio\\Application\\Preview\\StudioPreviewBlock",
-      "kind": "class",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-6",
-      "spi": 4,
-      "path": "src/Studio/Application/Preview/StudioPreviewBlock.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Studio\\Application\\Preview\\StudioPreviewBlockFragment",
-      "kind": "class",
-      "visibility": "public",
-      "role": "construct",
-      "reachable_from": "manifest-6",
-      "spi": 4,
-      "path": "src/Studio/Application/Preview/StudioPreviewBlockFragment.php",
-      "pinned_by": null
-    },
-    {
-      "type": "Kumwe\\App\\Studio\\Application\\Preview\\StudioPreviewBlockRenderer",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "implement",
-      "reachable_from": "manifest-6",
-      "spi": 4,
-      "path": "src/Studio/Application/Preview/StudioPreviewBlockRenderer.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/studio-preview-block-renderer-v1.json"
-    },
-    {
-      "type": "Kumwe\\App\\Extension\\Runtime\\ExtensionEvent",
-      "kind": "interface",
-      "visibility": "public",
-      "role": "receive",
-      "reachable_from": "manifest-1",
-      "spi": null,
-      "path": "src/Extension/Runtime/ExtensionEvent.php",
-      "pinned_by": "tests/Fixtures/ExtensionApi/extension-event-v1.json"
-    }
-  ]
+    "format": "kumwe-extension-sdk-public-api-v1",
+    "package": "kumwe/extension-sdk",
+    "release_line": "0.2",
+    "authority": "SDK source under src/; Support is internal.",
+    "note": "Canonical package-owned API. Type membership and source digests are recorded from this repository only.",
+    "public_namespaces": [
+        "Kumwe\\Extension\\Contract\\",
+        "Kumwe\\Extension\\Manifest\\",
+        "Kumwe\\Extension\\Package\\",
+        "Kumwe\\Extension\\Spi\\",
+        "Kumwe\\Extension\\Toolchain\\"
+    ],
+    "internal_namespaces": [
+        "Kumwe\\Extension\\Support\\"
+    ],
+    "external_packages": [
+        "doctrine/dbal",
+        "kumwe/conversion",
+        "kumwe/producer",
+        "psr/http-message",
+        "psr/http-server-handler",
+        "ramsey/uuid"
+    ],
+    "types": [
+        {
+            "type": "Kumwe\\Extension\\Contract\\NameBasedUuid",
+            "kind": "class",
+            "path": "src/Contract/NameBasedUuid.php",
+            "source_sha256": "f4f777f907099e42a21f48b49fd2edb0f3dc707056d02abb280e65ab05a6081c"
+        },
+        {
+            "type": "Kumwe\\Extension\\Manifest\\ExtensionDependency",
+            "kind": "class",
+            "path": "src/Manifest/ExtensionDependency.php",
+            "source_sha256": "f429df7018a22bf434c69684fce8afdb1073090fef0a7a1592dca8aafeb35a2f"
+        },
+        {
+            "type": "Kumwe\\Extension\\Manifest\\ExtensionIdentifier",
+            "kind": "class",
+            "path": "src/Manifest/ExtensionIdentifier.php",
+            "source_sha256": "48821bfc166e693dcd090b17c8e006910170b72ce02c2a94a4c182844eb0ba4d"
+        },
+        {
+            "type": "Kumwe\\Extension\\Manifest\\ExtensionManifest",
+            "kind": "class",
+            "path": "src/Manifest/ExtensionManifest.php",
+            "source_sha256": "c159b0aadd5d7db0e99e7019b35da93d295c01eaa620720de5ab6cd00fc5b960"
+        },
+        {
+            "type": "Kumwe\\Extension\\Manifest\\ExtensionType",
+            "kind": "enum",
+            "path": "src/Manifest/ExtensionType.php",
+            "source_sha256": "94ea2072b0231858e18d53afa064347126c0ec5de8cc967852f3fa183ba7a6c4"
+        },
+        {
+            "type": "Kumwe\\Extension\\Manifest\\ManifestContributions",
+            "kind": "class",
+            "path": "src/Manifest/ManifestContributions.php",
+            "source_sha256": "f6475debcd92796d01ca8b0eebd43e4731010448801bc3328232a56212d17713"
+        },
+        {
+            "type": "Kumwe\\Extension\\Manifest\\SemanticVersion",
+            "kind": "class",
+            "path": "src/Manifest/SemanticVersion.php",
+            "source_sha256": "041e042a3c5fd7d7a9c0c1bd4186076dd15f97730c36811c7aae30d770bb4d53"
+        },
+        {
+            "type": "Kumwe\\Extension\\Manifest\\TemplateKisCompatibility",
+            "kind": "class",
+            "path": "src/Manifest/TemplateKisCompatibility.php",
+            "source_sha256": "d6e7a19e97d538be05754f5b5e73a625fc50b3cb77256f805d84d1ac9c89c9df"
+        },
+        {
+            "type": "Kumwe\\Extension\\Manifest\\VersionConstraint",
+            "kind": "class",
+            "path": "src/Manifest/VersionConstraint.php",
+            "source_sha256": "4e5a1ad31b7258fffd96310d5f313d4c2ba289e3a54c04893c5448982de14e8d"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\ArchiveContentReader",
+            "kind": "interface",
+            "path": "src/Package/ArchiveContentReader.php",
+            "source_sha256": "918a176db88e7dbc24d76ad4990f5d7b14c723778d5ef596ff7e56834cc61ab2"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\ArchiveEntry",
+            "kind": "class",
+            "path": "src/Package/ArchiveEntry.php",
+            "source_sha256": "1a7af12c08c8d5ef629668b075588d124cbc4a9100b66e2d437bcb3f1c8a84a7"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\ArchiveEntryType",
+            "kind": "enum",
+            "path": "src/Package/ArchiveEntryType.php",
+            "source_sha256": "7851c64bd077ce5265ad930e9cec8b254b1ff42ad360da09ac27eac056cdb1d3"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\ArchivePackage",
+            "kind": "class",
+            "path": "src/Package/ArchivePackage.php",
+            "source_sha256": "8a19441986234ff9e923e9d3bc42c1be6de7e936ca2ed7138a13141952bcfba9"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\ArchiveReader",
+            "kind": "interface",
+            "path": "src/Package/ArchiveReader.php",
+            "source_sha256": "3756d198f099ddc268d667ffae5dd0057922dabd6ab0f7ff5e7cdc7347102c42"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\InspectedPackage",
+            "kind": "class",
+            "path": "src/Package/InspectedPackage.php",
+            "source_sha256": "bc157f478a5eeedd7b52c6723f9253afbf8141eb8a125d71838e09f9e5970517"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\InvalidPackage",
+            "kind": "class",
+            "path": "src/Package/InvalidPackage.php",
+            "source_sha256": "c73596df18a0375527a80e3193d0eae692fb3dbd3a7298e1856b2e6cf1552fe6"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageAttestationState",
+            "kind": "enum",
+            "path": "src/Package/PackageAttestationState.php",
+            "source_sha256": "dafdb89ba1113048e9e40f232ff63eb986ed30ad444bd81200b59de22c9f65a4"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageBillOfMaterials",
+            "kind": "class",
+            "path": "src/Package/PackageBillOfMaterials.php",
+            "source_sha256": "6a6b664211bdf94bdf1dd0875c3cfd0c90fc66e926f515b967cc705718e32631"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageChecksum",
+            "kind": "class",
+            "path": "src/Package/PackageChecksum.php",
+            "source_sha256": "44f6a76b219d0a4d32e290356544207d594e4628fa9c91132588aa7ecf90a0b7"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageCodeConformance",
+            "kind": "class",
+            "path": "src/Package/PackageCodeConformance.php",
+            "source_sha256": "7dc3a1779bbbdf4925fea36308b9c449a117f24a1c9e37e4cbfbe0f920179a33"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageEvidenceInspector",
+            "kind": "class",
+            "path": "src/Package/PackageEvidenceInspector.php",
+            "source_sha256": "bae9fa528b840ce3ed9d274ff214775dd8a6ba92f0e8c65be7e8fc94b54485f1"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageEvidenceReport",
+            "kind": "class",
+            "path": "src/Package/PackageEvidenceReport.php",
+            "source_sha256": "460033e2906fa97eb405fd157bb2ca32698c113f71801c959f0b31495f698181"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageEvidenceScope",
+            "kind": "enum",
+            "path": "src/Package/PackageEvidenceScope.php",
+            "source_sha256": "524038386cc5a2a27bd28e96c9122bf698b7de2c4633cb20878d4392e4055213"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageFinding",
+            "kind": "class",
+            "path": "src/Package/PackageFinding.php",
+            "source_sha256": "ca86ac2942880bdda72ed9ab406d5e7022e4def3d038ae0eade8fc1d53c2d8f8"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageLimits",
+            "kind": "class",
+            "path": "src/Package/PackageLimits.php",
+            "source_sha256": "ac0bad7f9997198b803c2f3c2a1a9b773a1cf14c5a352047bfb3dd9ac9687d10"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackagePath",
+            "kind": "class",
+            "path": "src/Package/PackagePath.php",
+            "source_sha256": "31d04c8d447e965df3e04606191f19ba3295c7c58c6cfc1af9eaf302237d4fe8"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageProvenance",
+            "kind": "class",
+            "path": "src/Package/PackageProvenance.php",
+            "source_sha256": "aa4ceaa2c53bcc0f3f437946d2576e5478c9ecf16b0713cbc5f3a4f33c675e00"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageSafetyInspector",
+            "kind": "class",
+            "path": "src/Package/PackageSafetyInspector.php",
+            "source_sha256": "2721a282640ad21fad0446671f27fc82a6ac8b90cfec01e2c79eb0d081b18dc4"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageSignature",
+            "kind": "class",
+            "path": "src/Package/PackageSignature.php",
+            "source_sha256": "bff8200852b52c3f3c9b590dc44b1db0362d08897f268a911725658d144529d7"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageSignatureMessage",
+            "kind": "class",
+            "path": "src/Package/PackageSignatureMessage.php",
+            "source_sha256": "51ffd7879695331d11b6429221cb8da5cef9dd6217368c7ea51e3d459adb8292"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PackageSignatureVerifier",
+            "kind": "interface",
+            "path": "src/Package/PackageSignatureVerifier.php",
+            "source_sha256": "cafd418e3155b4f274992dc2f6d8961d7bdc50f839cefdfc074af8ff2b73c367"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\PublicKeyPackageSignatureVerifier",
+            "kind": "interface",
+            "path": "src/Package/PublicKeyPackageSignatureVerifier.php",
+            "source_sha256": "5412bcac072afc5d2ee8e91077968c5b0e294497fd854d01ae62eb8d28a47aa0"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\SodiumEd25519Verifier",
+            "kind": "class",
+            "path": "src/Package/SodiumEd25519Verifier.php",
+            "source_sha256": "e1304a80153c4aa27e41e8e9d0066df4d0fa6443fd6e6cf227fab02cf5a42291"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\SodiumPublicKeyPackageSignatureVerifier",
+            "kind": "class",
+            "path": "src/Package/SodiumPublicKeyPackageSignatureVerifier.php",
+            "source_sha256": "fc9af9323358c35d36a28412162729c20a413bc901afec3143daf4ae4a501b47"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\ZipArchiveContentReader",
+            "kind": "class",
+            "path": "src/Package/ZipArchiveContentReader.php",
+            "source_sha256": "430dc7f4cd6144684ec87a157ec63e6d196a3ae99c1ef9ce31c1389989754da5"
+        },
+        {
+            "type": "Kumwe\\Extension\\Package\\ZipArchiveReader",
+            "kind": "class",
+            "path": "src/Package/ZipArchiveReader.php",
+            "source_sha256": "1a3b6fb17ee604ef71e346180e4bd040161f6513f216cb76d15372478d2380cd"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Application\\Automation\\IdempotencyKey",
+            "kind": "class",
+            "path": "src/Spi/Application/Automation/IdempotencyKey.php",
+            "source_sha256": "112d12125da8adfa59eba7fb032cfea3f70eb882a0c9388aeccf13748eda63f4"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Application\\Automation\\JobDeclaration",
+            "kind": "class",
+            "path": "src/Spi/Application/Automation/JobDeclaration.php",
+            "source_sha256": "00f34d188f338146a6da5fe010e977c7d5a1285a3820599c03c787bcd6c5020c"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Application\\Automation\\JobHandler",
+            "kind": "interface",
+            "path": "src/Spi/Application/Automation/JobHandler.php",
+            "source_sha256": "1044eac41cb0c888bc03ab48e8fbb5b8187695ada1420d138ec9ba03637cfe8b"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Application\\ExecutionContext",
+            "kind": "interface",
+            "path": "src/Spi/Application/ExecutionContext.php",
+            "source_sha256": "e684875290359cbe69d5cfbc8f731a52cfe917a60d44971deea46d6ca3b75678"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Application\\ExtensionServiceProvider",
+            "kind": "interface",
+            "path": "src/Spi/Application/ExtensionServiceProvider.php",
+            "source_sha256": "d3c0832702ae1fe3cdcd9bac13b94b93bfa7223a2637e7abe261b392692df688"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind",
+            "kind": "enum",
+            "path": "src/Spi/Binding/ExecutableBindingKind.php",
+            "source_sha256": "301541cf1481d36877621e6fca24ab2823885592f8e78561fe867dd4a97637a0"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingRequirements",
+            "kind": "class",
+            "path": "src/Spi/Binding/ExecutableBindingRequirements.php",
+            "source_sha256": "3f6b14504a09bc6d8fdc0abaaaa52b189c2e5453a810c107b3409c0ca8b848d8"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingProvider",
+            "kind": "interface",
+            "path": "src/Spi/Binding/ExtensionBindingProvider.php",
+            "source_sha256": "c4b5095e5421ffac87307cc2dd0730677b436d8093236eb1fea53101af2f6c1c"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingRegistrar",
+            "kind": "interface",
+            "path": "src/Spi/Binding/ExtensionBindingRegistrar.php",
+            "source_sha256": "fa6a4705117c3866c8ad9fe2179fd0d8087e993778dc2f094e0e3cc444924bea"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteHandlerFactory",
+            "kind": "interface",
+            "path": "src/Spi/Binding/Http/AdministratorRouteHandlerFactory.php",
+            "source_sha256": "bc17857cd8d9a12969bea28d22bc07f4f873a7be9ff1f014f29b3d1084f93776"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteRenderer",
+            "kind": "interface",
+            "path": "src/Spi/Binding/Http/AdministratorRouteRenderer.php",
+            "source_sha256": "46b77209b2f27be3548a3f78523577b5ff7979b3132316f744c36ce92a94b5c5"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteHandlerFactory",
+            "kind": "interface",
+            "path": "src/Spi/Binding/Http/PortalRouteHandlerFactory.php",
+            "source_sha256": "52fa4b926159453d702cd931698f03e1d2d30a3b8f242f2bb2adcb1dafe12c6d"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteRenderer",
+            "kind": "interface",
+            "path": "src/Spi/Binding/Http/PortalRouteRenderer.php",
+            "source_sha256": "2513963e8d4dcfa87d5b3459e79a6ce113ca978cec4ed07c7f6ba208a399ce74"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\DomainEventHandler",
+            "kind": "interface",
+            "path": "src/Spi/BusinessIntegration/Application/DomainEventHandler.php",
+            "source_sha256": "a05800c090d15b1371da772682006e0c65f662b90746aafd87a67a1abaf8de4d"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventHandler",
+            "kind": "interface",
+            "path": "src/Spi/BusinessIntegration/Application/IntegrationEventHandler.php",
+            "source_sha256": "36e6fdf1fe5c597f9a615099cd70a877c08629bae9c1b60af199364baaa8d4b5"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventTransport",
+            "kind": "interface",
+            "path": "src/Spi/BusinessIntegration/Application/IntegrationEventTransport.php",
+            "source_sha256": "822a9ec7bbbc8d93bd8a257524e74048e45c92ec5c9d48dc4f9ba9288d611742"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\ConsumerIdempotency",
+            "kind": "enum",
+            "path": "src/Spi/BusinessIntegration/Domain/ConsumerIdempotency.php",
+            "source_sha256": "cbceb8caad3fc559e31140e5b653437d2cbe14d92acf93615a3fe554c2bcd085"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainEvent",
+            "kind": "interface",
+            "path": "src/Spi/BusinessIntegration/Domain/DomainEvent.php",
+            "source_sha256": "73107e974c693feccacd99a10d90be83dd0d32c97a417681f73c898d400c0903"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainListenerDeclaration",
+            "kind": "class",
+            "path": "src/Spi/BusinessIntegration/Domain/DomainListenerDeclaration.php",
+            "source_sha256": "21b1c24234022586319938a8c9361f51fb445f9d00ca7927363db124fece8827"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainListenerDefinition",
+            "kind": "class",
+            "path": "src/Spi/BusinessIntegration/Domain/DomainListenerDefinition.php",
+            "source_sha256": "8e04d454d8cee58bcc8d22e63882827ea37be0f168bde461b60f6291a1ab5a01"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventConsumerDeclaration",
+            "kind": "class",
+            "path": "src/Spi/BusinessIntegration/Domain/EventConsumerDeclaration.php",
+            "source_sha256": "3145584bccf6375d7eec9ea9be8c945f57ce89e7ce572fec1f4a2f5d2fe0a0c4"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventConsumerDefinition",
+            "kind": "class",
+            "path": "src/Spi/BusinessIntegration/Domain/EventConsumerDefinition.php",
+            "source_sha256": "699347d4dd56faf8d8a624e778d0a1bbbb1103cee7a38958caace646eb315036"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventEnvelope",
+            "kind": "interface",
+            "path": "src/Spi/BusinessIntegration/Domain/EventEnvelope.php",
+            "source_sha256": "c2b53ecbaf2eb3031cb8817e484cfccbe0fc2f2536e98992f6a539aca9e4baf0"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventSensitivity",
+            "kind": "enum",
+            "path": "src/Spi/BusinessIntegration/Domain/EventSensitivity.php",
+            "source_sha256": "b3e08ab19e24b885b70fabcdd08ba541f812ca6776096a537d21913e5eed5e7b"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationContract",
+            "kind": "interface",
+            "path": "src/Spi/BusinessIntegration/Domain/IntegrationContract.php",
+            "source_sha256": "60fadaaf169a25fa88af3c49eac1f0b03eb226f9f4de3fa27ab3100d28ecd04a"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationContractValidator",
+            "kind": "class",
+            "path": "src/Spi/BusinessIntegration/Domain/IntegrationContractValidator.php",
+            "source_sha256": "62eef65ddc42ee6c9cdc8bf6ecd338cae4f5723be9c2a1b618be0dbe2c45ded9"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationEvent",
+            "kind": "interface",
+            "path": "src/Spi/BusinessIntegration/Domain/IntegrationEvent.php",
+            "source_sha256": "48630e04fd7e70318d7d228f8cdb6e9ba7cbf0c2f2c843a79ce605d38d445fd2"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\JobContributionDefinition",
+            "kind": "class",
+            "path": "src/Spi/BusinessIntegration/Domain/JobContributionDefinition.php",
+            "source_sha256": "f513bbbbeb26814dba9361f6cc8e7dcda4d5f1ca3bc8bf3bf9b0ece54ff90fb7"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\WebhookContributionDefinition",
+            "kind": "class",
+            "path": "src/Spi/BusinessIntegration/Domain/WebhookContributionDefinition.php",
+            "source_sha256": "84fef2804288f1bd5fde4caaeac6bcdc1019b500c39f260af25b5adc44e755e8"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\WebhookDeclaration",
+            "kind": "class",
+            "path": "src/Spi/BusinessIntegration/Domain/WebhookDeclaration.php",
+            "source_sha256": "75e0538770372cbf2625136bcef2bd7cf8f1207325babb270d0ac9602fb7fdfe"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordPage",
+            "kind": "interface",
+            "path": "src/Spi/BusinessRecord/Application/BusinessRecordPage.php",
+            "source_sha256": "2e9238be8f2714ee6194b530adc556cc6962e1704620dbfd3943e7e3ce85479c"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordQueryPurpose",
+            "kind": "enum",
+            "path": "src/Spi/BusinessRecord/Application/BusinessRecordQueryPurpose.php",
+            "source_sha256": "a3812bdb4ee20fdd3203e650d0710e51123c5a151a3efe52dce01ef34fd355b4"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReadRequest",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Application/BusinessRecordReadRequest.php",
+            "source_sha256": "164c31729dd3f6fb83ae5e1e05bb8b1e002126e1433ee31bf97d41acb8e17ee2"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReader",
+            "kind": "interface",
+            "path": "src/Spi/BusinessRecord/Application/BusinessRecordReader.php",
+            "source_sha256": "91ef69206a132975df5066f8af71fae70bc3f6de48cf9d30c80ac27ff6891b43"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordRequestGuard",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Application/BusinessRecordRequestGuard.php",
+            "source_sha256": "f319139e65b60d5abc11ab54b4f8f491c1ecfbe1e0c81cec25d5753caaaad2ad"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordView",
+            "kind": "interface",
+            "path": "src/Spi/BusinessRecord/Application/BusinessRecordView.php",
+            "source_sha256": "cecd0d0b6c5780cfaa3740fe4200962d6e9fb33fa52b34f3ca34fe6023257230"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\AggregateFunction",
+            "kind": "enum",
+            "path": "src/Spi/BusinessRecord/Query/AggregateFunction.php",
+            "source_sha256": "40b3acd032a799bcdbe987b4c00900f0da3f2379533b009561aad93e2f976253"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BooleanFilter",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/BooleanFilter.php",
+            "source_sha256": "e20d32859f572404bf169c4cebec3fd848fbcfe4574d24a22b822608cd5ed8c7"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BooleanOperator",
+            "kind": "enum",
+            "path": "src/Spi/BusinessRecord/Query/BooleanOperator.php",
+            "source_sha256": "7b4c8182787fbe5f87aaf4be183d5e201fb29f7cd8ce6e00d7e8b46aa450f062"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordCursor",
+            "kind": "interface",
+            "path": "src/Spi/BusinessRecord/Query/BusinessRecordCursor.php",
+            "source_sha256": "ae47a1c313a28707c1420e0e6562474ea51ae5b65c3900def1495aeaba8784d8"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordSearch",
+            "kind": "interface",
+            "path": "src/Spi/BusinessRecord/Query/BusinessRecordSearch.php",
+            "source_sha256": "8aeb874b5f4169e01ff94cba5fddd5e336387852eb987fa45871b6bc0ae2750b"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordSort",
+            "kind": "interface",
+            "path": "src/Spi/BusinessRecord/Query/BusinessRecordSort.php",
+            "source_sha256": "ffafa3bafb71b61f7a83b01b34f6a0a17995b2deb041e4de978d297a13e037fc"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\ComparisonFilter",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/ComparisonFilter.php",
+            "source_sha256": "3105198f457357f86a4c80f59d2ce505d5824b3ca8fb71f22146501f1f75dae1"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\ComparisonOperator",
+            "kind": "enum",
+            "path": "src/Spi/BusinessRecord/Query/ComparisonOperator.php",
+            "source_sha256": "d1597357d5852cc129df37ed869cac3ed6ba6022c3148f53216d604756e1d5f7"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\CursorPosition",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/CursorPosition.php",
+            "source_sha256": "8d7692de8fb9f46be7d9e349a891c5a634371b060c0cc0461b15a6c4d23d48d2"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\NullFilter",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/NullFilter.php",
+            "source_sha256": "00118bb268f515d8ff28c5cf0d2db489f0a1960276e77584f2687c375a2d17ec"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryCanonicalizer",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/QueryCanonicalizer.php",
+            "source_sha256": "345c907bfc83420d4e610d20dde4e7ca304caddaf0698189df27d9f296fdae71"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryIdentifier",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/QueryIdentifier.php",
+            "source_sha256": "9ad8155fc18f6f3ad57a6b0d56f4df011ec9e27850890a3ee44fa6d479fd7d78"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryValue",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/QueryValue.php",
+            "source_sha256": "298acc2d5db3d5d7170f9d789400c079fa5ee124132a1c628eb2b73a7aaeac71"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordAggregate",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/RecordAggregate.php",
+            "source_sha256": "b3b7ccb03766d3534fe9bfe0f1f016e921c421442beef53e71ccb68f09627d9d"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordCursor",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/RecordCursor.php",
+            "source_sha256": "1304239620f19d8f02604562660bce4ff0a7db19ea7035b5e891404196da4006"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordFilter",
+            "kind": "interface",
+            "path": "src/Spi/BusinessRecord/Query/RecordFilter.php",
+            "source_sha256": "f349bd5a4d5f6ae135896513c006586820479dff74f86fd33d3638fe69056565"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordProjection",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/RecordProjection.php",
+            "source_sha256": "0c2ac483388fac9165bd52517f8426f73765c84366bedf4f9c6dadce2b279c2d"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordQuerySpecification",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/RecordQuerySpecification.php",
+            "source_sha256": "5fa49bf9975356d2915ae0e2d9c0fc8ceb0d75945ec92893779ca63d75044ebe"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordSearch",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/RecordSearch.php",
+            "source_sha256": "73777d95da5f62a898b263c973f6376b615670012d2d99b6c44639010981a32e"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordSort",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/RecordSort.php",
+            "source_sha256": "35cd5b62bbeca0b31f02e961d28b340a3b95075a4dc8eecc0e1e49a42ab1cc8e"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RelationFilter",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/RelationFilter.php",
+            "source_sha256": "247ec48ba8ced6a85bd13b934761316d7be6bf50a4898d8267784c63f3236545"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RelationQuantifier",
+            "kind": "enum",
+            "path": "src/Spi/BusinessRecord/Query/RelationQuantifier.php",
+            "source_sha256": "431429774cd3ffd0904b3e096400e2db61ebc9030976ca1a066e737871a4a17f"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\SetFilter",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/SetFilter.php",
+            "source_sha256": "4706f15501e7cddc67a881a50923bfbdb674cb3cce132445ffa860181d2fc782"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\SortDirection",
+            "kind": "enum",
+            "path": "src/Spi/BusinessRecord/Query/SortDirection.php",
+            "source_sha256": "e80784caf36789b0e53853130a01ecaca59ebdf92c2fc2b60e41feec86431832"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\TextFilter",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Query/TextFilter.php",
+            "source_sha256": "907cfdf17da34ba563b744e92674e07ddadd172615e540fef1eb7e8165b3f01b"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\TextOperator",
+            "kind": "enum",
+            "path": "src/Spi/BusinessRecord/Query/TextOperator.php",
+            "source_sha256": "98abf050921dbcbbd5aba00971b53cae14ad30d3b04d8e73938c046eca2738fe"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Value\\ZonedDateTimeValue",
+            "kind": "class",
+            "path": "src/Spi/BusinessRecord/Value/ZonedDateTimeValue.php",
+            "source_sha256": "6d3bb1abb46b66cda07c807120598cf05a1dfee5c0b5cab37d53edde8ab50ff2"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionBuilder",
+            "kind": "interface",
+            "path": "src/Spi/BusinessReporting/Application/ProjectionBuilder.php",
+            "source_sha256": "fc484c067191208df7eb1bf857d2f200ece7f7aac8f60769cb1c42bdf50f6772"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionEvent",
+            "kind": "interface",
+            "path": "src/Spi/BusinessReporting/Application/ProjectionEvent.php",
+            "source_sha256": "cea03a3cddb7b2d736b86d2de72189e3758fd4c0079d0af3ce059038c28680d4"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionWriter",
+            "kind": "interface",
+            "path": "src/Spi/BusinessReporting/Application/ProjectionWriter.php",
+            "source_sha256": "08507d428a9e0b3a220421a2df7c9616a848e364f20d342b4c2df4c37eb60689"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionDefinition",
+            "kind": "class",
+            "path": "src/Spi/BusinessReporting/Domain/ProjectionDefinition.php",
+            "source_sha256": "b96f4e38b3241a20daee2e94a5a0ffdae888aba8faf5f212948e2b4e09a7376a"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionFieldDefinition",
+            "kind": "class",
+            "path": "src/Spi/BusinessReporting/Domain/ProjectionFieldDefinition.php",
+            "source_sha256": "622266a4ab41a20eab1dd1eed76faeb091d0bfb2749b9c2efc17e609c6e5c895"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionSourceDefinition",
+            "kind": "class",
+            "path": "src/Spi/BusinessReporting/Domain/ProjectionSourceDefinition.php",
+            "source_sha256": "00b8fd12cf7beb9e8a1164e0cae848fba7182704c660403527b49174811b318e"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ReportDefinitionGuard",
+            "kind": "class",
+            "path": "src/Spi/BusinessReporting/Domain/ReportDefinitionGuard.php",
+            "source_sha256": "505dc8cc5c27ce1c02a74e5bd915b7e117c5c099411a292ffebc85cc96e42e17"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ReportValueType",
+            "kind": "enum",
+            "path": "src/Spi/BusinessReporting/Domain/ReportValueType.php",
+            "source_sha256": "996f10b0b15bda10f2a96bc1e3c264f1b0c4f048f0d4c74a9dba32e63e1e60b9"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Application\\FieldAccessUsage",
+            "kind": "enum",
+            "path": "src/Spi/BusinessSecurity/Application/FieldAccessUsage.php",
+            "source_sha256": "d528316a739b959bd30935b869d8ed6cb98fc3d43fcd47d44e582b7281648e67"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Application\\FieldDisclosurePlan",
+            "kind": "class",
+            "path": "src/Spi/BusinessSecurity/Application/FieldDisclosurePlan.php",
+            "source_sha256": "7004225fb6a84a4f9847a219f7719b4ee98ecbc381ce9d60287401a07de779e9"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyComparison",
+            "kind": "class",
+            "path": "src/Spi/BusinessSecurity/Policy/RecordPolicyComparison.php",
+            "source_sha256": "0cba381d67f63e88ee79a5bd48f39db3fbc53c3b06269c95286536f5a20cc01d"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyComparisonOperator",
+            "kind": "enum",
+            "path": "src/Spi/BusinessSecurity/Policy/RecordPolicyComparisonOperator.php",
+            "source_sha256": "2909f12cc2848756940614555a77c7fd56c69b904118bb633baadaf563bac4b6"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyPredicate",
+            "kind": "interface",
+            "path": "src/Spi/BusinessSecurity/Policy/RecordPolicyPredicate.php",
+            "source_sha256": "6d8ae1f46189964deaea4c0c5b1a7c12da45a2069ce166111f30d2c9abb8acf9"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyValueType",
+            "kind": "enum",
+            "path": "src/Spi/BusinessSecurity/Policy/RecordPolicyValueType.php",
+            "source_sha256": "b170cc565fc5ae06109410a51625cc72b9763c92c7f0ac513dc2d09a82533eca"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionCommand",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionCommand.php",
+            "source_sha256": "a9e645e6947d62849090ef257ec61477fc662ed7573f9497652f4c3a76fd7195"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionDeclaration",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionDeclaration.php",
+            "source_sha256": "bca42b6f43f6f3ac839339378ab532ce8624a5f08e07f2bd689680305ac5bb1f"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionHandler",
+            "kind": "interface",
+            "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionHandler.php",
+            "source_sha256": "7377b5e765efd9462e1d2ab5e1e308bcc5be8ee8352cacf29e199df2939b0c46"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionResult",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionResult.php",
+            "source_sha256": "60a5f3fd62e910dbd24fee60321a58c308bfad3fbb67ce52711a7bfe4f676bef"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessPayload",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessPayload.php",
+            "source_sha256": "53d0c02702f53598ca89da9574761397be29677cf2abc9354b7ee51ce9b568d2"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessReference",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessReference.php",
+            "source_sha256": "9e1bddbf1bc8307cc175b0545067f5b64e969fc0153f14c7179a6c727e946b6e"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessSchema",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessSchema.php",
+            "source_sha256": "05627136b56f6f38cc1ced9dd31ad5fe5a918f8607110089842c407e5293b6a3"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewDeclaration",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessViewDeclaration.php",
+            "source_sha256": "6f0e80b21b0e8c0e24eeca38699db581923f06896aeb01c7f6557d53c607c65f"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewHandler",
+            "kind": "interface",
+            "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessViewHandler.php",
+            "source_sha256": "8614610e768db6d2128a0cdff53fec6a35c4f34aea82cd5d8894f992e5476883"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewQuery",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessViewQuery.php",
+            "source_sha256": "0f808bd489289ca0c6b91fa07da488320c6950faa4053ff835eed739a9c2d950"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewResult",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessViewResult.php",
+            "source_sha256": "ddaaa09ef142ab2dab8ed7ed75fdbb2073e608e89c317cbeaa7c757b954f13a2"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationConfiguration",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresentationConfiguration.php",
+            "source_sha256": "e9f101b2c790aba1edeec5c13f5f6bad9c9be82249ea31d3385d064b0ee6dd98"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationContext",
+            "kind": "enum",
+            "path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresentationContext.php",
+            "source_sha256": "e98b0d9f83a346f67117db273b5f5ecf0e853267d3ca2f541c3fb0375b228253"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationContribution",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresentationContribution.php",
+            "source_sha256": "081850ab34da86da94cb9f20dfcf0ff4a034cf3240fb09ddf5e409b2137d0db4"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationInput",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresentationInput.php",
+            "source_sha256": "bddddda25b4cd4b268665060b9dedf3fed1c6b5625e23491bbaab091ec838da2"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationModel",
+            "kind": "class",
+            "path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresentationModel.php",
+            "source_sha256": "6ccf85c3d6b72eb932162576b7a268661dca1cc62bb03f21e3adfc42f3eaa6dd"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresenter",
+            "kind": "interface",
+            "path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresenter.php",
+            "source_sha256": "db29de557a82f75a56054fc1efe65da5ca81bada219f881431af468b7d8bb6ff"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldWidget",
+            "kind": "enum",
+            "path": "src/Spi/BusinessSurface/Presentation/Field/FieldWidget.php",
+            "source_sha256": "6fb5ece41652e438a2570791ebe767450da2a26e82fae9789100c2a402e87ba7"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\AdministratorNavigationDefinition",
+            "kind": "class",
+            "path": "src/Spi/Contribution/AdministratorNavigationDefinition.php",
+            "source_sha256": "8222751a689392979c1fca67710893d34452511570f726c63f1b84d2242f080d"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\AdministratorRouteDefinition",
+            "kind": "class",
+            "path": "src/Spi/Contribution/AdministratorRouteDefinition.php",
+            "source_sha256": "1ad5c2fdc3c318a5f1a9a9e3255e6a4608d01a25f7406969a47a053607632408"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\AdministratorViewDefinition",
+            "kind": "class",
+            "path": "src/Spi/Contribution/AdministratorViewDefinition.php",
+            "source_sha256": "8501f0653b742c1153d7f73b50664c641a0018e9b915e03690d888a25f3883c9"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\AdministratorWorkspaceDefinition",
+            "kind": "class",
+            "path": "src/Spi/Contribution/AdministratorWorkspaceDefinition.php",
+            "source_sha256": "e6260ff8b756b7a934b21804b0aa04182319ec4ec6e83cbbae8493079182f0c4"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionDocument",
+            "kind": "class",
+            "path": "src/Spi/Contribution/CanonicalCompositionDocument.php",
+            "source_sha256": "1458889931d5230d956c25a3b4f888b70c5c7949d58d20e5eeb6c4a46b1f9c56"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionKind",
+            "kind": "enum",
+            "path": "src/Spi/Contribution/CanonicalCompositionKind.php",
+            "source_sha256": "81b209921fa4c1194936730b7f114d1641c820898616a70eea526ac9208f580d"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\CompositionBlockDeclaration",
+            "kind": "class",
+            "path": "src/Spi/Contribution/CompositionBlockDeclaration.php",
+            "source_sha256": "c0ceccb12902915fd3b16bb0b74d9df5da46db283ec9cbb89e46361931da4c49"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\CompositionDesignVocabularyDeclaration",
+            "kind": "class",
+            "path": "src/Spi/Contribution/CompositionDesignVocabularyDeclaration.php",
+            "source_sha256": "370686c3b4f843fe2a87b6a0d751e372001865eff2443ebf8a681c98c1197017"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\CompositionFieldControlDeclaration",
+            "kind": "class",
+            "path": "src/Spi/Contribution/CompositionFieldControlDeclaration.php",
+            "source_sha256": "dfc76d9f8020605e6d1eaaa691f64d1d537de893e9eb2fd56517e9cd1bf8ad80"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\CompositionHostBinding",
+            "kind": "class",
+            "path": "src/Spi/Contribution/CompositionHostBinding.php",
+            "source_sha256": "84a28fac66a192c2e086d561656abeb40b904e11d36da28fa3fde0c5da1def16"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\CompositionInspectorDeclaration",
+            "kind": "class",
+            "path": "src/Spi/Contribution/CompositionInspectorDeclaration.php",
+            "source_sha256": "254be35cfb058b12c6bf4196a56516fc83a31037bb77c3f3c8a417109e65e5ce"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\CompositionMigrationDeclaration",
+            "kind": "class",
+            "path": "src/Spi/Contribution/CompositionMigrationDeclaration.php",
+            "source_sha256": "5796c6714b8bc322acc949d28c00a059598f4ac8bc34034df7f73d51c249977e"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\CompositionPatternDeclaration",
+            "kind": "class",
+            "path": "src/Spi/Contribution/CompositionPatternDeclaration.php",
+            "source_sha256": "fd2258b976cbed26cb763f92cb44adcccb11f7533b961f55e3a9836aa88ed494"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\CompositionPropertySchema",
+            "kind": "class",
+            "path": "src/Spi/Contribution/CompositionPropertySchema.php",
+            "source_sha256": "3ba9a09d372eb8fd3247d098f68766e3e9ce2fb698879199bf2960452ba2e113"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\CompositionPropertyType",
+            "kind": "enum",
+            "path": "src/Spi/Contribution/CompositionPropertyType.php",
+            "source_sha256": "024641e334d4cfc089badd2d61c71fc9e404fd596e652209e9eeb480aee7d831"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\ContributionDefinition",
+            "kind": "interface",
+            "path": "src/Spi/Contribution/ContributionDefinition.php",
+            "source_sha256": "60afe142508eff8ad391ddb7ac7d911587c86773461774e82990b7fb66e4429a"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\ContributionOwner",
+            "kind": "class",
+            "path": "src/Spi/Contribution/ContributionOwner.php",
+            "source_sha256": "c3cf3dbfa32362a76120cfeba179c0db08a831a87f73c74b2a1caff343424efc"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Contribution\\TranslationSetItemAssociation",
+            "kind": "class",
+            "path": "src/Spi/Contribution/TranslationSetItemAssociation.php",
+            "source_sha256": "b7538fd125d2ad622db9971faa2a6d0178b4178128f07a85d9b2ede30adecb8c"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Http\\ExtensionRequest",
+            "kind": "class",
+            "path": "src/Spi/Http/ExtensionRequest.php",
+            "source_sha256": "8409a4462e35f86abe5c1454426ac401e7970da14d368a4ebe19dd675bf42271"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Identity\\Domain\\Capability",
+            "kind": "class",
+            "path": "src/Spi/Identity/Domain/Capability.php",
+            "source_sha256": "a98087e56679c590fbd226c53a8773671baa4e9f130236c5961a5c4721af6123"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Migration\\ExtensionMigration",
+            "kind": "interface",
+            "path": "src/Spi/Migration/ExtensionMigration.php",
+            "source_sha256": "612f9c75a4f7fb363d1f80313992c4db6f181b90dd1687a88363191a09b0f8ed"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Migration\\ExtensionTableNames",
+            "kind": "interface",
+            "path": "src/Spi/Migration/ExtensionTableNames.php",
+            "source_sha256": "41b12ee8597d32f33d46c5a1b26f2dbc9496fcfe3edd0e8700f2f1ff925c06c1"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalNavigationDefinition",
+            "kind": "class",
+            "path": "src/Spi/Portal/Contribution/PortalNavigationDefinition.php",
+            "source_sha256": "098e6d41a25254566729de1a807b2131ac3bc90f0dd92d3f636eea2fe3a23012"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalRouteDefinition",
+            "kind": "class",
+            "path": "src/Spi/Portal/Contribution/PortalRouteDefinition.php",
+            "source_sha256": "1b037cedcb1e0be3b99383dcc797569b0e5e83e7979824ac3e297503d96ebed3"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalTemplateDefinition",
+            "kind": "class",
+            "path": "src/Spi/Portal/Contribution/PortalTemplateDefinition.php",
+            "source_sha256": "3c8a1b8d559666844676b90b4a3c0f25ec97dbbf0f056a05e2cb7041e94cec17"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalWorkspaceDefinition",
+            "kind": "class",
+            "path": "src/Spi/Portal/Contribution/PortalWorkspaceDefinition.php",
+            "source_sha256": "42c37396f476673d7fe58c21e44f77054d352e2b8f0233753b79e022e789a6e1"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Presentation\\AdministratorRouteRenderer",
+            "kind": "interface",
+            "path": "src/Spi/Presentation/AdministratorRouteRenderer.php",
+            "source_sha256": "d7fe52b378d6498929618074f97f67566710358a8f69c08e5d42e94fa902fdb1"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Presentation\\PortalRenderer",
+            "kind": "interface",
+            "path": "src/Spi/Presentation/PortalRenderer.php",
+            "source_sha256": "5b508a32ff9a815e6ad6c151536b4a6385dd3281cc6fd2dc8f4f90dc9cedf2c6"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Presentation\\PortalRouteRenderer",
+            "kind": "interface",
+            "path": "src/Spi/Presentation/PortalRouteRenderer.php",
+            "source_sha256": "7677ffe29ffc24b856387cf3ad5093404a113c79f9257cf73cf1ef88b3749b1d"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Runtime\\BootableExtension",
+            "kind": "interface",
+            "path": "src/Spi/Runtime/BootableExtension.php",
+            "source_sha256": "400c3de05075b9ca6375e9ec8fb7ee6d88c0fc06a8bac7e920f0e6994dd9e848"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer",
+            "kind": "interface",
+            "path": "src/Spi/Runtime/ExtensionContainer.php",
+            "source_sha256": "dbea75170721b409582103f57515cb4fdedbcbdc66ef4f8afd40c83ea1f211a2"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionEvent",
+            "kind": "interface",
+            "path": "src/Spi/Runtime/ExtensionEvent.php",
+            "source_sha256": "226fbc61a22d4ae8f4ce9003a9c5b81b5e52e8767051edad676d5eefa703e054"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionEventRegistrar",
+            "kind": "interface",
+            "path": "src/Spi/Runtime/ExtensionEventRegistrar.php",
+            "source_sha256": "3fc01cce7a89a7cfeeb50b434a4179584a77351418668a05ca78925b5dbbbf42"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionRouteRegistrar",
+            "kind": "interface",
+            "path": "src/Spi/Runtime/ExtensionRouteRegistrar.php",
+            "source_sha256": "40cb71209a58a1a81fc3f8ad08d97a3eaadc20bb9640771d14f4ec40eaf32a78"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBindingResult",
+            "kind": "class",
+            "path": "src/Spi/Studio/Application/Preview/StudioPreviewBindingResult.php",
+            "source_sha256": "79ada535ac2c81ccaf53246c83e43323c43b03cd3ab63d6c94cf5ac129da3fe7"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlock",
+            "kind": "interface",
+            "path": "src/Spi/Studio/Application/Preview/StudioPreviewBlock.php",
+            "source_sha256": "b7bfd3e147ea171c7435744cdd28d10983bc2a16048ef31c088724ba5a404798"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockFragment",
+            "kind": "class",
+            "path": "src/Spi/Studio/Application/Preview/StudioPreviewBlockFragment.php",
+            "source_sha256": "4fb725a956667d7a572e522d184edd9047601e6437d9c050633c9a0226cfbf5a"
+        },
+        {
+            "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockRenderer",
+            "kind": "interface",
+            "path": "src/Spi/Studio/Application/Preview/StudioPreviewBlockRenderer.php",
+            "source_sha256": "902b2c3d18a1907eb567264e4792fac2ad20c5aaf04c0cd3e693d48d6cdb6739"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\ComponentScaffolder",
+            "kind": "class",
+            "path": "src/Toolchain/ComponentScaffolder.php",
+            "source_sha256": "71d27f55fe38fbf85b993fd7a1ff2fb1ae5709847403da5d74ba544000a30d81"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\ConformanceReport",
+            "kind": "class",
+            "path": "src/Toolchain/ConformanceReport.php",
+            "source_sha256": "21b11f554619899247ad353b8957855aa79a7a6d273b6ecc5e3dfbe5f79f1908"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\DeterministicPackageBuilder",
+            "kind": "class",
+            "path": "src/Toolchain/DeterministicPackageBuilder.php",
+            "source_sha256": "05fc2260be8e427330691af84bcf994b0b9bdeb445534f0c8e2cf79144f786c8"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\ExtensionConformanceTestCase",
+            "kind": "class",
+            "path": "src/Toolchain/ExtensionConformanceTestCase.php",
+            "source_sha256": "8d5a9af95e3cc8364a244be665bdeb8851d74e368cdc393e27a4bddf082b8fd5"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\ExtensionLifecycleTestCase",
+            "kind": "class",
+            "path": "src/Toolchain/ExtensionLifecycleTestCase.php",
+            "source_sha256": "e9035466fb7835415e23eff95a9f356366afd09a61f81d5e119e25df9febb4ea"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\ExtensionPackageConformance",
+            "kind": "class",
+            "path": "src/Toolchain/ExtensionPackageConformance.php",
+            "source_sha256": "cd424bab3f7659a6838264067795c060b9b9eb4e4cbd0d05314cb11e3c9b9e8c"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\LifecycleConformanceAdapter",
+            "kind": "interface",
+            "path": "src/Toolchain/LifecycleConformanceAdapter.php",
+            "source_sha256": "b11b08e74f1df860d0e01a27111509a44f382e5e957cd3212b037dd5e1efe14f"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\LifecycleConformanceReport",
+            "kind": "class",
+            "path": "src/Toolchain/LifecycleConformanceReport.php",
+            "source_sha256": "70f183a0ef2692d01290dbaee0b957887c8214f890c04eb98f1f920c6f419ec0"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\LifecycleConformanceRunner",
+            "kind": "class",
+            "path": "src/Toolchain/LifecycleConformanceRunner.php",
+            "source_sha256": "78b423e3b2a7c415b0179dd6913a750a7b6ff67b1c293d6c319125de3c66c16e"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\PackageBuildResult",
+            "kind": "class",
+            "path": "src/Toolchain/PackageBuildResult.php",
+            "source_sha256": "5d8be5528990cab5ce71e78d22bf26f563c44b91484266aaf9751878337b0be7"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\PackageInspection",
+            "kind": "class",
+            "path": "src/Toolchain/PackageInspection.php",
+            "source_sha256": "009885b0fb5f23f23f413251eae80b7fdb87dd34a6fe16a856996f39fa86d4f0"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\PackageInspector",
+            "kind": "class",
+            "path": "src/Toolchain/PackageInspector.php",
+            "source_sha256": "fab3bfa316f5e0b48d6c03acc6b8e1de20b19814ba9a1ec77d365ec145bd0e4c"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\PackageSigner",
+            "kind": "class",
+            "path": "src/Toolchain/PackageSigner.php",
+            "source_sha256": "720dfbb2744175a1a70be0f6b7c93f3db1278d908fa533cab6a0684f9d5b4aee"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\ProtectedSigningKeyReader",
+            "kind": "class",
+            "path": "src/Toolchain/ProtectedSigningKeyReader.php",
+            "source_sha256": "9b1fffe2211e08dd057c3feb18ee6b8b1a626d5bdbb51504f765ade64ad35d68"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\ScaffoldRequest",
+            "kind": "class",
+            "path": "src/Toolchain/ScaffoldRequest.php",
+            "source_sha256": "ee3314c66060bae9c21a9dfc32ed70217aa962897a2078f686b5369aea5dc64c"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\ScaffoldResult",
+            "kind": "class",
+            "path": "src/Toolchain/ScaffoldResult.php",
+            "source_sha256": "0549c8068f400de33f83b76561e960cb491a1cad470b551ced5e552ff8cb7857"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\SignatureDocument",
+            "kind": "class",
+            "path": "src/Toolchain/SignatureDocument.php",
+            "source_sha256": "371bccc2af8038c391d15f147fe83a15118a72bac528c54e578ca51c8ea207bb"
+        },
+        {
+            "type": "Kumwe\\Extension\\Toolchain\\StaticConformanceRunner",
+            "kind": "class",
+            "path": "src/Toolchain/StaticConformanceRunner.php",
+            "source_sha256": "6ae79d5d4b571e7ce40aadf2bb88e4294f69a715e898595f1fc54feca17abd14"
+        }
+    ]
 }
