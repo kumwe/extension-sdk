@@ -3,6 +3,17 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## [0.2.2] - 2026-09-01
+
+### Added
+
+- KIS graphical route coverage at the graph boundary for schema-4 and newer packages: every
+  administrator or portal GET route must be declared as an area-matched interface surface whose
+  capabilities include the route capability, and every such surface must resolve back to its owned
+  graphical GET route. The pre-extraction host enforced exactly this fail-closed rule; 0.2.0 and
+  0.2.1 validated declared surfaces structurally but let a graphical package omit its interface
+  declaration entirely.
+
 ## [0.2.1] - 2026-09-01
 
 ### Added

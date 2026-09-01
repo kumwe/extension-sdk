@@ -219,7 +219,7 @@ final readonly class ManifestContributions
             ExtensionManifestGrammar::integrationKeys($manifestSchema),
             'integration contributions',
         );
-        ManifestContributionGraphValidator::validate($owner, $data);
+        ManifestContributionGraphValidator::validate($owner, $data, $manifestSchema);
         $data = self::canonicalGraph($data);
 
         $capabilities = self::index(array_map(static function (array $item) use ($owner): array {
