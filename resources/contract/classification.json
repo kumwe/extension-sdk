@@ -966,24 +966,6 @@
             "source_sha256": "42c37396f476673d7fe58c21e44f77054d352e2b8f0233753b79e022e789a6e1"
         },
         {
-            "type": "Kumwe\\Extension\\Spi\\Presentation\\AdministratorRouteRenderer",
-            "kind": "interface",
-            "path": "src/Spi/Presentation/AdministratorRouteRenderer.php",
-            "source_sha256": "d7fe52b378d6498929618074f97f67566710358a8f69c08e5d42e94fa902fdb1"
-        },
-        {
-            "type": "Kumwe\\Extension\\Spi\\Presentation\\PortalRenderer",
-            "kind": "interface",
-            "path": "src/Spi/Presentation/PortalRenderer.php",
-            "source_sha256": "5b508a32ff9a815e6ad6c151536b4a6385dd3281cc6fd2dc8f4f90dc9cedf2c6"
-        },
-        {
-            "type": "Kumwe\\Extension\\Spi\\Presentation\\PortalRouteRenderer",
-            "kind": "interface",
-            "path": "src/Spi/Presentation/PortalRouteRenderer.php",
-            "source_sha256": "7677ffe29ffc24b856387cf3ad5093404a113c79f9257cf73cf1ef88b3749b1d"
-        },
-        {
             "type": "Kumwe\\Extension\\Spi\\Runtime\\BootableExtension",
             "kind": "interface",
             "path": "src/Spi/Runtime/BootableExtension.php",
@@ -1000,18 +982,6 @@
             "kind": "interface",
             "path": "src/Spi/Runtime/ExtensionEvent.php",
             "source_sha256": "226fbc61a22d4ae8f4ce9003a9c5b81b5e52e8767051edad676d5eefa703e054"
-        },
-        {
-            "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionEventRegistrar",
-            "kind": "interface",
-            "path": "src/Spi/Runtime/ExtensionEventRegistrar.php",
-            "source_sha256": "3fc01cce7a89a7cfeeb50b434a4179584a77351418668a05ca78925b5dbbbf42"
-        },
-        {
-            "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionRouteRegistrar",
-            "kind": "interface",
-            "path": "src/Spi/Runtime/ExtensionRouteRegistrar.php",
-            "source_sha256": "40cb71209a58a1a81fc3f8ad08d97a3eaadc20bb9640771d14f4ec40eaf32a78"
         },
         {
             "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBindingResult",

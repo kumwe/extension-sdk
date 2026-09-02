@@ -40,7 +40,7 @@ final readonly class ItemDomainListener implements DomainEventHandler
      */
     public function handle(DomainListenerDefinition $declaration, DomainEvent $event): void
     {
-        if (!$declaration->accepts($event)) {
+        if (!$declaration->accepts($event->eventType(), $event->schemaVersion(), $event->sensitivity())) {
             throw new InvalidArgumentException('The item listener received an unsupported event contract.');
         }
         $this->ledger->recordDomain($event);

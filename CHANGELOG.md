@@ -3,6 +3,53 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## [0.2.4] - 2026-09-02
+
+### Fixed
+
+- `bin/kumwe-extension` composed its package inspector from constructors the 0.2.0 reset had
+  deleted, so every real command — `build`, `inspect`, `evidence` and `conformance` — fatalled
+  before reading its target and only `help` worked. The command now composes the same
+  `PackageInspector`, `DeterministicPackageBuilder`, `PackageEvidenceInspector` and
+  `StaticConformanceRunner` the PHP API exposes, and the suite executes every lane as a subprocess
+  against scaffold output, holding each to its exit code and report.
+- The complete-component scaffold generated two declaration mirrors, `Integration\IntegrationDefinitions`
+  and `Definition\BusinessDefinitions`, importing five `Spi` types that do not exist
+  (`EventSchemaDefinition`, `QueueContributionDefinition`, `ScheduleContributionDefinition`,
+  `ReportDefinition`, `EntityTypeDefinition`), and the schema-4 generation fixture carried the same
+  dead `Definitions` mirror. Those declarations are manifest sections the SDK validates, not values
+  any SPI callback receives, so the mirrors are removed rather than the types invented. A new suite
+  scaffolds and packages the component and autoloads, import-resolves and reflection-checks every
+  generated class in the package and in all six generation fixtures.
+- The scaffold's generated handlers called declaration methods the SDK does not define, so an
+  installed component crashed on its first event, job and durable delivery: `ItemDomainListener`
+  passed the event object to `DomainListenerDefinition::accepts()`, which takes the event type,
+  schema version and sensitivity; `DigestJobHandler` called `JobContributionDefinition::type()`,
+  which is `identifier()`; `ItemIntegrationConsumer` called a non-existent
+  `EventConsumerDefinition::accepts()`, which is an `eventType()` comparison plus
+  `acceptsVersion()`. The schema-4 fixture's listener, consumer, webhook transport, job and
+  projection builder made the same calls. All are corrected, and the SDK suite now executes the
+  generated listener, consumer, job handler and projection builder — and the fixture's handlers —
+  against definitions built from the generated manifest and real event, context and writer values,
+  asserting the ledger and projection effects and every refusal; the generated PHPUnit suite is
+  run as well.
+
+### Removed
+
+- Dead SPI: `Spi\Presentation\{AdministratorRouteRenderer,PortalRouteRenderer,PortalRenderer}`, byte-identical
+  duplicates of the `Spi\Binding\Http` renderers that nothing referenced, and
+  `Spi\Runtime\{ExtensionEventRegistrar,ExtensionRouteRegistrar}`, the code-side registrars the
+  0.2.0 reset had withdrawn but left classified public, documented against host classes that no
+  longer exist. The contract records follow, and `docs/migration-map.json` is reconciled against
+  kumwe/app `201ef18a`, the commit that completed adoption: the registrars join the `replaced` set,
+  every retained type the App has since deleted now records its canonical successor, and the
+  remaining retained closures are re-derived from that source.
+
+### Added
+
+- Unit coverage for `Spi\Identity\Domain\Capability`: the accepted grammar, trim and lowercase
+  normalisation, value equality, and every bounds and grammar refusal.
+
 ## [0.2.3] - 2026-09-01
 
 ### Fixed

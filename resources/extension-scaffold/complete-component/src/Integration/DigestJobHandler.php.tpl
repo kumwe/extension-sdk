@@ -43,7 +43,7 @@ final readonly class DigestJobHandler implements JobHandler
     {
         $message = $payload['message'] ?? null;
         if (
-            $declaration->type() !== '@@EXTENSION_DOTTED@@.digest'
+            $declaration->identifier() !== '@@EXTENSION_DOTTED@@.digest'
             || $declaration->schemaVersion() !== 1
             || array_keys($payload) !== ['message']
             || !is_string($message)

@@ -43,7 +43,10 @@ final readonly class ObservationConsumer implements IntegrationEventHandler
         ExecutionContext $context,
     ): void
     {
-        if (!$declaration->accepts($event)) {
+        if (
+            $declaration->eventType() !== $event->eventType()
+            || !$declaration->acceptsVersion($event->schemaVersion())
+        ) {
             throw new \InvalidArgumentException('The fixture consumer received an undeclared event.');
         }
         $this->ledger->record('consumer');

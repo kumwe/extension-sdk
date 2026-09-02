@@ -4,6 +4,10 @@
 /**
  * Host-independent command line entry point for the Kumwe extension SDK.
  *
+ * Every lane composes the same production objects the PHP API exposes: one `PackageInspector` over the
+ * shipped `PackageLimits`, the `DeterministicPackageBuilder` for `build`, the `PackageEvidenceInspector`
+ * for `evidence`, and the `StaticConformanceRunner` for `conformance`.
+ *
  * @since 0.2.0
  */
 
@@ -11,9 +15,9 @@ declare(strict_types=1);
 
 use Kumwe\Extension\Package\PackageCodeConformance;
 use Kumwe\Extension\Package\PackageEvidenceInspector;
-use Kumwe\Extension\Package\PackageSafetyPolicy;
+use Kumwe\Extension\Package\PackageEvidenceScope;
+use Kumwe\Extension\Package\PackageLimits;
 use Kumwe\Extension\Package\ZipArchiveContentReader;
-use Kumwe\Extension\Package\ZipArchiveReader;
 use Kumwe\Extension\Toolchain\DeterministicPackageBuilder;
 use Kumwe\Extension\Toolchain\PackageInspector;
 use Kumwe\Extension\Toolchain\StaticConformanceRunner;
@@ -58,7 +62,7 @@ if (!is_string($target) || $target === '' || !str_starts_with($target, '/')) {
     exit(2);
 }
 
-$archiveInspector = new PackageInspector(new ZipArchiveReader(), new PackageSafetyPolicy());
+$archiveInspector = new PackageInspector(new PackageLimits());
 
 try {
     $result = match ($command) {
@@ -82,7 +86,7 @@ try {
  *
  * @param   string            $source     Canonical absolute source directory.
  * @param   list<string>      $arguments  Remaining command arguments.
- * @param   PackageInspector  $inspector  Safe package inspector.
+ * @param   PackageInspector  $inspector  Bounded package inspector shared with post-build verification.
  *
  * @return  array<string, mixed>  Build result.
  *
@@ -106,10 +110,10 @@ function buildPackage(string $source, array $arguments, PackageInspector $inspec
 }
 
 /**
- * Produce neutral evidence after safe archive inspection.
+ * Produce neutral authoring evidence over one immutable package snapshot.
  *
  * @param   string            $archive    Canonical archive path.
- * @param   PackageInspector  $inspector  Safe package inspector.
+ * @param   PackageInspector  $inspector  Bounded package inspector producing the snapshot.
  *
  * @return  array<string, mixed>  Evidence report.
  *
@@ -117,10 +121,10 @@ function buildPackage(string $source, array $arguments, PackageInspector $inspec
  */
 function inspectEvidence(string $archive, PackageInspector $inspector): array
 {
-    $package = $inspector->inspect($archive);
+    $package = $inspector->inspect($archive)->package;
 
     return (new PackageEvidenceInspector(new ZipArchiveContentReader(), new PackageCodeConformance()))
-        ->inspect($archive, $package->manifest)
+        ->inspect($package, PackageEvidenceScope::Authoring)
         ->toArray();
 }
 
@@ -128,7 +132,7 @@ function inspectEvidence(string $archive, PackageInspector $inspector): array
  * Run complete static conformance.
  *
  * @param   string            $archive    Canonical archive path.
- * @param   PackageInspector  $inspector  Safe package inspector.
+ * @param   PackageInspector  $inspector  Bounded package inspector producing the snapshot.
  *
  * @return  array<string, mixed>  Conformance report.
  *

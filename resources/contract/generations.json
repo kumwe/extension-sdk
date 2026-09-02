@@ -113,7 +113,7 @@
             "identifier": "kumwe/contract-manifest-four",
             "provider": "KumweContract\\ManifestFour\\Provider",
             "manifest_sha256": "97aee4caa19f0b559f9049ff0e249bacc0a9700731858fea54efeab6d12c1704",
-            "fixture_sha256": "4de706a7166a4edd71bcb4b05c1ef377c5c6236c439a0bdc9f98512fba2473aa",
+            "fixture_sha256": "225bf60427b1a597cfc46a12edd5353afe974d13a76a0aef96ba7677b85475f6",
             "surface_counts": {
                 "capabilities": 1,
                 "resource_policies": 1,
@@ -145,7 +145,7 @@
                     "kumwe.contract-manifest-four.observed-webhook"
                 ]
             },
-            "surface_digest": "96ef88b5617391af059252b0d22bbaed21719cad77b90b69e63ef46393502287"
+            "surface_digest": "6b94754060aa6394a6bd377d35d06da4ead2d6c9bdb52a5d63d2880e390299be"
         },
         {
             "id": "manifest-5",

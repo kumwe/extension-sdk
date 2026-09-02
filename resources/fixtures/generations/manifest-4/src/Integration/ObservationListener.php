@@ -37,7 +37,7 @@ final readonly class ObservationListener implements DomainEventHandler
      */
     public function handle(DomainListenerDefinition $declaration, DomainEvent $event): void
     {
-        if (!$declaration->accepts($event)) {
+        if (!$declaration->accepts($event->eventType(), $event->schemaVersion(), $event->sensitivity())) {
             throw new \InvalidArgumentException('The fixture listener received an undeclared event.');
         }
         $this->ledger->record('domain-listener');

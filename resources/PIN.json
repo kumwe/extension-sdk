@@ -10,11 +10,11 @@
         },
         {
             "file": "contract/classification.json",
-            "sha256": "24d1a6ce7d1f8f925f673309c3c88a27c0eb53e839cb2e970e75cbfb8edcc01a"
+            "sha256": "dd4555e66e304512e37a43c90604b67dc3979f497c26455eccbd4bd881f5c6a9"
         },
         {
             "file": "contract/generations.json",
-            "sha256": "7dea312c20a914eb4a631dd876963e8d83fb62912219b433ea327e4ec034b638"
+            "sha256": "03b7610a19cde8dd2ec23a153da253038f794e4dfe931446345fc08248296391"
         },
         {
             "file": "extension-scaffold/complete-component/.gitignore.tpl",
@@ -49,10 +49,6 @@
             "sha256": "6e633424ff3c2489a4929b4ddcade7db24d8b55f9509c243072b5b82888b0177"
         },
         {
-            "file": "extension-scaffold/complete-component/src/Definition/BusinessDefinitions.php.tpl",
-            "sha256": "d8dac15286ab9e1b5d3bffa0fd682710b36dac50478e532c2da9574e3cdd6321"
-        },
-        {
             "file": "extension-scaffold/complete-component/src/Delivery/Administrator/OverviewHandler.php.tpl",
             "sha256": "189073442a4bfdee6abb704d39c25c4df1843ecea3022579ad9886de37761ede"
         },
@@ -74,11 +70,7 @@
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/DigestJobHandler.php.tpl",
-            "sha256": "e62e42bcfab5d7ebcb963ceea39612f698fedb8c76220f1196592cd42e563c74"
-        },
-        {
-            "file": "extension-scaffold/complete-component/src/Integration/IntegrationDefinitions.php.tpl",
-            "sha256": "0ff67f4012e9b9143d391e4c955bb54585612ed21f9c232b997ed349ab5d674b"
+            "sha256": "58cb62269fb205217344a70e41f0a54b8402ac6b69d3219bdfdd8b4dcb36e499"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/IntegrationLedger.php.tpl",
@@ -86,11 +78,11 @@
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/ItemDomainListener.php.tpl",
-            "sha256": "dacfe03dee9381f595290df92c482def5174de2ac160cb1b254a637a52834375"
+            "sha256": "0f4c8d19f6dd8853c665116bc248350e25ffe748363230891fca12a81c5ead17"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/ItemIntegrationConsumer.php.tpl",
-            "sha256": "f3f3b099c90ff725ea27a0873b23424d4ce31c39b74d5d42323bfe5739d0da54"
+            "sha256": "9715f87bbf519f76a148c5b08b860edda86023b578de5732f1e4e5c56dbaac96"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/ItemProjectionBuilder.php.tpl",
@@ -185,12 +177,8 @@
             "sha256": "97aee4caa19f0b559f9049ff0e249bacc0a9700731858fea54efeab6d12c1704"
         },
         {
-            "file": "fixtures/generations/manifest-4/src/Definitions.php",
-            "sha256": "58ec4d9d8560ca96a49e34e420742cdddf8b34df21920236ef9e6c320c117051"
-        },
-        {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationConsumer.php",
-            "sha256": "783f59fc9a17c061e1438fcbda7623d89159999c709136e2392453edac1392b7"
+            "sha256": "5d73bfe19e5d88bac92b4b4e8f5b80f4b66c9179181d8ebfc8e863aabba7cd14"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationLedger.php",
@@ -198,19 +186,19 @@
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationListener.php",
-            "sha256": "6e74d315cc4533940dc27c4f039ac94cc3f7488cf57b83a78913ecabda01e0fc"
+            "sha256": "434db858965b46a44f267c9ca78e0e6b56c69f138269ce62c8d4e71fdefd0936"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationProjectionBuilder.php",
-            "sha256": "539a875ffd8b6b0409df9135f945cac111dd19a755f3a11bb1cec45ea1de001c"
+            "sha256": "2e5d278b516dc53f39b841e71dbf906275896cb24a656e3934214640a1228a1b"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationWebhookTransport.php",
-            "sha256": "191a7ccd187f232d5531338e5d07e28b653e0e58d3d775480e6a61f9de64db95"
+            "sha256": "87639aff338d8fab8b0a25bab99423e2b68cf626fe223818db3bd4a7fdbe961b"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/SummarizeJob.php",
-            "sha256": "d20437c51ad7f6c43b0429ea62a7a5a691611bdf7cd3e6c76537139ad9bf8beb"
+            "sha256": "8b4616b22734b085a484033a2a60908f0386d1fbbf4657b355033520f9fabc96"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Provider.php",

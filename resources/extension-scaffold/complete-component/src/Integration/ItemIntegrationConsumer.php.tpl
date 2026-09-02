@@ -46,7 +46,10 @@ final readonly class ItemIntegrationConsumer implements IntegrationEventHandler
         ExecutionContext $context,
     ): void
     {
-        if (!$declaration->accepts($event)) {
+        if (
+            $declaration->eventType() !== $event->eventType()
+            || !$declaration->acceptsVersion($event->schemaVersion())
+        ) {
             throw new InvalidArgumentException('The item consumer received an unsupported event contract.');
         }
         $this->ledger->recordIntegration($event);
