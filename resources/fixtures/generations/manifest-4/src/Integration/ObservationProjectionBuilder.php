@@ -22,7 +22,7 @@ final readonly class ObservationProjectionBuilder implements ProjectionBuilder
     {
         if (
             $declaration->identifier() !== 'kumwe.contract-manifest-four.activity'
-            || !$declaration->accepts($event)
+            || !$declaration->accepts($event->type(), $event->schemaVersion())
         ) {
             throw new InvalidArgumentException('The compatibility projection received an undeclared source event.');
         }
