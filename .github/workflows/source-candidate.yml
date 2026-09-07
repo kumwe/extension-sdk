@@ -92,7 +92,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/record-model
-          ref: e5e465cd90041ba93e8a6e62cce92a702040534c
+          ref: cd32f56266242939f3276980134d8967c9764788
           path: dependencies/record-model
           persist-credentials: false
       - name: Check out record-query source
@@ -113,7 +113,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/reporting
-          ref: 330db83752a10a1636df52a471a0d35b89b33a95
+          ref: 43f857a11bc30f4e9ed3f25aa7026b035f2fd993
           path: dependencies/reporting
           persist-credentials: false
       - name: Check out business-definition source

@@ -113,10 +113,10 @@
   },
   {
     "package": "kumwe/record-model",
-    "version": "dev-agent/merged-dependency-coordinates-v2",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/record-model.git",
-    "requested_ref": "e5e465cd90041ba93e8a6e62cce92a702040534c"
+    "requested_ref": "cd32f56266242939f3276980134d8967c9764788"
   },
   {
     "package": "kumwe/record-query",
@@ -134,10 +134,10 @@
   },
   {
     "package": "kumwe/reporting",
-    "version": "dev-agent/merged-dependency-coordinates-v2",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/reporting.git",
-    "requested_ref": "330db83752a10a1636df52a471a0d35b89b33a95"
+    "requested_ref": "43f857a11bc30f4e9ed3f25aa7026b035f2fd993"
   },
   {
     "package": "kumwe/sequence",
