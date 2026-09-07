@@ -1,0 +1,2023 @@
+{
+  "schema": "kumwe-test-ownership/v1",
+  "package": "kumwe/extension-sdk",
+  "api_manifest": "resources/contract/classification.json",
+  "suite": {
+    "inventory_command": [
+      "php",
+      "tests/run.php",
+      "--list-json"
+    ]
+  },
+  "exports": {
+    "Kumwe\\Extension\\Contract\\NameBasedUuid": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testIdentifierNormalizesAndComparesVendorNames"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testAssociationRefusalsMatchTheContract",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Manifest\\ExtensionDependency": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testDependencyEvaluatesCompatibilityAndOptionality",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testLegacyKisOneCompatibilityIsExact"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testKisCompatibilityRefusesMalformedDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testSemanticVersionRefusals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Manifest\\ExtensionIdentifier": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testAManifestWithoutAContentSectionExportsNone",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testParsesACompatibleManifestWithTypedDependencies"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testSchemaTwoRejectsForeignContributionOwnership"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Manifest\\ExtensionManifest": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testAManifestWithoutAContentSectionExportsNone",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testParsesACompatibleManifestWithTypedDependencies"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testSchemaTwoRejectsForeignContributionOwnership"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Manifest\\ExtensionType": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testAManifestWithoutAContentSectionExportsNone",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testParsesACompatibleManifestWithTypedDependencies"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testSchemaTwoRejectsForeignContributionOwnership"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Manifest\\ManifestContributions": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Manifest\\SemanticVersion": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testAManifestWithoutAContentSectionExportsNone",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testParsesACompatibleManifestWithTypedDependencies"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testSchemaTwoRejectsForeignContributionOwnership"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Manifest\\TemplateKisCompatibility": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testDependencyEvaluatesCompatibilityAndOptionality",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testLegacyKisOneCompatibilityIsExact"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testKisCompatibilityRefusesMalformedDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testSemanticVersionRefusals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Manifest\\VersionConstraint": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testDependencyEvaluatesCompatibilityAndOptionality",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testLegacyKisOneCompatibilityIsExact"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testKisCompatibilityRefusesMalformedDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testSemanticVersionRefusals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\ArchiveContentReader": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Package\\PackageEvidenceInspector; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Package\\ArchiveEntry": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testArchiveFileLimitProducesANeutralFinding",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testBuilderReservesAttestationsInsideConfiguredCaps"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testSnapshotConstructionIsClosedAndUnsafeBytesRemainReported"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\ArchiveEntryType": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testArchiveFileLimitProducesANeutralFinding",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testBuilderReservesAttestationsInsideConfiguredCaps"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testSnapshotConstructionIsClosedAndUnsafeBytesRemainReported"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\ArchivePackage": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testArchiveFileLimitProducesANeutralFinding",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testBuilderReservesAttestationsInsideConfiguredCaps"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testSnapshotConstructionIsClosedAndUnsafeBytesRemainReported"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\ArchiveReader": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testArchiveFileLimitProducesANeutralFinding",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testBuilderReservesAttestationsInsideConfiguredCaps"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testSnapshotConstructionIsClosedAndUnsafeBytesRemainReported"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Package\\ArchiveEntry; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Package\\InspectedPackage": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testBuiltPackageCarriesVerifiableEvidence",
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testPackageScopeOmitsOnlyAuthoringEvidence"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testProvenanceCannotBindToInvalidInventory",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\InvalidPackage": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testArchiveFileLimitProducesANeutralFinding",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testBuilderReservesAttestationsInsideConfiguredCaps"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testSnapshotConstructionIsClosedAndUnsafeBytesRemainReported"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageAttestationState": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageBillOfMaterials": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageChecksum": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testDependencyEvaluatesCompatibilityAndOptionality",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testLegacyKisOneCompatibilityIsExact"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testKisCompatibilityRefusesMalformedDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testSemanticVersionRefusals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageCodeConformance": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageEvidenceInspector": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testBuiltPackageCarriesVerifiableEvidence",
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testPackageScopeOmitsOnlyAuthoringEvidence"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testProvenanceCannotBindToInvalidInventory"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageEvidenceReport": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Package\\PackageEvidenceInspector; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Package\\PackageEvidenceScope": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testBuiltPackageCarriesVerifiableEvidence",
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testPackageScopeOmitsOnlyAuthoringEvidence"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testProvenanceCannotBindToInvalidInventory"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageFinding": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testComposerDeclaresCanonicalLibraryDependenciesOnly",
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testFacadePassesAllSixVendoredGenerations"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testProvenanceCannotBindToInvalidInventory",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageLimits": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testComposerDeclaresCanonicalLibraryDependenciesOnly",
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testFacadePassesAllSixVendoredGenerations"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackagePath": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testDependencyEvaluatesCompatibilityAndOptionality",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testLegacyKisOneCompatibilityIsExact"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testKisCompatibilityRefusesMalformedDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testSemanticVersionRefusals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageProvenance": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageSafetyInspector": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testArchiveFileLimitProducesANeutralFinding",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testBuilderReservesAttestationsInsideConfiguredCaps"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testSnapshotConstructionIsClosedAndUnsafeBytesRemainReported"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageSignature": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testDependencyEvaluatesCompatibilityAndOptionality",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testLegacyKisOneCompatibilityIsExact"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testKisCompatibilityRefusesMalformedDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testSemanticVersionRefusals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\PackageSignatureMessage": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testCompleteScaffoldBuildsReproduciblyAndConforms",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceRunsEveryGateAndRecovery"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testBuilderOmitsDevelopmentCachesAndRejectsSensitiveFiles",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceStopsAfterFailureAndStillRecovers"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Package\\SodiumPublicKeyPackageSignatureVerifier; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Package\\PackageSignatureVerifier": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testDependencyEvaluatesCompatibilityAndOptionality",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testLegacyKisOneCompatibilityIsExact"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testKisCompatibilityRefusesMalformedDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testSemanticVersionRefusals"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Package\\PackageSignature; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Package\\PublicKeyPackageSignatureVerifier": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Package\\SodiumEd25519Verifier; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Package\\SodiumEd25519Verifier": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\SodiumPublicKeyPackageSignatureVerifier": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testCompleteScaffoldBuildsReproduciblyAndConforms",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceRunsEveryGateAndRecovery"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testBuilderOmitsDevelopmentCachesAndRejectsSensitiveFiles",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceStopsAfterFailureAndStillRecovers"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\ZipArchiveContentReader": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Package\\ZipArchiveReader": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testArchiveFileLimitProducesANeutralFinding",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testBuilderReservesAttestationsInsideConfiguredCaps"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testSnapshotConstructionIsClosedAndUnsafeBytesRemainReported"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Application\\Automation\\IdempotencyKey": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testTypedViewAndActionInputsPreserveTheirGuards"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testInvalidIdentitiesAndExactJsonAreRefused",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Application\\Automation\\JobDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Application\\Automation\\JobHandler": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Application\\ExecutionContext": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testTypedViewAndActionInputsPreserveTheirGuards"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testInvalidIdentitiesAndExactJsonAreRefused",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Application\\ExtensionServiceProvider": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingRequirements": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingProvider": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingRegistrar": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteHandlerFactory": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteRenderer": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testIdentifierNormalizesAndComparesVendorNames"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testAssociationRefusalsMatchTheContract",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\Contribution\\AdministratorViewDefinition; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteHandlerFactory": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteRenderer": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\DomainEventHandler": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventHandler": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventTransport": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\ConsumerIdempotency": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventConsumerDefinition; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainEvent": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainListenerDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainListenerDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventConsumerDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventConsumerDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventEnvelope": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainEvent; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventSensitivity": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationContract": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainListenerDefinition; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationContractValidator": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainListenerDefinition; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationEvent": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\JobContributionDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\WebhookContributionDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\WebhookDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordPage": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordQueryPurpose": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testHttpHelpersRequireCanonicalContextWithoutInventingCsrfTokens"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testHttpHelpersRequireCanonicalContextWithoutInventingCsrfTokens",
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testReadRequestPreservesHostContextAndRefusesMalformedScopes"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReadRequest": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testHttpHelpersRequireCanonicalContextWithoutInventingCsrfTokens"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testHttpHelpersRequireCanonicalContextWithoutInventingCsrfTokens",
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testReadRequestPreservesHostContextAndRefusesMalformedScopes"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReader": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordRequestGuard": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testHttpHelpersRequireCanonicalContextWithoutInventingCsrfTokens"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testHttpHelpersRequireCanonicalContextWithoutInventingCsrfTokens",
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testReadRequestPreservesHostContextAndRefusesMalformedScopes"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReadRequest; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordView": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\AggregateFunction": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BooleanFilter": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BooleanOperator": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordCursor": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordSearch": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordSort": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\ComparisonFilter": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testQueryValuesAreBoundedTypedScalars"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testComparisonFilterRefusesApproximateAndNullLiterals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\ComparisonOperator": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testQueryValuesAreBoundedTypedScalars"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testComparisonFilterRefusesApproximateAndNullLiterals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\CursorPosition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordCursor; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\NullFilter": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryCanonicalizer": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testQueryValuesAreBoundedTypedScalars"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testComparisonFilterRefusesApproximateAndNullLiterals"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\ComparisonFilter; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryIdentifier": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testQueryValuesAreBoundedTypedScalars"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testComparisonFilterRefusesApproximateAndNullLiterals"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\ComparisonFilter; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryValue": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testQueryValuesAreBoundedTypedScalars"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testComparisonFilterRefusesApproximateAndNullLiterals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordAggregate": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordCursor": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordFilter": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordProjection": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordQuerySpecification": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testTypedViewAndActionInputsPreserveTheirGuards"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testInvalidIdentitiesAndExactJsonAreRefused",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordSearch": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordSort": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RelationFilter": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RelationQuantifier": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\SetFilter": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testQueryValuesAreBoundedTypedScalars"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testComparisonFilterRefusesApproximateAndNullLiterals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\SortDirection": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\TextFilter": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testQueryValuesAreBoundedTypedScalars"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testComparisonFilterRefusesApproximateAndNullLiterals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\TextOperator": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testQueryValuesAreBoundedTypedScalars"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testComparisonFilterRefusesApproximateAndNullLiterals"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessRecord\\Value\\ZonedDateTimeValue": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ZonedDateTimeValueTest::testCanonicalExportRoundTripsAtPortableAndFractionalBoundaries"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ZonedDateTimeValueTest::testCanonicalExportRoundTripsAtPortableAndFractionalBoundaries",
+        "Kumwe\\Extension\\Tests\\Case\\ZonedDateTimeValueTest::testSilentCalendarRepairAndOffsetOnlyZonesAreRefused"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionBuilder": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionEvent": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionWriter": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionFieldDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionDefinition; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionSourceDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionDefinition; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ReportDefinitionGuard": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionDefinition; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ReportValueType": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionDefinition; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSecurity\\Application\\FieldAccessUsage": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSecurity\\Application\\FieldDisclosurePlan": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyComparison": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralAcceptsCanonicalInstants"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralRejectsImpossibleCalendarValues"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyComparisonOperator": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralAcceptsCanonicalInstants"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralRejectsImpossibleCalendarValues"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyPredicate": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralAcceptsCanonicalInstants"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralRejectsImpossibleCalendarValues"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyComparison; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyValueType": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralAcceptsCanonicalInstants"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralRejectsImpossibleCalendarValues"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionCommand": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testTypedViewAndActionInputsPreserveTheirGuards"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testInvalidIdentitiesAndExactJsonAreRefused",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionHandler": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionResult": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testTypedViewAndActionInputsPreserveTheirGuards"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testInvalidIdentitiesAndExactJsonAreRefused",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessPayload": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testTypedViewAndActionInputsPreserveTheirGuards"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testInvalidIdentitiesAndExactJsonAreRefused",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionCommand; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessReference": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionDeclaration; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessSchema": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewHandler": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewQuery": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testTypedViewAndActionInputsPreserveTheirGuards"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testInvalidIdentitiesAndExactJsonAreRefused",
+        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewResult": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationConfiguration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testAnOrdinaryPresentationCarriesNoProvenance",
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testConvertedMoneyCannotBeSeparatedFromItsEvidence"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testConvertedMoneyRefusalsFollowTheEditorStateInvariant",
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testErrorsOptionsAndAttributesAreClosedAndBounded"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationContext": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testAManifestWithoutAContentSectionExportsNone",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testParsesACompatibleManifestWithTypedDependencies"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testSchemaTwoRejectsForeignContributionOwnership"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationContribution": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationInput": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testAnOrdinaryPresentationCarriesNoProvenance",
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testConvertedMoneyCannotBeSeparatedFromItsEvidence"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testConvertedMoneyRefusalsFollowTheEditorStateInvariant",
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testErrorsOptionsAndAttributesAreClosedAndBounded"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationModel": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testAnOrdinaryPresentationCarriesNoProvenance",
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testConvertedMoneyCannotBeSeparatedFromItsEvidence"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testConvertedMoneyRefusalsFollowTheEditorStateInvariant",
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testErrorsOptionsAndAttributesAreClosedAndBounded"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresenter": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldWidget": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testAnOrdinaryPresentationCarriesNoProvenance",
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testConvertedMoneyCannotBeSeparatedFromItsEvidence"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testConvertedMoneyRefusalsFollowTheEditorStateInvariant",
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testErrorsOptionsAndAttributesAreClosedAndBounded"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\AdministratorNavigationDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\AdministratorRouteDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testIdentifierNormalizesAndComparesVendorNames"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testAssociationRefusalsMatchTheContract",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\AdministratorViewDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testIdentifierNormalizesAndComparesVendorNames"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testAssociationRefusalsMatchTheContract",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\AdministratorWorkspaceDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testIdentifierNormalizesAndComparesVendorNames"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testAssociationRefusalsMatchTheContract",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionDocument": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testCanonicalStudioDocumentViewsCannotMutateSignedState",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testCanonicalStudioDocumentsMustPassThePinnedProducerSchema"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testPlatformEventBindingsCrossTheOwnerBoundaryOnlyTowardCore"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionKind": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\CompositionBlockDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\CompositionDesignVocabularyDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\CompositionFieldControlDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\CompositionHostBinding": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\CompositionInspectorDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\CompositionMigrationDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\CompositionPatternDeclaration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\CompositionPropertySchema": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\CompositionPropertyType": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\ContributionDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\ContributionOwner": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testIdentifierNormalizesAndComparesVendorNames"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testAssociationRefusalsMatchTheContract",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Contribution\\TranslationSetItemAssociation": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testIdentifierNormalizesAndComparesVendorNames"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testAssociationRefusalsMatchTheContract",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Http\\ExtensionRequest": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testHttpHelpersRequireCanonicalContextWithoutInventingCsrfTokens"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testHttpHelpersRequireCanonicalContextWithoutInventingCsrfTokens",
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testReadRequestPreservesHostContextAndRefusesMalformedScopes"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Identity\\Domain\\Capability": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\CapabilityTest::testAcceptedGrammarRoundTrips",
+        "Kumwe\\Extension\\Tests\\Case\\CapabilityTest::testNormalisationTrimsAndLowercases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\CapabilityTest::testEmptyAndOverlongValuesAreRefused",
+        "Kumwe\\Extension\\Tests\\Case\\CapabilityTest::testMalformedIdentifiersAreRefused"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Migration\\ExtensionMigration": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\Migration\\ExtensionTableNames": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testAManifestWithoutAContentSectionExportsNone",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testParsesACompatibleManifestWithTypedDependencies"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testSchemaTwoRejectsForeignContributionOwnership"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ExtensionIdentifier; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalNavigationDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalRouteDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testIdentifierNormalizesAndComparesVendorNames"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testAssociationRefusalsMatchTheContract",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalTemplateDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testIdentifierNormalizesAndComparesVendorNames"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testAssociationRefusalsMatchTheContract",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalWorkspaceDefinition": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testIdentifierNormalizesAndComparesVendorNames"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testAssociationRefusalsMatchTheContract",
+        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Runtime\\BootableExtension": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\Runtime\\ExtensionEvent": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBindingResult": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlock": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockFragment": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockRenderer": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
+        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+      ],
+      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+    },
+    "Kumwe\\Extension\\Toolchain\\ComponentScaffolder": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\CliTest::testConformanceExitsNonzeroForANonconformingArchiveWhileEvidenceReportsIt",
+        "Kumwe\\Extension\\Tests\\Case\\CliTest::testEveryLaneRunsAgainstTheScaffoldedComponent"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\CliTest::testMalformedInvocationsAreRefused",
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testProvenanceCannotBindToInvalidInventory"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Toolchain\\ConformanceReport": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testCompleteScaffoldBuildsReproduciblyAndConforms",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceRunsEveryGateAndRecovery"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testBuilderOmitsDevelopmentCachesAndRejectsSensitiveFiles",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceStopsAfterFailureAndStillRecovers"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Toolchain\\DeterministicPackageBuilder": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testComposerDeclaresCanonicalLibraryDependenciesOnly",
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testFacadePassesAllSixVendoredGenerations"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Toolchain\\ExtensionConformanceTestCase": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testBuilderOmitsDevelopmentCachesAndRejectsSensitiveFiles",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceStopsAfterFailureAndStillRecovers"
+      ],
+      "note": "Author test bridge delegates to the package conformance runner exercised by generated scaffolds and lifecycle adapter fixtures; real host lifecycle acceptance remains App-owned."
+    },
+    "Kumwe\\Extension\\Toolchain\\ExtensionLifecycleTestCase": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testBuilderOmitsDevelopmentCachesAndRejectsSensitiveFiles",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceStopsAfterFailureAndStillRecovers"
+      ],
+      "note": "Author test bridge delegates to the package conformance runner exercised by generated scaffolds and lifecycle adapter fixtures; real host lifecycle acceptance remains App-owned."
+    },
+    "Kumwe\\Extension\\Toolchain\\ExtensionPackageConformance": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testComposerDeclaresCanonicalLibraryDependenciesOnly",
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testFacadePassesAllSixVendoredGenerations"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testComposerDeclaresCanonicalLibraryDependenciesOnly"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Toolchain\\LifecycleConformanceAdapter": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testCompleteScaffoldBuildsReproduciblyAndConforms",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceRunsEveryGateAndRecovery"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testBuilderOmitsDevelopmentCachesAndRejectsSensitiveFiles",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceStopsAfterFailureAndStillRecovers"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Toolchain\\LifecycleConformanceReport": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testComposerDeclaresCanonicalLibraryDependenciesOnly",
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testFacadePassesAllSixVendoredGenerations"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testComposerDeclaresCanonicalLibraryDependenciesOnly"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Toolchain\\ExtensionPackageConformance; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Toolchain\\LifecycleConformanceRunner": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testCompleteScaffoldBuildsReproduciblyAndConforms",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceRunsEveryGateAndRecovery"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testBuilderOmitsDevelopmentCachesAndRejectsSensitiveFiles",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceStopsAfterFailureAndStillRecovers"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Toolchain\\PackageBuildResult": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testComposerDeclaresCanonicalLibraryDependenciesOnly",
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testFacadePassesAllSixVendoredGenerations"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Toolchain\\DeterministicPackageBuilder; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Toolchain\\PackageInspection": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testCompleteScaffoldBuildsReproduciblyAndConforms",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceRunsEveryGateAndRecovery"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testBuilderOmitsDevelopmentCachesAndRejectsSensitiveFiles",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceStopsAfterFailureAndStillRecovers"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Toolchain\\ConformanceReport; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Toolchain\\PackageInspector": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testComposerDeclaresCanonicalLibraryDependenciesOnly",
+        "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testFacadePassesAllSixVendoredGenerations"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Toolchain\\PackageSigner": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Toolchain\\ProtectedSigningKeyReader": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Toolchain\\ScaffoldRequest": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\CliTest::testConformanceExitsNonzeroForANonconformingArchiveWhileEvidenceReportsIt",
+        "Kumwe\\Extension\\Tests\\Case\\CliTest::testEveryLaneRunsAgainstTheScaffoldedComponent"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\CliTest::testMalformedInvocationsAreRefused",
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testProvenanceCannotBindToInvalidInventory"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Toolchain\\ScaffoldResult": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\CliTest::testConformanceExitsNonzeroForANonconformingArchiveWhileEvidenceReportsIt",
+        "Kumwe\\Extension\\Tests\\Case\\CliTest::testEveryLaneRunsAgainstTheScaffoldedComponent"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\CliTest::testMalformedInvocationsAreRefused",
+        "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testProvenanceCannotBindToInvalidInventory"
+      ],
+      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Toolchain\\ComponentScaffolder; public signature pinning runs separately."
+    },
+    "Kumwe\\Extension\\Toolchain\\SignatureDocument": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    },
+    "Kumwe\\Extension\\Toolchain\\StaticConformanceRunner": {
+      "behavior": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testCompleteScaffoldBuildsReproduciblyAndConforms",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceRunsEveryGateAndRecovery"
+      ],
+      "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testBuilderOmitsDevelopmentCachesAndRejectsSensitiveFiles",
+        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceStopsAfterFailureAndStillRecovers"
+      ],
+      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+    }
+  },
+  "conformance": {
+    "status": "owned",
+    "rationale": "SDK owns signed manifest/generation fixtures, executable scaffold fixtures and neutral static/lifecycle conformance adapter tests. Actual host installation and trust remain App-owned.",
+    "tests": [
+      "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testComposerDeclaresCanonicalLibraryDependenciesOnly",
+      "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testFacadePassesAllSixVendoredGenerations",
+      "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testFacadeReportsTheHostileCorpusAsNonconforming",
+      "Kumwe\\Extension\\Tests\\Case\\ConformanceRunnerTest::testNoLibrarySourceReferencesTheHostApplication",
+      "Kumwe\\Extension\\Tests\\Case\\GeneratedSourceAutoloadTest::testEveryGenerationFixtureClassAutoloadsAgainstTheSdk",
+      "Kumwe\\Extension\\Tests\\Case\\GeneratedSourceAutoloadTest::testEveryPackagedScaffoldClassAutoloadsAgainstTheSdk",
+      "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
+      "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses",
+      "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testSchemaFourFixtureHandlersExecuteAgainstSdkDeclarations"
+    ],
+    "corpora": [
+      "resources/PIN.json"
+    ]
+  },
+  "architecture": [
+    "tools/verify-contract.php"
+  ],
+  "host": {
+    "repository": "kumwe/app",
+    "baseline": "960ce8ec00cf724a7cae03e5ba09c4852c9ab54e",
+    "transfers": [],
+    "retained_responsibilities": [
+      "Authenticated host contexts, authorization and disclosure decisions.",
+      "Trust/admission, lifecycle, migration and database behavior.",
+      "Delivery adapters and actual generated-component deployment acceptance."
+    ]
+  }
+}
