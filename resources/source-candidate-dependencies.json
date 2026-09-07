@@ -36,10 +36,10 @@
   },
   {
     "package": "kumwe/business-policy",
-    "version": "dev-agent/business-policy-boundary-gates-v2",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/business-policy.git",
-    "requested_ref": "534062bbf414dc592199b4320d0db49dcbb621e3"
+    "requested_ref": "7fbccb7d4d2bcbe8f128eace9b83ad3f8996a04d"
   },
   {
     "package": "kumwe/business-surface-contract",
@@ -85,10 +85,10 @@
   },
   {
     "package": "kumwe/integration",
-    "version": "dev-agent/merged-dependency-coordinates-v2",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/integration.git",
-    "requested_ref": "d6fcc108f967255f26eeb74de21a3f52a76ef3f9"
+    "requested_ref": "ac3e3942a69ce662e0ce37e8645c8d6394a067de"
   },
   {
     "package": "kumwe/localization",
