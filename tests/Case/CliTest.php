@@ -65,7 +65,7 @@ final class CliTest extends TestCase
     {
         $work = $this->workspace();
         $source = $work . '/component';
-        (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             'acme/cli-component',
             'Acme\\CliComponent',
             $source,

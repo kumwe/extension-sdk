@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Toolchain;
 
+use Kumwe\CanonicalJson\CanonicalEncoder;
+
 use FilesystemIterator;
 use InvalidArgumentException;
 use Kumwe\Extension\Manifest\ExtensionManifest;
@@ -54,8 +56,9 @@ final class ComponentScaffolder
      * @param  ?string  $templateRoot  Absolute template root; null selects the shipped component template.
      *
      * @since  0.1.0
+     * @param CanonicalEncoder $canonicalEncoder Canonical encoding port supplied by the composition root.
      */
-    public function __construct(?string $templateRoot = null)
+    public function __construct(private CanonicalEncoder $canonicalEncoder, ?string $templateRoot = null)
     {
         $this->templateRoot = $templateRoot
             ?? dirname(__DIR__, 2) . '/resources/extension-scaffold/complete-component';
@@ -128,7 +131,7 @@ final class ComponentScaffolder
             if (!is_string($manifestJson)) {
                 throw new RuntimeException('The generated extension manifest could not be read.');
             }
-            ExtensionManifest::fromJson($manifestJson);
+            ExtensionManifest::fromJson($this->canonicalEncoder, $manifestJson);
             if (!rename($temporary, $target)) {
                 throw new RuntimeException('The completed extension scaffold could not be published atomically.');
             }

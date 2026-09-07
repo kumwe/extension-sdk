@@ -15,7 +15,7 @@ final class PackageDefinitionTest extends TestCase
     {
         $json = file_get_contents(dirname(__DIR__) . '/kumwe.json');
         self::assertIsString($json);
-        $manifest = ExtensionManifest::fromJson($json);
+        $manifest = ExtensionManifest::fromJson($this->canonicalEncoder(), $json);
         $declarations = $manifest->contributions()->declarations();
 
         self::assertSame('@@EXTENSION_IDENTIFIER@@', $manifest->identifier()->value());
@@ -38,5 +38,18 @@ final class PackageDefinitionTest extends TestCase
             '@@EXTENSION_DOTTED@@.item_report',
             $declarations['integration']['reports'][0]['identifier'],
         );
+    }
+    private function canonicalEncoder(): \Kumwe\CanonicalJson\CanonicalEncoder
+    {
+        $path = getenv('KUMWE_NATIVE_EXPECTED_TUPLE');
+        if (!is_string($path) || !is_file($path)) {
+            throw new \RuntimeException('Configure KUMWE_NATIVE_EXPECTED_TUPLE for the native integration fixture.');
+        }
+        $tuple = json_decode((string) file_get_contents($path), true, 64, JSON_THROW_ON_ERROR);
+        return new \Kumwe\Computation\NativeCanonicalEncoder(new \Kumwe\Engine\Runtime(), new \Kumwe\Computation\NativeCompatibility(
+            \Kumwe\Computation\CapabilitySet::fromArray($tuple['capabilities']),
+            $tuple['extension_version'], $tuple['embedded_engine_commit'], $tuple['embedded_source_sha256'],
+            $tuple['binding_build_digest'],
+        ));
     }
 }

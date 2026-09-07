@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Spi\BusinessRecord\Application;
 
-use Kumwe\Extension\Spi\BusinessRecord\Query\RecordCursor;
+use Kumwe\Record\Query\RecordCursor;
 
 /** Policy-admitted bounded page returned by the host business-record reader. @since 0.2.0 */
 interface BusinessRecordPage

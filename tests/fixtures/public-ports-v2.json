@@ -1,0 +1,1884 @@
+{
+    "source": "e8ec23f155c5836c6bd083f154a8efb6e50aec66",
+    "state": "source-candidate-not-released",
+    "types": {
+        "Kumwe\\Extension\\Manifest\\ExtensionType": {
+            "kind": "enum",
+            "interfaces": [
+                "BackedEnum",
+                "UnitEnum"
+            ],
+            "methods": {
+                "cases": {
+                    "static": true,
+                    "parameters": [],
+                    "return": "array",
+                    "by_reference": false
+                },
+                "from": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "static",
+                    "by_reference": false
+                },
+                "tryFrom": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "?static",
+                    "by_reference": false
+                }
+            },
+            "cases": {
+                "Plugin": "plugin",
+                "Module": "module",
+                "Template": "template",
+                "Component": "component",
+                "Package": "package",
+                "Language": "language"
+            }
+        },
+        "Kumwe\\Extension\\Package\\ArchiveContentReader": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "contents": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "package",
+                            "type": "Kumwe\\Extension\\Package\\InspectedPackage",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "iterable",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Package\\ArchiveEntryType": {
+            "kind": "enum",
+            "interfaces": [
+                "BackedEnum",
+                "UnitEnum"
+            ],
+            "methods": {
+                "cases": {
+                    "static": true,
+                    "parameters": [],
+                    "return": "array",
+                    "by_reference": false
+                },
+                "from": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "static",
+                    "by_reference": false
+                },
+                "tryFrom": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "?static",
+                    "by_reference": false
+                }
+            },
+            "cases": {
+                "File": "file",
+                "Directory": "directory",
+                "SymbolicLink": "symbolic_link",
+                "Special": "special"
+            }
+        },
+        "Kumwe\\Extension\\Package\\ArchiveReader": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "inspect": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "archiveFile",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "limits",
+                            "type": "Kumwe\\Extension\\Package\\PackageLimits",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "Kumwe\\Extension\\Package\\ArchivePackage",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Package\\PackageAttestationState": {
+            "kind": "enum",
+            "interfaces": [
+                "BackedEnum",
+                "UnitEnum"
+            ],
+            "methods": {
+                "cases": {
+                    "static": true,
+                    "parameters": [],
+                    "return": "array",
+                    "by_reference": false
+                },
+                "from": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "static",
+                    "by_reference": false
+                },
+                "tryFrom": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "?static",
+                    "by_reference": false
+                }
+            },
+            "cases": {
+                "NotInspected": "not_inspected",
+                "Verified": "verified",
+                "Absent": "absent",
+                "Invalid": "invalid"
+            }
+        },
+        "Kumwe\\Extension\\Package\\PackageEvidenceScope": {
+            "kind": "enum",
+            "interfaces": [
+                "BackedEnum",
+                "UnitEnum"
+            ],
+            "methods": {
+                "cases": {
+                    "static": true,
+                    "parameters": [],
+                    "return": "array",
+                    "by_reference": false
+                },
+                "from": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "static",
+                    "by_reference": false
+                },
+                "includesAuthoring": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "bool",
+                    "by_reference": false
+                },
+                "tryFrom": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "?static",
+                    "by_reference": false
+                }
+            },
+            "cases": {
+                "Package": "package",
+                "Authoring": "authoring"
+            }
+        },
+        "Kumwe\\Extension\\Package\\PackageSignatureVerifier": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "verify": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "checksum",
+                            "type": "Kumwe\\Extension\\Package\\PackageChecksum",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "signature",
+                            "type": "Kumwe\\Extension\\Package\\PackageSignature",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "bool",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Package\\PublicKeyPackageSignatureVerifier": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "verify": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "base64PublicKey",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "checksum",
+                            "type": "Kumwe\\Extension\\Package\\PackageChecksum",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "signature",
+                            "type": "Kumwe\\Extension\\Package\\PackageSignature",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "bool",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Application\\Automation\\JobHandler": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "handle": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "definition",
+                            "type": "Kumwe\\Automation\\JobContributionDefinition",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "payload",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "context",
+                            "type": "Kumwe\\Extension\\Spi\\Application\\ExecutionContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Application\\ExecutionContext": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "actorId": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "correlationId": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "deliverySurface": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "organizationIdentifier": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "?string",
+                    "by_reference": false
+                },
+                "requestId": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "siteIdentifier": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "workspaceIdentifier": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "?string",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Application\\ExtensionServiceProvider": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "register": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "container",
+                            "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind": {
+            "kind": "enum",
+            "interfaces": [
+                "BackedEnum",
+                "UnitEnum"
+            ],
+            "methods": {
+                "cases": {
+                    "static": true,
+                    "parameters": [],
+                    "return": "array",
+                    "by_reference": false
+                },
+                "from": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "static",
+                    "by_reference": false
+                },
+                "tryFrom": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "?static",
+                    "by_reference": false
+                }
+            },
+            "cases": {
+                "FieldPresenter": "field_presenter",
+                "MoneyRateProvider": "money_rate_provider",
+                "UnitConversionProvider": "unit_conversion_provider",
+                "CustomBusinessViewHandler": "custom_business_view_handler",
+                "CustomBusinessActionHandler": "custom_business_action_handler",
+                "AdministratorRoute": "administrator_route",
+                "PortalRoute": "portal_route",
+                "DomainListener": "domain_listener",
+                "EventConsumer": "event_consumer",
+                "JobHandler": "job_handler",
+                "Projection": "projection",
+                "Webhook": "webhook",
+                "StudioPreviewRenderer": "studio_preview_renderer"
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingProvider": {
+            "kind": "interface",
+            "interfaces": [
+                "Kumwe\\Extension\\Spi\\Application\\ExtensionServiceProvider"
+            ],
+            "methods": {
+                "bind": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "bindings",
+                            "type": "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingRegistrar",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "container",
+                            "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "register": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "container",
+                            "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingRegistrar": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "administratorRoute": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "factory",
+                            "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteHandlerFactory",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "customBusinessActionHandler": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "identifier",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "handler",
+                            "type": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessActionHandler",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "customBusinessViewHandler": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "identifier",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "handler",
+                            "type": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessViewHandler",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "domainListener": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "identifier",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "handler",
+                            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\DomainEventHandler",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "eventConsumer": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "identifier",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "handler",
+                            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventHandler",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "fieldPresenter": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "fieldType",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "presenter",
+                            "type": "Kumwe\\BusinessSurface\\Contract\\Presentation\\Field\\FieldPresenter",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "jobHandler": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "identifier",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "handler",
+                            "type": "Kumwe\\Extension\\Spi\\Application\\Automation\\JobHandler",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "moneyRateProvider": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "identifier",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "provider",
+                            "type": "Kumwe\\Conversion\\Provider\\MoneyRateProvider",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "portalRoute": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "factory",
+                            "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteHandlerFactory",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "projection": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "identifier",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "builder",
+                            "type": "Kumwe\\Reporting\\Contract\\ProjectionBuilder",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "studioPreviewRenderer": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "identifier",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "renderer",
+                            "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockRenderer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "unitConversionProvider": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "identifier",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "provider",
+                            "type": "Kumwe\\Conversion\\Provider\\UnitConversionProvider",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "webhook": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "identifier",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "transport",
+                            "type": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventTransport",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteHandlerFactory": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "create": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "renderer",
+                            "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteRenderer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "Psr\\Http\\Server\\RequestHandlerInterface",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteRenderer": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "render": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "model",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "request",
+                            "type": "Psr\\Http\\Message\\ServerRequestInterface",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "string",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteHandlerFactory": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "create": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "renderer",
+                            "type": "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteRenderer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "Psr\\Http\\Server\\RequestHandlerInterface",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteRenderer": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "render": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "model",
+                            "type": "array",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "request",
+                            "type": "Psr\\Http\\Message\\ServerRequestInterface",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "string",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\DomainEventHandler": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "handle": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "definition",
+                            "type": "Kumwe\\Integration\\DomainListenerDefinition",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "event",
+                            "type": "Kumwe\\Integration\\DomainEvent",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventHandler": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "handle": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "definition",
+                            "type": "Kumwe\\Integration\\EventConsumerDefinition",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "event",
+                            "type": "Kumwe\\Integration\\IntegrationEvent",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "context",
+                            "type": "Kumwe\\Extension\\Spi\\Application\\ExecutionContext",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventTransport": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "publish": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "definition",
+                            "type": "Kumwe\\Integration\\WebhookContributionDefinition",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "event",
+                            "type": "Kumwe\\Integration\\IntegrationEvent",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordPage": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "aggregates": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "array",
+                    "by_reference": false
+                },
+                "nextCursor": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "?Kumwe\\Record\\Query\\RecordCursor",
+                    "by_reference": false
+                },
+                "records": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "array",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordQueryPurpose": {
+            "kind": "enum",
+            "interfaces": [
+                "BackedEnum",
+                "UnitEnum"
+            ],
+            "methods": {
+                "cases": {
+                    "static": true,
+                    "parameters": [],
+                    "return": "array",
+                    "by_reference": false
+                },
+                "from": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "static",
+                    "by_reference": false
+                },
+                "tryFrom": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "?static",
+                    "by_reference": false
+                }
+            },
+            "cases": {
+                "Browse": "browse",
+                "Report": "report",
+                "Export": "export"
+            }
+        },
+        "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReader": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "readPage": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "query",
+                            "type": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReadRequest",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordPage",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordView": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "definitionIdentifier": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "definitionVersion": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "int",
+                    "by_reference": false
+                },
+                "organizationIdentifier": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "?string",
+                    "by_reference": false
+                },
+                "recordIdentifier": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "siteIdentifier": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "?string",
+                    "by_reference": false
+                },
+                "updatedAt": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "DateTimeImmutable",
+                    "by_reference": false
+                },
+                "values": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "array",
+                    "by_reference": false
+                },
+                "version": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "int",
+                    "by_reference": false
+                },
+                "workflowState": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "?string",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionKind": {
+            "kind": "enum",
+            "interfaces": [
+                "BackedEnum",
+                "UnitEnum"
+            ],
+            "methods": {
+                "cases": {
+                    "static": true,
+                    "parameters": [],
+                    "return": "array",
+                    "by_reference": false
+                },
+                "from": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "static",
+                    "by_reference": false
+                },
+                "identityMember": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "tryFrom": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "?static",
+                    "by_reference": false
+                }
+            },
+            "cases": {
+                "BlockDefinition": "block-definition",
+                "Pattern": "pattern",
+                "FieldAdapter": "field-adapter",
+                "Inspector": "inspector",
+                "DesignVocabulary": "design-vocabulary",
+                "Migration": "migration"
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Contribution\\CompositionPropertyType": {
+            "kind": "enum",
+            "interfaces": [
+                "BackedEnum",
+                "UnitEnum"
+            ],
+            "methods": {
+                "cases": {
+                    "static": true,
+                    "parameters": [],
+                    "return": "array",
+                    "by_reference": false
+                },
+                "from": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "static",
+                    "by_reference": false
+                },
+                "tryFrom": {
+                    "static": true,
+                    "parameters": [
+                        {
+                            "name": "value",
+                            "type": "string|int",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "?static",
+                    "by_reference": false
+                }
+            },
+            "cases": {
+                "String": "string",
+                "Text": "text",
+                "Integer": "integer",
+                "Number": "number",
+                "Boolean": "boolean",
+                "Choice": "choice",
+                "Reference": "reference"
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Migration\\ExtensionMigration": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "down": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "database",
+                            "type": "Doctrine\\DBAL\\Connection",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "tables",
+                            "type": "Kumwe\\Extension\\Spi\\Migration\\ExtensionTableNames",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "id": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "up": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "database",
+                            "type": "Doctrine\\DBAL\\Connection",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "tables",
+                            "type": "Kumwe\\Extension\\Spi\\Migration\\ExtensionTableNames",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Migration\\ExtensionTableNames": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "quoted": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "raw": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "string",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Runtime\\BootableExtension": {
+            "kind": "interface",
+            "interfaces": [
+                "Kumwe\\Extension\\Spi\\Application\\ExtensionServiceProvider"
+            ],
+            "methods": {
+                "boot": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "container",
+                            "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "register": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "container",
+                            "type": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "get": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "object",
+                    "by_reference": false
+                },
+                "share": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "id",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "factory",
+                            "type": "callable",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Runtime\\ExtensionEvent": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "getArgument": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "default",
+                            "type": "mixed",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": true,
+                            "has_default": true,
+                            "default": null
+                        }
+                    ],
+                    "return": "mixed",
+                    "by_reference": false
+                },
+                "getName": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "isStopped": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "bool",
+                    "by_reference": false
+                },
+                "stopPropagation": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlock": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "id": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "property": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "mixed",
+                    "by_reference": false
+                },
+                "type": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                },
+                "version": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "string",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockRenderer": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "render": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "block",
+                            "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlock",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "binding",
+                            "type": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBindingResult",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "viewport",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockFragment",
+                    "by_reference": false
+                }
+            }
+        },
+        "Kumwe\\Extension\\Toolchain\\LifecycleConformanceAdapter": {
+            "kind": "interface",
+            "interfaces": [],
+            "methods": {
+                "assertAuthorizationAndFieldPolicies": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "assertBackupAndRestore": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "assertCliAndMcp": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "assertDatabaseMatrix": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "basePackage",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "upgradePackage",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "assertDefinitions": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "assertJobsEventsAndReports": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "assertPackageSafetyAndSigning": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "basePackage",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "upgradePackage",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "assertPortalAndAdministrator": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "assertRestAndOpenApi": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "assertRoutes": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "assertSchemaPlan": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "basePackage",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        },
+                        {
+                            "name": "upgradePackage",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "disable": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "install": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "basePackage",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "reactivate": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "recover": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "uninstall": {
+                    "static": false,
+                    "parameters": [],
+                    "return": "void",
+                    "by_reference": false
+                },
+                "upgrade": {
+                    "static": false,
+                    "parameters": [
+                        {
+                            "name": "upgradePackage",
+                            "type": "string",
+                            "by_reference": false,
+                            "variadic": false,
+                            "optional": false,
+                            "has_default": false,
+                            "default": null
+                        }
+                    ],
+                    "return": "void",
+                    "by_reference": false
+                }
+            }
+        }
+    }
+}

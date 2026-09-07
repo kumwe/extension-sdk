@@ -15,8 +15,8 @@ declare(strict_types=1);
 
 use Kumwe\Extension\Manifest\ExtensionManifest;
 use Kumwe\Extension\Package\PackageLimits;
-use Kumwe\Extension\Spi\Application\Automation\IdempotencyKey;
-use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldPresentationConfiguration;
+use Kumwe\Idempotency\IdempotencyKey;
+use Kumwe\BusinessSurface\Contract\Presentation\Field\FieldPresentationConfiguration;
 use Kumwe\Extension\Toolchain\PackageInspector;
 
 $autoload = dirname(__DIR__) . '/vendor/autoload.php';

@@ -9,21 +9,36 @@
     "source": "https://github.com/kumwe/extension-sdk"
   },
   "require": {
-    "php": "^8.5",
+    "doctrine/dbal": "^4.3",
     "ext-json": "*",
     "ext-mbstring": "*",
     "ext-sodium": "*",
     "ext-zip": "*",
-    "doctrine/dbal": "^4.3",
+    "kumwe/access-control": "dev-agent/access-membership-di-completion",
+    "kumwe/administrator-contract": "dev-agent/extract-administrator-contract-runtime-v2",
+    "kumwe/automation": "dev-agent/extract-automation-v2",
+    "kumwe/business-policy": "dev-agent/business-policy-boundary-gates-v2",
+    "kumwe/business-surface-contract": "dev-agent/extract-business-surface-contract-runtime-v2",
+    "kumwe/canonical-json": "dev-agent/canonical-encoder-port-v2",
+    "kumwe/contribution": "0.1.0",
     "kumwe/conversion": "^0.1",
+    "kumwe/idempotency": "dev-agent/extract-idempotency-v2",
+    "kumwe/integration": "dev-agent/extract-integration-v2",
+    "kumwe/portal-contract": "dev-agent/extract-portal-contract-runtime-v2",
     "kumwe/producer": "^0.2",
+    "kumwe/record-model": "dev-agent/extraction-v2-business-data",
+    "kumwe/record-query": "dev-agent/extraction-v2-business-data",
+    "kumwe/record-values": "dev-agent/extraction-v2-business-data",
+    "kumwe/reporting": "dev-agent/extraction-v2-business-data",
+    "php": "^8.5",
     "psr/http-message": "^1.1 || ^2.0",
     "psr/http-server-handler": "^1.0",
     "ramsey/uuid": "^4.7"
   },
   "require-dev": {
     "phpstan/phpstan": "^2.1",
-    "phpunit/phpunit": "^12.0"
+    "phpunit/phpunit": "^12.0",
+    "kumwe/computation": "dev-codex/native-adapter-candidate"
   },
   "bin": [
     "bin/kumwe-extension"
@@ -67,5 +82,76 @@
   },
   "config": {
     "sort-packages": true
-  }
+  },
+  "suggest": {
+    "kumwe/computation": "Required by the native CLI composition root; install the documented candidate with ext-kumwe_engine and an exact compatibility tuple."
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/access-control.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/administrator-contract.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/automation.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/business-definition.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/business-policy.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/business-surface-contract.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/canonical-json.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/computation.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/idempotency.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/integration.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/portal-contract.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/record-model.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/record-query.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/record-values.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/reporting.git"
+    },
+    {
+      "type": "vcs",
+      "url": "https://github.com/kumwe/sequence.git"
+    }
+  ]
 }

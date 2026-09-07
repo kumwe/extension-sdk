@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Spi\Contribution;
 
+use Kumwe\Contribution\ContributionOwner;
+
 use InvalidArgumentException;
 use Kumwe\Extension\Contract\NameBasedUuid;
 
@@ -108,7 +110,7 @@ final readonly class TranslationSetItemAssociation
         if (preg_match('/^[a-z][a-z0-9]*(?:[._-][a-z0-9]+){1,15}$/D', $translationSet) !== 1) {
             throw new InvalidArgumentException('A content translation set identifier must be namespaced.');
         }
-        $this->owner->assertOwns($translationSet, 'content translation group');
+        $this->owner->assertOwns($translationSet, \Kumwe\Contribution\SurfaceIdentifierPolicy::dotted('content-translation-group', true));
         $this->translationSet = $translationSet;
     }
 

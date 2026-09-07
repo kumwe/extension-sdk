@@ -36,12 +36,12 @@ final class ConformanceRunnerTest extends TestCase
     public function testFacadePassesAllSixVendoredGenerations(): void
     {
         $work = $this->workspace();
-        $facade = ExtensionPackageConformance::withProductionDefaults();
+        $facade = ExtensionPackageConformance::withProductionDefaults(self::encoder());
         $generations = glob(dirname(__DIR__, 2) . '/resources/fixtures/generations/manifest-*') ?: [];
         $this->assertSame(6, count($generations), 'All six generation fixtures are vendored.');
         foreach ($generations as $source) {
             $archive = $work . '/' . basename($source) . '.zip';
-            (new DeterministicPackageBuilder($this->inspector()))->build($source, $archive);
+            (new DeterministicPackageBuilder(self::encoder(), $this->inspector()))->build($source, $archive);
             $report = $facade->run($archive);
 
             $this->assertTrue(
@@ -68,7 +68,7 @@ final class ConformanceRunnerTest extends TestCase
     {
         $work = $this->workspace();
         $archives = $this->hostileArchives($work);
-        $facade = ExtensionPackageConformance::withProductionDefaults();
+        $facade = ExtensionPackageConformance::withProductionDefaults(self::encoder());
         foreach ($archives as $name => $archive) {
             $report = $facade->run($archive);
             $this->assertTrue(
@@ -141,7 +141,7 @@ final class ConformanceRunnerTest extends TestCase
      */
     private function inspector(): PackageInspector
     {
-        return new PackageInspector(new PackageLimits());
+        return new PackageInspector(self::encoder(), new PackageLimits());
     }
 
     /**

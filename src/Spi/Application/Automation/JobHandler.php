@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Kumwe\Extension\Spi\Application\Automation;
 
 use Kumwe\Extension\Spi\Application\ExecutionContext;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
+use Kumwe\Automation\JobContributionDefinition;
 
 /**
  * Idempotent executable bound to one manifest-declared job type.

@@ -14,16 +14,16 @@ use DateTimeImmutable;
 use InvalidArgumentException;
 use Kumwe\Extension\Manifest\ExtensionManifest;
 use Kumwe\Extension\Spi\Application\ExecutionContext;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainEvent;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainListenerDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventConsumerDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventSensitivity;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\IntegrationEvent;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\WebhookContributionDefinition;
-use Kumwe\Extension\Spi\BusinessReporting\Application\ProjectionEvent;
-use Kumwe\Extension\Spi\BusinessReporting\Application\ProjectionWriter;
-use Kumwe\Extension\Spi\BusinessReporting\Domain\ProjectionDefinition;
+use Kumwe\Integration\DomainEvent;
+use Kumwe\Integration\DomainListenerDefinition;
+use Kumwe\Integration\EventConsumerDefinition;
+use Kumwe\Integration\EventSensitivity;
+use Kumwe\Integration\IntegrationEvent;
+use Kumwe\Automation\JobContributionDefinition;
+use Kumwe\Integration\WebhookContributionDefinition;
+use Kumwe\Reporting\Contract\ProjectionEvent;
+use Kumwe\Reporting\Contract\ProjectionWriter;
+use Kumwe\Reporting\Domain\ProjectionDefinition;
 use Kumwe\Extension\Tests\TestCase;
 use Kumwe\Extension\Toolchain\ComponentScaffolder;
 use Kumwe\Extension\Toolchain\ScaffoldRequest;
@@ -57,7 +57,7 @@ final class ScaffoldExecutionTest extends TestCase
         $work = $this->workspace();
         $source = $work . '/component';
         $namespace = 'Acme\\ExecutedComponent';
-        (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             'acme/executed-component',
             $namespace,
             $source,
@@ -107,9 +107,9 @@ final class ScaffoldExecutionTest extends TestCase
 
         $jobClass = $namespace . '\\Integration\\DigestJobHandler';
         $job = new $jobClass($ledger);
-        $jobDeclaration = JobContributionDefinition::fromArray($integration['jobs'][0]);
+        $jobDeclaration = JobContributionDefinition::fromArray(self::encoder(), $integration['jobs'][0]);
         $job->handle($jobDeclaration, ['message' => 'scheduled-health'], $context);
-        $foreignJob = JobContributionDefinition::fromArray(
+        $foreignJob = JobContributionDefinition::fromArray(self::encoder(), 
             ['job_type' => 'acme.executed-component.other'] + $integration['jobs'][0],
         );
         foreach ([
@@ -210,11 +210,11 @@ final class ScaffoldExecutionTest extends TestCase
 
         $jobClass = $namespace . '\\Integration\\SummarizeJob';
         $job = new $jobClass($ledger);
-        $jobDeclaration = JobContributionDefinition::fromArray($integration['jobs'][0]);
+        $jobDeclaration = JobContributionDefinition::fromArray(self::encoder(), $integration['jobs'][0]);
         $job->handle($jobDeclaration, ['site_identifier' => 'default', 'limit' => 25], $context);
         $this->assertThrows(
             static fn () => $job->handle(
-                JobContributionDefinition::fromArray(['job_type' => 'kumwe.contract-manifest-four.other'] + $integration['jobs'][0]),
+                JobContributionDefinition::fromArray(self::encoder(), ['job_type' => 'kumwe.contract-manifest-four.other'] + $integration['jobs'][0]),
                 ['site_identifier' => 'default', 'limit' => 25],
                 $context,
             ),
@@ -262,7 +262,7 @@ final class ScaffoldExecutionTest extends TestCase
         $this->assertTrue(is_file($phpunit), 'The development PHPUnit binary is installed.');
         $work = $this->workspace();
         $source = $work . '/component';
-        (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             'acme/tested-component',
             'Acme\\TestedComponent',
             $source,
@@ -351,7 +351,7 @@ final class ScaffoldExecutionTest extends TestCase
      */
     private function integration(string $root): array
     {
-        $declarations = ExtensionManifest::fromJson((string) file_get_contents($root . '/kumwe.json'))
+        $declarations = ExtensionManifest::fromJson(self::encoder(), (string) file_get_contents($root . '/kumwe.json'))
             ->contributions()
             ->declarations();
         $this->assertTrue(is_array($declarations['integration'] ?? null), 'The manifest declares integration.');

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Toolchain;
 
+use Kumwe\CanonicalJson\CanonicalEncoder;
+
 use Kumwe\Extension\Package\PackageLimits;
 
 /**
@@ -36,12 +38,13 @@ final readonly class ExtensionPackageConformance
      * @return  self  Ready-to-run conformance facade.
      *
      * @since   0.1.0
+     * @param CanonicalEncoder $canonicalEncoder Canonical encoding port supplied by the composition root.
      */
-    public static function withProductionDefaults(): self
+    public static function withProductionDefaults(CanonicalEncoder $canonicalEncoder): self
     {
         $limits = new PackageLimits();
 
-        return new self(new StaticConformanceRunner(new PackageInspector($limits)));
+        return new self(new StaticConformanceRunner(new PackageInspector($canonicalEncoder, $limits)));
     }
 
     /**

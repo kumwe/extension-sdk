@@ -10,11 +10,11 @@
         },
         {
             "file": "contract/classification.json",
-            "sha256": "dd4555e66e304512e37a43c90604b67dc3979f497c26455eccbd4bd881f5c6a9"
+            "sha256": "5786d72a0240548916c7fdf9d1474df4d6d9957ae8a328e234105a0401075889"
         },
         {
             "file": "contract/generations.json",
-            "sha256": "03b7610a19cde8dd2ec23a153da253038f794e4dfe931446345fc08248296391"
+            "sha256": "277795f4f128c40ef094e10dfbc35f46dbae29a146578555d5dc4d130a6802bf"
         },
         {
             "file": "extension-scaffold/complete-component/.gitignore.tpl",
@@ -26,7 +26,7 @@
         },
         {
             "file": "extension-scaffold/complete-component/composer.json.tpl",
-            "sha256": "5663da670f317dfd7d92bf365384a765ba8dd16f084a5db1b0a646c5b795cbeb"
+            "sha256": "739c5c173dc230d03545795892f8b9f2f8e8b38640cc54ce3d9aa11cf7f93cc5"
         },
         {
             "file": "extension-scaffold/complete-component/docs/authoring.md.tpl",
@@ -70,23 +70,23 @@
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/DigestJobHandler.php.tpl",
-            "sha256": "58cb62269fb205217344a70e41f0a54b8402ac6b69d3219bdfdd8b4dcb36e499"
+            "sha256": "206d343ee7b6c2868bd2135316380c67ee2c6d1efc23a12253d9a99b48a0ff7a"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/IntegrationLedger.php.tpl",
-            "sha256": "b6aec09e03c81e8085bf461c66914dd654c4f17741a483df40fe9ec320a11f1b"
+            "sha256": "91a7af4f64d7a2c5f92c2373bed5a00b37330161f274c01d770fd7c074b968fc"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/ItemDomainListener.php.tpl",
-            "sha256": "0f4c8d19f6dd8853c665116bc248350e25ffe748363230891fca12a81c5ead17"
+            "sha256": "f6d33d68a511271d9b5bcbb22deee5ed3de25e822c1c9c240810e302e779381c"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/ItemIntegrationConsumer.php.tpl",
-            "sha256": "9715f87bbf519f76a148c5b08b860edda86023b578de5732f1e4e5c56dbaac96"
+            "sha256": "df17548af2ea35e14e9c3f1c50d7179f076905fae0d656d7b959220cf722cdb2"
         },
         {
             "file": "extension-scaffold/complete-component/src/Integration/ItemProjectionBuilder.php.tpl",
-            "sha256": "519f3349897486168e4364218d8becca180c2ba06f2e1e15aa0884f434e5e69e"
+            "sha256": "67675a7ad5db4915161d2031a22c1c2ddfba060af299b43393688ce78fa1580a"
         },
         {
             "file": "extension-scaffold/complete-component/src/Migration/CreateComponentRecords.php.tpl",
@@ -106,11 +106,11 @@
         },
         {
             "file": "extension-scaffold/complete-component/tests/IntegrationContributionTest.php.tpl",
-            "sha256": "10151ea96b206c862c8f8710553c5a8c12c475049565677d5706b8c215abc42a"
+            "sha256": "4c358070010ab69d2adf83e8afc1be09bb834c3b59d9fb3b40ccb7afd8f57f5f"
         },
         {
             "file": "extension-scaffold/complete-component/tests/PackageDefinitionTest.php.tpl",
-            "sha256": "b4938c4584c59c0814984fd71b6ef72529128fe7f208c5a6d8696c2308f0498b"
+            "sha256": "c42dc1a6d9045e51cfe534dd755665d20b903095ddfdf7d1610be7aaeec05d20"
         },
         {
             "file": "fixtures/generations/manifest-1/README.md",
@@ -154,11 +154,11 @@
         },
         {
             "file": "fixtures/generations/manifest-3/src/GradeFieldPresenter.php",
-            "sha256": "fb810cb9b36f298e97e81f40b20402718fea0142fdaa67034baa4cba5b6e5a4e"
+            "sha256": "e4e0a628cad51f815f51d71b448927f335dfae64cad7e82760d98b2921eb8b2b"
         },
         {
             "file": "fixtures/generations/manifest-3/src/Provider.php",
-            "sha256": "8a337b58e06a90711c4d41eabe22687f4e8fb7f43af040b5875dd9ecbd48ed67"
+            "sha256": "1349f8eeaca01eb2cd5933327ae9bf9ecd61c2de9f38f7756348656fd39c045c"
         },
         {
             "file": "fixtures/generations/manifest-3/templates/views/administrator/index.twig",
@@ -178,7 +178,7 @@
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationConsumer.php",
-            "sha256": "5d73bfe19e5d88bac92b4b4e8f5b80f4b66c9179181d8ebfc8e863aabba7cd14"
+            "sha256": "c6807af1a38ce0fbe3c0a6e3e6d927aae070b7264e8f1d22ea4c63e192473c61"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationLedger.php",
@@ -186,19 +186,19 @@
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationListener.php",
-            "sha256": "434db858965b46a44f267c9ca78e0e6b56c69f138269ce62c8d4e71fdefd0936"
+            "sha256": "f7db9b9c9a354c31f6153c62151fad2b43f6edd081f691d52b805b8e4b736698"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationProjectionBuilder.php",
-            "sha256": "2e5d278b516dc53f39b841e71dbf906275896cb24a656e3934214640a1228a1b"
+            "sha256": "284129bf709ddf2f0a70d18efdfaf995fcc7aeca67f51e2e9bf28458ac4dbfda"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/ObservationWebhookTransport.php",
-            "sha256": "87639aff338d8fab8b0a25bab99423e2b68cf626fe223818db3bd4a7fdbe961b"
+            "sha256": "ffe89205341f1c8104ae9a4ba9fefdf6f72e0036d0a636cb7018f6bc47a0b868"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Integration/SummarizeJob.php",
-            "sha256": "8b4616b22734b085a484033a2a60908f0386d1fbbf4657b355033520f9fabc96"
+            "sha256": "d83275128c0d0c5b2c6112dc16e28cf7edd5e647fc3049d64e3cdb1333b8c98e"
         },
         {
             "file": "fixtures/generations/manifest-4/src/Provider.php",
@@ -267,6 +267,14 @@
         {
             "file": "fixtures/schemas/schema-4/kumwe.json",
             "sha256": "d1410f96ea3b6d0036813384e03d4b91d72694d49ae49c87d098ff5602ec4402"
+        },
+        {
+            "file": "source-candidate-dependencies.json",
+            "sha256": "03c45fe67d0612b70c16c5d884f93ba27ca95f964d3cbf51bf7bbc69d09a5c27"
+        },
+        {
+            "file": "source-ci-dependencies.json",
+            "sha256": "dfe5d2bde62d5aec231252b2ca8b72e6a449199d17157257a8235c81693907b7"
         }
     ]
 }

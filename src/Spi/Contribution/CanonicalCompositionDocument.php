@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Spi\Contribution;
 
+use Kumwe\Contribution\ContributionDefinition;
+
 use InvalidArgumentException;
 use JsonException;
 use Kumwe\Producer\Canonical\CanonicalEncodingException;

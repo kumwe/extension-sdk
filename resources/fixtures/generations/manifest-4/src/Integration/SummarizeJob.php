@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace KumweContract\ManifestFour\Integration;
 
 use Kumwe\Extension\Spi\Application\Automation\JobHandler;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
+use Kumwe\Automation\JobContributionDefinition;
 use Kumwe\Extension\Spi\Application\ExecutionContext;
 
 /**

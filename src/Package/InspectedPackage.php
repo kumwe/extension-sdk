@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Package;
 
+use Kumwe\CanonicalJson\CanonicalEncoder;
+
 use InvalidArgumentException;
 use Kumwe\Extension\Manifest\ExtensionManifest;
 use LogicException;
@@ -60,8 +62,9 @@ final readonly class InspectedPackage
      * @throws  RuntimeException  When stable filesystem reads or hashing fail.
      *
      * @since   0.2.0
+     * @param CanonicalEncoder $canonicalEncoder Canonical encoding port supplied by the composition root.
      */
-    public static function inspect(string $archiveFile, PackageLimits $limits = new PackageLimits()): self
+    public static function inspect(CanonicalEncoder $canonicalEncoder, string $archiveFile, PackageLimits $limits = new PackageLimits()): self
     {
         if (!str_starts_with($archiveFile, '/')) {
             throw new InvalidArgumentException('The extension package path must be absolute.');
@@ -116,7 +119,7 @@ final readonly class InspectedPackage
 
         $manifestJson = self::manifest($canonical, $manifestIndex, $manifestEntry->uncompressedBytes(), $limits);
         try {
-            $manifest = ExtensionManifest::fromJson($manifestJson);
+            $manifest = ExtensionManifest::fromJson($canonicalEncoder, $manifestJson);
         } catch (InvalidArgumentException $failure) {
             throw new InvalidPackage(new PackageFinding(
                 'manifest.document.invalid',

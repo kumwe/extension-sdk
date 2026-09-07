@@ -50,13 +50,26 @@ try {
         throw new RuntimeException('One exact candidate release is required.');
     }
     $version = $releaseLines[0];
+    $candidateConfig = getenv('KUMWE_SOURCE_CONSUMER_CONFIG');
+    $candidate = null;
+    if (is_string($candidateConfig) && $candidateConfig !== '') {
+        $candidate = json_decode((string) file_get_contents($candidateConfig), true, 64, JSON_THROW_ON_ERROR);
+        if (!is_array($candidate) || !is_array($candidate['repositories'] ?? null)
+            || !is_array($candidate['require'] ?? null)) {
+            throw new RuntimeException('Explicit source consumer configuration is invalid.');
+        }
+        $version = 'dev-agent/canonical-package-boundary-v2';
+    }
     $archivedMetadata['version'] = $version;
     $archivedMetadata['dist'] = ['type' => 'zip', 'url' => 'file://' . $archive, 'shasum' => sha1_file($archive)];
     $consumer = $workspace . '/consumer';
     mkdir($consumer);
     file_put_contents($consumer . '/composer.json', json_encode([
-        'name' => 'kumwe/isolated-consumer', 'license' => 'proprietary', 'require' => [$packageName => $version],
-        'repositories' => [['type' => 'package', 'package' => $archivedMetadata]],
+        'name' => 'kumwe/isolated-consumer', 'license' => 'proprietary',
+        'require' => [$packageName => $version] + ($candidate['require'] ?? []),
+        'repositories' => array_merge([['type' => 'package', 'package' => $archivedMetadata]], $candidate['repositories'] ?? []),
+        'minimum-stability' => $candidate === null ? 'stable' : 'dev',
+        'prefer-stable' => true,
         'config' => ['allow-plugins' => false],
     ], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . "\n");
     runConsumerCommand(['composer', '--working-dir=' . $consumer, 'install', '--no-interaction',
@@ -101,10 +114,24 @@ $expected = ['kumwe/conversion' => '12.500', 'kumwe/extension-sdk' => 'acme/exam
 if ($actual !== $expected) {
     throw new RuntimeException('Installed dependency behavior failed.');
 }
+if ($argv[1] === 'kumwe/extension-sdk') {
+    $encoder = new class implements Kumwe\CanonicalJson\CanonicalEncoder {
+        public function encode(mixed $value): string { throw new RuntimeException('No jobs require encoding in this fixture.'); }
+        public function digest(mixed $value): string { throw new RuntimeException('No digest is requested by this fixture.'); }
+    };
+    $json = file_get_contents($package . '/resources/fixtures/generations/manifest-2/kumwe.json');
+    $manifest = Kumwe\Extension\Manifest\ExtensionManifest::fromJson($encoder, $json);
+    if ($manifest->identifier()->value() !== 'kumwe/contract-manifest-two') {
+        throw new RuntimeException('Installed SDK failed to assemble its canonical contribution graph.');
+    }
+}
 echo "True archive dependency consumer passed: {$loaded} runtime exports; no development autoloader.\n";
 SMOKE;
     file_put_contents($consumer . '/smoke.php', $smoke . "\n");
     runConsumerCommand(['php', $consumer . '/smoke.php', $packageName, $apiPath]);
+    if ($candidate !== null) {
+        echo 'Source candidate only; archive SHA-256 ' . hash_file('sha256', $archive) . "; no release attestation.\n";
+    }
 } finally {
     $files = new RecursiveIteratorIterator(
         new RecursiveDirectoryIterator($workspace, FilesystemIterator::SKIP_DOTS),

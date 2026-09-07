@@ -49,7 +49,7 @@ final class GeneratedSourceAutoloadTest extends TestCase
      * @since  0.2.4
      */
     private const array CHECKED_ROOTS = [
-        'Kumwe\\Extension\\',
+        'Kumwe\\',
         'Kumwe\\Conversion\\',
         'Kumwe\\Producer\\',
         'Psr\\',
@@ -69,14 +69,14 @@ final class GeneratedSourceAutoloadTest extends TestCase
     {
         $work = $this->workspace();
         $source = $work . '/component';
-        (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             'acme/autoload-component',
             'Acme\\AutoloadComponent',
             $source,
             'Autoload Component',
         ));
-        $inspector = new PackageInspector(new PackageLimits());
-        $package = (new DeterministicPackageBuilder($inspector))
+        $inspector = new PackageInspector(self::encoder(), new PackageLimits());
+        $package = (new DeterministicPackageBuilder(self::encoder(), $inspector))
             ->build($source, $work . '/autoload-component.zip')
             ->inspection
             ->package;
@@ -116,7 +116,7 @@ final class GeneratedSourceAutoloadTest extends TestCase
         $this->assertSame(6, count($fixtures), 'All six generation fixtures are shipped.');
         $checked = 0;
         foreach ($fixtures as $fixture) {
-            $manifest = ExtensionManifest::fromJson((string) file_get_contents($fixture . '/kumwe.json'));
+            $manifest = ExtensionManifest::fromJson(self::encoder(), (string) file_get_contents($fixture . '/kumwe.json'));
             $files = [];
             $iterator = new \RecursiveIteratorIterator(
                 new \RecursiveDirectoryIterator($fixture, \FilesystemIterator::SKIP_DOTS),

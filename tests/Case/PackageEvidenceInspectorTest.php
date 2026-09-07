@@ -196,7 +196,7 @@ final class PackageEvidenceInspectorTest extends TestCase
     {
         $work = $this->workspace();
         $source = $work . '/broken';
-        (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             'acme/evidence-broken',
             'Acme\EvidenceBroken',
             $source,
@@ -205,7 +205,7 @@ final class PackageEvidenceInspectorTest extends TestCase
         $path = $source . '/src/Provider.php';
         $contents = (string) file_get_contents($path);
         file_put_contents($path, $contents . "\nfunction (\n", LOCK_EX);
-        $built = (new DeterministicPackageBuilder($this->packageInspector()))
+        $built = (new DeterministicPackageBuilder(self::encoder(), $this->packageInspector()))
             ->build($source, $work . '/broken.zip');
 
         $report = $this->evidence()->inspect($built->inspection->package);
@@ -278,13 +278,13 @@ final class PackageEvidenceInspectorTest extends TestCase
     private function build(string $work, string $identifier, string $namespace): array
     {
         $source = $work . '/' . str_replace('/', '-', $identifier);
-        (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             $identifier,
             $namespace,
             $source,
             'Evidence Fixture',
         ));
-        $result = (new DeterministicPackageBuilder($this->packageInspector()))
+        $result = (new DeterministicPackageBuilder(self::encoder(), $this->packageInspector()))
             ->build($source, $work . '/' . str_replace('/', '-', $identifier) . '.zip');
 
         return [$result->archive, $result->inspection->package];
@@ -350,7 +350,7 @@ final class PackageEvidenceInspectorTest extends TestCase
      */
     private function packageInspector(): PackageInspector
     {
-        return new PackageInspector(new PackageLimits());
+        return new PackageInspector(self::encoder(), new PackageLimits());
     }
 
     /**

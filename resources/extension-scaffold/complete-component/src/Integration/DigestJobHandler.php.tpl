@@ -6,7 +6,7 @@ namespace @@PHP_NAMESPACE@@\Integration;
 
 use InvalidArgumentException;
 use Kumwe\Extension\Spi\Application\Automation\JobHandler;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
+use Kumwe\Automation\JobContributionDefinition;
 use Kumwe\Extension\Spi\Application\ExecutionContext;
 
 /**

@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Manifest;
 
+use Kumwe\CanonicalJson\CanonicalEncoder;
+
 use InvalidArgumentException;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainListenerDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventConsumerDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\WebhookContributionDefinition;
-use Kumwe\Extension\Spi\BusinessReporting\Domain\ProjectionDefinition;
+use Kumwe\Integration\DomainListenerDefinition;
+use Kumwe\Integration\EventConsumerDefinition;
+use Kumwe\Automation\JobContributionDefinition;
+use Kumwe\Integration\WebhookContributionDefinition;
+use Kumwe\Reporting\Domain\ProjectionDefinition;
 use Kumwe\Extension\Spi\Binding\ExecutableBindingRequirements;
-use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldPresentationContribution;
-use Kumwe\Extension\Spi\Contribution\AdministratorNavigationDefinition;
-use Kumwe\Extension\Spi\Contribution\AdministratorRouteDefinition;
-use Kumwe\Extension\Spi\Contribution\AdministratorViewDefinition;
-use Kumwe\Extension\Spi\Contribution\AdministratorWorkspaceDefinition;
+use Kumwe\BusinessSurface\Contract\Presentation\Field\FieldPresentationContribution;
+use Kumwe\Administrator\Contract\AdministratorNavigationDefinition;
+use Kumwe\Administrator\Contract\AdministratorRouteDefinition;
+use Kumwe\Administrator\Contract\AdministratorViewDefinition;
+use Kumwe\Administrator\Contract\AdministratorWorkspaceDefinition;
 use Kumwe\Extension\Spi\Contribution\CanonicalCompositionKind;
 use Kumwe\Extension\Spi\Contribution\CanonicalCompositionDocument;
 use Kumwe\Extension\Spi\Contribution\CompositionBlockDeclaration;
@@ -25,12 +27,12 @@ use Kumwe\Extension\Spi\Contribution\CompositionHostBinding;
 use Kumwe\Extension\Spi\Contribution\CompositionInspectorDeclaration;
 use Kumwe\Extension\Spi\Contribution\CompositionMigrationDeclaration;
 use Kumwe\Extension\Spi\Contribution\CompositionPatternDeclaration;
-use Kumwe\Extension\Spi\Contribution\ContributionDefinition;
-use Kumwe\Extension\Spi\Contribution\ContributionOwner;
-use Kumwe\Extension\Spi\Portal\Contribution\PortalRouteDefinition;
-use Kumwe\Extension\Spi\Portal\Contribution\PortalNavigationDefinition;
-use Kumwe\Extension\Spi\Portal\Contribution\PortalTemplateDefinition;
-use Kumwe\Extension\Spi\Portal\Contribution\PortalWorkspaceDefinition;
+use Kumwe\Contribution\ContributionDefinition;
+use Kumwe\Contribution\ContributionOwner;
+use Kumwe\Portal\Contract\PortalRouteDefinition;
+use Kumwe\Portal\Contract\PortalNavigationDefinition;
+use Kumwe\Portal\Contract\PortalTemplateDefinition;
+use Kumwe\Portal\Contract\PortalWorkspaceDefinition;
 
 /**
  * The canonical, owner-checked contribution graph declared by one signed package.
@@ -173,8 +175,9 @@ final readonly class ManifestContributions
      *          identifier's ownership, or a duplicate declaration violates the frozen grammar.
      *
      * @since   0.1.0
+     * @param CanonicalEncoder $canonicalEncoder Canonical encoding port supplied by the composition root.
      */
-    public static function fromManifest(ExtensionIdentifier $extension, array $data, int $manifestSchema = 3): self
+    public static function fromManifest(CanonicalEncoder $canonicalEncoder, ExtensionIdentifier $extension, array $data, int $manifestSchema = 3): self
     {
         if (!in_array($manifestSchema, [2, 3, 4, 5, 6], true)) {
             throw new InvalidArgumentException(
@@ -219,7 +222,7 @@ final readonly class ManifestContributions
             ExtensionManifestGrammar::integrationKeys($manifestSchema),
             'integration contributions',
         );
-        ManifestContributionGraphValidator::validate($owner, $data, $manifestSchema);
+        ManifestContributionGraphValidator::validate($canonicalEncoder, $owner, $data, $manifestSchema);
         $data = self::canonicalGraph($data);
 
         $capabilities = self::index(array_map(static function (array $item) use ($owner): array {
@@ -238,7 +241,7 @@ final readonly class ManifestContributions
                 'lifecycle' => self::lifecycle($item),
                 'version' => self::positiveInteger($item, 'version', 1),
             ];
-            $owner->assertOwns($declaration['id'], 'capability');
+            $owner->assertOwns($declaration['id'], ManifestIdentifierPolicies::forKind('capability'));
 
             return $declaration;
         }, self::objects($data['capabilities'] ?? [], 'contributions.capabilities')), 'capability', 'id');
@@ -266,8 +269,8 @@ final readonly class ManifestContributions
                 'lifecycle' => self::lifecycle($item),
                 'version' => self::positiveInteger($item, 'version', 1),
             ];
-            $owner->assertOwns($declaration['id'], 'resource policy');
-            $owner->assertOwns($declaration['capability'], 'capability');
+            $owner->assertOwns($declaration['id'], ManifestIdentifierPolicies::forKind('resource policy'));
+            $owner->assertOwns($declaration['capability'], ManifestIdentifierPolicies::forKind('capability'));
 
             return $declaration;
         }, self::objects($data['resource_policies'] ?? [], 'contributions.resource_policies')), 'resource policy', 'id');
@@ -282,7 +285,7 @@ final readonly class ManifestContributions
                 self::string($item, 'description'),
                 self::integer($item, 'priority'),
             );
-            $owner->assertOwns($definition->id, 'workspace');
+            $owner->assertOwns($definition->id, ManifestIdentifierPolicies::forKind('workspace'));
 
             return $definition;
         }, self::objects($administrator['workspaces'] ?? [], 'contributions.administrator.workspaces')), 'workspace');
@@ -309,11 +312,11 @@ final readonly class ManifestContributions
                 self::optionalString($item, 'keywords'),
                 $surface === '' ? null : $surface,
             );
-            $owner->assertOwns($definition->id, 'navigation');
-            $owner->assertOwns($definition->workspace, 'workspace');
-            $owner->assertOwns($definition->capability, 'capability');
+            $owner->assertOwns($definition->id, ManifestIdentifierPolicies::forKind('navigation'));
+            $owner->assertOwns($definition->workspace, ManifestIdentifierPolicies::forKind('workspace'));
+            $owner->assertOwns($definition->capability, ManifestIdentifierPolicies::forKind('capability'));
             if ($definition->surface !== null) {
-                $owner->assertOwns($definition->surface, 'interface surface');
+                $owner->assertOwns($definition->surface, ManifestIdentifierPolicies::forKind('interface surface'));
             }
 
             return $definition;
@@ -331,9 +334,9 @@ final readonly class ManifestContributions
                 self::string($item, 'capability'),
                 self::string($item, 'view'),
             );
-            $owner->assertOwns($definition->name, 'route');
-            $owner->assertOwns($definition->capability, 'capability');
-            $owner->assertOwns($definition->view, 'view');
+            $owner->assertOwns($definition->name, ManifestIdentifierPolicies::forKind('route'));
+            $owner->assertOwns($definition->capability, ManifestIdentifierPolicies::forKind('capability'));
+            $owner->assertOwns($definition->view, ManifestIdentifierPolicies::forKind('view'));
 
             return $definition;
         }, self::objects($administrator['routes'] ?? [], 'contributions.administrator.routes')), 'route');
@@ -346,7 +349,7 @@ final readonly class ManifestContributions
                 self::string($item, 'name'),
                 self::string($item, 'template'),
             );
-            $owner->assertOwns($definition->name, 'view');
+            $owner->assertOwns($definition->name, ManifestIdentifierPolicies::forKind('view'));
 
             return $definition;
         }, self::objects($administrator['views'] ?? [], 'contributions.administrator.views')), 'view');
@@ -361,7 +364,7 @@ final readonly class ManifestContributions
                 self::string($item, 'description'),
                 self::integer($item, 'priority'),
             );
-            $owner->assertOwns($definition->id, 'portal workspace');
+            $owner->assertOwns($definition->id, ManifestIdentifierPolicies::forKind('portal workspace'));
 
             return $definition;
         }, self::objects($portal['workspaces'] ?? [], 'contributions.portal.workspaces')), 'portal workspace');
@@ -388,11 +391,11 @@ final readonly class ManifestContributions
                 self::optionalString($item, 'keywords'),
                 $surface === '' ? null : $surface,
             );
-            $owner->assertOwns($definition->id, 'portal navigation');
-            $owner->assertOwns($definition->workspace, 'portal workspace');
-            $owner->assertOwns($definition->capability, 'capability');
+            $owner->assertOwns($definition->id, ManifestIdentifierPolicies::forKind('portal navigation'));
+            $owner->assertOwns($definition->workspace, ManifestIdentifierPolicies::forKind('portal workspace'));
+            $owner->assertOwns($definition->capability, ManifestIdentifierPolicies::forKind('capability'));
             if ($definition->surface !== null) {
-                $owner->assertOwns($definition->surface, 'interface surface');
+                $owner->assertOwns($definition->surface, ManifestIdentifierPolicies::forKind('interface surface'));
             }
 
             return $definition;
@@ -410,9 +413,9 @@ final readonly class ManifestContributions
                 self::string($item, 'capability'),
                 self::string($item, 'template'),
             );
-            $owner->assertOwns($definition->name, 'portal route');
-            $owner->assertOwns($definition->capability, 'capability');
-            $owner->assertOwns($definition->template, 'portal template');
+            $owner->assertOwns($definition->name, ManifestIdentifierPolicies::forKind('portal route'));
+            $owner->assertOwns($definition->capability, ManifestIdentifierPolicies::forKind('capability'));
+            $owner->assertOwns($definition->template, ManifestIdentifierPolicies::forKind('portal template'));
 
             return $definition;
         }, self::objects($portal['routes'] ?? [], 'contributions.portal.routes')), 'portal route');
@@ -425,14 +428,14 @@ final readonly class ManifestContributions
                 self::string($item, 'name'),
                 self::string($item, 'template'),
             );
-            $owner->assertOwns($definition->name, 'portal template');
+            $owner->assertOwns($definition->name, ManifestIdentifierPolicies::forKind('portal template'));
 
             return $definition;
         }, self::objects($portal['templates'] ?? [], 'contributions.portal.templates')), 'portal template');
 
         $interfaceSurfaces = self::index(array_map(static function (array $item) use ($owner): array {
             $surface = self::string($item, 'surface');
-            $owner->assertOwns($surface, 'interface surface');
+            $owner->assertOwns($surface, ManifestIdentifierPolicies::forKind('interface surface'));
 
             return ['surface' => $surface] + $item;
         }, self::objects($interface['surfaces'] ?? [], 'contributions.interface.surfaces')), 'interface surface', 'surface');
@@ -454,7 +457,7 @@ final readonly class ManifestContributions
             self::objects($integration['consumers'] ?? [], 'contributions.integration.consumers'),
         ), 'event consumer');
         $jobs = self::indexDefinitions(array_map(
-            static fn (array $item): JobContributionDefinition => JobContributionDefinition::fromArray($item),
+            static fn (array $item): JobContributionDefinition => JobContributionDefinition::fromArray($canonicalEncoder, $item),
             self::objects($integration['jobs'] ?? [], 'contributions.integration.jobs'),
         ), 'job');
         $projections = self::indexDefinitions(array_map(
@@ -525,7 +528,7 @@ final readonly class ManifestContributions
                 'contributions.composition.documents',
             )), 'canonical composition document');
             foreach ($documents as $document) {
-                $owner->assertOwns($document->identity(), 'canonical composition document');
+                $owner->assertOwns($document->identity(), ManifestIdentifierPolicies::forKind('canonical composition document'));
             }
             $hostBindings = self::indexDefinitions(array_map(static function (array $item): CompositionHostBinding {
                 self::knownKeys($item, ['kind', 'id', 'renderer', 'capability'], 'composition host binding');
@@ -549,7 +552,7 @@ final readonly class ManifestContributions
                     );
                 }
                 if ($binding->renderer !== null) {
-                    $owner->assertOwns($binding->renderer, 'studio preview renderer');
+                    $owner->assertOwns($binding->renderer, ManifestIdentifierPolicies::forKind('studio preview renderer'));
                 }
                 if ($binding->capability !== null && !isset($capabilities[$binding->capability])) {
                     throw new InvalidArgumentException('A composition host binding capability is undeclared.');

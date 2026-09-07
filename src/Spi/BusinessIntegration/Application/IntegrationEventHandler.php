@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Kumwe\Extension\Spi\BusinessIntegration\Application;
 
 use Kumwe\Extension\Spi\Application\ExecutionContext;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\IntegrationEvent;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventConsumerDefinition;
+use Kumwe\Integration\IntegrationEvent;
+use Kumwe\Integration\EventConsumerDefinition;
 
 /** Idempotent executable bound to one manifest-declared durable consumer. @since 0.2.0 */
 interface IntegrationEventHandler

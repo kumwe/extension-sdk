@@ -49,7 +49,7 @@ final class ToolchainTest extends TestCase
     {
         $work = $this->workspace();
         $source = $work . '/component';
-        $result = (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        $result = (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             'acme/quality-component',
             'Acme\\QualityComponent',
             $source,
@@ -58,7 +58,7 @@ final class ToolchainTest extends TestCase
         $this->assertTrue($result->fileCount >= 10, 'The shipped template generates a complete component.');
 
         $inspector = $this->inspector();
-        $builder = new DeterministicPackageBuilder($inspector);
+        $builder = new DeterministicPackageBuilder(self::encoder(), $inspector);
         $first = $builder->build($source, $work . '/first.zip');
         $second = $builder->build($source, $work . '/second.zip');
 
@@ -112,7 +112,7 @@ final class ToolchainTest extends TestCase
     {
         $work = $this->workspace();
         $source = $work . '/component';
-        (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             'acme/safe-component',
             'Acme\\SafeComponent',
             $source,
@@ -120,7 +120,7 @@ final class ToolchainTest extends TestCase
         ));
         mkdir($source . '/.phpunit.cache', 0700);
         file_put_contents($source . '/.phpunit.cache/results', "test-results\n", LOCK_EX);
-        $builder = new DeterministicPackageBuilder($this->inspector());
+        $builder = new DeterministicPackageBuilder(self::encoder(), $this->inspector());
         $result = $builder->build($source, $work . '/without-cache.zip');
 
         $this->assertTrue(
@@ -152,7 +152,7 @@ final class ToolchainTest extends TestCase
     {
         $work = $this->workspace();
         $source = $work . '/component';
-        (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             'acme/non-strict-component',
             'Acme\\NonStrictComponent',
             $source,
@@ -164,7 +164,7 @@ final class ToolchainTest extends TestCase
         $this->assertSame(1, $replacements, 'Exactly one declaration is commented out.');
         file_put_contents($path, $unsafe, LOCK_EX);
 
-        $archive = (new DeterministicPackageBuilder($this->inspector()))
+        $archive = (new DeterministicPackageBuilder(self::encoder(), $this->inspector()))
             ->build($source, $work . '/non-strict.zip')->archive;
         $report = (new StaticConformanceRunner($this->inspector()))->run($archive);
 
@@ -192,14 +192,14 @@ final class ToolchainTest extends TestCase
     {
         $work = $this->workspace();
         $source = $work . '/component';
-        (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             'acme/signed-component',
             'Acme\\SignedComponent',
             $source,
             'Signed Component',
         ));
         $inspector = $this->inspector();
-        $archive = (new DeterministicPackageBuilder($inspector))->build($source, $work . '/signed.zip')->archive;
+        $archive = (new DeterministicPackageBuilder(self::encoder(), $inspector))->build($source, $work . '/signed.zip')->archive;
         $seed = random_bytes(SODIUM_CRYPTO_SIGN_SEEDBYTES);
         $keyFile = $work . '/signing.key';
         file_put_contents($keyFile, bin2hex($seed), LOCK_EX);
@@ -346,20 +346,20 @@ final class ToolchainTest extends TestCase
      */
     private function lifecyclePackages(string $work): array
     {
-        (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             'acme/lifecycle-component',
             'Acme\\LifecycleComponent',
             $work . '/lifecycle-base-source',
             'Lifecycle Component',
         ));
-        (new ComponentScaffolder())->scaffold(new ScaffoldRequest(
+        (new ComponentScaffolder(self::encoder()))->scaffold(new ScaffoldRequest(
             'acme/lifecycle-component',
             'Acme\\LifecycleComponent',
             $work . '/lifecycle-upgrade-source',
             'Lifecycle Component',
             '1.1.0',
         ));
-        $builder = new DeterministicPackageBuilder($this->inspector());
+        $builder = new DeterministicPackageBuilder(self::encoder(), $this->inspector());
 
         return [
             $builder->build($work . '/lifecycle-base-source', $work . '/lifecycle-base.zip')->archive,
@@ -665,7 +665,7 @@ final class ToolchainTest extends TestCase
      */
     private function inspector(): PackageInspector
     {
-        return new PackageInspector(new PackageLimits());
+        return new PackageInspector(self::encoder(), new PackageLimits());
     }
 
     /**

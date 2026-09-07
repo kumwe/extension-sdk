@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace KumweContract\ManifestFour\Integration;
 
 use Kumwe\Extension\Spi\BusinessIntegration\Application\DomainEventHandler;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainEvent;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainListenerDefinition;
+use Kumwe\Integration\DomainEvent;
+use Kumwe\Integration\DomainListenerDefinition;
 
 /**
  * Synchronous listener half of the manifest-4 compatibility package.

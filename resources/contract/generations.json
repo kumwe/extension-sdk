@@ -85,7 +85,7 @@
             "identifier": "kumwe/contract-manifest-three",
             "provider": "KumweContract\\ManifestThree\\Provider",
             "manifest_sha256": "df5045b8c7a40ad2661e1579cab4032f988ef02b6fab32528c1a575d2f523251",
-            "fixture_sha256": "b34566279ff1910dce946234ffb0b070872d9df0abee7070c3ab163fb1803dee",
+            "fixture_sha256": "75eb9029be76629d39a7ffe5cb4fee6d8d2873943662b5509b5b092abab25567",
             "surface_counts": {
                 "capabilities": 1,
                 "resource_policies": 1,
@@ -103,7 +103,7 @@
                     "kumwe.contract-manifest-three.grade"
                 ]
             },
-            "surface_digest": "b835f15f741f140131b1ca767348b4bcf85a2b9b2d0e659a8a1c3f19b08e6a68"
+            "surface_digest": "cf699ca7d6995c40c7c26ca1b8f1633f92e3c170b0ca48e4caa68b97190902ec"
         },
         {
             "id": "manifest-4",
@@ -113,7 +113,7 @@
             "identifier": "kumwe/contract-manifest-four",
             "provider": "KumweContract\\ManifestFour\\Provider",
             "manifest_sha256": "97aee4caa19f0b559f9049ff0e249bacc0a9700731858fea54efeab6d12c1704",
-            "fixture_sha256": "225bf60427b1a597cfc46a12edd5353afe974d13a76a0aef96ba7677b85475f6",
+            "fixture_sha256": "96282e4e241de3ecdc17a945cf8a4e6aa983703abadee962a6bf0084dd45e256",
             "surface_counts": {
                 "capabilities": 1,
                 "resource_policies": 1,
@@ -145,7 +145,7 @@
                     "kumwe.contract-manifest-four.observed-webhook"
                 ]
             },
-            "surface_digest": "6b94754060aa6394a6bd377d35d06da4ead2d6c9bdb52a5d63d2880e390299be"
+            "surface_digest": "8f45a178ca6ec102d02bfac6c203cb861adccc265db1f76cc9dbccebb9a1dbd7"
         },
         {
             "id": "manifest-5",
