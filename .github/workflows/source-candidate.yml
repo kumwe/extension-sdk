@@ -43,14 +43,14 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/portal-contract
-          ref: ad00ceea81e0d98c95cf8d3209f5f69409a15d7b
+          ref: c64f6bdb742d3fc2c905f9ab3868a864952d0f6c
           path: dependencies/portal-contract
           persist-credentials: false
       - name: Check out business-surface-contract source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/business-surface-contract
-          ref: 593294c77cc407c1c46cc3a84aff13c6cdd6047b
+          ref: c7996a55fe2d5c0c645e5b2f71cc7462de9046f2
           path: dependencies/business-surface-contract
           persist-credentials: false
       - name: Check out automation source
@@ -71,7 +71,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/canonical-json
-          ref: 8045d023fa42dbe5eb298a0852daac41cad0fc90
+          ref: e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58
           path: dependencies/canonical-json
           persist-credentials: false
       - name: Check out idempotency source
@@ -99,7 +99,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/record-query
-          ref: 951e4f63999500965a49f07c7f6c64bb622600dc
+          ref: db19f03daec2c0cefbaf675ad1ed28379a0546f5
           path: dependencies/record-query
           persist-credentials: false
       - name: Check out record-values source
@@ -169,7 +169,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/computation
-          ref: de5460786f0c8d04ff8df07952a0b9309d6f045d
+          ref: 4d3217816ff4b23b5c60037fe6f0d01cab5b8dd2
           path: dependencies/computation
           persist-credentials: false
       - name: Set up PHP
