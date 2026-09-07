@@ -36,21 +36,21 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/administrator-contract
-          ref: 3322ade4ba857a04878763bef65cc44fd191b068
+          ref: e801b128d344d23c856d7e4e1d573e8b106afbe2
           path: dependencies/administrator-contract
           persist-credentials: false
       - name: Check out portal-contract source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/portal-contract
-          ref: 9275c1a636c9597b1cf8ac6f8ed84ccd38f79d88
+          ref: ad00ceea81e0d98c95cf8d3209f5f69409a15d7b
           path: dependencies/portal-contract
           persist-credentials: false
       - name: Check out business-surface-contract source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/business-surface-contract
-          ref: 95a40cba48e088910480f921726514fe857450d0
+          ref: 593294c77cc407c1c46cc3a84aff13c6cdd6047b
           path: dependencies/business-surface-contract
           persist-credentials: false
       - name: Check out automation source
@@ -71,7 +71,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/canonical-json
-          ref: 022218b364625f85307f0d9585a3d48404c0d437
+          ref: 8045d023fa42dbe5eb298a0852daac41cad0fc90
           path: dependencies/canonical-json
           persist-credentials: false
       - name: Check out idempotency source
