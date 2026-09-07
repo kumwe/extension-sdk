@@ -11,21 +11,21 @@
     "version": "dev-agent/extract-administrator-contract-runtime-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/administrator-contract.git",
-    "requested_ref": "3322ade4ba857a04878763bef65cc44fd191b068"
+    "requested_ref": "e801b128d344d23c856d7e4e1d573e8b106afbe2"
   },
   {
     "package": "kumwe/portal-contract",
     "version": "dev-agent/extract-portal-contract-runtime-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/portal-contract.git",
-    "requested_ref": "9275c1a636c9597b1cf8ac6f8ed84ccd38f79d88"
+    "requested_ref": "ad00ceea81e0d98c95cf8d3209f5f69409a15d7b"
   },
   {
     "package": "kumwe/business-surface-contract",
     "version": "dev-agent/extract-business-surface-contract-runtime-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/business-surface-contract.git",
-    "requested_ref": "95a40cba48e088910480f921726514fe857450d0"
+    "requested_ref": "593294c77cc407c1c46cc3a84aff13c6cdd6047b"
   },
   {
     "package": "kumwe/automation",
@@ -46,7 +46,7 @@
     "version": "dev-agent/canonical-encoder-port-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/canonical-json.git",
-    "requested_ref": "022218b364625f85307f0d9585a3d48404c0d437"
+    "requested_ref": "8045d023fa42dbe5eb298a0852daac41cad0fc90"
   },
   {
     "package": "kumwe/idempotency",
