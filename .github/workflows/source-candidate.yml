@@ -36,7 +36,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/administrator-contract
-          ref: e801b128d344d23c856d7e4e1d573e8b106afbe2
+          ref: 083090964606c81671601d4c12b0e1ad97335d3a
           path: dependencies/administrator-contract
           persist-credentials: false
       - name: Check out portal-contract source
@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/integration
-          ref: 76751a925f726f1cc1e5a156ff59a1fc663b4429
+          ref: d6fcc108f967255f26eeb74de21a3f52a76ef3f9
           path: dependencies/integration
           persist-credentials: false
       - name: Check out canonical-json source
@@ -85,21 +85,21 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/business-policy
-          ref: d8e278321be92c426548fe1b27b965b08ac18437
+          ref: 534062bbf414dc592199b4320d0db49dcbb621e3
           path: dependencies/business-policy
           persist-credentials: false
       - name: Check out record-model source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/record-model
-          ref: 5005194d76c7a67a0e49fca08e382dc92bcc31a7
+          ref: e5e465cd90041ba93e8a6e62cce92a702040534c
           path: dependencies/record-model
           persist-credentials: false
       - name: Check out record-query source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/record-query
-          ref: 6a7c5de54a7cd967f2e46889c59410ef345ec803
+          ref: 951e4f63999500965a49f07c7f6c64bb622600dc
           path: dependencies/record-query
           persist-credentials: false
       - name: Check out record-values source
@@ -113,7 +113,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/reporting
-          ref: 066ffa4b4341519e60f93b1474f6e1ee82323aec
+          ref: 330db83752a10a1636df52a471a0d35b89b33a95
           path: dependencies/reporting
           persist-credentials: false
       - name: Check out business-definition source
