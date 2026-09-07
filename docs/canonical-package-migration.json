@@ -1,0 +1,631 @@
+{
+  "schema": "kumwe-sdk-package-migration/v1",
+  "state": "source-candidate-not-released",
+  "source_commit": "e8ec23f155c5836c6bd083f154a8efb6e50aec66",
+  "symbols": [
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Application\\Automation\\IdempotencyKey",
+      "new_fqcn": "Kumwe\\Idempotency\\IdempotencyKey",
+      "owner": "kumwe/idempotency",
+      "source_path": "src/Spi/Application/Automation/IdempotencyKey.php",
+      "source_sha256": "112d12125da8adfa59eba7fb032cfea3f70eb882a0c9388aeccf13748eda63f4"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Application\\Automation\\JobDeclaration",
+      "new_fqcn": "Kumwe\\Automation\\JobDeclaration",
+      "owner": "kumwe/automation",
+      "source_path": "src/Spi/Application/Automation/JobDeclaration.php",
+      "source_sha256": "00f34d188f338146a6da5fe010e977c7d5a1285a3820599c03c787bcd6c5020c"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\ConsumerIdempotency",
+      "new_fqcn": "Kumwe\\Integration\\ConsumerIdempotency",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/ConsumerIdempotency.php",
+      "source_sha256": "cbceb8caad3fc559e31140e5b653437d2cbe14d92acf93615a3fe554c2bcd085"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainEvent",
+      "new_fqcn": "Kumwe\\Integration\\DomainEvent",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/DomainEvent.php",
+      "source_sha256": "73107e974c693feccacd99a10d90be83dd0d32c97a417681f73c898d400c0903"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainListenerDeclaration",
+      "new_fqcn": "Kumwe\\Integration\\DomainListenerDeclaration",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/DomainListenerDeclaration.php",
+      "source_sha256": "21b1c24234022586319938a8c9361f51fb445f9d00ca7927363db124fece8827"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainListenerDefinition",
+      "new_fqcn": "Kumwe\\Integration\\DomainListenerDefinition",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/DomainListenerDefinition.php",
+      "source_sha256": "8e04d454d8cee58bcc8d22e63882827ea37be0f168bde461b60f6291a1ab5a01"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventConsumerDeclaration",
+      "new_fqcn": "Kumwe\\Integration\\EventConsumerDeclaration",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/EventConsumerDeclaration.php",
+      "source_sha256": "3145584bccf6375d7eec9ea9be8c945f57ce89e7ce572fec1f4a2f5d2fe0a0c4"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventConsumerDefinition",
+      "new_fqcn": "Kumwe\\Integration\\EventConsumerDefinition",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/EventConsumerDefinition.php",
+      "source_sha256": "699347d4dd56faf8d8a624e778d0a1bbbb1103cee7a38958caace646eb315036"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventEnvelope",
+      "new_fqcn": "Kumwe\\Integration\\EventEnvelope",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/EventEnvelope.php",
+      "source_sha256": "c2b53ecbaf2eb3031cb8817e484cfccbe0fc2f2536e98992f6a539aca9e4baf0"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventSensitivity",
+      "new_fqcn": "Kumwe\\Integration\\EventSensitivity",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/EventSensitivity.php",
+      "source_sha256": "b3e08ab19e24b885b70fabcdd08ba541f812ca6776096a537d21913e5eed5e7b"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationContract",
+      "new_fqcn": "Kumwe\\Integration\\IntegrationContract",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/IntegrationContract.php",
+      "source_sha256": "60fadaaf169a25fa88af3c49eac1f0b03eb226f9f4de3fa27ab3100d28ecd04a"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationContractValidator",
+      "new_fqcn": "Kumwe\\Integration\\IntegrationContractValidator",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/IntegrationContractValidator.php",
+      "source_sha256": "62eef65ddc42ee6c9cdc8bf6ecd338cae4f5723be9c2a1b618be0dbe2c45ded9"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationEvent",
+      "new_fqcn": "Kumwe\\Integration\\IntegrationEvent",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/IntegrationEvent.php",
+      "source_sha256": "48630e04fd7e70318d7d228f8cdb6e9ba7cbf0c2f2c843a79ce605d38d445fd2"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\JobContributionDefinition",
+      "new_fqcn": "Kumwe\\Automation\\JobContributionDefinition",
+      "owner": "kumwe/automation",
+      "source_path": "src/Spi/BusinessIntegration/Domain/JobContributionDefinition.php",
+      "source_sha256": "f513bbbbeb26814dba9361f6cc8e7dcda4d5f1ca3bc8bf3bf9b0ece54ff90fb7"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\WebhookContributionDefinition",
+      "new_fqcn": "Kumwe\\Integration\\WebhookContributionDefinition",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/WebhookContributionDefinition.php",
+      "source_sha256": "84fef2804288f1bd5fde4caaeac6bcdc1019b500c39f260af25b5adc44e755e8"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\WebhookDeclaration",
+      "new_fqcn": "Kumwe\\Integration\\WebhookDeclaration",
+      "owner": "kumwe/integration",
+      "source_path": "src/Spi/BusinessIntegration/Domain/WebhookDeclaration.php",
+      "source_sha256": "75e0538770372cbf2625136bcef2bd7cf8f1207325babb270d0ac9602fb7fdfe"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordRequestGuard",
+      "new_fqcn": "Kumwe\\Record\\Model\\BusinessRecordRequestGuard",
+      "owner": "kumwe/record-model",
+      "source_path": "src/Spi/BusinessRecord/Application/BusinessRecordRequestGuard.php",
+      "source_sha256": "f319139e65b60d5abc11ab54b4f8f491c1ecfbe1e0c81cec25d5753caaaad2ad"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\AggregateFunction",
+      "new_fqcn": "Kumwe\\Record\\Query\\AggregateFunction",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/AggregateFunction.php",
+      "source_sha256": "40b3acd032a799bcdbe987b4c00900f0da3f2379533b009561aad93e2f976253"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BooleanFilter",
+      "new_fqcn": "Kumwe\\Record\\Query\\BooleanFilter",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/BooleanFilter.php",
+      "source_sha256": "e20d32859f572404bf169c4cebec3fd848fbcfe4574d24a22b822608cd5ed8c7"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BooleanOperator",
+      "new_fqcn": "Kumwe\\Record\\Query\\BooleanOperator",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/BooleanOperator.php",
+      "source_sha256": "7b4c8182787fbe5f87aaf4be183d5e201fb29f7cd8ce6e00d7e8b46aa450f062"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordCursor",
+      "new_fqcn": "Kumwe\\Record\\Query\\BusinessRecordCursor",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/BusinessRecordCursor.php",
+      "source_sha256": "ae47a1c313a28707c1420e0e6562474ea51ae5b65c3900def1495aeaba8784d8"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordSearch",
+      "new_fqcn": "Kumwe\\Record\\Query\\BusinessRecordSearch",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/BusinessRecordSearch.php",
+      "source_sha256": "8aeb874b5f4169e01ff94cba5fddd5e336387852eb987fa45871b6bc0ae2750b"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordSort",
+      "new_fqcn": "Kumwe\\Record\\Query\\BusinessRecordSort",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/BusinessRecordSort.php",
+      "source_sha256": "ffafa3bafb71b61f7a83b01b34f6a0a17995b2deb041e4de978d297a13e037fc"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\ComparisonFilter",
+      "new_fqcn": "Kumwe\\Record\\Query\\ComparisonFilter",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/ComparisonFilter.php",
+      "source_sha256": "3105198f457357f86a4c80f59d2ce505d5824b3ca8fb71f22146501f1f75dae1"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\ComparisonOperator",
+      "new_fqcn": "Kumwe\\Record\\Query\\ComparisonOperator",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/ComparisonOperator.php",
+      "source_sha256": "d1597357d5852cc129df37ed869cac3ed6ba6022c3148f53216d604756e1d5f7"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\CursorPosition",
+      "new_fqcn": "Kumwe\\Record\\Query\\CursorPosition",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/CursorPosition.php",
+      "source_sha256": "8d7692de8fb9f46be7d9e349a891c5a634371b060c0cc0461b15a6c4d23d48d2"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\NullFilter",
+      "new_fqcn": "Kumwe\\Record\\Query\\NullFilter",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/NullFilter.php",
+      "source_sha256": "00118bb268f515d8ff28c5cf0d2db489f0a1960276e77584f2687c375a2d17ec"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryCanonicalizer",
+      "new_fqcn": "Kumwe\\Record\\Query\\QueryCanonicalizer",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/QueryCanonicalizer.php",
+      "source_sha256": "345c907bfc83420d4e610d20dde4e7ca304caddaf0698189df27d9f296fdae71"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryGraphGuard",
+      "new_fqcn": "Kumwe\\Record\\Query\\QueryGraphGuard",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/QueryGraphGuard.php",
+      "source_sha256": "7c3145a334011b2589165d15062601c34bfb6c6df48c88a697c065aa6aab45e6"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryIdentifier",
+      "new_fqcn": "Kumwe\\Record\\Query\\QueryIdentifier",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/QueryIdentifier.php",
+      "source_sha256": "9ad8155fc18f6f3ad57a6b0d56f4df011ec9e27850890a3ee44fa6d479fd7d78"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\QueryValue",
+      "new_fqcn": "Kumwe\\Record\\Query\\QueryValue",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/QueryValue.php",
+      "source_sha256": "298acc2d5db3d5d7170f9d789400c079fa5ee124132a1c628eb2b73a7aaeac71"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordAggregate",
+      "new_fqcn": "Kumwe\\Record\\Query\\RecordAggregate",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/RecordAggregate.php",
+      "source_sha256": "b3b7ccb03766d3534fe9bfe0f1f016e921c421442beef53e71ccb68f09627d9d"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordCursor",
+      "new_fqcn": "Kumwe\\Record\\Query\\RecordCursor",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/RecordCursor.php",
+      "source_sha256": "1304239620f19d8f02604562660bce4ff0a7db19ea7035b5e891404196da4006"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordFilter",
+      "new_fqcn": "Kumwe\\Record\\Query\\RecordFilter",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/RecordFilter.php",
+      "source_sha256": "f349bd5a4d5f6ae135896513c006586820479dff74f86fd33d3638fe69056565"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordProjection",
+      "new_fqcn": "Kumwe\\Record\\Query\\RecordProjection",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/RecordProjection.php",
+      "source_sha256": "0c2ac483388fac9165bd52517f8426f73765c84366bedf4f9c6dadce2b279c2d"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordQuerySpecification",
+      "new_fqcn": "Kumwe\\Record\\Query\\RecordQuerySpecification",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/RecordQuerySpecification.php",
+      "source_sha256": "5fa49bf9975356d2915ae0e2d9c0fc8ceb0d75945ec92893779ca63d75044ebe"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordSearch",
+      "new_fqcn": "Kumwe\\Record\\Query\\RecordSearch",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/RecordSearch.php",
+      "source_sha256": "73777d95da5f62a898b263c973f6376b615670012d2d99b6c44639010981a32e"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordSort",
+      "new_fqcn": "Kumwe\\Record\\Query\\RecordSort",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/RecordSort.php",
+      "source_sha256": "35cd5b62bbeca0b31f02e961d28b340a3b95075a4dc8eecc0e1e49a42ab1cc8e"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RelationFilter",
+      "new_fqcn": "Kumwe\\Record\\Query\\RelationFilter",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/RelationFilter.php",
+      "source_sha256": "247ec48ba8ced6a85bd13b934761316d7be6bf50a4898d8267784c63f3236545"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RelationQuantifier",
+      "new_fqcn": "Kumwe\\Record\\Query\\RelationQuantifier",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/RelationQuantifier.php",
+      "source_sha256": "431429774cd3ffd0904b3e096400e2db61ebc9030976ca1a066e737871a4a17f"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\SetFilter",
+      "new_fqcn": "Kumwe\\Record\\Query\\SetFilter",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/SetFilter.php",
+      "source_sha256": "4706f15501e7cddc67a881a50923bfbdb674cb3cce132445ffa860181d2fc782"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\SortDirection",
+      "new_fqcn": "Kumwe\\Record\\Query\\SortDirection",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/SortDirection.php",
+      "source_sha256": "e80784caf36789b0e53853130a01ecaca59ebdf92c2fc2b60e41feec86431832"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\TextFilter",
+      "new_fqcn": "Kumwe\\Record\\Query\\TextFilter",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/TextFilter.php",
+      "source_sha256": "907cfdf17da34ba563b744e92674e07ddadd172615e540fef1eb7e8165b3f01b"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\TextOperator",
+      "new_fqcn": "Kumwe\\Record\\Query\\TextOperator",
+      "owner": "kumwe/record-query",
+      "source_path": "src/Spi/BusinessRecord/Query/TextOperator.php",
+      "source_sha256": "98abf050921dbcbbd5aba00971b53cae14ad30d3b04d8e73938c046eca2738fe"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Value\\ZonedDateTimeValue",
+      "new_fqcn": "Kumwe\\Record\\Value\\ZonedDateTimeValue",
+      "owner": "kumwe/record-values",
+      "source_path": "src/Spi/BusinessRecord/Value/ZonedDateTimeValue.php",
+      "source_sha256": "6d3bb1abb46b66cda07c807120598cf05a1dfee5c0b5cab37d53edde8ab50ff2"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionBuilder",
+      "new_fqcn": "Kumwe\\Reporting\\Contract\\ProjectionBuilder",
+      "owner": "kumwe/reporting",
+      "source_path": "src/Spi/BusinessReporting/Application/ProjectionBuilder.php",
+      "source_sha256": "fc484c067191208df7eb1bf857d2f200ece7f7aac8f60769cb1c42bdf50f6772"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionEvent",
+      "new_fqcn": "Kumwe\\Reporting\\Contract\\ProjectionEvent",
+      "owner": "kumwe/reporting",
+      "source_path": "src/Spi/BusinessReporting/Application/ProjectionEvent.php",
+      "source_sha256": "cea03a3cddb7b2d736b86d2de72189e3758fd4c0079d0af3ce059038c28680d4"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionWriter",
+      "new_fqcn": "Kumwe\\Reporting\\Contract\\ProjectionWriter",
+      "owner": "kumwe/reporting",
+      "source_path": "src/Spi/BusinessReporting/Application/ProjectionWriter.php",
+      "source_sha256": "08507d428a9e0b3a220421a2df7c9616a848e364f20d342b4c2df4c37eb60689"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionDefinition",
+      "new_fqcn": "Kumwe\\Reporting\\Domain\\ProjectionDefinition",
+      "owner": "kumwe/reporting",
+      "source_path": "src/Spi/BusinessReporting/Domain/ProjectionDefinition.php",
+      "source_sha256": "17fa73bc15d6e73ec40f4f9518b883e0384baff4b2f158980aaf7597842d08ba"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionFieldDefinition",
+      "new_fqcn": "Kumwe\\Reporting\\Domain\\ProjectionFieldDefinition",
+      "owner": "kumwe/reporting",
+      "source_path": "src/Spi/BusinessReporting/Domain/ProjectionFieldDefinition.php",
+      "source_sha256": "622266a4ab41a20eab1dd1eed76faeb091d0bfb2749b9c2efc17e609c6e5c895"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionSourceDefinition",
+      "new_fqcn": "Kumwe\\Reporting\\Domain\\ProjectionSourceDefinition",
+      "owner": "kumwe/reporting",
+      "source_path": "src/Spi/BusinessReporting/Domain/ProjectionSourceDefinition.php",
+      "source_sha256": "00b8fd12cf7beb9e8a1164e0cae848fba7182704c660403527b49174811b318e"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ReportDefinitionGuard",
+      "new_fqcn": "Kumwe\\Reporting\\Domain\\ReportDefinitionGuard",
+      "owner": "kumwe/reporting",
+      "source_path": "src/Spi/BusinessReporting/Domain/ReportDefinitionGuard.php",
+      "source_sha256": "505dc8cc5c27ce1c02a74e5bd915b7e117c5c099411a292ffebc85cc96e42e17"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ReportValueType",
+      "new_fqcn": "Kumwe\\Reporting\\Domain\\ReportValueType",
+      "owner": "kumwe/reporting",
+      "source_path": "src/Spi/BusinessReporting/Domain/ReportValueType.php",
+      "source_sha256": "996f10b0b15bda10f2a96bc1e3c264f1b0c4f048f0d4c74a9dba32e63e1e60b9"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Application\\FieldAccessUsage",
+      "new_fqcn": "Kumwe\\BusinessPolicy\\Application\\FieldAccessUsage",
+      "owner": "kumwe/business-policy",
+      "source_path": "src/Spi/BusinessSecurity/Application/FieldAccessUsage.php",
+      "source_sha256": "d528316a739b959bd30935b869d8ed6cb98fc3d43fcd47d44e582b7281648e67"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Application\\FieldDisclosurePlan",
+      "new_fqcn": "Kumwe\\BusinessPolicy\\Application\\FieldDisclosurePlan",
+      "owner": "kumwe/business-policy",
+      "source_path": "src/Spi/BusinessSecurity/Application/FieldDisclosurePlan.php",
+      "source_sha256": "7004225fb6a84a4f9847a219f7719b4ee98ecbc381ce9d60287401a07de779e9"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyComparison",
+      "new_fqcn": "Kumwe\\BusinessPolicy\\Policy\\RecordPolicyComparison",
+      "owner": "kumwe/business-policy",
+      "source_path": "src/Spi/BusinessSecurity/Policy/RecordPolicyComparison.php",
+      "source_sha256": "0cba381d67f63e88ee79a5bd48f39db3fbc53c3b06269c95286536f5a20cc01d"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyComparisonOperator",
+      "new_fqcn": "Kumwe\\BusinessPolicy\\Policy\\RecordPolicyComparisonOperator",
+      "owner": "kumwe/business-policy",
+      "source_path": "src/Spi/BusinessSecurity/Policy/RecordPolicyComparisonOperator.php",
+      "source_sha256": "2909f12cc2848756940614555a77c7fd56c69b904118bb633baadaf563bac4b6"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyPredicate",
+      "new_fqcn": "Kumwe\\BusinessPolicy\\Policy\\RecordPolicyPredicate",
+      "owner": "kumwe/business-policy",
+      "source_path": "src/Spi/BusinessSecurity/Policy/RecordPolicyPredicate.php",
+      "source_sha256": "6d8ae1f46189964deaea4c0c5b1a7c12da45a2069ce166111f30d2c9abb8acf9"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyValueType",
+      "new_fqcn": "Kumwe\\BusinessPolicy\\Policy\\RecordPolicyValueType",
+      "owner": "kumwe/business-policy",
+      "source_path": "src/Spi/BusinessSecurity/Policy/RecordPolicyValueType.php",
+      "source_sha256": "b170cc565fc5ae06109410a51625cc72b9763c92c7f0ac513dc2d09a82533eca"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionCommand",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessActionCommand",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionCommand.php",
+      "source_sha256": "a9e645e6947d62849090ef257ec61477fc662ed7573f9497652f4c3a76fd7195"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionDeclaration",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessActionDeclaration",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionDeclaration.php",
+      "source_sha256": "bca42b6f43f6f3ac839339378ab532ce8624a5f08e07f2bd689680305ac5bb1f"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionHandler",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessActionHandler",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionHandler.php",
+      "source_sha256": "7377b5e765efd9462e1d2ab5e1e308bcc5be8ee8352cacf29e199df2939b0c46"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionResult",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessActionResult",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessActionResult.php",
+      "source_sha256": "60a5f3fd62e910dbd24fee60321a58c308bfad3fbb67ce52711a7bfe4f676bef"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessPayload",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessPayload",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessPayload.php",
+      "source_sha256": "53d0c02702f53598ca89da9574761397be29677cf2abc9354b7ee51ce9b568d2"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessReference",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessReference",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessReference.php",
+      "source_sha256": "9e1bddbf1bc8307cc175b0545067f5b64e969fc0153f14c7179a6c727e946b6e"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessSchema",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessSchema",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessSchema.php",
+      "source_sha256": "05627136b56f6f38cc1ced9dd31ad5fe5a918f8607110089842c407e5293b6a3"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewDeclaration",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessViewDeclaration",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessViewDeclaration.php",
+      "source_sha256": "6f0e80b21b0e8c0e24eeca38699db581923f06896aeb01c7f6557d53c607c65f"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewHandler",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessViewHandler",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessViewHandler.php",
+      "source_sha256": "8614610e768db6d2128a0cdff53fec6a35c4f34aea82cd5d8894f992e5476883"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewQuery",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessViewQuery",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessViewQuery.php",
+      "source_sha256": "0f808bd489289ca0c6b91fa07da488320c6950faa4053ff835eed739a9c2d950"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewResult",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Application\\Custom\\CustomBusinessViewResult",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Application/Custom/CustomBusinessViewResult.php",
+      "source_sha256": "ddaaa09ef142ab2dab8ed7ed75fdbb2073e608e89c317cbeaa7c757b954f13a2"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationConfiguration",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Presentation\\Field\\FieldPresentationConfiguration",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresentationConfiguration.php",
+      "source_sha256": "e9f101b2c790aba1edeec5c13f5f6bad9c9be82249ea31d3385d064b0ee6dd98"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationContext",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Presentation\\Field\\FieldPresentationContext",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresentationContext.php",
+      "source_sha256": "e98b0d9f83a346f67117db273b5f5ecf0e853267d3ca2f541c3fb0375b228253"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationContribution",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Presentation\\Field\\FieldPresentationContribution",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresentationContribution.php",
+      "source_sha256": "081850ab34da86da94cb9f20dfcf0ff4a034cf3240fb09ddf5e409b2137d0db4"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationInput",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Presentation\\Field\\FieldPresentationInput",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresentationInput.php",
+      "source_sha256": "bddddda25b4cd4b268665060b9dedf3fed1c6b5625e23491bbaab091ec838da2"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresentationModel",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Presentation\\Field\\FieldPresentationModel",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresentationModel.php",
+      "source_sha256": "6ccf85c3d6b72eb932162576b7a268661dca1cc62bb03f21e3adfc42f3eaa6dd"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresenter",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Presentation\\Field\\FieldPresenter",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Presentation/Field/FieldPresenter.php",
+      "source_sha256": "db29de557a82f75a56054fc1efe65da5ca81bada219f881431af468b7d8bb6ff"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldWidget",
+      "new_fqcn": "Kumwe\\BusinessSurface\\Contract\\Presentation\\Field\\FieldWidget",
+      "owner": "kumwe/business-surface-contract",
+      "source_path": "src/Spi/BusinessSurface/Presentation/Field/FieldWidget.php",
+      "source_sha256": "6fb5ece41652e438a2570791ebe767450da2a26e82fae9789100c2a402e87ba7"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\AdministratorNavigationDefinition",
+      "new_fqcn": "Kumwe\\Administrator\\Contract\\AdministratorNavigationDefinition",
+      "owner": "kumwe/administrator-contract",
+      "source_path": "src/Spi/Contribution/AdministratorNavigationDefinition.php",
+      "source_sha256": "8222751a689392979c1fca67710893d34452511570f726c63f1b84d2242f080d"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\AdministratorRouteDefinition",
+      "new_fqcn": "Kumwe\\Administrator\\Contract\\AdministratorRouteDefinition",
+      "owner": "kumwe/administrator-contract",
+      "source_path": "src/Spi/Contribution/AdministratorRouteDefinition.php",
+      "source_sha256": "1ad5c2fdc3c318a5f1a9a9e3255e6a4608d01a25f7406969a47a053607632408"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\AdministratorViewDefinition",
+      "new_fqcn": "Kumwe\\Administrator\\Contract\\AdministratorViewDefinition",
+      "owner": "kumwe/administrator-contract",
+      "source_path": "src/Spi/Contribution/AdministratorViewDefinition.php",
+      "source_sha256": "8501f0653b742c1153d7f73b50664c641a0018e9b915e03690d888a25f3883c9"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\AdministratorWorkspaceDefinition",
+      "new_fqcn": "Kumwe\\Administrator\\Contract\\AdministratorWorkspaceDefinition",
+      "owner": "kumwe/administrator-contract",
+      "source_path": "src/Spi/Contribution/AdministratorWorkspaceDefinition.php",
+      "source_sha256": "e6260ff8b756b7a934b21804b0aa04182319ec4ec6e83cbbae8493079182f0c4"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\ContributionDefinition",
+      "new_fqcn": "Kumwe\\Contribution\\ContributionDefinition",
+      "owner": "kumwe/contribution",
+      "source_path": "src/Spi/Contribution/ContributionDefinition.php",
+      "source_sha256": "60afe142508eff8ad391ddb7ac7d911587c86773461774e82990b7fb66e4429a"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\ContributionOwner",
+      "new_fqcn": "Kumwe\\Contribution\\ContributionOwner",
+      "owner": "kumwe/contribution",
+      "source_path": "src/Spi/Contribution/ContributionOwner.php",
+      "source_sha256": "c3cf3dbfa32362a76120cfeba179c0db08a831a87f73c74b2a1caff343424efc"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Identity\\Domain\\Capability",
+      "new_fqcn": "Kumwe\\Access\\Capability",
+      "owner": "kumwe/access-control",
+      "source_path": "src/Spi/Identity/Domain/Capability.php",
+      "source_sha256": "a98087e56679c590fbd226c53a8773671baa4e9f130236c5961a5c4721af6123"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalNavigationDefinition",
+      "new_fqcn": "Kumwe\\Portal\\Contract\\PortalNavigationDefinition",
+      "owner": "kumwe/portal-contract",
+      "source_path": "src/Spi/Portal/Contribution/PortalNavigationDefinition.php",
+      "source_sha256": "098e6d41a25254566729de1a807b2131ac3bc90f0dd92d3f636eea2fe3a23012"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalRouteDefinition",
+      "new_fqcn": "Kumwe\\Portal\\Contract\\PortalRouteDefinition",
+      "owner": "kumwe/portal-contract",
+      "source_path": "src/Spi/Portal/Contribution/PortalRouteDefinition.php",
+      "source_sha256": "1b037cedcb1e0be3b99383dcc797569b0e5e83e7979824ac3e297503d96ebed3"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalTemplateDefinition",
+      "new_fqcn": "Kumwe\\Portal\\Contract\\PortalTemplateDefinition",
+      "owner": "kumwe/portal-contract",
+      "source_path": "src/Spi/Portal/Contribution/PortalTemplateDefinition.php",
+      "source_sha256": "3c8a1b8d559666844676b90b4a3c0f25ec97dbbf0f056a05e2cb7041e94cec17"
+    },
+    {
+      "old_fqcn": "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalWorkspaceDefinition",
+      "new_fqcn": "Kumwe\\Portal\\Contract\\PortalWorkspaceDefinition",
+      "owner": "kumwe/portal-contract",
+      "source_path": "src/Spi/Portal/Contribution/PortalWorkspaceDefinition.php",
+      "source_sha256": "42c37396f476673d7fe58c21e44f77054d352e2b8f0233753b79e022e789a6e1"
+    }
+  ],
+  "removed_class_test_suites": [
+    "RecordPolicyTest",
+    "ZonedDateTimeValueTest",
+    "RecordQueryBoundaryTest",
+    "RecordQueryGrammarTest",
+    "FieldPresentationSecurityTest",
+    "PortableValueBoundaryTest"
+  ]
+}

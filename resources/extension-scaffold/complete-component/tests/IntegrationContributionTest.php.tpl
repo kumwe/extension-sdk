@@ -11,15 +11,15 @@ use @@PHP_NAMESPACE@@\Integration\ItemDomainListener;
 use @@PHP_NAMESPACE@@\Integration\ItemIntegrationConsumer;
 use @@PHP_NAMESPACE@@\Integration\ItemProjectionBuilder;
 use Kumwe\Extension\Spi\Application\ExecutionContext;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainListenerDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainEvent;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventConsumerDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventSensitivity;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\IntegrationEvent;
-use Kumwe\Extension\Spi\BusinessReporting\Application\ProjectionEvent;
-use Kumwe\Extension\Spi\BusinessReporting\Application\ProjectionWriter;
-use Kumwe\Extension\Spi\BusinessReporting\Domain\ProjectionDefinition;
+use Kumwe\Automation\JobContributionDefinition;
+use Kumwe\Integration\DomainListenerDefinition;
+use Kumwe\Integration\DomainEvent;
+use Kumwe\Integration\EventConsumerDefinition;
+use Kumwe\Integration\EventSensitivity;
+use Kumwe\Integration\IntegrationEvent;
+use Kumwe\Reporting\Contract\ProjectionEvent;
+use Kumwe\Reporting\Contract\ProjectionWriter;
+use Kumwe\Reporting\Domain\ProjectionDefinition;
 use Kumwe\Extension\Manifest\ExtensionManifest;
 use PHPUnit\Framework\TestCase;
 
@@ -54,7 +54,7 @@ final class IntegrationContributionTest extends TestCase
         $consumer->handle($consumerDeclaration, $event, $context);
         $consumer->handle($consumerDeclaration, $event, $context);
         $job = new DigestJobHandler($ledger);
-        $jobDeclaration = JobContributionDefinition::fromArray($integration['jobs'][0]);
+        $jobDeclaration = JobContributionDefinition::fromArray($this->canonicalEncoder(), $integration['jobs'][0]);
         $job->handle($jobDeclaration, ['message' => 'scheduled-health'], $context);
         $job->handle($jobDeclaration, ['message' => 'scheduled-health'], $context);
 
@@ -130,8 +130,21 @@ final class IntegrationContributionTest extends TestCase
     {
         $json = file_get_contents(dirname(__DIR__) . '/kumwe.json');
         self::assertIsString($json);
-        $declarations = ExtensionManifest::fromJson($json)->contributions()->declarations();
+        $declarations = ExtensionManifest::fromJson($this->canonicalEncoder(), $json)->contributions()->declarations();
 
         return $declarations['integration'];
+    }
+    private function canonicalEncoder(): \Kumwe\CanonicalJson\CanonicalEncoder
+    {
+        $path = getenv('KUMWE_NATIVE_EXPECTED_TUPLE');
+        if (!is_string($path) || !is_file($path)) {
+            throw new \RuntimeException('Configure KUMWE_NATIVE_EXPECTED_TUPLE for the native integration fixture.');
+        }
+        $tuple = json_decode((string) file_get_contents($path), true, 64, JSON_THROW_ON_ERROR);
+        return new \Kumwe\Computation\NativeCanonicalEncoder(new \Kumwe\Engine\Runtime(), new \Kumwe\Computation\NativeCompatibility(
+            \Kumwe\Computation\CapabilitySet::fromArray($tuple['capabilities']),
+            $tuple['extension_version'], $tuple['embedded_engine_commit'], $tuple['embedded_source_sha256'],
+            $tuple['binding_build_digest'],
+        ));
     }
 }

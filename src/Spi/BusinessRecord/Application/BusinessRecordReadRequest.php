@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Spi\BusinessRecord\Application;
 
+use Kumwe\Record\Model\BusinessRecordRequestGuard;
+
 use Kumwe\Extension\Spi\Application\ExecutionContext;
-use Kumwe\Extension\Spi\BusinessRecord\Query\RecordQuerySpecification;
+use Kumwe\Record\Query\RecordQuerySpecification;
 
 /** Immutable request for one host-authorized page of policy-admitted business records. @since 0.2.0 */
 final readonly class BusinessRecordReadRequest

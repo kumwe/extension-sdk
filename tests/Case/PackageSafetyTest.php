@@ -119,7 +119,7 @@ final class PackageSafetyTest extends TestCase
         $work = $this->workspace();
         $archive = $this->archive($work, ['kumwe.json' => $this->manifest()]);
         $failure = $this->assertThrows(
-            static fn (): InspectedPackage => InspectedPackage::inspect(
+            static fn (): InspectedPackage => InspectedPackage::inspect(self::encoder(), 
                 $archive,
                 new PackageLimits(maximumArchiveBytes: 64),
             ),
@@ -147,7 +147,7 @@ final class PackageSafetyTest extends TestCase
         $archive = $this->archive($work, ['kumwe.json' => $this->manifest()]);
         $archiveBytes = filesize($archive);
         $this->assertTrue(is_int($archiveBytes), 'The staged archive has a measurable size.');
-        $package = InspectedPackage::inspect(
+        $package = InspectedPackage::inspect(self::encoder(), 
             $archive,
             new PackageLimits(maximumArchiveBytes: is_int($archiveBytes) ? $archiveBytes : 1),
         );
@@ -160,7 +160,7 @@ final class PackageSafetyTest extends TestCase
 
         $symlinkWork = $this->workspace();
         $symlinkArchive = $this->archive($symlinkWork, ['kumwe.json' => $this->manifest()]);
-        $symlinkPackage = InspectedPackage::inspect($symlinkArchive);
+        $symlinkPackage = InspectedPackage::inspect(self::encoder(), $symlinkArchive);
         $target = $symlinkWork . '/retained.zip';
         $this->assertTrue(rename($symlinkArchive, $target), 'The original file is retained under a private path.');
         $this->assertTrue(symlink($target, $symlinkArchive), 'A link replaces the inspected pathname.');
@@ -230,7 +230,7 @@ final class PackageSafetyTest extends TestCase
             $entries[sprintf('blob-%d.bin', $index)] = random_bytes(4_096);
         }
         $archive = $this->archive($work, $entries);
-        $package = InspectedPackage::inspect($archive, new PackageLimits());
+        $package = InspectedPackage::inspect(self::encoder(), $archive, new PackageLimits());
         $this->assertTrue($package->hasNoSafetyFindings(), 'Random bytes stay inside the compression-ratio limit.');
 
         $before = memory_get_usage(true);
@@ -359,7 +359,7 @@ final class PackageSafetyTest extends TestCase
             'a.php' => "<?php\n",
             'kumwe.json' => $this->manifest(),
         ]);
-        $snapshot = InspectedPackage::inspect($archive);
+        $snapshot = InspectedPackage::inspect(self::encoder(), $archive);
         $this->assertTrue(
             !$snapshot->hasNoSafetyFindings(),
             'The only public factory derives case-collision findings from the archive itself.',
@@ -404,7 +404,7 @@ final class PackageSafetyTest extends TestCase
             maximumProvenanceBytes: 512,
             readChunkBytes: 32,
         );
-        $inspection = (new PackageInspector($limits))->inspect($archive);
+        $inspection = (new PackageInspector(self::encoder(), $limits))->inspect($archive);
         $contents = iterator_to_array((new ZipArchiveContentReader())->contents($inspection->package));
 
         $this->assertSame(32, $inspection->package->limits->readChunkBytes, 'The snapshot retains the exact budget.');
@@ -480,8 +480,8 @@ final class PackageSafetyTest extends TestCase
         file_put_contents($source . '/kumwe.json', $this->manifest(), LOCK_EX);
 
         $entryLimits = new PackageLimits(maximumEntries: 3);
-        $entryInspector = new PackageInspector($entryLimits);
-        $built = (new DeterministicPackageBuilder($entryInspector))->build($source, $work . '/three.zip');
+        $entryInspector = new PackageInspector(self::encoder(), $entryLimits);
+        $built = (new DeterministicPackageBuilder(self::encoder(), $entryInspector))->build($source, $work . '/three.zip');
         $this->assertSame(
             3,
             count($built->inspection->package->paths()),
@@ -489,7 +489,7 @@ final class PackageSafetyTest extends TestCase
         );
         file_put_contents($source . '/README.md', "# Overflow\n", LOCK_EX);
         $this->assertThrows(
-            static fn () => (new DeterministicPackageBuilder($entryInspector))
+            static fn () => (new DeterministicPackageBuilder(self::encoder(), $entryInspector))
                 ->build($source, $work . '/too-many.zip'),
             RuntimeException::class,
             'A second source file cannot consume an attestation-reserved entry.',
@@ -499,9 +499,9 @@ final class PackageSafetyTest extends TestCase
             maximumEntryBytes: 4_194_304,
             maximumExpandedBytes: 4_194_304,
         );
-        $byteInspector = new PackageInspector($byteLimits);
+        $byteInspector = new PackageInspector(self::encoder(), $byteLimits);
         $this->assertThrows(
-            static fn () => (new DeterministicPackageBuilder($byteInspector))
+            static fn () => (new DeterministicPackageBuilder(self::encoder(), $byteInspector))
                 ->build($source, $work . '/too-large.zip'),
             RuntimeException::class,
             'The builder reserves the maximum generated evidence bytes inside the total ceiling.',
@@ -576,7 +576,7 @@ final class PackageSafetyTest extends TestCase
      */
     private function inspector(): PackageInspector
     {
-        return new PackageInspector(new PackageLimits());
+        return new PackageInspector(self::encoder(), new PackageLimits());
     }
 
     /**

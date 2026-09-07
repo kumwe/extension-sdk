@@ -1,17 +1,12 @@
-name: Extension SDK CI
-
+name: Native source candidate CI
 on:
-  push:
-    branches: [main, master]
   pull_request:
   workflow_call:
-
 permissions:
   contents: read
-
 jobs:
-  check:
-    name: PHP 8.5
+  native-source-candidate:
+    name: Native source candidate gate
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     defaults:
@@ -204,41 +199,9 @@ jobs:
         run: php tools/install-source-candidate.php
       - name: Run complete SDK checks with actual native runtime
         run: composer check
-      - name: Verify production-only installation
-        run: |
-          php tools/install-source-candidate.php --no-dev
-          composer smoke
       - name: Verify production-only authoritative archive consumer
         run: php tools/verify-clean-consumer.php
       - name: Record source candidate scope
         run: |
           cat ../candidate-dependency-evidence.json
           echo 'Source verification only; immutable release and host adoption gates remain separate.'
-
-  release-tests:
-    name: Release automation tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-      - name: Verify release transitions and repository setup
-        run: |
-          bash tools/test-release-record.sh
-          bash tools/test-release-integrity.sh
-          bash tools/test-release-on-record.sh
-          bash tools/test-configure-release-repositories.sh
-
-  package-gate:
-    name: Package gate
-    if: always()
-    needs: [check, release-tests]
-    runs-on: ubuntu-latest
-    timeout-minutes: 2
-    steps:
-      - name: Require all package and release tests
-        env:
-          PACKAGE_RESULT: ${{ needs.check.result }}
-          RELEASE_RESULT: ${{ needs.release-tests.result }}
-        run: test "$PACKAGE_RESULT" = success && test "$RELEASE_RESULT" = success

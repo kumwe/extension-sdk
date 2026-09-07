@@ -10,17 +10,19 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Tests\Case;
 
+use Kumwe\Extension\Manifest\ManifestIdentifierPolicies;
+
 use InvalidArgumentException;
 use Kumwe\Extension\Contract\NameBasedUuid;
 use Kumwe\Extension\Manifest\ExtensionIdentifier;
-use Kumwe\Extension\Spi\Contribution\AdministratorRouteDefinition;
-use Kumwe\Extension\Spi\Contribution\AdministratorViewDefinition;
-use Kumwe\Extension\Spi\Contribution\AdministratorWorkspaceDefinition;
-use Kumwe\Extension\Spi\Contribution\ContributionOwner;
+use Kumwe\Administrator\Contract\AdministratorRouteDefinition;
+use Kumwe\Administrator\Contract\AdministratorViewDefinition;
+use Kumwe\Administrator\Contract\AdministratorWorkspaceDefinition;
+use Kumwe\Contribution\ContributionOwner;
 use Kumwe\Extension\Spi\Contribution\TranslationSetItemAssociation;
-use Kumwe\Extension\Spi\Portal\Contribution\PortalRouteDefinition;
-use Kumwe\Extension\Spi\Portal\Contribution\PortalTemplateDefinition;
-use Kumwe\Extension\Spi\Portal\Contribution\PortalWorkspaceDefinition;
+use Kumwe\Portal\Contract\PortalRouteDefinition;
+use Kumwe\Portal\Contract\PortalTemplateDefinition;
+use Kumwe\Portal\Contract\PortalWorkspaceDefinition;
 use Kumwe\Extension\Tests\TestCase;
 
 /**
@@ -77,20 +79,20 @@ final class SpiPortTest extends TestCase
         $owner = ContributionOwner::extension('acme/editor');
 
         $this->assertSame('acme.editor', $owner->namespace(), 'The owner namespace is the dotted identifier.');
-        $owner->assertOwns('acme.editor.view', 'view');
+        $owner->assertOwns('acme.editor.view', ManifestIdentifierPolicies::forKind('view'));
         $this->assertThrows(
-            static fn () => $owner->assertOwns('rival.editor.view', 'view'),
+            static fn () => $owner->assertOwns('rival.editor.view', ManifestIdentifierPolicies::forKind('view')),
             InvalidArgumentException::class,
             'An owner must not claim an identifier outside its namespace.',
         );
         $this->assertThrows(
-            static fn () => $owner->assertOwns('acme.editor.', 'view'),
+            static fn () => $owner->assertOwns('acme.editor.', ManifestIdentifierPolicies::forKind('view')),
             InvalidArgumentException::class,
             'A graphical identifier must carry a non-empty suffix.',
         );
-        ContributionOwner::core()->assertOwns('content.read', 'capability');
+        ContributionOwner::core()->assertOwns('content.read', ManifestIdentifierPolicies::forKind('capability'));
         $this->assertThrows(
-            static fn () => ContributionOwner::core()->assertOwns('content.read', 'view'),
+            static fn () => ContributionOwner::core()->assertOwns('content.read', ManifestIdentifierPolicies::forKind('view')),
             InvalidArgumentException::class,
             'Core views must sit inside the core namespace.',
         );
@@ -251,11 +253,12 @@ final class SpiPortTest extends TestCase
     public function testOwnerBoundaryRejectsRepeatedDotsInTheContributionSuffix(): void
     {
         $failure = $this->assertThrows(
-            static fn () => ContributionOwner::core()->assertOwns('core..settings', 'interface surface'),
+            static fn () => ContributionOwner::core()->assertOwns('core..settings', ManifestIdentifierPolicies::forKind('interface surface')),
             InvalidArgumentException::class,
             'A repeated dot after the core boundary must be refused.',
         );
-        $this->assertStringContains('core namespace', $failure->getMessage(), 'The refusal names the namespace rule.');
+        $this->assertTrue($failure instanceof \Kumwe\Contribution\ContributionRejected, 'The canonical owner returns its typed refusal.');
+        $this->assertSame('invalid_identifier', $failure->reason, 'The refusal identifies malformed suffix grammar.');
     }
 
     /**
@@ -271,7 +274,7 @@ final class SpiPortTest extends TestCase
             $owner = ContributionOwner::extension($ownerIdentifier);
             $identifier = $namespace . '.workspace';
 
-            $owner->assertOwns($identifier, 'interface surface');
+            $owner->assertOwns($identifier, ManifestIdentifierPolicies::forKind('interface surface'));
             AdministratorWorkspaceDefinition::assertIdentifier($identifier, 'workspace');
             PortalWorkspaceDefinition::assertIdentifier($identifier, 'workspace');
 
@@ -328,7 +331,7 @@ final class SpiPortTest extends TestCase
         $owner = ContributionOwner::extension($vendor . '/' . $package);
         $identifier = $vendor . '.' . $package . '.workspace';
 
-        $owner->assertOwns($identifier, 'interface surface');
+        $owner->assertOwns($identifier, ManifestIdentifierPolicies::forKind('interface surface'));
         AdministratorWorkspaceDefinition::assertIdentifier($identifier, 'workspace');
         PortalWorkspaceDefinition::assertIdentifier($identifier, 'workspace');
 

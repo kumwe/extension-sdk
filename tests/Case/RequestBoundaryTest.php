@@ -9,7 +9,7 @@ use InvalidArgumentException;
 use Kumwe\Extension\Spi\Application\ExecutionContext;
 use Kumwe\Extension\Spi\BusinessRecord\Application\BusinessRecordReadRequest;
 use Kumwe\Extension\Spi\BusinessRecord\Application\BusinessRecordQueryPurpose;
-use Kumwe\Extension\Spi\BusinessRecord\Query\RecordQuerySpecification;
+use Kumwe\Record\Query\RecordQuerySpecification;
 use Kumwe\Extension\Spi\Http\ExtensionRequest;
 use Kumwe\Extension\Tests\TestCase;
 use Psr\Http\Message\ServerRequestInterface;

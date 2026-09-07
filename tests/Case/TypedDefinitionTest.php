@@ -8,11 +8,11 @@ namespace Kumwe\Extension\Tests\Case;
 
 use InvalidArgumentException;
 use Kumwe\Extension\Manifest\ExtensionManifest;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainListenerDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventConsumerDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\WebhookContributionDefinition;
-use Kumwe\Extension\Spi\BusinessReporting\Domain\ProjectionDefinition;
+use Kumwe\Integration\DomainListenerDefinition;
+use Kumwe\Integration\EventConsumerDefinition;
+use Kumwe\Automation\JobContributionDefinition;
+use Kumwe\Integration\WebhookContributionDefinition;
+use Kumwe\Reporting\Domain\ProjectionDefinition;
 use Kumwe\Extension\Spi\Contribution\CanonicalCompositionDocument;
 use Kumwe\Extension\Tests\TestCase;
 
@@ -22,7 +22,7 @@ final class TypedDefinitionTest extends TestCase
     /** @since 0.2.0 */
     public function testManifestConstructsCompleteExecutableDefinitionsOnce(): void
     {
-        $manifest = ExtensionManifest::fromJson($this->fixture());
+        $manifest = ExtensionManifest::fromJson(self::encoder(), $this->fixture());
         $graph = $manifest->contributions();
 
         $listener = $graph->domainListener('kumwe.contract-manifest-four.observe-now');
@@ -50,7 +50,7 @@ final class TypedDefinitionTest extends TestCase
     /** @since 0.2.0 */
     public function testManifestPublishesCanonicalTypedContributionLookups(): void
     {
-        $administrator = ExtensionManifest::fromJson($this->fixture(2))->contributions();
+        $administrator = ExtensionManifest::fromJson(self::encoder(), $this->fixture(2))->contributions();
         $workspace = $administrator->administratorWorkspaces()[0];
         $navigation = $administrator->administratorNavigation()[0];
         $view = $administrator->administratorViews()[0];
@@ -59,7 +59,7 @@ final class TypedDefinitionTest extends TestCase
         $this->assertSame($view, $administrator->administratorView($view->identifier()), 'View lookup retains the parsed value.');
         $this->assertSame([], $administrator->administratorRoutes(), 'An undeclared route surface stays empty.');
 
-        $portal = ExtensionManifest::fromJson($this->fixture(3))->contributions();
+        $portal = ExtensionManifest::fromJson(self::encoder(), $this->fixture(3))->contributions();
         $portalWorkspace = $portal->portalWorkspaces()[0];
         $portalNavigation = $portal->portalNavigation()[0];
         $portalTemplate = $portal->portalTemplates()[0];
@@ -69,7 +69,7 @@ final class TypedDefinitionTest extends TestCase
         $this->assertSame($portalTemplate, $portal->portalTemplate($portalTemplate->identifier()), 'Portal template lookup retains the parsed value.');
         $this->assertSame($fieldPresentation, $portal->fieldPresentation($fieldPresentation->identifier()), 'Field-presenter lookup retains the parsed value.');
 
-        $composition = ExtensionManifest::fromJson($this->fixture(5))->contributions();
+        $composition = ExtensionManifest::fromJson(self::encoder(), $this->fixture(5))->contributions();
         $block = $composition->compositionBlocks()[0];
         $pattern = $composition->compositionPatterns()[0];
         $control = $composition->compositionFieldControls()[0];
@@ -83,7 +83,7 @@ final class TypedDefinitionTest extends TestCase
         $this->assertSame($vocabulary, $composition->compositionDesignVocabulary($vocabulary->identifier()), 'Vocabulary lookup retains the parsed value.');
         $this->assertSame($migration, $composition->compositionMigration($migration->identifier()), 'Migration lookup retains the parsed value.');
 
-        $canonical = ExtensionManifest::fromJson($this->fixture(6))->contributions();
+        $canonical = ExtensionManifest::fromJson(self::encoder(), $this->fixture(6))->contributions();
         $documents = $canonical->canonicalCompositionDocuments();
         $this->assertSame(6, count($documents), 'Every Producer-validated Studio document is typed once.');
         foreach ($documents as $document) {
@@ -109,7 +109,7 @@ final class TypedDefinitionTest extends TestCase
         $job = $integration['jobs'][0];
         $job['schema_version'] = '1';
         $this->assertThrows(
-            static fn (): JobContributionDefinition => JobContributionDefinition::fromArray($job),
+            static fn (): JobContributionDefinition => JobContributionDefinition::fromArray(self::encoder(), $job),
             InvalidArgumentException::class,
             'A numeric-string job schema version is refused.',
         );
@@ -146,7 +146,7 @@ final class TypedDefinitionTest extends TestCase
         );
 
         $failure = $this->assertThrows(
-            static fn (): ExtensionManifest => ExtensionManifest::fromJson(json_encode(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), json_encode(
                 $manifest,
                 JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR,
             )),
@@ -163,7 +163,7 @@ final class TypedDefinitionTest extends TestCase
     /** @since 0.2.0 */
     public function testCanonicalStudioDocumentViewsCannotMutateSignedState(): void
     {
-        $document = ExtensionManifest::fromJson($this->fixture(6))
+        $document = ExtensionManifest::fromJson(self::encoder(), $this->fixture(6))
             ->contributions()
             ->canonicalCompositionDocuments()[0];
         $first = $document->document();
@@ -185,7 +185,7 @@ final class TypedDefinitionTest extends TestCase
     /** @return array<string, mixed> Canonical integration section. @since 0.2.0 */
     private function integration(): array
     {
-        $manifest = ExtensionManifest::fromJson($this->fixture());
+        $manifest = ExtensionManifest::fromJson(self::encoder(), $this->fixture());
         $integration = $manifest->contributions()->declarations()['integration'] ?? null;
         if (!is_array($integration)) {
             throw new InvalidArgumentException('The integration fixture is malformed.');
@@ -204,7 +204,7 @@ final class TypedDefinitionTest extends TestCase
         $integration['projections'][0]['sources'][0]['event_type'] = 'core.business_record.mutated';
         $integration['webhooks'][0]['event_types'] = ['core.business_record.mutated'];
         $manifest['contributions']['integration'] = $integration;
-        $accepted = ExtensionManifest::fromJson(json_encode($manifest, JSON_THROW_ON_ERROR));
+        $accepted = ExtensionManifest::fromJson(self::encoder(), json_encode($manifest, JSON_THROW_ON_ERROR));
         $declared = $accepted->contributions()->declarations()['integration'] ?? null;
         if (!is_array($declared)) {
             throw new InvalidArgumentException('The platform-event fixture lost its integration section.');
@@ -223,17 +223,14 @@ final class TypedDefinitionTest extends TestCase
         $integration['domain_listeners'][0]['event_type'] = 'acme.rival.observed';
         $manifest['contributions']['integration'] = $integration;
         $failure = $this->assertThrows(
-            static fn (): ExtensionManifest => ExtensionManifest::fromJson(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), 
                 json_encode($manifest, JSON_THROW_ON_ERROR),
             ),
             InvalidArgumentException::class,
             'A foreign vendor event binding is refused at the manifest boundary.',
         );
-        $this->assertStringContains(
-            'cannot claim',
-            $failure->getMessage(),
-            'The refusal names the foreign claim, not a missing schema.',
-        );
+        $this->assertTrue($failure instanceof \Kumwe\Contribution\ContributionRejected, 'The canonical owner supplies its typed refusal.');
+        $this->assertSame('owner_mismatch', $failure->reason, 'The refusal identifies the foreign owner.');
     }
 
     /** @since 0.2.1 */
@@ -246,7 +243,7 @@ final class TypedDefinitionTest extends TestCase
             'fallback_locale' => 'en-GB',
         ];
         $manifest['contributions']['content'] = ['translation_groups' => [$group]];
-        $accepted = ExtensionManifest::fromJson(json_encode($manifest, JSON_THROW_ON_ERROR));
+        $accepted = ExtensionManifest::fromJson(self::encoder(), json_encode($manifest, JSON_THROW_ON_ERROR));
         $declared = $accepted->contributions()->declarations()['content'] ?? null;
         $this->assertSame(
             'kumwe.contract-manifest-four.articles',
@@ -257,19 +254,20 @@ final class TypedDefinitionTest extends TestCase
         $group['group_id'] = 'zeta.shop.products';
         $manifest['contributions']['content'] = ['translation_groups' => [$group]];
         $foreign = $this->assertThrows(
-            static fn (): ExtensionManifest => ExtensionManifest::fromJson(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), 
                 json_encode($manifest, JSON_THROW_ON_ERROR),
             ),
             InvalidArgumentException::class,
             'A foreign content set claim is refused at the manifest boundary.',
         );
-        $this->assertStringContains('cannot claim', $foreign->getMessage(), 'The refusal names the claim.');
+        $this->assertTrue($foreign instanceof \Kumwe\Contribution\ContributionRejected, 'Ownership refusals retain the canonical type.');
+        $this->assertSame('owner_mismatch', $foreign->reason, 'The refusal names the ownership boundary.');
 
         $group['group_id'] = 'kumwe.contract-manifest-four.articles';
         $group['fallback_locale'] = 'fr';
         $manifest['contributions']['content'] = ['translation_groups' => [$group]];
         $this->assertThrows(
-            static fn (): ExtensionManifest => ExtensionManifest::fromJson(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), 
                 json_encode($manifest, JSON_THROW_ON_ERROR),
             ),
             InvalidArgumentException::class,
@@ -304,7 +302,7 @@ final class TypedDefinitionTest extends TestCase
             'capabilities' => [$prefix . '.view'],
             'states' => ['default', 'empty', 'error', 'permission-reduced'],
         ]]];
-        $accepted = ExtensionManifest::fromJson(json_encode($manifest, JSON_THROW_ON_ERROR));
+        $accepted = ExtensionManifest::fromJson(self::encoder(), json_encode($manifest, JSON_THROW_ON_ERROR));
         $declared = $accepted->contributions()->declarations()['interface'] ?? null;
         $this->assertSame(
             $prefix . '.administrator.index',
@@ -315,7 +313,7 @@ final class TypedDefinitionTest extends TestCase
         $undeclared = $manifest;
         unset($undeclared['contributions']['interface']);
         $failure = $this->assertThrows(
-            static fn (): ExtensionManifest => ExtensionManifest::fromJson(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), 
                 json_encode($undeclared, JSON_THROW_ON_ERROR),
             ),
             InvalidArgumentException::class,
@@ -330,7 +328,7 @@ final class TypedDefinitionTest extends TestCase
         $foreignArea = $manifest;
         $foreignArea['contributions']['interface']['surfaces'][0]['area'] = 'portal';
         $this->assertThrows(
-            static fn (): ExtensionManifest => ExtensionManifest::fromJson(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), 
                 json_encode($foreignArea, JSON_THROW_ON_ERROR),
             ),
             InvalidArgumentException::class,

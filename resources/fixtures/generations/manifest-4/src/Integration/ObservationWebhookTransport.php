@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace KumweContract\ManifestFour\Integration;
 
 use Kumwe\Extension\Spi\BusinessIntegration\Application\IntegrationEventTransport;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\IntegrationEvent;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\WebhookContributionDefinition;
+use Kumwe\Integration\IntegrationEvent;
+use Kumwe\Integration\WebhookContributionDefinition;
 
 /**
  * Outbound adapter half of the manifest-4 compatibility package.

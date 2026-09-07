@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Toolchain;
 
+use Kumwe\CanonicalJson\CanonicalEncoder;
+
 use FilesystemIterator;
 use InvalidArgumentException;
 use JsonException;
@@ -51,8 +53,9 @@ final readonly class DeterministicPackageBuilder
      * @param  PackageInspector  $inspector  Safety and manifest boundary for the completed ZIP.
      *
      * @since  0.1.0
+     * @param CanonicalEncoder $canonicalEncoder Canonical encoding port supplied by the composition root.
      */
-    public function __construct(private PackageInspector $inspector)
+    public function __construct(private CanonicalEncoder $canonicalEncoder, private PackageInspector $inspector)
     {
     }
 
@@ -101,7 +104,7 @@ final readonly class DeterministicPackageBuilder
         $manifestJson = $this->readStableFile($files['kumwe.json'] ?? throw new RuntimeException(
             'The extension source must contain kumwe.json at its root.',
         ));
-        $manifest = ExtensionManifest::fromJson($manifestJson);
+        $manifest = ExtensionManifest::fromJson($this->canonicalEncoder, $manifestJson);
         $entries = [];
         $sourceBytes = 0;
         $reservedAttestationBytes = $this->inspector->limits()->maximumBillOfMaterialsBytes

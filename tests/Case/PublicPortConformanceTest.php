@@ -15,10 +15,10 @@ final class PublicPortConformanceTest extends TestCase
 {
     public function testEveryPublishedPortAndVocabularyKeepsItsReviewedContract(): void
     {
-        $expected = json_decode((string) file_get_contents(dirname(__DIR__) . '/fixtures/public-ports-v1.json'),
+        $expected = json_decode((string) file_get_contents(dirname(__DIR__) . '/fixtures/public-ports-v2.json'),
             true, 64, JSON_THROW_ON_ERROR);
-        $this->assertSame('d0484b8733eaa57d076f567ffa5e997b9564b5fa', $expected['source'],
-            'The reviewed snapshot belongs to the legacy main contract.');
+        $this->assertSame('e8ec23f155c5836c6bd083f154a8efb6e50aec66', $expected['source'],
+            'The candidate snapshot declares its source baseline.');
         $this->assertTrue(count($expected['types']) > 0, 'A port conformance corpus cannot be empty.');
         $this->assertSame($expected['types'], self::surface(),
             'Every public interface and enum retains its exact callable or vocabulary shape.');

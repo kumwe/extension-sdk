@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Manifest;
 
+use Kumwe\CanonicalJson\CanonicalEncoder;
+
 use InvalidArgumentException;
 use JsonException;
 use Kumwe\Extension\Manifest\ExtensionManifestGrammar;
@@ -257,8 +259,9 @@ final readonly class ExtensionManifest
      * @throws  InvalidArgumentException  When the document is oversized, malformed, or fails any check.
      *
      * @since   0.1.0
+     * @param CanonicalEncoder $canonicalEncoder Canonical encoding port supplied by the composition root.
      */
-    public static function fromJson(string $json): self
+    public static function fromJson(CanonicalEncoder $canonicalEncoder, string $json): self
     {
         if (strlen($json) > 1_048_576) {
             throw new InvalidArgumentException('An extension manifest cannot exceed one mebibyte.');
@@ -308,6 +311,7 @@ final readonly class ExtensionManifest
         $identifier = ExtensionIdentifier::fromString($name);
         $contributions = $schema >= 2
             ? ManifestContributions::fromManifest(
+                $canonicalEncoder,
                 $identifier,
                 self::requiredObject($data, 'contributions'),
                 $schema,

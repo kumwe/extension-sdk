@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Toolchain;
 
+use Kumwe\CanonicalJson\CanonicalEncoder;
+
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,6 +20,14 @@ use PHPUnit\Framework\TestCase;
  */
 abstract class ExtensionLifecycleTestCase extends TestCase
 {
+    /**
+     * Supply the canonical encoder from the product test composition root.
+     *
+     * @return CanonicalEncoder Canonical package admission port.
+     * @since 0.3.0
+     */
+    abstract protected function canonicalEncoder(): CanonicalEncoder;
+
     /**
      * Supply an adapter backed by the product's real test deployment.
      *
@@ -54,7 +64,7 @@ abstract class ExtensionLifecycleTestCase extends TestCase
      */
     final public function testExtensionLifecycleConformance(): void
     {
-        $report = ExtensionPackageConformance::withProductionDefaults()->runLifecycle(
+        $report = ExtensionPackageConformance::withProductionDefaults($this->canonicalEncoder())->runLifecycle(
             $this->lifecycleAdapter(),
             $this->basePackage(),
             $this->upgradePackage(),

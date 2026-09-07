@@ -50,7 +50,7 @@ final class PackageDeterminismTest extends TestCase
         $this->assertSame(6, count($sources), 'All six declared generations are exercised.');
         foreach ($sources as $source) {
             $name = basename($source);
-            $builder = new DeterministicPackageBuilder($this->inspector());
+            $builder = new DeterministicPackageBuilder(self::encoder(), $this->inspector());
             $first = $builder->build($source, $work . '/' . $name . '-first.zip');
             $second = $builder->build($source, $work . '/' . $name . '-second.zip');
 
@@ -93,7 +93,7 @@ final class PackageDeterminismTest extends TestCase
         $work = $this->workspace();
         $source = dirname(__DIR__, 2) . '/resources/fixtures/generations/manifest-1';
         $inspector = $this->inspector();
-        $built = (new DeterministicPackageBuilder($inspector))->build($source, $work . '/signed.zip');
+        $built = (new DeterministicPackageBuilder(self::encoder(), $inspector))->build($source, $work . '/signed.zip');
         $seed = random_bytes(SODIUM_CRYPTO_SIGN_SEEDBYTES);
         $keyFile = $work . '/signing.seed';
         file_put_contents($keyFile, bin2hex($seed), LOCK_EX);
@@ -156,7 +156,7 @@ final class PackageDeterminismTest extends TestCase
     {
         $work = $this->workspace();
         $source = dirname(__DIR__, 2) . '/resources/fixtures/generations/manifest-1';
-        $built = (new DeterministicPackageBuilder($this->inspector()))
+        $built = (new DeterministicPackageBuilder(self::encoder(), $this->inspector()))
             ->build($source, $work . '/canonical.zip');
 
         $sbom = json_decode($this->entry($built->archive, PackageBillOfMaterials::PATH), true);
@@ -192,7 +192,7 @@ final class PackageDeterminismTest extends TestCase
      */
     private function inspector(): PackageInspector
     {
-        return new PackageInspector(new PackageLimits());
+        return new PackageInspector(self::encoder(), new PackageLimits());
     }
 
     /**

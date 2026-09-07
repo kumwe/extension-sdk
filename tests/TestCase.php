@@ -12,6 +12,28 @@ namespace Kumwe\Extension\Tests;
 
 abstract class TestCase
 {
+    /**
+     * Native integration fixture; no PHP encoder is substituted when the native lane is unavailable.
+     *
+     * @return \Kumwe\CanonicalJson\CanonicalEncoder Explicitly configured native encoder.
+     * @since 0.3.0
+     */
+    final protected static function encoder(): \Kumwe\CanonicalJson\CanonicalEncoder
+    {
+        $path = getenv('KUMWE_NATIVE_EXPECTED_TUPLE');
+        if (!is_string($path) || !is_file($path) || !extension_loaded('kumwe_engine')) {
+            throw new \RuntimeException('SDK integration tests require native Engine and KUMWE_NATIVE_EXPECTED_TUPLE.');
+        }
+        $tuple = json_decode((string) file_get_contents($path), true, 64, JSON_THROW_ON_ERROR);
+        return new \Kumwe\Computation\NativeCanonicalEncoder(new \Kumwe\Engine\Runtime(), new \Kumwe\Computation\NativeCompatibility(
+            \Kumwe\Computation\CapabilitySet::fromArray($tuple['capabilities']),
+            $tuple['extension_version'],
+            $tuple['embedded_engine_commit'],
+            $tuple['embedded_source_sha256'],
+            $tuple['binding_build_digest'],
+        ));
+    }
+
     private int $assertions = 0;
 
     final public function assertionCount(): int

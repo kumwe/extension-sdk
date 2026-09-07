@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Toolchain;
 
+use Kumwe\CanonicalJson\CanonicalEncoder;
+
 use Kumwe\Extension\Package\InspectedPackage;
 use Kumwe\Extension\Package\PackageLimits;
 
@@ -24,8 +26,9 @@ final readonly class PackageInspector
      * @param  PackageLimits  $limits  Exact limits carried into each resulting snapshot.
      *
      * @since  0.2.0
+     * @param CanonicalEncoder $canonicalEncoder Canonical encoding port supplied by the composition root.
      */
-    public function __construct(private PackageLimits $limits = new PackageLimits())
+    public function __construct(private CanonicalEncoder $canonicalEncoder, private PackageLimits $limits = new PackageLimits())
     {
     }
 
@@ -40,7 +43,7 @@ final readonly class PackageInspector
      */
     public function inspect(string $archiveFile): PackageInspection
     {
-        return new PackageInspection(InspectedPackage::inspect($archiveFile, $this->limits));
+        return new PackageInspection(InspectedPackage::inspect($this->canonicalEncoder, $archiveFile, $this->limits));
     }
 
     /**

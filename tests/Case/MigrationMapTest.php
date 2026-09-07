@@ -48,7 +48,16 @@ final class MigrationMapTest extends TestCase
         $this->assertTrue($map['moved'] !== [], 'The adoption map must record at least one moved type.');
 
         $sourcesByTarget = [];
+        $successors = json_decode((string) file_get_contents(dirname(__DIR__, 2)
+            . '/docs/canonical-package-migration.json'), true, 64, JSON_THROW_ON_ERROR);
+        $byOld = array_column($successors['symbols'], null, 'old_fqcn');
         foreach ($map['moved'] as $source => $target) {
+            // The historical host adoption record stays unchanged; this candidate records a second move.
+            if (isset($byOld[$target])) {
+                $target = $byOld[$target]['new_fqcn'];
+                $type = new \ReflectionClass($target);
+                $classified[$target] = ['kind' => $type->isInterface() ? 'interface' : ($type->isEnum() ? 'enum' : 'class')];
+            }
             $this->assertTrue(
                 isset($classified[$target]),
                 sprintf('Moved value %s must name a type the canonical classification lists.', $target),

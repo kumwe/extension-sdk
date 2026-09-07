@@ -98,7 +98,7 @@ final class ExecutableBindingRequirementsTest extends TestCase
         for ($generation = 2; $generation <= 6; $generation++) {
             $manifest = $this->manifest($generation);
             $graph = $manifest->contributions()->declarations();
-            $reparsed = ManifestContributions::fromManifest(
+            $reparsed = ManifestContributions::fromManifest(self::encoder(), 
                 $manifest->identifier(),
                 $graph,
                 $manifest->schemaVersion(),
@@ -121,7 +121,7 @@ final class ExecutableBindingRequirementsTest extends TestCase
         }
         $decoded['contributions']['capabilities'][0]['id'] .= ' ';
         $this->assertThrows(
-            fn (): ExtensionManifest => ExtensionManifest::fromJson(json_encode($decoded, JSON_THROW_ON_ERROR)),
+            fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), json_encode($decoded, JSON_THROW_ON_ERROR)),
             InvalidArgumentException::class,
             'A binding identity with normalization-sensitive whitespace is refused.',
         );
@@ -145,7 +145,7 @@ final class ExecutableBindingRequirementsTest extends TestCase
         }
         $decoded['contributions']['composition']['host_bindings'][0]['renderer'] = null;
         $this->assertThrows(
-            fn (): ExtensionManifest => ExtensionManifest::fromJson(json_encode($decoded, JSON_THROW_ON_ERROR)),
+            fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), json_encode($decoded, JSON_THROW_ON_ERROR)),
             InvalidArgumentException::class,
             'A block without its exact preview renderer is refused.',
         );
@@ -177,7 +177,7 @@ final class ExecutableBindingRequirementsTest extends TestCase
     /** @since 0.2.0 */
     private function manifest(int $generation): ExtensionManifest
     {
-        return ExtensionManifest::fromJson($this->fixture($generation));
+        return ExtensionManifest::fromJson(self::encoder(), $this->fixture($generation));
     }
 
     /** @since 0.2.0 */

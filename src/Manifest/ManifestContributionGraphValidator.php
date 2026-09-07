@@ -4,19 +4,21 @@ declare(strict_types=1);
 
 namespace Kumwe\Extension\Manifest;
 
+use Kumwe\CanonicalJson\CanonicalEncoder;
+
 use InvalidArgumentException;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\JobContributionDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\ConsumerIdempotency;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\DomainListenerDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventConsumerDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventSensitivity;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\WebhookContributionDefinition;
-use Kumwe\Extension\Spi\BusinessReporting\Domain\ProjectionDefinition;
-use Kumwe\Extension\Spi\BusinessSurface\Application\Custom\CustomBusinessActionDeclaration;
-use Kumwe\Extension\Spi\BusinessSurface\Application\Custom\CustomBusinessReference;
-use Kumwe\Extension\Spi\BusinessSurface\Application\Custom\CustomBusinessViewDeclaration;
-use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldPresentationContribution;
-use Kumwe\Extension\Spi\Contribution\ContributionOwner;
+use Kumwe\Automation\JobContributionDefinition;
+use Kumwe\Integration\ConsumerIdempotency;
+use Kumwe\Integration\DomainListenerDefinition;
+use Kumwe\Integration\EventConsumerDefinition;
+use Kumwe\Integration\EventSensitivity;
+use Kumwe\Integration\WebhookContributionDefinition;
+use Kumwe\Reporting\Domain\ProjectionDefinition;
+use Kumwe\BusinessSurface\Contract\Application\Custom\CustomBusinessActionDeclaration;
+use Kumwe\BusinessSurface\Contract\Application\Custom\CustomBusinessReference;
+use Kumwe\BusinessSurface\Contract\Application\Custom\CustomBusinessViewDeclaration;
+use Kumwe\BusinessSurface\Contract\Presentation\Field\FieldPresentationContribution;
+use Kumwe\Contribution\ContributionOwner;
 
 /**
  * Structural and referential validator for the complete canonical contribution graph.
@@ -34,8 +36,9 @@ final class ManifestContributionGraphValidator
      * @param  array<string, mixed>  $data            Complete contribution graph.
      * @param  int                   $manifestSchema  Declaring manifest schema generation.
      * @since  0.2.0
+     * @param CanonicalEncoder $canonicalEncoder Canonical encoding port supplied by the composition root.
      */
-    public static function validate(ContributionOwner $owner, array $data, int $manifestSchema = 4): void
+    public static function validate(CanonicalEncoder $canonicalEncoder, ContributionOwner $owner, array $data, int $manifestSchema = 4): void
     {
         $capabilities = self::identities(
             self::objects($data['capabilities'] ?? [], 'capabilities'),
@@ -52,12 +55,12 @@ final class ManifestContributionGraphValidator
         self::validateGraphical($owner, $capabilities, $administrator, $portal, $interface, $manifestSchema);
         self::validateResourcePolicies($owner, $capabilities, $data);
         [$definitionHandles, $fieldTypes] = self::validateBusiness($owner, $business);
-        self::validateIntegration($owner, $capabilities, $definitionHandles, $integration);
+        self::validateIntegration($canonicalEncoder, $owner, $capabilities, $definitionHandles, $integration);
         self::validateContent($owner, $content);
         foreach (self::objects($business['field_presentations'] ?? [], 'business.field_presentations') as $item) {
             $presentation = FieldPresentationContribution::fromArray($item);
             $fieldType = $presentation->fieldType;
-            $owner->assertOwns($fieldType, 'field type');
+            $owner->assertOwns($fieldType, ManifestIdentifierPolicies::forKind('field type'));
             if (!isset($fieldTypes[$fieldType])) {
                 throw new InvalidArgumentException('A field presentation must reference a declared field type.');
             }
@@ -291,8 +294,8 @@ final class ManifestContributionGraphValidator
         $customReferences = [];
         foreach (self::objects($business['view_handlers'] ?? [], 'business.view_handlers') as $item) {
             $declaration = CustomBusinessViewDeclaration::fromManifest($item);
-            $owner->assertOwns($declaration->handler, 'custom business view handler');
-            $owner->assertOwns($declaration->schema, 'custom business view schema');
+            $owner->assertOwns($declaration->handler, ManifestIdentifierPolicies::forKind('custom business view handler'));
+            $owner->assertOwns($declaration->schema, ManifestIdentifierPolicies::forKind('custom business view schema'));
             if (isset($viewContracts[$declaration->handler])) {
                 throw new InvalidArgumentException('A custom business view handler is declared more than once.');
             }
@@ -302,8 +305,8 @@ final class ManifestContributionGraphValidator
         }
         foreach (self::objects($business['action_handlers'] ?? [], 'business.action_handlers') as $item) {
             $declaration = CustomBusinessActionDeclaration::fromManifest($item);
-            $owner->assertOwns($declaration->handler, 'custom business action handler');
-            $owner->assertOwns($declaration->schema, 'custom business action schema');
+            $owner->assertOwns($declaration->handler, ManifestIdentifierPolicies::forKind('custom business action handler'));
+            $owner->assertOwns($declaration->schema, ManifestIdentifierPolicies::forKind('custom business action schema'));
             if (isset($actionContracts[$declaration->handler])) {
                 throw new InvalidArgumentException('A custom business action handler is declared more than once.');
             }
@@ -387,8 +390,10 @@ final class ManifestContributionGraphValidator
      * @param  array<string, mixed>  $integration        Integration declaration section.
      *
      * @since  0.2.0
+     * @param CanonicalEncoder $canonicalEncoder Canonical encoding port supplied by the composition root.
      */
     private static function validateIntegration(
+        CanonicalEncoder $canonicalEncoder,
         ContributionOwner $owner,
         array $capabilities,
         array $definitionHandles,
@@ -435,7 +440,7 @@ final class ManifestContributionGraphValidator
                 'listener_id', 'event_type', 'schema_versions', 'handler_version', 'priority', 'sensitivity_ceiling',
             ], 'domain listener');
             $declaration = DomainListenerDefinition::fromArray($item);
-            $owner->assertOwns($declaration->identifier(), 'domain listener');
+            $owner->assertOwns($declaration->identifier(), ManifestIdentifierPolicies::forKind('domain listener'));
             self::assertEventBinding($owner, $eventSchemas, $declaration->eventType(), $declaration->schemaVersions());
             self::requiredString($item, 'handler_version', 'domain listener');
             if (!is_int($item['priority'] ?? null) || $item['priority'] < -1_000 || $item['priority'] > 1_000) {
@@ -452,7 +457,7 @@ final class ManifestContributionGraphValidator
                 'idempotency', 'maximum_attempts', 'sensitivity_ceiling',
             ], 'event consumer');
             $declaration = EventConsumerDefinition::fromArray($item);
-            $owner->assertOwns($declaration->identifier(), 'event consumer');
+            $owner->assertOwns($declaration->identifier(), ManifestIdentifierPolicies::forKind('event consumer'));
             self::assertEventBinding($owner, $eventSchemas, $declaration->eventType(), $declaration->schemaVersions());
             self::assertQueueReference($queues, $item, 'event consumer');
             self::requiredBoolean($item['aggregate_ordered'] ?? null, 'event consumer aggregate ordering');
@@ -472,8 +477,8 @@ final class ManifestContributionGraphValidator
                 'job_type', 'schema_version', 'handler_version', 'payload_schema', 'queue', 'maximum_attempts',
                 'installation_wide',
             ], 'job');
-            $declaration = JobContributionDefinition::fromArray($item);
-            $owner->assertOwns($declaration->identifier(), 'job');
+            $declaration = JobContributionDefinition::fromArray($canonicalEncoder, $item);
+            $owner->assertOwns($declaration->identifier(), ManifestIdentifierPolicies::forKind('job'));
             self::assertQueueReference($queues, $item, 'job');
             self::requiredString($item, 'handler_version', 'job');
             self::nonEmptyObject($item['payload_schema'] ?? null, 'job payload schema');
@@ -508,7 +513,7 @@ final class ManifestContributionGraphValidator
                 'fields', 'key_fields', 'rebuild_batch_size',
             ], 'projection');
             $declaration = ProjectionDefinition::fromArray($item);
-            $owner->assertOwns($declaration->identifier(), 'projection');
+            $owner->assertOwns($declaration->identifier(), ManifestIdentifierPolicies::forKind('projection'));
             foreach ($declaration->sources as $source) {
                 self::assertEventBinding($owner, $eventSchemas, $source->eventType, $source->schemaVersions);
             }
@@ -538,7 +543,7 @@ final class ManifestContributionGraphValidator
                 'maximum_attempts', 'sensitivity_ceiling',
             ], 'webhook');
             $declaration = WebhookContributionDefinition::fromArray($item);
-            $owner->assertOwns($declaration->identifier(), 'webhook');
+            $owner->assertOwns($declaration->identifier(), ManifestIdentifierPolicies::forKind('webhook'));
             foreach ($declaration->eventTypes() as $eventType) {
                 self::assertEventBinding($owner, $eventSchemas, $eventType, $declaration->schemaVersions());
             }
@@ -648,7 +653,7 @@ final class ManifestContributionGraphValidator
             str_starts_with($eventType, $owner->namespace() . '.')
             || !str_starts_with($eventType, ContributionOwner::CORE . '.')
         ) {
-            $owner->assertOwns($eventType, 'event type');
+            $owner->assertOwns($eventType, ManifestIdentifierPolicies::forKind('event type'));
             self::assertEventReferences($eventSchemas, $eventType, $versions);
         }
     }
@@ -703,7 +708,7 @@ final class ManifestContributionGraphValidator
     private static function owned(ContributionOwner $owner, array $item, string $member, string $kind): string
     {
         $identifier = self::requiredString($item, $member, $kind);
-        $owner->assertOwns($identifier, $kind);
+        $owner->assertOwns($identifier, ManifestIdentifierPolicies::forKind($kind));
 
         return $identifier;
     }

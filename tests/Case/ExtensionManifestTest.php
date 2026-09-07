@@ -16,7 +16,7 @@ use Kumwe\Extension\Manifest\ExtensionManifest;
 use Kumwe\Extension\Manifest\ExtensionType;
 use Kumwe\Extension\Manifest\ManifestContributions;
 use Kumwe\Extension\Manifest\SemanticVersion;
-use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldPresentationContext;
+use Kumwe\BusinessSurface\Contract\Presentation\Field\FieldPresentationContext;
 use Kumwe\Extension\Tests\TestCase;
 
 /**
@@ -35,7 +35,7 @@ final class ExtensionManifestTest extends TestCase
      */
     public function testSchemaOneTemplateReceivesExactLegacyKisCompatibility(): void
     {
-        $manifest = ExtensionManifest::fromJson(str_replace(
+        $manifest = ExtensionManifest::fromJson(self::encoder(), str_replace(
             '"type": "plugin"',
             '"type": "template"',
             $this->manifestJson(),
@@ -72,7 +72,7 @@ final class ExtensionManifestTest extends TestCase
 
         $failure = $this->assertThrows(
             static fn (): ExtensionManifest
-                => ExtensionManifest::fromJson(json_encode($data, JSON_THROW_ON_ERROR)),
+                => ExtensionManifest::fromJson(self::encoder(), json_encode($data, JSON_THROW_ON_ERROR)),
             InvalidArgumentException::class,
             'A strict template without a declaration must be refused.',
         );
@@ -101,7 +101,7 @@ final class ExtensionManifestTest extends TestCase
             'tokens' => ['minimum' => '1.0.0', 'maximum' => '1.0.0'],
         ];
 
-        $manifest = ExtensionManifest::fromJson(json_encode($data, JSON_THROW_ON_ERROR));
+        $manifest = ExtensionManifest::fromJson(self::encoder(), json_encode($data, JSON_THROW_ON_ERROR));
         $compatibility = $manifest->templateCompatibility();
 
         $this->assertTrue($compatibility !== null, 'The declaration is parsed.');
@@ -117,7 +117,7 @@ final class ExtensionManifestTest extends TestCase
      */
     public function testParsesACompatibleManifestWithTypedDependencies(): void
     {
-        $manifest = ExtensionManifest::fromJson($this->manifestJson());
+        $manifest = ExtensionManifest::fromJson(self::encoder(), $this->manifestJson());
 
         $this->assertSame('acme/editor', $manifest->identifier()->value(), 'The identifier normalises.');
         $this->assertSame(ExtensionType::Plugin, $manifest->type(), 'The type parses to its enum case.');
@@ -140,7 +140,7 @@ final class ExtensionManifestTest extends TestCase
     public function testRejectsSelfDependencies(): void
     {
         $this->assertThrows(
-            fn (): ExtensionManifest => ExtensionManifest::fromJson(
+            fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), 
                 str_replace('acme/library', 'acme/editor', $this->manifestJson()),
             ),
             InvalidArgumentException::class,
@@ -157,7 +157,7 @@ final class ExtensionManifestTest extends TestCase
      */
     public function testParsesStrictSchemaTwoContributionContracts(): void
     {
-        $manifest = ExtensionManifest::fromJson(<<<'JSON'
+        $manifest = ExtensionManifest::fromJson(self::encoder(), <<<'JSON'
 {
   "schema": 2,
   "name": "acme/editor",
@@ -240,7 +240,7 @@ JSON);
         $json = str_replace('"schema": 1,', '"schema": 2, "unknown": true,', $this->manifestJson());
 
         $failure = $this->assertThrows(
-            static fn (): ExtensionManifest => ExtensionManifest::fromJson($json),
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), $json),
             InvalidArgumentException::class,
             'An unknown strict root key must be refused.',
         );
@@ -256,7 +256,7 @@ JSON);
      */
     public function testSchemaOneRemainsPermissiveAndHasNoTypedShellContributions(): void
     {
-        $manifest = ExtensionManifest::fromJson(str_replace(
+        $manifest = ExtensionManifest::fromJson(self::encoder(), str_replace(
             '"schema": 1,',
             '"schema": 1, "unknown_package_metadata": true,',
             $this->manifestJson(),
@@ -281,7 +281,7 @@ JSON);
     public function testSchemaTwoRejectsForeignContributionOwnership(): void
     {
         $failure = $this->assertThrows(
-            static fn (): ExtensionManifest => ExtensionManifest::fromJson(<<<'JSON'
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), <<<'JSON'
 {
   "schema": 2,
   "name": "acme/editor",
@@ -304,11 +304,8 @@ JSON),
             InvalidArgumentException::class,
             'A foreign-owned capability must be refused.',
         );
-        $this->assertStringContains(
-            'cannot claim capability identifier foreign.manage',
-            $failure->getMessage(),
-            'The refusal names the claimed identifier.',
-        );
+        $this->assertTrue($failure instanceof \Kumwe\Contribution\ContributionRejected, 'The canonical owner supplies its typed refusal.');
+        $this->assertSame('owner_mismatch', $failure->reason, 'The foreign owner claim is refused.');
     }
 
     /**
@@ -321,7 +318,7 @@ JSON),
     public function testSchemaTwoRejectsUnknownNestedKeys(): void
     {
         $failure = $this->assertThrows(
-            static fn (): ExtensionManifest => ExtensionManifest::fromJson(<<<'JSON'
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), <<<'JSON'
 {
   "schema": 2,
   "name": "acme/editor",
@@ -353,7 +350,7 @@ JSON),
     public function testSchemaTwoRejectsSchemaThreeBusinessKeys(): void
     {
         $failure = $this->assertThrows(
-            fn (): ExtensionManifest => ExtensionManifest::fromJson($this->schemaThreeBusinessManifest(2)),
+            fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), $this->schemaThreeBusinessManifest(2)),
             InvalidArgumentException::class,
             'A schema-2 manifest naming schema-3 business keys must be refused.',
         );
@@ -373,7 +370,7 @@ JSON),
      */
     public function testSchemaThreeAdmitsNewBusinessContributionKeys(): void
     {
-        $manifest = ExtensionManifest::fromJson($this->schemaThreeBusinessManifest(3));
+        $manifest = ExtensionManifest::fromJson(self::encoder(), $this->schemaThreeBusinessManifest(3));
 
         $this->assertSame(3, $manifest->schemaVersion(), 'The schema-3 manifest parses.');
         $this->assertSame(
@@ -412,7 +409,7 @@ JSON),
         ];
 
         $failure = $this->assertThrows(
-            static fn (): ExtensionManifest => ExtensionManifest::fromJson(
+            static fn (): ExtensionManifest => ExtensionManifest::fromJson(self::encoder(), 
                 json_encode($data, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES),
             ),
             InvalidArgumentException::class,
@@ -435,7 +432,7 @@ JSON),
     public function testSchemaThreeContributionsRoundTripAFieldPresentationDeclaration(): void
     {
         $document = $this->fieldPresentationContributions();
-        $declared = ManifestContributions::fromManifest(ExtensionIdentifier::fromString('acme/editor'), $document, 3);
+        $declared = ManifestContributions::fromManifest(self::encoder(), ExtensionIdentifier::fromString('acme/editor'), $document, 3);
         $roundTrip = $declared->declarations();
 
         $this->assertSame(
@@ -445,7 +442,7 @@ JSON),
         );
         $this->assertSame(
             $roundTrip,
-            ManifestContributions::fromManifest(ExtensionIdentifier::fromString('acme/editor'), $roundTrip, 3)
+            ManifestContributions::fromManifest(self::encoder(), ExtensionIdentifier::fromString('acme/editor'), $roundTrip, 3)
                 ->declarations(),
             'The exported declaration re-parses to itself.',
         );
@@ -488,7 +485,7 @@ JSON),
         ]];
         $document['business']['field_presentations'][0]['contexts'] = ['relation', 'update', 'detail', 'create', 'list'];
 
-        $declared = ManifestContributions::fromManifest(ExtensionIdentifier::fromString('acme/editor'), $document, 3);
+        $declared = ManifestContributions::fromManifest(self::encoder(), ExtensionIdentifier::fromString('acme/editor'), $document, 3);
 
         $this->assertSame(
             ['create', 'detail', 'list', 'relation', 'update'],
@@ -513,7 +510,7 @@ JSON),
     {
         $document = $this->fieldPresentationContributions();
         $failure = $this->assertThrows(
-            static fn (): ManifestContributions => ManifestContributions::fromManifest(
+            static fn (): ManifestContributions => ManifestContributions::fromManifest(self::encoder(), 
                 ExtensionIdentifier::fromString('acme/editor'),
                 $document,
                 2,
@@ -524,7 +521,7 @@ JSON),
         $this->assertStringContains('unknown key field_presentations', $failure->getMessage(), 'The key is named.');
 
         unset($document['business']['field_presentations']);
-        $roundTrip = ManifestContributions::fromManifest(ExtensionIdentifier::fromString('acme/editor'), $document, 2)
+        $roundTrip = ManifestContributions::fromManifest(self::encoder(), ExtensionIdentifier::fromString('acme/editor'), $document, 2)
             ->declarations();
         $expected = $document['business']['field_types'][0];
         ksort($expected, SORT_STRING);
@@ -545,7 +542,7 @@ JSON),
      */
     public function testAManifestWithoutAContentSectionExportsNone(): void
     {
-        $bare = ManifestContributions::fromManifest(ExtensionIdentifier::fromString('acme/blog'), ['version' => 2], 4);
+        $bare = ManifestContributions::fromManifest(self::encoder(), ExtensionIdentifier::fromString('acme/blog'), ['version' => 2], 4);
 
         $this->assertSame(['version' => 2], $bare->declarations(), 'The bare set exports only its SPI version.');
         $this->assertSame([], $bare->surfaceCounts(), 'The bare set counts no surface.');

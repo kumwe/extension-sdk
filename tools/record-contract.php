@@ -88,14 +88,10 @@ function recordPublicApi(string $root): array
         'internal_namespaces' => [
             'Kumwe\\Extension\\Support\\',
         ],
-        'external_packages' => [
-            'doctrine/dbal',
-            'kumwe/conversion',
-            'kumwe/producer',
-            'psr/http-message',
-            'psr/http-server-handler',
-            'ramsey/uuid',
-        ],
+        'external_packages' => array_values(array_filter(
+            array_keys(json_decode(headBytes($root, 'composer.json'), true, 64, JSON_THROW_ON_ERROR)['require']),
+            static fn (string $package): bool => str_contains($package, '/'),
+        )),
         'types' => $types,
     ];
 }

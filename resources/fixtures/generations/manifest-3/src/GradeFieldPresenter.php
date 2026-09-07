@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace KumweContract\ManifestThree;
 
 use InvalidArgumentException;
-use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldPresentationInput;
-use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldPresentationModel;
-use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldPresenter;
-use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldWidget;
+use Kumwe\BusinessSurface\Contract\Presentation\Field\FieldPresentationInput;
+use Kumwe\BusinessSurface\Contract\Presentation\Field\FieldPresentationModel;
+use Kumwe\BusinessSurface\Contract\Presentation\Field\FieldPresenter;
+use Kumwe\BusinessSurface\Contract\Presentation\Field\FieldWidget;
 
 /**
  * Presents the manifest-3 compatibility grade as markup-free output.
@@ -20,6 +20,14 @@ use Kumwe\Extension\Spi\BusinessSurface\Presentation\Field\FieldWidget;
  */
 final readonly class GradeFieldPresenter implements FieldPresenter
 {
+    /**
+     * @param \Kumwe\CanonicalJson\CanonicalEncoder $canonicalEncoder Host-granted canonical admission port.
+     * @since 0.3.0
+     */
+    public function __construct(private \Kumwe\CanonicalJson\CanonicalEncoder $canonicalEncoder)
+    {
+    }
+
     /**
      * Render the disclosed grade as read-only text in every declared context.
      *
@@ -47,6 +55,7 @@ final readonly class GradeFieldPresenter implements FieldPresenter
             null,
             false,
             $request->required,
+            $this->canonicalEncoder,
             $request->errors,
             [],
         );

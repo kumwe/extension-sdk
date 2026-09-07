@@ -13,6 +13,11 @@
 
 declare(strict_types=1);
 
+use Kumwe\CanonicalJson\CanonicalEncoder;
+use Kumwe\Computation\CapabilitySet;
+use Kumwe\Computation\NativeCanonicalEncoder;
+use Kumwe\Computation\NativeCompatibility;
+use Kumwe\Engine\Runtime;
 use Kumwe\Extension\Package\PackageCodeConformance;
 use Kumwe\Extension\Package\PackageEvidenceInspector;
 use Kumwe\Extension\Package\PackageEvidenceScope;
@@ -62,11 +67,11 @@ if (!is_string($target) || $target === '' || !str_starts_with($target, '/')) {
     exit(2);
 }
 
-$archiveInspector = new PackageInspector(new PackageLimits());
-
 try {
+    $canonicalEncoder = nativeCanonicalEncoder();
+    $archiveInspector = new PackageInspector($canonicalEncoder, new PackageLimits());
     $result = match ($command) {
-        'build' => buildPackage($target, $arguments, $archiveInspector),
+        'build' => buildPackage($canonicalEncoder, $target, $arguments, $archiveInspector),
         'inspect' => $archiveInspector->inspect($target)->toArray(),
         'evidence' => inspectEvidence($target, $archiveInspector),
         'conformance' => runConformance($target, $archiveInspector),
@@ -92,7 +97,7 @@ try {
  *
  * @since   0.2.0
  */
-function buildPackage(string $source, array $arguments, PackageInspector $inspector): array
+function buildPackage(CanonicalEncoder $canonicalEncoder, string $source, array $arguments, PackageInspector $inspector): array
 {
     $output = null;
     foreach ($arguments as $argument) {
@@ -106,7 +111,7 @@ function buildPackage(string $source, array $arguments, PackageInspector $inspec
         throw new InvalidArgumentException('Build requires --output=ABSOLUTE_ARCHIVE.');
     }
 
-    return (new DeterministicPackageBuilder($inspector))->build($source, $output)->toArray();
+    return (new DeterministicPackageBuilder($canonicalEncoder, $inspector))->build($source, $output)->toArray();
 }
 
 /**
@@ -141,4 +146,41 @@ function inspectEvidence(string $archive, PackageInspector $inspector): array
 function runConformance(string $archive, PackageInspector $inspector): array
 {
     return (new StaticConformanceRunner($inspector))->run($archive)->toArray();
+}
+
+/**
+ * Compose the native encoder against an explicitly supplied expected compatibility tuple.
+ *
+ * @return CanonicalEncoder Verified native adapter for this invocation.
+ * @throws RuntimeException When the native dependency or expected tuple is unavailable.
+ * @since 0.3.0
+ */
+function nativeCanonicalEncoder(): CanonicalEncoder
+{
+    if (!extension_loaded('kumwe_engine') || !class_exists(NativeCanonicalEncoder::class)) {
+        throw new RuntimeException('The CLI requires kumwe/computation and the actual kumwe_engine extension.');
+    }
+    $configuration = getenv('KUMWE_NATIVE_EXPECTED_TUPLE');
+    if (!is_string($configuration) || $configuration === '' || !is_file($configuration)) {
+        throw new RuntimeException('Set KUMWE_NATIVE_EXPECTED_TUPLE to the expected compatibility JSON file.');
+    }
+    $bytes = file_get_contents($configuration);
+    if (!is_string($bytes)) {
+        throw new RuntimeException('The expected native compatibility tuple could not be read.');
+    }
+    $tuple = json_decode($bytes, true, 64, JSON_THROW_ON_ERROR);
+    if (!is_array($tuple) || !is_array($tuple['capabilities'] ?? null)
+        || !is_string($tuple['extension_version'] ?? null)
+        || !is_string($tuple['embedded_engine_commit'] ?? null)
+        || !is_string($tuple['embedded_source_sha256'] ?? null)
+        || !is_string($tuple['binding_build_digest'] ?? null)) {
+        throw new RuntimeException('The expected native compatibility tuple has an invalid shape.');
+    }
+    return new NativeCanonicalEncoder(new Runtime(), new NativeCompatibility(
+        CapabilitySet::fromArray($tuple['capabilities']),
+        $tuple['extension_version'],
+        $tuple['embedded_engine_commit'],
+        $tuple['embedded_source_sha256'],
+        $tuple['binding_build_digest'],
+    ));
 }

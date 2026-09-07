@@ -6,8 +6,8 @@ namespace KumweContract\ManifestFour\Integration;
 
 use Kumwe\Extension\Spi\Application\ExecutionContext;
 use Kumwe\Extension\Spi\BusinessIntegration\Application\IntegrationEventHandler;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\EventConsumerDefinition;
-use Kumwe\Extension\Spi\BusinessIntegration\Domain\IntegrationEvent;
+use Kumwe\Integration\EventConsumerDefinition;
+use Kumwe\Integration\IntegrationEvent;
 
 /**
  * Durable, queue-backed consumer half of the manifest-4 compatibility package.
