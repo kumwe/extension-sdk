@@ -14,6 +14,8 @@ The complete SDK behavioral suite likewise requires the actual native extension 
 
 Both the required SDK source job and the additional native candidate job build the pinned native extension, install the explicit candidate graph, and run the complete SDK gate and fresh archive consumer. Release automation and the required aggregate Package gate remain unchanged.
 
+Within one CI job, production reinstallation reuses the successfully installed Composer plan and lock after checking the same SDK inputs and dependency commits, trees and clean contents. This keeps an already verified development checkout usable if its branch is merged and deleted during the job. Initial installation still verifies every remote coordinate; stable tags are checked again during reinstallation. Snapshots from another job or altered inputs are refused.
+
 Published canonical JSON 0.1.1 is selected by its exact tag commit. Where an upstream fix awaits a maintainer merge, the source graph selects that real repair branch and exact commit; Composer requirements admit the documented main and repair branches without version aliases. Merged dependency branches are refreshed to released versions as those versions become available. Both native lanes build binding `81a30990f24767b61f3b0d1cfe4c073389e09b97` with optimized Engine `24d43dd6b4755010f1eb8fea9c8f1d6373cc06fa`.
 
 The top Unreleased changelog section describes the canonical API successor. Version 0.2.5 remains the previously published API. Before publishing the successor, replace the remaining development requirements with verified stable dependency versions and record a new release version; green source tests alone do not create that release.
