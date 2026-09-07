@@ -13,7 +13,7 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^11.5",
-    "kumwe/computation": "dev-main || dev-agent/native-runtime-closure-v3"
+    "kumwe/computation": "dev-main || dev-agent/canonical-main-dependency-v2"
   },
   "autoload": {
     "psr-4": {
