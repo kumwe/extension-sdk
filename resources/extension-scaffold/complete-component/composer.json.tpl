@@ -13,7 +13,7 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^11.5",
-    "kumwe/computation": "dev-codex/native-adapter-candidate"
+    "kumwe/computation": "dev-main || dev-agent/native-runtime-closure-v3"
   },
   "autoload": {
     "psr-4": {

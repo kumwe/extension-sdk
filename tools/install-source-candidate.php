@@ -17,9 +17,45 @@ foreach($dependencies as $name=>$dependency){
  $observed=trim(shell_exec('git -C '.escapeshellarg($path).' rev-parse HEAD')??'');
  if(!is_string($dependency['ref'])||preg_match('/^[0-9a-f]{40}$/D',$dependency['ref'])!==1
   ||$observed!==$dependency['ref'])throw new RuntimeException('Candidate dependency commit mismatch: '.$name);
+ // Verify the advertised Composer coordinate against the real remote before assigning it to a checkout.
+ $version=$dependency['version'];
+ if(!is_string($version))throw new RuntimeException('Invalid candidate version.');
+ $refs=str_starts_with($version,'dev-')
+  ? ['refs/heads/'.substr($version,4)]
+  : ['refs/tags/'.$version,'refs/tags/'.$version.'^{}','refs/tags/v'.$version,'refs/tags/v'.$version.'^{}'];
+ $remote=proc_open(['git','ls-remote','--exit-code','https://github.com/'.$name.'.git',...$refs],
+  [0=>['pipe','r'],1=>['pipe','w'],2=>['pipe','w']],$pipes);
+ if(!is_resource($remote))throw new RuntimeException('Cannot verify source coordinate: '.$name);
+ fclose($pipes[0]);$remoteOutput=stream_get_contents($pipes[1]);fclose($pipes[1]);
+ stream_get_contents($pipes[2]);fclose($pipes[2]);$remoteStatus=proc_close($remote);
+ $resolved=[];
+ foreach(explode("\n",trim($remoteOutput)) as $line){
+  if(preg_match('/^([0-9a-f]{40})\s+(refs\/[^\s]+)$/D',$line,$match)===1)$resolved[$match[2]]=$match[1];
+ }
+ $matches=false;
+ foreach($refs as $ref){
+  if(str_ends_with($ref,'^{}'))continue;
+  if(($resolved[$ref.'^{}']??$resolved[$ref]??null)===$observed)$matches=true;
+ }
+ if($remoteStatus===0&&!$matches&&str_starts_with($version,'dev-')&&isset($resolved[$refs[0]])){
+  // A reviewed commit remains valid when its live development branch advances.
+  $remoteHead=$resolved[$refs[0]];
+  $shallow=trim(shell_exec('git -C '.escapeshellarg($path).' rev-parse --is-shallow-repository')??'')==='true';
+  $fetch=['git','-C',$path,'fetch','--quiet','--no-tags'];
+  if($shallow)$fetch[]='--unshallow';
+  $fetch[]='https://github.com/'.$name.'.git';$fetch[]=$refs[0];
+  $fetchProcess=proc_open($fetch,[STDIN,STDOUT,STDERR],$fetchPipes);
+  $fetchStatus=is_resource($fetchProcess)?proc_close($fetchProcess):1;
+  if($fetchStatus===0){
+   $ancestry=proc_open(['git','-C',$path,'merge-base','--is-ancestor',$observed,$remoteHead],
+    [STDIN,STDOUT,STDERR],$ancestryPipes);
+   $matches=is_resource($ancestry)&&proc_close($ancestry)===0;
+  }
+ }
+ if($remoteStatus!==0||!$matches)throw new RuntimeException('Unavailable or unrelated source coordinate: '.$name.' '.$version);
  $config['repositories'][]=['type'=>'path','url'=>$path,'options'=>['symlink'=>false,'versions'=>[$name=>$dependency['version']]]];
  $source[$name]=['path'=>$path,'version'=>$dependency['version']];
- $evidence[$name]=['version'=>$dependency['version'],'checkout_commit'=>$observed];
+ $evidence[$name]=['version'=>$dependency['version'],'checkout_commit'=>$observed,'remote_coordinate_verified'=>true];
 }
 $config['minimum-stability']='dev';$config['prefer-stable']=true;
 $temporary=$root.'/.composer.candidate.json';file_put_contents($temporary,json_encode($config,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_THROW_ON_ERROR));

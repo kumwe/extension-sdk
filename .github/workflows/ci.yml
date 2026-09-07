@@ -27,49 +27,49 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/kumwe-engine
-          ref: 7a06fbd9d09d3bd81f65f3eed45986bad9a96bc2
+          ref: 81a30990f24767b61f3b0d1cfe4c073389e09b97
           path: native
           persist-credentials: false
       - name: Check out access-control source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/access-control
-          ref: 28dd9367bc8e0a17a30dbec42e76ebe66b7aeb94
+          ref: 54dbaa1dbffeb09ba390a5e75e8adc951c437a41
           path: dependencies/access-control
           persist-credentials: false
       - name: Check out administrator-contract source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/administrator-contract
-          ref: 0c4babc7414b540e8c11db64b71105abb4c2fbe2
+          ref: 3322ade4ba857a04878763bef65cc44fd191b068
           path: dependencies/administrator-contract
           persist-credentials: false
       - name: Check out portal-contract source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/portal-contract
-          ref: d952d07b6c5500e6403eb42fa8a5d9015d51ef6b
+          ref: 9275c1a636c9597b1cf8ac6f8ed84ccd38f79d88
           path: dependencies/portal-contract
           persist-credentials: false
       - name: Check out business-surface-contract source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/business-surface-contract
-          ref: 4f9c01f2c39c6e9c47a485946a5475f8009a6f8c
+          ref: 95a40cba48e088910480f921726514fe857450d0
           path: dependencies/business-surface-contract
           persist-credentials: false
       - name: Check out automation source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/automation
-          ref: 9982d8ac9ca6bc28b15913b2942d59685bbf6c29
+          ref: d8f62b8b687308c403b085012ff624faa6cbca5d
           path: dependencies/automation
           persist-credentials: false
       - name: Check out integration source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/integration
-          ref: 38420957e8b5070e5239bb1be57e2cb26328f1c5
+          ref: 76751a925f726f1cc1e5a156ff59a1fc663b4429
           path: dependencies/integration
           persist-credentials: false
       - name: Check out canonical-json source
@@ -83,7 +83,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/idempotency
-          ref: 080a9cd6ad2a2414d28a45c89ba6321bc185b033
+          ref: 459c6559c84f7666cc06c80d131b513b7ac2d2df
           path: dependencies/idempotency
           persist-credentials: false
       - name: Check out business-policy source
@@ -97,35 +97,35 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/record-model
-          ref: 1f7a7eaab29f9bf90feaca8d90329dc838c647e9
+          ref: 5005194d76c7a67a0e49fca08e382dc92bcc31a7
           path: dependencies/record-model
           persist-credentials: false
       - name: Check out record-query source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/record-query
-          ref: f3c6c52f72ee918efebb1f507b4d1b5ff2d3a762
+          ref: 6a7c5de54a7cd967f2e46889c59410ef345ec803
           path: dependencies/record-query
           persist-credentials: false
       - name: Check out record-values source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/record-values
-          ref: 84d73f3d42b95b5c32ab5999d886f82bb9718440
+          ref: 8a3452f618f30b69ca6ee62ccffaf483ebb9bf75
           path: dependencies/record-values
           persist-credentials: false
       - name: Check out reporting source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/reporting
-          ref: ee8e9a6c933721a95a3f252b29d3b0db756a88f8
+          ref: 066ffa4b4341519e60f93b1474f6e1ee82323aec
           path: dependencies/reporting
           persist-credentials: false
       - name: Check out business-definition source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/business-definition
-          ref: 26c77a6258e0af80fec0d971b66624b750ab5d1c
+          ref: 2cbb7f0430b4a950c129064b380ecf2378cc6662
           path: dependencies/business-definition
           persist-credentials: false
       - name: Check out sequence source
@@ -174,7 +174,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/computation
-          ref: 5831786ef014462b25c4d72e08ee960d645f1b7b
+          ref: de5460786f0c8d04ff8df07952a0b9309d6f045d
           path: dependencies/computation
           persist-credentials: false
       - name: Set up PHP
@@ -187,7 +187,7 @@ jobs:
       - name: Build and load pinned native extension
         working-directory: native
         run: |
-          test "$(git rev-parse HEAD)" = 7a06fbd9d09d3bd81f65f3eed45986bad9a96bc2
+          test "$(git rev-parse HEAD)" = 81a30990f24767b61f3b0d1cfe4c073389e09b97
           php tools/generate-arginfo.php --check
           php tools/verify-binding.php
           php tools/verify-engine.php
