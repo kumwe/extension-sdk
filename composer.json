@@ -15,7 +15,7 @@
     "ext-sodium": "*",
     "ext-zip": "*",
     "kumwe/access-control": "dev-main",
-    "kumwe/administrator-contract": "dev-agent/extract-administrator-contract-runtime-v2",
+    "kumwe/administrator-contract": "dev-main",
     "kumwe/automation": "dev-main",
     "kumwe/business-policy": "dev-agent/business-policy-boundary-gates-v2",
     "kumwe/business-surface-contract": "dev-agent/extract-business-surface-contract-runtime-v2",
