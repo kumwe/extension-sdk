@@ -64,7 +64,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/integration
-          ref: d6fcc108f967255f26eeb74de21a3f52a76ef3f9
+          ref: ac3e3942a69ce662e0ce37e8645c8d6394a067de
           path: dependencies/integration
           persist-credentials: false
       - name: Check out canonical-json source
@@ -85,7 +85,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/business-policy
-          ref: 534062bbf414dc592199b4320d0db49dcbb621e3
+          ref: 7fbccb7d4d2bcbe8f128eace9b83ad3f8996a04d
           path: dependencies/business-policy
           persist-credentials: false
       - name: Check out record-model source
