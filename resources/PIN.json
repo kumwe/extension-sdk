@@ -270,11 +270,11 @@
         },
         {
             "file": "source-candidate-dependencies.json",
-            "sha256": "260504353aecf336dab26f90b2f67e5494653268d3b3e986c1edcd0593622859"
+            "sha256": "062995c1a1ff7d1b3b86d74587bfd7a5330b31c51d349ab00ebf20d81618dcb0"
         },
         {
             "file": "source-ci-dependencies.json",
-            "sha256": "faa1e5661185601c8fe0da7c7800cde49aeb3a53d96e2e38b1b7a7a64551193b"
+            "sha256": "f354fdbc6b90509cee3f29356c19001c57176bdb0c44a55d403454024c009289"
         }
     ]
 }

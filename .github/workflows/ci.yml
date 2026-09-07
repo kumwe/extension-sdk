@@ -55,7 +55,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/business-surface-contract
-          ref: dd245ec85f7a029d0a25d186d510db101835cea7
+          ref: aaba812b82c9572404736367030fed3f4d8cf89c
           path: dependencies/business-surface-contract
           persist-credentials: false
       - name: Check out automation source
@@ -97,7 +97,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/record-model
-          ref: 50f3cdd980c030b827868177208d8cc9dbc1e3c9
+          ref: d7955e6beae2c3a9fa30052aea5ec3478af7dffc
           path: dependencies/record-model
           persist-credentials: false
       - name: Check out record-query source

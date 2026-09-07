@@ -26,7 +26,7 @@
     "kumwe/integration": "dev-main || dev-fix/published-canonical-dependency",
     "kumwe/portal-contract": "dev-main || dev-fix/complete-stable-package-release",
     "kumwe/producer": "^0.2",
-    "kumwe/record-model": "dev-main || dev-fix/stable-definition-dependency",
+    "kumwe/record-model": "0.1.0",
     "kumwe/record-query": "dev-main || dev-fix/stable-definition-dependency",
     "kumwe/record-values": "0.1.0",
     "kumwe/reporting": "dev-main || dev-fix/stable-definition-dependency",
