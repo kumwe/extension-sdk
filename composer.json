@@ -54,10 +54,12 @@
       "@lint",
       "@docs",
       "@contract",
+      "@test:ownership",
       "@test",
       "@analyse",
       "@audit-dependencies"
-    ]
+    ],
+    "test:ownership": "php tools/verify-test-ownership.php --self-test"
   },
   "config": {
     "sort-packages": true
