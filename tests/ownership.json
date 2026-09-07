@@ -60,8 +60,8 @@
         "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testParsesACompatibleManifestWithTypedDependencies"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies",
-        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testSchemaTwoRejectsForeignContributionOwnership"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -111,14 +111,12 @@
     },
     "Kumwe\\Extension\\Package\\ArchiveContentReader": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
-        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
-        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Package\\PackageEvidenceInspector; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Package\\ArchiveEntry": {
       "behavior": [
@@ -137,8 +135,8 @@
         "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testBuilderReservesAttestationsInsideConfiguredCaps"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot",
-        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testSnapshotConstructionIsClosedAndUnsafeBytesRemainReported"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -155,14 +153,12 @@
     },
     "Kumwe\\Extension\\Package\\ArchiveReader": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testArchiveFileLimitProducesANeutralFinding",
-        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testBuilderReservesAttestationsInsideConfiguredCaps"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testContentReaderIsBoundToTheInspectedSnapshot",
-        "Kumwe\\Extension\\Tests\\Case\\PackageSafetyTest::testSnapshotConstructionIsClosedAndUnsafeBytesRemainReported"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Package\\ArchiveEntry; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Package\\InspectedPackage": {
       "behavior": [
@@ -192,8 +188,8 @@
         "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
-        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -257,6 +253,7 @@
         "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testPackageScopeOmitsOnlyAuthoringEvidence"
       ],
       "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
         "Kumwe\\Extension\\Tests\\Case\\PackageEvidenceInspectorTest::testProvenanceCannotBindToInvalidInventory"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
@@ -340,25 +337,21 @@
     },
     "Kumwe\\Extension\\Package\\PackageSignatureVerifier": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testDependencyEvaluatesCompatibilityAndOptionality",
-        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testLegacyKisOneCompatibilityIsExact"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testKisCompatibilityRefusesMalformedDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ManifestValueTest::testSemanticVersionRefusals"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Package\\PackageSignature; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Package\\PublicKeyPackageSignatureVerifier": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAllGenerationsBuildAndInspectDeterministically",
-        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSigningRoundTripsThroughCanonicalVerifier"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testAttestationsRejectNoncanonicalJsonOrdering",
-        "Kumwe\\Extension\\Tests\\Case\\PackageDeterminismTest::testSignatureDocumentRejectsNoncanonicalJson"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Package\\SodiumEd25519Verifier; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Package\\SodiumEd25519Verifier": {
       "behavior": [
@@ -428,35 +421,30 @@
     },
     "Kumwe\\Extension\\Spi\\Application\\Automation\\JobHandler": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Application\\ExecutionContext": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact",
-        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testTypedViewAndActionInputsPreserveTheirGuards"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testInvalidIdentitiesAndExactJsonAreRefused",
-        "Kumwe\\Extension\\Tests\\Case\\CustomBusinessPortTest::testReplayIdentityAndIdentifierBoundariesAreExact"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Application\\ExtensionServiceProvider": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind": {
       "behavior": [
@@ -464,6 +452,7 @@
         "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
       ],
       "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
         "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
@@ -480,102 +469,84 @@
     },
     "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingProvider": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingRegistrar": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteHandlerFactory": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteRenderer": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace",
-        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testIdentifierNormalizesAndComparesVendorNames"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testAssociationRefusalsMatchTheContract",
-        "Kumwe\\Extension\\Tests\\Case\\SpiPortTest::testContributionOwnerBoundsItsNamespace"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\Contribution\\AdministratorViewDefinition; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteHandlerFactory": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteRenderer": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\DomainEventHandler": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventHandler": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventTransport": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\ConsumerIdempotency": {
       "behavior": [
@@ -583,21 +554,19 @@
         "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
-        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed"
       ],
       "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventConsumerDefinition; public signature pinning runs separately."
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainEvent": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainListenerDeclaration": {
       "behavior": [
@@ -645,14 +614,12 @@
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventEnvelope": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainEvent; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\EventSensitivity": {
       "behavior": [
@@ -660,21 +627,19 @@
         "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationContract": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
-        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\DomainListenerDefinition; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationContractValidator": {
       "behavior": [
@@ -689,14 +654,12 @@
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\IntegrationEvent": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessIntegration\\Domain\\JobContributionDefinition": {
       "behavior": [
@@ -733,22 +696,20 @@
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordPage": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordQueryPurpose": {
       "behavior": [
         "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testHttpHelpersRequireCanonicalContextWithoutInventingCsrfTokens"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testHttpHelpersRequireCanonicalContextWithoutInventingCsrfTokens",
-        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testReadRequestPreservesHostContextAndRefusesMalformedScopes"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\RequestBoundaryTest::testHttpHelpersRequireCanonicalContextWithoutInventingCsrfTokens"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -764,14 +725,12 @@
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReader": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordRequestGuard": {
       "behavior": [
@@ -785,14 +744,12 @@
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordView": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\AggregateFunction": {
       "behavior": [
@@ -800,8 +757,8 @@
         "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -822,43 +779,37 @@
         "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordCursor": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordSearch": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\BusinessRecordSort": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\ComparisonFilter": {
       "behavior": [
@@ -877,8 +828,8 @@
         "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testQueryValuesAreBoundedTypedScalars"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testComparisonFilterRefusesApproximateAndNullLiterals"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -961,14 +912,12 @@
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordFilter": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessRecord\\Query\\RecordProjection": {
       "behavior": [
@@ -1031,8 +980,8 @@
         "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -1053,8 +1002,8 @@
         "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication",
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testDepthRelationAndOperationBudgetsAreOwnedByTheGrammar"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryBoundaryTest::testCursorBoundariesPreserveBytesWithoutClaimingAuthentication"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -1075,8 +1024,8 @@
         "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testQueryValuesAreBoundedTypedScalars"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut",
-        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testComparisonFilterRefusesApproximateAndNullLiterals"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\RecordQueryGrammarTest::testBooleanFilterBoundsItsFanOut"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -1092,36 +1041,30 @@
     },
     "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionBuilder": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionEvent": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessReporting\\Application\\ProjectionWriter": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
-        "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionDefinition": {
       "behavior": [
@@ -1173,8 +1116,8 @@
         "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed",
-        "Kumwe\\Extension\\Tests\\Case\\TypedDefinitionTest::testMalformedCompleteDefinitionsFailClosed"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\TypedDeclarationTest::testMalformedDeclarationMembersFailClosed"
       ],
       "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessReporting\\Domain\\ProjectionDefinition; public signature pinning runs separately."
     },
@@ -1184,8 +1127,8 @@
         "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema",
-        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testDisclosureIsAnExplicitSetForEveryUsage"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\PortableValueBoundaryTest::testCustomDeclarationsValidatePayloadsAgainstTheirClosedSchema"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -1214,24 +1157,26 @@
         "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralAcceptsCanonicalInstants"
       ],
       "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
         "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralRejectsImpossibleCalendarValues"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
     "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyPredicate": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralAcceptsCanonicalInstants"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralRejectsImpossibleCalendarValues"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyComparison; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessSecurity\\Policy\\RecordPolicyValueType": {
       "behavior": [
         "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralAcceptsCanonicalInstants"
       ],
       "boundary": [
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
         "Kumwe\\Extension\\Tests\\Case\\RecordPolicyTest::testTemporalLiteralRejectsImpossibleCalendarValues"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
@@ -1260,13 +1205,12 @@
     },
     "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionHandler": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessActionResult": {
       "behavior": [
@@ -1325,13 +1269,12 @@
     },
     "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewHandler": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessSurface\\Application\\Custom\\CustomBusinessViewQuery": {
       "behavior": [
@@ -1371,8 +1314,8 @@
         "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testParsesACompatibleManifestWithTypedDependencies"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies",
-        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testSchemaTwoRejectsForeignContributionOwnership"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -1411,13 +1354,12 @@
     },
     "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldPresenter": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\BusinessSurface\\Presentation\\Field\\FieldWidget": {
       "behavior": [
@@ -1425,8 +1367,8 @@
         "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testConvertedMoneyCannotBeSeparatedFromItsEvidence"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testConvertedMoneyRefusalsFollowTheEditorStateInvariant",
-        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testErrorsOptionsAndAttributesAreClosedAndBounded"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\FieldPresentationSecurityTest::testConvertedMoneyRefusalsFollowTheEditorStateInvariant"
       ],
       "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
     },
@@ -1491,8 +1433,8 @@
         "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
-        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
       ],
       "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
     },
@@ -1590,21 +1532,19 @@
         "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
-        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract",
+        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed"
       ],
       "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
     },
     "Kumwe\\Extension\\Spi\\Contribution\\ContributionDefinition": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testBlocksRequireRenderersWhileNonRenderedDocumentsDoNot",
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testCanonicalGraphExportReparsesWithoutNormalizationDrift"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ExecutableBindingRequirementsTest::testUndeclaredWrongKindDuplicateAndMissingBindingsFailClosed",
-        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ManifestContributions; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Contribution\\ContributionOwner": {
       "behavior": [
@@ -1651,25 +1591,21 @@
     },
     "Kumwe\\Extension\\Spi\\Migration\\ExtensionMigration": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Migration\\ExtensionTableNames": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testAManifestWithoutAContentSectionExportsNone",
-        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testParsesACompatibleManifestWithTypedDependencies"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testRejectsSelfDependencies",
-        "Kumwe\\Extension\\Tests\\Case\\ExtensionManifestTest::testSchemaTwoRejectsForeignContributionOwnership"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Exercised through the owning public collaborator Kumwe\\Extension\\Manifest\\ExtensionIdentifier; public signature pinning runs separately."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Portal\\Contribution\\PortalNavigationDefinition": {
       "behavior": [
@@ -1717,36 +1653,30 @@
     },
     "Kumwe\\Extension\\Spi\\Runtime\\BootableExtension": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Runtime\\ExtensionEvent": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBindingResult": {
       "behavior": [
@@ -1761,14 +1691,12 @@
     },
     "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlock": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockFragment": {
       "behavior": [
@@ -1783,14 +1711,12 @@
     },
     "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockRenderer": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testAssociationKeepsItsPinnedDerivation",
-        "Kumwe\\Extension\\Tests\\Case\\PinnedSurfaceTest::testPinnedEnumsKeepTheirCases"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "This declaration owns no runtime implementation; package signature/enum conformance freezes its author contract. Host implementations own authorization, persistence and lifecycle behavior."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Toolchain\\ComponentScaffolder": {
       "behavior": [
@@ -1859,14 +1785,12 @@
     },
     "Kumwe\\Extension\\Toolchain\\LifecycleConformanceAdapter": {
       "behavior": [
-        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testCompleteScaffoldBuildsReproduciblyAndConforms",
-        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceRunsEveryGateAndRecovery"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
       "boundary": [
-        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testBuilderOmitsDevelopmentCachesAndRejectsSensitiveFiles",
-        "Kumwe\\Extension\\Tests\\Case\\ToolchainTest::testLifecycleConformanceStopsAfterFailureAndStillRecovers"
+        "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
       ],
-      "note": "Package-owned behavior and refusal cases; these references identify evidence, not percentage coverage."
+      "note": "This interface declares no runtime behavior. This complete public-port corpus freezes its exact callable boundary, including types/defaults/inheritance; host implementations own concrete behavior."
     },
     "Kumwe\\Extension\\Toolchain\\LifecycleConformanceReport": {
       "behavior": [
@@ -2001,10 +1925,12 @@
       "Kumwe\\Extension\\Tests\\Case\\GeneratedSourceAutoloadTest::testEveryPackagedScaffoldClassAutoloadsAgainstTheSdk",
       "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedIntegrationHandlersExecuteAgainstSdkDeclarations",
       "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testGeneratedPhpUnitSuitePasses",
-      "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testSchemaFourFixtureHandlersExecuteAgainstSdkDeclarations"
+      "Kumwe\\Extension\\Tests\\Case\\ScaffoldExecutionTest::testSchemaFourFixtureHandlersExecuteAgainstSdkDeclarations",
+      "Kumwe\\Extension\\Tests\\Case\\PublicPortConformanceTest::testEveryPublishedPortAndVocabularyKeepsItsReviewedContract"
     ],
     "corpora": [
-      "resources/PIN.json"
+      "resources/PIN.json",
+      "tests/fixtures/public-ports-v1.json"
     ]
   },
   "architecture": [
