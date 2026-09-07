@@ -64,8 +64,8 @@
     "version": "0.2.0"
   },
   "kumwe/record-model": {
-    "version": "dev-agent/merged-dependency-coordinates-v2",
-    "ref": "e5e465cd90041ba93e8a6e62cce92a702040534c"
+    "version": "dev-main",
+    "ref": "cd32f56266242939f3276980134d8967c9764788"
   },
   "kumwe/record-query": {
     "version": "dev-agent/merged-dependency-coordinates-v2",
@@ -76,8 +76,8 @@
     "ref": "8a3452f618f30b69ca6ee62ccffaf483ebb9bf75"
   },
   "kumwe/reporting": {
-    "version": "dev-agent/merged-dependency-coordinates-v2",
-    "ref": "330db83752a10a1636df52a471a0d35b89b33a95"
+    "version": "dev-main",
+    "ref": "43f857a11bc30f4e9ed3f25aa7026b035f2fd993"
   },
   "kumwe/sequence": {
     "ref": "3cb1f63437ddec7ddbd8392e997bceb981cd73b5",
