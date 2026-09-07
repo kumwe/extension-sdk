@@ -3,6 +3,12 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## Unreleased
+
+- Move portable SDK definitions to their canonical package owners and require explicit canonical encoder injection.
+- Exercise the actual native runtime and exact dependency source graph in both SDK test lanes.
+- A successor release number remains pending stable upstream dependency versions; this candidate is not part of v0.2.5.
+
 ## 0.2.5 — 2026-09-07
 
 - Unify PR and post-rebase release gates, dynamic release identity, tested publication retries,

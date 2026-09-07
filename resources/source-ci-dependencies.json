@@ -4,36 +4,36 @@
     "version": "0.1.0"
   },
   "kumwe/access-control": {
-    "version": "dev-main",
-    "ref": "54dbaa1dbffeb09ba390a5e75e8adc951c437a41"
+    "ref": "54dbaa1dbffeb09ba390a5e75e8adc951c437a41",
+    "version": "0.1.0"
   },
   "kumwe/administrator-contract": {
-    "version": "dev-main",
-    "ref": "083090964606c81671601d4c12b0e1ad97335d3a"
+    "ref": "8682b1b98a2973828469e09280e9a9c3c780c0a8",
+    "version": "dev-fix/complete-stable-package-release"
   },
   "kumwe/automation": {
-    "version": "dev-agent/canonical-main-dependency-v2",
-    "ref": "94672104fa40edb2f2974708925b78b1f57f72b0"
+    "ref": "88e62d37e5c7e79ba6daf85e05faad641d6aaf3c",
+    "version": "0.1.0"
   },
   "kumwe/business-definition": {
-    "version": "dev-main",
-    "ref": "2cbb7f0430b4a950c129064b380ecf2378cc6662"
+    "ref": "f3b86f8af1469066637fd1b4b8f71c4df634adf8",
+    "version": "0.1.0"
   },
   "kumwe/business-policy": {
-    "version": "dev-main",
-    "ref": "7fbccb7d4d2bcbe8f128eace9b83ad3f8996a04d"
+    "ref": "7fbccb7d4d2bcbe8f128eace9b83ad3f8996a04d",
+    "version": "0.1.0"
   },
   "kumwe/business-surface-contract": {
-    "version": "dev-agent/canonical-main-dependency-v2",
-    "ref": "c99d31e98e026da07ce3d3da84bb85dabb967615"
+    "ref": "dd245ec85f7a029d0a25d186d510db101835cea7",
+    "version": "dev-agent/canonical-main-dependency-v2"
   },
   "kumwe/canonical-json": {
-    "version": "0.1.1",
-    "ref": "e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58"
+    "ref": "e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58",
+    "version": "0.1.1"
   },
   "kumwe/computation": {
-    "version": "0.2.1",
-    "ref": "6ac52321c2a5089f52d44e20cfa6374064960e8a"
+    "ref": "6ac52321c2a5089f52d44e20cfa6374064960e8a",
+    "version": "0.2.1"
   },
   "kumwe/contribution": {
     "ref": "0504e87c836ca61edadc92df4203d6ccba8f0eca",
@@ -44,43 +44,43 @@
     "version": "0.1.0"
   },
   "kumwe/idempotency": {
-    "version": "dev-agent/canonical-main-dependency-v2",
-    "ref": "d47b7b3bb38c5853c13e45056f22dbdd39d93a5d"
+    "ref": "26ec2ac31c493a088dd2bd01983b7428692bd1ea",
+    "version": "0.1.0"
   },
   "kumwe/integration": {
-    "version": "dev-agent/merged-dependency-coordinates-v2",
-    "ref": "2ea1ef84eedc132d1d28280ba668d253951ad2a4"
+    "ref": "77d291ee4afcfabc82f0170fcd7ff1d1d8999cfe",
+    "version": "dev-fix/published-canonical-dependency"
   },
   "kumwe/localization": {
     "ref": "672e330e2cae89dc71769d647f6d01fd2c1dea08",
     "version": "0.1.0"
   },
   "kumwe/portal-contract": {
-    "version": "dev-main",
-    "ref": "c64f6bdb742d3fc2c905f9ab3868a864952d0f6c"
+    "ref": "57222a86b46dc743e3c4506c7c34bfeb9c6dc936",
+    "version": "dev-fix/complete-stable-package-release"
   },
   "kumwe/producer": {
     "ref": "e746b9f019482c78a34df04375f00c35ad5961af",
     "version": "0.2.0"
   },
   "kumwe/record-model": {
-    "version": "dev-main",
-    "ref": "cd32f56266242939f3276980134d8967c9764788"
+    "ref": "50f3cdd980c030b827868177208d8cc9dbc1e3c9",
+    "version": "dev-fix/stable-definition-dependency"
   },
   "kumwe/record-query": {
-    "version": "dev-main",
-    "ref": "db19f03daec2c0cefbaf675ad1ed28379a0546f5"
+    "ref": "b1967719969d72eb36df7ead7e795d50be9af3c6",
+    "version": "dev-fix/stable-definition-dependency"
   },
   "kumwe/record-values": {
-    "version": "dev-main",
-    "ref": "8a3452f618f30b69ca6ee62ccffaf483ebb9bf75"
+    "ref": "191c5b53fbda0179f3387f6a819716f4bc8f2be2",
+    "version": "0.1.0"
   },
   "kumwe/reporting": {
-    "version": "dev-main",
-    "ref": "43f857a11bc30f4e9ed3f25aa7026b035f2fd993"
+    "ref": "1dd04beb11bf5156b286d19a3e0ed63224943670",
+    "version": "dev-fix/stable-definition-dependency"
   },
   "kumwe/sequence": {
-    "ref": "3cb1f63437ddec7ddbd8392e997bceb981cd73b5",
-    "version": "dev-main"
+    "ref": "021c63f5f768daadcdb476f810e8d1fdbf2e2938",
+    "version": "0.2.0"
   }
 }
