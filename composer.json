@@ -19,7 +19,7 @@
     "kumwe/automation": "dev-main || dev-agent/canonical-main-dependency-v2",
     "kumwe/business-policy": "dev-main",
     "kumwe/business-surface-contract": "dev-main || dev-agent/canonical-main-dependency-v2",
-    "kumwe/canonical-json": "dev-main",
+    "kumwe/canonical-json": "0.1.1",
     "kumwe/contribution": "0.1.0",
     "kumwe/conversion": "^0.1",
     "kumwe/idempotency": "dev-main || dev-agent/canonical-main-dependency-v2",
@@ -38,7 +38,7 @@
   "require-dev": {
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^12.0",
-    "kumwe/computation": "dev-main || dev-agent/canonical-main-dependency-v2"
+    "kumwe/computation": "0.2.1"
   },
   "bin": [
     "bin/kumwe-extension"

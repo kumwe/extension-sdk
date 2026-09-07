@@ -55,21 +55,21 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/business-surface-contract
-          ref: 4a2f0ccaf5e03239c28f9cc10b943632236ce2fd
+          ref: c99d31e98e026da07ce3d3da84bb85dabb967615
           path: dependencies/business-surface-contract
           persist-credentials: false
       - name: Check out automation source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/automation
-          ref: 5bb46bc6c87abd33812ab5a935a198cb36a86cda
+          ref: 94672104fa40edb2f2974708925b78b1f57f72b0
           path: dependencies/automation
           persist-credentials: false
       - name: Check out integration source
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/integration
-          ref: 7a66178e919f100152f162e8d606ca75bf9868d9
+          ref: 2ea1ef84eedc132d1d28280ba668d253951ad2a4
           path: dependencies/integration
           persist-credentials: false
       - name: Check out canonical-json source
@@ -83,7 +83,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/idempotency
-          ref: a815c5ccda5676bee8174880c17405ed224385ff
+          ref: d47b7b3bb38c5853c13e45056f22dbdd39d93a5d
           path: dependencies/idempotency
           persist-credentials: false
       - name: Check out business-policy source
@@ -174,7 +174,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/computation
-          ref: f7bee62fed4e4d0f8875392c186b021b40e53431
+          ref: 6ac52321c2a5089f52d44e20cfa6374064960e8a
           path: dependencies/computation
           persist-credentials: false
       - name: Set up PHP

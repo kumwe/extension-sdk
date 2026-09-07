@@ -13,7 +13,7 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^11.5",
-    "kumwe/computation": "dev-main || dev-agent/canonical-main-dependency-v2"
+    "kumwe/computation": "0.2.1"
   },
   "autoload": {
     "psr-4": {
