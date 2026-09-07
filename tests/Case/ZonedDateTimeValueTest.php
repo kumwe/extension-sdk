@@ -32,7 +32,9 @@ final class ZonedDateTimeValueTest extends TestCase
             $this->assertThrows(static fn () => ZonedDateTimeValue::fromStrings($instant, 'UTC'),
                 InvalidArgumentException::class, 'Noncanonical or silently repaired instant refuses.');
         }
-        foreach (['+02:00', 'EST', 'Africa/Imaginary', 'utc', ''] as $zone) {
+        $this->assertSame('UTC', ZonedDateTimeValue::fromStrings('2024-01-01T00:00:00Z', 'utc')->timezone,
+            'UTC aliases normalize to the canonical timezone identifier.');
+        foreach (['+02:00', 'EST', 'Africa/Imaginary', ''] as $zone) {
             $this->assertThrows(static fn () => ZonedDateTimeValue::fromStrings('2024-01-01T00:00:00Z', $zone),
                 InvalidArgumentException::class, 'A zone must be an exact canonical IANA name.');
         }

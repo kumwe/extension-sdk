@@ -57,9 +57,13 @@
       "@test:ownership",
       "@test",
       "@analyse",
-      "@audit-dependencies"
+      "@audit-dependencies",
+      "@release-record",
+      "@release:integrity"
     ],
-    "test:ownership": "php tools/verify-test-ownership.php --self-test"
+    "test:ownership": "php tools/verify-test-ownership.php --self-test",
+    "release-record": "bash tools/test-release-record.sh",
+    "release:integrity": "bash tools/test-release-integrity.sh"
   },
   "config": {
     "sort-packages": true

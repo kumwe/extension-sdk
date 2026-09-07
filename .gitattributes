@@ -1,1 +1,13 @@
 * text=auto eol=lf
+/.github export-ignore
+/.gitignore export-ignore
+/.gitattributes export-ignore
+/CHARTER.md export-ignore
+/CHANGELOG.md export-ignore
+/composer.lock export-ignore
+/docs export-ignore
+/tests export-ignore
+/tools export-ignore
+/phpstan.neon export-ignore
+/vendor export-ignore
+/var export-ignore
