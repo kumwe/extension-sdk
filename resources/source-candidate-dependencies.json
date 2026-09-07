@@ -1,45 +1,45 @@
 [
   {
     "package": "kumwe/access-control",
-    "version": "dev-agent/access-membership-di-completion",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/access-control.git",
-    "requested_ref": "28dd9367bc8e0a17a30dbec42e76ebe66b7aeb94"
+    "requested_ref": "54dbaa1dbffeb09ba390a5e75e8adc951c437a41"
   },
   {
     "package": "kumwe/administrator-contract",
     "version": "dev-agent/extract-administrator-contract-runtime-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/administrator-contract.git",
-    "requested_ref": "agent/extract-administrator-contract-runtime-v2"
+    "requested_ref": "3322ade4ba857a04878763bef65cc44fd191b068"
   },
   {
     "package": "kumwe/portal-contract",
     "version": "dev-agent/extract-portal-contract-runtime-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/portal-contract.git",
-    "requested_ref": "agent/extract-portal-contract-runtime-v2"
+    "requested_ref": "9275c1a636c9597b1cf8ac6f8ed84ccd38f79d88"
   },
   {
     "package": "kumwe/business-surface-contract",
     "version": "dev-agent/extract-business-surface-contract-runtime-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/business-surface-contract.git",
-    "requested_ref": "4f9c01f2c39c6e9c47a485946a5475f8009a6f8c"
+    "requested_ref": "95a40cba48e088910480f921726514fe857450d0"
   },
   {
     "package": "kumwe/automation",
-    "version": "dev-agent/extract-automation-v2",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/automation.git",
-    "requested_ref": "9982d8ac9ca6bc28b15913b2942d59685bbf6c29"
+    "requested_ref": "d8f62b8b687308c403b085012ff624faa6cbca5d"
   },
   {
     "package": "kumwe/integration",
-    "version": "dev-agent/extract-integration-v2",
+    "version": "dev-agent/merged-dependency-coordinates-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/integration.git",
-    "requested_ref": "38420957e8b5070e5239bb1be57e2cb26328f1c5"
+    "requested_ref": "76751a925f726f1cc1e5a156ff59a1fc663b4429"
   },
   {
     "package": "kumwe/canonical-json",
@@ -50,100 +50,100 @@
   },
   {
     "package": "kumwe/idempotency",
-    "version": "dev-agent/extract-idempotency-v2",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/idempotency.git",
-    "requested_ref": "agent/extract-idempotency-v2"
+    "requested_ref": "459c6559c84f7666cc06c80d131b513b7ac2d2df"
   },
   {
     "package": "kumwe/business-policy",
     "version": "dev-agent/business-policy-boundary-gates-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/business-policy.git",
-    "requested_ref": "agent/business-policy-boundary-gates-v2"
+    "requested_ref": "d8e278321be92c426548fe1b27b965b08ac18437"
   },
   {
     "package": "kumwe/record-model",
-    "version": "dev-agent/extraction-v2-business-data",
+    "version": "dev-agent/merged-dependency-coordinates-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/record-model.git",
-    "requested_ref": "agent/extraction-v2-business-data"
+    "requested_ref": "5005194d76c7a67a0e49fca08e382dc92bcc31a7"
   },
   {
     "package": "kumwe/record-query",
-    "version": "dev-agent/extraction-v2-business-data",
+    "version": "dev-agent/merged-dependency-coordinates-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/record-query.git",
-    "requested_ref": "agent/extraction-v2-business-data"
+    "requested_ref": "6a7c5de54a7cd967f2e46889c59410ef345ec803"
   },
   {
     "package": "kumwe/record-values",
-    "version": "dev-agent/extraction-v2-business-data",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/record-values.git",
-    "requested_ref": "agent/extraction-v2-business-data"
+    "requested_ref": "8a3452f618f30b69ca6ee62ccffaf483ebb9bf75"
   },
   {
     "package": "kumwe/reporting",
-    "version": "dev-agent/extraction-v2-business-data",
+    "version": "dev-agent/merged-dependency-coordinates-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/reporting.git",
-    "requested_ref": "d3ffad3fd00a8f96fdce95e61783f2ab026aa4f0"
+    "requested_ref": "066ffa4b4341519e60f93b1474f6e1ee82323aec"
   },
   {
     "package": "kumwe/business-definition",
-    "version": "dev-agent/candidate-sequence-dependency-v2",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/business-definition.git",
-    "requested_ref": "agent/candidate-sequence-dependency-v2"
+    "requested_ref": "2cbb7f0430b4a950c129064b380ecf2378cc6662"
   },
   {
     "package": "kumwe/sequence",
     "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/sequence.git",
-    "requested_ref": "main"
+    "requested_ref": "3cb1f63437ddec7ddbd8392e997bceb981cd73b5"
   },
   {
     "package": "kumwe/contribution",
     "version": "0.1.0",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/contribution.git",
-    "requested_ref": "v0.1.0"
+    "requested_ref": "0504e87c836ca61edadc92df4203d6ccba8f0eca"
   },
   {
     "package": "kumwe/access-context",
     "version": "0.1.0",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/access-context.git",
-    "requested_ref": "v0.1.0"
+    "requested_ref": "34241cbd0cc67934536d2921eca14b063be6fb81"
   },
   {
     "package": "kumwe/conversion",
     "version": "0.1.0",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/conversion.git",
-    "requested_ref": "v0.1.0"
+    "requested_ref": "b1ae15e3ccddaffe709e01d20bf59a9e8a14714d"
   },
   {
     "package": "kumwe/localization",
     "version": "0.1.0",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/localization.git",
-    "requested_ref": "v0.1.0"
+    "requested_ref": "672e330e2cae89dc71769d647f6d01fd2c1dea08"
   },
   {
     "package": "kumwe/producer",
     "version": "0.2.0",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/producer.git",
-    "requested_ref": "v0.2.0"
+    "requested_ref": "e746b9f019482c78a34df04375f00c35ad5961af"
   },
   {
     "package": "kumwe/computation",
-    "version": "dev-codex/native-adapter-candidate",
+    "version": "dev-agent/native-runtime-closure-v3",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/computation.git",
-    "requested_ref": "5e7201230511df99b6dbf4c4aa2ffdd8a1c6f0ec"
+    "requested_ref": "de5460786f0c8d04ff8df07952a0b9309d6f045d"
   }
 ]

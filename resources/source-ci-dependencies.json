@@ -1,59 +1,59 @@
 {
   "kumwe/access-control": {
-    "version": "dev-agent/access-membership-di-completion",
-    "ref": "28dd9367bc8e0a17a30dbec42e76ebe66b7aeb94"
+    "version": "dev-main",
+    "ref": "54dbaa1dbffeb09ba390a5e75e8adc951c437a41"
   },
   "kumwe/administrator-contract": {
     "version": "dev-agent/extract-administrator-contract-runtime-v2",
-    "ref": "0c4babc7414b540e8c11db64b71105abb4c2fbe2"
+    "ref": "3322ade4ba857a04878763bef65cc44fd191b068"
   },
   "kumwe/portal-contract": {
     "version": "dev-agent/extract-portal-contract-runtime-v2",
-    "ref": "d952d07b6c5500e6403eb42fa8a5d9015d51ef6b"
+    "ref": "9275c1a636c9597b1cf8ac6f8ed84ccd38f79d88"
   },
   "kumwe/business-surface-contract": {
     "version": "dev-agent/extract-business-surface-contract-runtime-v2",
-    "ref": "4f9c01f2c39c6e9c47a485946a5475f8009a6f8c"
+    "ref": "95a40cba48e088910480f921726514fe857450d0"
   },
   "kumwe/automation": {
-    "version": "dev-agent/extract-automation-v2",
-    "ref": "9982d8ac9ca6bc28b15913b2942d59685bbf6c29"
+    "version": "dev-main",
+    "ref": "d8f62b8b687308c403b085012ff624faa6cbca5d"
   },
   "kumwe/integration": {
-    "version": "dev-agent/extract-integration-v2",
-    "ref": "38420957e8b5070e5239bb1be57e2cb26328f1c5"
+    "version": "dev-agent/merged-dependency-coordinates-v2",
+    "ref": "76751a925f726f1cc1e5a156ff59a1fc663b4429"
   },
   "kumwe/canonical-json": {
     "version": "dev-agent/canonical-encoder-port-v2",
     "ref": "022218b364625f85307f0d9585a3d48404c0d437"
   },
   "kumwe/idempotency": {
-    "version": "dev-agent/extract-idempotency-v2",
-    "ref": "080a9cd6ad2a2414d28a45c89ba6321bc185b033"
+    "version": "dev-main",
+    "ref": "459c6559c84f7666cc06c80d131b513b7ac2d2df"
   },
   "kumwe/business-policy": {
     "version": "dev-agent/business-policy-boundary-gates-v2",
     "ref": "d8e278321be92c426548fe1b27b965b08ac18437"
   },
   "kumwe/record-model": {
-    "version": "dev-agent/extraction-v2-business-data",
-    "ref": "1f7a7eaab29f9bf90feaca8d90329dc838c647e9"
+    "version": "dev-agent/merged-dependency-coordinates-v2",
+    "ref": "5005194d76c7a67a0e49fca08e382dc92bcc31a7"
   },
   "kumwe/record-query": {
-    "version": "dev-agent/extraction-v2-business-data",
-    "ref": "f3c6c52f72ee918efebb1f507b4d1b5ff2d3a762"
+    "version": "dev-agent/merged-dependency-coordinates-v2",
+    "ref": "6a7c5de54a7cd967f2e46889c59410ef345ec803"
   },
   "kumwe/record-values": {
-    "version": "dev-agent/extraction-v2-business-data",
-    "ref": "84d73f3d42b95b5c32ab5999d886f82bb9718440"
+    "version": "dev-main",
+    "ref": "8a3452f618f30b69ca6ee62ccffaf483ebb9bf75"
   },
   "kumwe/reporting": {
-    "version": "dev-agent/extraction-v2-business-data",
-    "ref": "ee8e9a6c933721a95a3f252b29d3b0db756a88f8"
+    "version": "dev-agent/merged-dependency-coordinates-v2",
+    "ref": "066ffa4b4341519e60f93b1474f6e1ee82323aec"
   },
   "kumwe/business-definition": {
-    "version": "dev-agent/candidate-sequence-dependency-v2",
-    "ref": "26c77a6258e0af80fec0d971b66624b750ab5d1c"
+    "version": "dev-main",
+    "ref": "2cbb7f0430b4a950c129064b380ecf2378cc6662"
   },
   "kumwe/sequence": {
     "version": "dev-main",
@@ -80,7 +80,7 @@
     "ref": "e746b9f019482c78a34df04375f00c35ad5961af"
   },
   "kumwe/computation": {
-    "version": "dev-codex/native-adapter-candidate",
-    "ref": "5831786ef014462b25c4d72e08ee960d645f1b7b"
+    "version": "dev-agent/native-runtime-closure-v3",
+    "ref": "de5460786f0c8d04ff8df07952a0b9309d6f045d"
   }
 }

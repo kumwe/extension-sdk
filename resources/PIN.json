@@ -26,7 +26,7 @@
         },
         {
             "file": "extension-scaffold/complete-component/composer.json.tpl",
-            "sha256": "739c5c173dc230d03545795892f8b9f2f8e8b38640cc54ce3d9aa11cf7f93cc5"
+            "sha256": "a07e9ff8cb1f768c72a9b449b2d582c290bf77d4620f4662041e22b6f892ab22"
         },
         {
             "file": "extension-scaffold/complete-component/docs/authoring.md.tpl",
@@ -270,11 +270,11 @@
         },
         {
             "file": "source-candidate-dependencies.json",
-            "sha256": "03c45fe67d0612b70c16c5d884f93ba27ca95f964d3cbf51bf7bbc69d09a5c27"
+            "sha256": "31d138c490efdcf7837ff68d442a334cac8043bd94e14385e212ecd41713d438"
         },
         {
             "file": "source-ci-dependencies.json",
-            "sha256": "dfe5d2bde62d5aec231252b2ca8b72e6a449199d17157257a8235c81693907b7"
+            "sha256": "7a13333cb50059dff3ca9545f66a15eb28d4bed7f896e35ecbcb47dc001a6f99"
         }
     ]
 }
