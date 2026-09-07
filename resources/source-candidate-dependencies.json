@@ -43,24 +43,24 @@
   },
   {
     "package": "kumwe/business-surface-contract",
-    "version": "dev-agent/extract-business-surface-contract-runtime-v2",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/business-surface-contract.git",
-    "requested_ref": "593294c77cc407c1c46cc3a84aff13c6cdd6047b"
+    "requested_ref": "c7996a55fe2d5c0c645e5b2f71cc7462de9046f2"
   },
   {
     "package": "kumwe/canonical-json",
-    "version": "dev-agent/canonical-encoder-port-v2",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/canonical-json.git",
-    "requested_ref": "8045d023fa42dbe5eb298a0852daac41cad0fc90"
+    "requested_ref": "e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58"
   },
   {
     "package": "kumwe/computation",
-    "version": "dev-agent/native-runtime-closure-v3",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/computation.git",
-    "requested_ref": "de5460786f0c8d04ff8df07952a0b9309d6f045d"
+    "requested_ref": "4d3217816ff4b23b5c60037fe6f0d01cab5b8dd2"
   },
   {
     "package": "kumwe/contribution",
@@ -99,10 +99,10 @@
   },
   {
     "package": "kumwe/portal-contract",
-    "version": "dev-agent/extract-portal-contract-runtime-v2",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/portal-contract.git",
-    "requested_ref": "ad00ceea81e0d98c95cf8d3209f5f69409a15d7b"
+    "requested_ref": "c64f6bdb742d3fc2c905f9ab3868a864952d0f6c"
   },
   {
     "package": "kumwe/producer",
@@ -120,10 +120,10 @@
   },
   {
     "package": "kumwe/record-query",
-    "version": "dev-agent/merged-dependency-coordinates-v2",
+    "version": "dev-main",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/record-query.git",
-    "requested_ref": "951e4f63999500965a49f07c7f6c64bb622600dc"
+    "requested_ref": "db19f03daec2c0cefbaf675ad1ed28379a0546f5"
   },
   {
     "package": "kumwe/record-values",

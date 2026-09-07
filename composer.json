@@ -18,16 +18,16 @@
     "kumwe/administrator-contract": "dev-main",
     "kumwe/automation": "dev-main",
     "kumwe/business-policy": "dev-main",
-    "kumwe/business-surface-contract": "dev-agent/extract-business-surface-contract-runtime-v2",
-    "kumwe/canonical-json": "dev-agent/canonical-encoder-port-v2",
+    "kumwe/business-surface-contract": "dev-main",
+    "kumwe/canonical-json": "dev-main",
     "kumwe/contribution": "0.1.0",
     "kumwe/conversion": "^0.1",
     "kumwe/idempotency": "dev-main",
     "kumwe/integration": "dev-main",
-    "kumwe/portal-contract": "dev-agent/extract-portal-contract-runtime-v2",
+    "kumwe/portal-contract": "dev-main",
     "kumwe/producer": "^0.2",
     "kumwe/record-model": "dev-main",
-    "kumwe/record-query": "dev-main || dev-agent/merged-dependency-coordinates-v2",
+    "kumwe/record-query": "dev-main",
     "kumwe/record-values": "dev-main",
     "kumwe/reporting": "dev-main",
     "php": "^8.5",
@@ -38,7 +38,7 @@
   "require-dev": {
     "phpstan/phpstan": "^2.1",
     "phpunit/phpunit": "^12.0",
-    "kumwe/computation": "dev-main || dev-agent/native-runtime-closure-v3"
+    "kumwe/computation": "dev-main"
   },
   "bin": [
     "bin/kumwe-extension"
