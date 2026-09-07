@@ -22,10 +22,10 @@
   },
   {
     "package": "kumwe/automation",
-    "version": "dev-main",
+    "version": "dev-agent/canonical-main-dependency-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/automation.git",
-    "requested_ref": "d8f62b8b687308c403b085012ff624faa6cbca5d"
+    "requested_ref": "5bb46bc6c87abd33812ab5a935a198cb36a86cda"
   },
   {
     "package": "kumwe/business-definition",
@@ -43,10 +43,10 @@
   },
   {
     "package": "kumwe/business-surface-contract",
-    "version": "dev-main",
+    "version": "dev-agent/canonical-main-dependency-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/business-surface-contract.git",
-    "requested_ref": "c7996a55fe2d5c0c645e5b2f71cc7462de9046f2"
+    "requested_ref": "4a2f0ccaf5e03239c28f9cc10b943632236ce2fd"
   },
   {
     "package": "kumwe/canonical-json",
@@ -57,10 +57,10 @@
   },
   {
     "package": "kumwe/computation",
-    "version": "dev-main",
+    "version": "dev-agent/canonical-main-dependency-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/computation.git",
-    "requested_ref": "4d3217816ff4b23b5c60037fe6f0d01cab5b8dd2"
+    "requested_ref": "f7bee62fed4e4d0f8875392c186b021b40e53431"
   },
   {
     "package": "kumwe/contribution",
@@ -78,17 +78,17 @@
   },
   {
     "package": "kumwe/idempotency",
-    "version": "dev-main",
+    "version": "dev-agent/canonical-main-dependency-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/idempotency.git",
-    "requested_ref": "459c6559c84f7666cc06c80d131b513b7ac2d2df"
+    "requested_ref": "a815c5ccda5676bee8174880c17405ed224385ff"
   },
   {
     "package": "kumwe/integration",
-    "version": "dev-main",
+    "version": "dev-agent/merged-dependency-coordinates-v2",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/integration.git",
-    "requested_ref": "ac3e3942a69ce662e0ce37e8645c8d6394a067de"
+    "requested_ref": "7a66178e919f100152f162e8d606ca75bf9868d9"
   },
   {
     "package": "kumwe/localization",
