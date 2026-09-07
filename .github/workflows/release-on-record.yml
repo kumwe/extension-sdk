@@ -48,6 +48,9 @@ jobs:
           composer install --no-dev --prefer-dist --no-interaction --no-progress --optimize-autoloader
           composer smoke
 
+      - name: Prove a fresh authoritative archive dependency consumer
+        run: php tools/verify-clean-consumer.php
+
   release:
     name: Release the recorded version
     needs: check
@@ -59,59 +62,118 @@ jobs:
       - name: Check out the pushed commit
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
+          fetch-depth: 0
           persist-credentials: false
 
+      - name: Require protected main before release mutations
+        env:
+          RELEASE_REF_PROTECTED: ${{ github.ref_protected }}
+        run: bash tools/check-release-integrity.sh protected "$RELEASE_REF_PROTECTED"
+
+      # The newest release record is the FIRST second-level heading, so a
+      # malformed record fails this run loudly instead of silently
+      # releasing nothing or re-reading an older heading.
       - name: Read the newest recorded version
         id: record
         shell: bash
         run: |
           set -euo pipefail
-          first="$(grep -m 1 -E '^## ' CHANGELOG.md || true)"
-          if [ "$first" = "## Unreleased" ] || [ "$first" = "## [Unreleased]" ]; then
-            first="$(grep -E '^## ' CHANGELOG.md | sed -n 2p)"
-          fi
-          if [ -z "$first" ]; then
-            echo "::notice::CHANGELOG.md records no release; nothing to publish."
+          version="$(bash tools/read-release-record.sh < CHANGELOG.md)"
+          if [ -z "$version" ]; then
+            echo "::notice::CHANGELOG.md records no released version yet; nothing to release."
             echo "version=" >> "$GITHUB_OUTPUT"
             exit 0
           fi
-          version="$(sed -nE 's/^## \[?([0-9]+\.[0-9]+\.[0-9]+)\]?( .*)?$/\1/p' <<<"$first")"
-          if [ -z "$version" ]; then
-            echo "::error::Newest changelog heading is not a release record: $first"
-            exit 1
-          fi
           echo "version=$version" >> "$GITHUB_OUTPUT"
 
-      - name: Create or verify the version tag
+      # Probe publication before accepting an existing tag. A release that
+      # already exists is an idempotent verification path; an unpublished
+      # tag must identify this exact commit after its complete check matrix.
+      - name: Check whether the GitHub release exists
         if: steps.record.outputs.version != ''
+        id: publication
         env:
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ steps.record.outputs.version }}
         shell: bash
         run: |
           set -euo pipefail
-          status=0
-          response="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/v$VERSION" 2>&1)" || status=$?
-          if [ "$status" -eq 0 ]; then
-            echo "Tag v$VERSION already exists; verifying its target."
-          elif grep -q 'HTTP 404' <<<"$response"; then
+          probe_status=0
+          probe="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" 2>&1)" || probe_status=$?
+          if [ "$probe_status" -eq 0 ]; then
+            bash tools/check-release-integrity.sh published "$VERSION" <<< "$probe"
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          elif grep -q 'HTTP 404' <<<"$probe"; then
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "$probe"
+            echo "::error::Could not determine whether release v$VERSION exists."
+            exit 1
+          fi
+
+      # Only a confirmed 404 means the tag is missing; any other probe
+      # failure stops the run rather than colliding with an existing tag.
+      - name: Create the version tag when it is missing
+        if: steps.record.outputs.version != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_EXISTS: ${{ steps.publication.outputs.exists }}
+          VERSION: ${{ steps.record.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          probe_status=0
+          probe="$(gh api "repos/$GITHUB_REPOSITORY/git/ref/tags/v$VERSION" 2>&1)" || probe_status=$?
+          if [ "$probe_status" -eq 0 ]; then
+            tag_type="$(jq -r '.object.type' <<<"$probe")"
+            tag_sha="$(jq -r '.object.sha' <<<"$probe")"
+            if [ "$tag_type" != commit ]; then
+              echo "::error::Tag v$VERSION points to $tag_type $tag_sha instead of a release commit."
+              exit 1
+            fi
+            if ! git merge-base --is-ancestor "$tag_sha" "$GITHUB_SHA"; then
+              echo "::error::Tag v$VERSION points outside the pushed main history: $tag_sha."
+              exit 1
+            fi
+            tagged_version="$(git show "$tag_sha:CHANGELOG.md" | bash tools/read-release-record.sh)"
+            if [ "$tagged_version" != "$VERSION" ]; then
+              echo "::error::Tag v$VERSION targets a commit whose newest release record is $tagged_version."
+              exit 1
+            fi
+            if [ "$RELEASE_EXISTS" != true ] && [ "$tag_sha" != "$GITHUB_SHA" ]; then
+              echo "::error::Unpublished tag v$VERSION points to $tag_sha, not the tested commit $GITHUB_SHA."
+              exit 1
+            fi
+            echo "Verified tag v$VERSION at release commit $tag_sha."
+          elif grep -q 'HTTP 404' <<<"$probe"; then
+            if [ "$RELEASE_EXISTS" = true ]; then
+              echo "::error::Release v$VERSION exists without its version tag."
+              exit 1
+            fi
             gh api "repos/$GITHUB_REPOSITORY/git/refs" \
               --field ref="refs/tags/v$VERSION" \
-              --field sha="$GITHUB_SHA" >/dev/null
-            echo "Created tag v$VERSION at $GITHUB_SHA."
+              --field sha="$GITHUB_SHA"
+            echo "Created tag v$VERSION at release commit $GITHUB_SHA."
           else
-            echo "$response"
+            echo "$probe"
             echo "::error::Could not determine whether tag v$VERSION exists."
             exit 1
           fi
 
-          target="$(gh api "repos/$GITHUB_REPOSITORY/commits/v$VERSION" --jq .sha)"
-          if [ "$target" != "$GITHUB_SHA" ]; then
-            echo "::error::Tag v$VERSION targets $target, not checked commit $GITHUB_SHA."
-            exit 1
-          fi
+      - name: Publish the GitHub release when it is missing
+        if: steps.record.outputs.version != '' && steps.publication.outputs.exists != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.record.outputs.version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release create "v$VERSION" \
+            --verify-tag \
+            --title "v$VERSION" \
+            --notes "Canonical extension author contracts and neutral package inspection. See CHANGELOG.md section $VERSION."
 
-      - name: Publish or verify the GitHub release
+      - name: Verify the published release is immutable
         if: steps.record.outputs.version != ''
         env:
           GH_TOKEN: ${{ github.token }}
@@ -119,17 +181,5 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          status=0
-          response="$(gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" 2>&1)" || status=$?
-          if [ "$status" -eq 0 ]; then
-            echo "Release v$VERSION already exists; leaving it unchanged."
-          elif grep -q 'HTTP 404' <<<"$response"; then
-            gh release create "v$VERSION" \
-              --verify-tag \
-              --title "v$VERSION" \
-              --notes "Canonical kumwe/extension-sdk v$VERSION. See CHANGELOG.md for the reviewed release record."
-          else
-            echo "$response"
-            echo "::error::Could not determine whether release v$VERSION exists."
-            exit 1
-          fi
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/v$VERSION" \
+            | bash tools/check-release-integrity.sh published "$VERSION"
