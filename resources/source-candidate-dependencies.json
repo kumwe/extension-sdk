@@ -43,10 +43,10 @@
   },
   {
     "package": "kumwe/business-surface-contract",
-    "version": "dev-fix/record-stable-first-release",
+    "version": "0.1.0",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/business-surface-contract.git",
-    "requested_ref": "36d14c9dd5d77f0bbf4f514754ef0ee212612c28"
+    "requested_ref": "3dad970d0fa18b9bf9cf486fd4c1e857f26be5ee"
   },
   {
     "package": "kumwe/canonical-json",
@@ -134,10 +134,10 @@
   },
   {
     "package": "kumwe/reporting",
-    "version": "dev-fix/stable-integration-release",
+    "version": "0.1.0",
     "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
     "repository": "https://github.com/kumwe/reporting.git",
-    "requested_ref": "efd88aa7a8b2be9a944ca3e9eebe9b3e1675c379"
+    "requested_ref": "d8cae56726170d39cd6e95e45b0ffcb085920849"
   },
   {
     "package": "kumwe/sequence",

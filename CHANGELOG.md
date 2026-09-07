@@ -8,7 +8,8 @@ Notable changes to `kumwe/extension-sdk` are recorded here in
 - Move portable SDK definitions to their canonical package owners and require explicit canonical encoder injection.
 - Exercise the actual native runtime and exact dependency source graph in both SDK test lanes.
 - Preserve the verified source graph and Composer lock across production reinstallation when branches are merged mid-job.
-- A successor release number remains pending stable upstream dependency versions; this candidate is not part of v0.2.5.
+- Select the published Business Surface Contract and Reporting 0.1.0 releases by their exact tag commits.
+- A successor release number remains pending; this candidate is not part of v0.2.5.
 
 ## 0.2.5 — 2026-09-07
 

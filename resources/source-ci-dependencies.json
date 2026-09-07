@@ -24,8 +24,8 @@
     "version": "0.1.0"
   },
   "kumwe/business-surface-contract": {
-    "ref": "36d14c9dd5d77f0bbf4f514754ef0ee212612c28",
-    "version": "dev-fix/record-stable-first-release"
+    "ref": "3dad970d0fa18b9bf9cf486fd4c1e857f26be5ee",
+    "version": "0.1.0"
   },
   "kumwe/canonical-json": {
     "ref": "e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58",
@@ -76,8 +76,8 @@
     "version": "0.1.0"
   },
   "kumwe/reporting": {
-    "ref": "efd88aa7a8b2be9a944ca3e9eebe9b3e1675c379",
-    "version": "dev-fix/stable-integration-release"
+    "ref": "d8cae56726170d39cd6e95e45b0ffcb085920849",
+    "version": "0.1.0"
   },
   "kumwe/sequence": {
     "ref": "021c63f5f768daadcdb476f810e8d1fdbf2e2938",
