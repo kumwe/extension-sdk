@@ -1,0 +1,61 @@
+schema: kumwe-release-attestation/v2
+artifact_kind: framework_php
+migration_id: KUMWE-MIG-2026-007
+change_set: KUMWE-CS-2026-007
+repository: https://github.com/kumwe/canonical-json
+merge_commit: e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58
+version: 0.1.1
+tag: v0.1.1
+source_archive:
+  url: https://api.github.com/repos/kumwe/canonical-json/zipball/e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58
+  sha256: 06ee813d1b917d32563670fa113f21931f85b1e3b282aed8c8a1cef364812c09
+artifacts:
+  - identity: kumwe/canonical-json:0.1.1
+    url: https://api.github.com/repos/kumwe/canonical-json/zipball/e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58
+    sha256: 06ee813d1b917d32563670fa113f21931f85b1e3b282aed8c8a1cef364812c09
+manifests_and_corpora:
+  - path: resources/public-api/v1.json
+    sha256: 43b126b3215555482b3d439cc2521808f16d252a99e0036138d6607a3c3a3465
+  - path: resources/capabilities/v1.json
+    sha256: fba51564639daa35180b354084649bacff466728ba531c2104b0a93d5136143b
+  - path: resources/service-map/v1.json
+    sha256: a9426334ed36972ab82781a64ace58bbac058aed884d5aa091354bbeb82e4108
+  - path: resources/semantics/v1.json
+    sha256: 621b7dfae136ce7635a234f047e7b744a06e2b7ad57c28ae09aeaa4a4308979c
+  - path: resources/ownership/v1.json
+    sha256: a2f66ab45521f54f1fc8145f6805ee8827cf098e44f33d8bae8c0f4f9fb34934
+  - path: resources/corpus/v1.json
+    sha256: 84d21b12e7a2bfd752356d9a6e664bcb332e209d19017e7634e7485a4fa4e250
+  - path: resources/corpus/v1.sha256
+    sha256: b7c340b7d8df32bacd2b16a8f575a43b99052642b2c38cd7896370acbc947350
+abi_and_capabilities: null
+sbom:
+  url: https://github.com/kumwe/extension-sdk/actions/runs/34250725389/artifacts/10065889028#source.spdx.json
+  sha256: 4fe8128b3e9f92e5e25a4062f668efa2b9cc9e822ac5967cb8cb1a5ba97ca829
+provenance:
+  url: https://github.com/kumwe/extension-sdk/actions/runs/34250725389/artifacts/10065889028#verification-provenance.json
+  sha256: 6cf8508583308798b3963819e1339cba07e84ffcd1baa74d734aec8954e9ec66
+  kind: independent-verification
+  publisher_build_provenance: false
+release_workflow:
+  url: https://github.com/kumwe/canonical-json/actions/runs/34157162566
+  result: success
+  source_commit: e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58
+registry_or_pie_verification:
+  - registry: https://repo.packagist.org/p2/kumwe/canonical-json.json
+    source_commit: e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58
+    dist_commit: e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58
+    evidence: https://github.com/kumwe/extension-sdk/actions/runs/34250725389/artifacts/10065889028#github-evidence.json
+clean_consumer_or_build_verification:
+  - evidence: https://github.com/kumwe/extension-sdk/actions/runs/34250725389/artifacts/10065889028#consumer-verification.json
+    sha256: 8d145df20737512abd323092c37c50e10b4431d738c6de3007f604131c6b57e4
+    no_dev: true
+    classmap_authoritative: true
+    offline_reinstall: true
+    runtime_types_loaded: 4
+verified_at: 2026-09-08T16:23:56Z
+verified_by:
+  repository: kumwe/extension-sdk
+  commit: f0109dba471c586610a837a4cb7b967ffac64180
+  run_url: https://github.com/kumwe/extension-sdk/actions/runs/34250725389
+status: verified

@@ -1,0 +1,105 @@
+{
+  "schema": "kumwe-preserved-release-evidence/v1",
+  "records": [
+    {
+      "package": "kumwe/computation",
+      "version": "0.1.1",
+      "source_commit": "fc9d049f8b675c8e19fd1672d49b5e206c9ad52a",
+      "source_archive_sha256": "2d132618efa233ec3bf0c648234c4892b7eb3d5cc1c378ea91a757a91617c223",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34250329345",
+      "attestation": {
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34250329345/artifacts/10065724495",
+        "path": "superseded/framework-php/computation/0.1.1/34250329345/attestation.zip",
+        "sha256": "0b92a8f8d87eb33764be035962cb15a5b3a2a5a276c81e4a43961a53422d230c",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "3e6f2ada771266adfaa6575eaf052bb3712e8a9ea3add2a4ca95819b7987bd08",
+        "yaml_path": "superseded/framework-php/computation/0.1.1/34250329345/RELEASE-ATTESTATION.yaml"
+      },
+      "evidence": {
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34250329345/artifacts/10065723481",
+        "path": "superseded/framework-php/computation/0.1.1/34250329345/evidence.zip",
+        "sha256": "9c46ae0182bfcfd43a7cc2e879fdb8fb49932c298bc2f0dafcaff606774b48b6",
+        "verification_path": "superseded/framework-php/computation/0.1.1/34250329345/verification.json"
+      },
+      "verified_at": "2026-09-08T16:19:54Z",
+      "status": "superseded",
+      "qualification": "not-authorized-by-this-receipt",
+      "superseded_reason": "The external YAML used rich objects where the authoritative kumwe-release-attestation/v2 schema requires strings; replace this receipt with a schema-valid independently verified successor receipt."
+    },
+    {
+      "package": "kumwe/canonical-json",
+      "version": "0.1.1",
+      "source_commit": "e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58",
+      "source_archive_sha256": "06ee813d1b917d32563670fa113f21931f85b1e3b282aed8c8a1cef364812c09",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34250725389",
+      "attestation": {
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34250725389/artifacts/10065889461",
+        "path": "superseded/framework-php/canonical-json/0.1.1/34250725389/attestation.zip",
+        "sha256": "fc7b41c3ab4c9357a7d1d08289c2220478be7b9292b7cbd3a3a344654a75fa48",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "03bf2ab3db08e9d68da6efba464da76538994f71b550eeb2c6e75c8a4cabb778",
+        "yaml_path": "superseded/framework-php/canonical-json/0.1.1/34250725389/RELEASE-ATTESTATION.yaml"
+      },
+      "evidence": {
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34250725389/artifacts/10065889028",
+        "path": "superseded/framework-php/canonical-json/0.1.1/34250725389/evidence.zip",
+        "sha256": "1cbe545759fc9a7e7f82ab7e55821a19b713ad60af6a180085cb0f641ba6b38d",
+        "verification_path": "superseded/framework-php/canonical-json/0.1.1/34250725389/verification.json"
+      },
+      "verified_at": "2026-09-08T16:23:56Z",
+      "status": "superseded",
+      "qualification": "not-authorized-by-this-receipt",
+      "superseded_reason": "The external YAML used rich objects where the authoritative kumwe-release-attestation/v2 schema requires strings; replace this receipt with a schema-valid independently verified successor receipt."
+    },
+    {
+      "package": "kumwe/business-definition",
+      "version": "0.1.2",
+      "source_commit": "1cb59229f311067e8cfdd773a34e34cfeb501791",
+      "source_archive_sha256": "68de06e87d006f48315402018325a134e51c0b1d6663871ff8c597fe90a10872",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34251165962",
+      "attestation": {
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34251165962/artifacts/10066121446",
+        "path": "superseded/framework-php/business-definition/0.1.2/34251165962/attestation.zip",
+        "sha256": "066f1eb6f06106b37280cf8b57a3b59696f929eed7cd8d3e9c47d245df2ff7fb",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "fddc42399e8b7682a36f3014a5e27633856144fd0057ea106afe9ec240d83c28",
+        "yaml_path": "superseded/framework-php/business-definition/0.1.2/34251165962/RELEASE-ATTESTATION.yaml"
+      },
+      "evidence": {
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34251165962/artifacts/10066120086",
+        "path": "superseded/framework-php/business-definition/0.1.2/34251165962/evidence.zip",
+        "sha256": "8017c6e406782a667e9c01cf020226e9d6f38cf56b54b3534079a39fe330c91c",
+        "verification_path": "superseded/framework-php/business-definition/0.1.2/34251165962/verification.json"
+      },
+      "verified_at": "2026-09-08T16:29:47Z",
+      "status": "superseded",
+      "qualification": "not-authorized-by-this-receipt",
+      "superseded_reason": "The external YAML used rich objects where the authoritative kumwe-release-attestation/v2 schema requires strings; replace this receipt with a schema-valid independently verified successor receipt."
+    },
+    {
+      "package": "kumwe/conversion",
+      "version": "0.1.4",
+      "source_commit": "61309523a58949e9d842c42e23f7d428a2b5ced2",
+      "source_archive_sha256": "5244287e192dae9098861f804f10f8ac871ccbe23e2cec65ba3f0c41022f10fc",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34251165962",
+      "attestation": {
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34251165962/artifacts/10066104811",
+        "path": "superseded/framework-php/conversion/0.1.4/34251165962/attestation.zip",
+        "sha256": "656a1e7a4b0756e9a51a54498871fc9e849deaf13fb37050197914b20566bc23",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "7f29766821691e59b39a135886b2d88bffc1834f47742d633b6a1b2f2435c187",
+        "yaml_path": "superseded/framework-php/conversion/0.1.4/34251165962/RELEASE-ATTESTATION.yaml"
+      },
+      "evidence": {
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34251165962/artifacts/10066103836",
+        "path": "superseded/framework-php/conversion/0.1.4/34251165962/evidence.zip",
+        "sha256": "d94ac35eb9593e56a2a6ce4673ddcf22d752cf511c148051f9d1829da3b6d7ea",
+        "verification_path": "superseded/framework-php/conversion/0.1.4/34251165962/verification.json"
+      },
+      "verified_at": "2026-09-08T16:29:22Z",
+      "status": "superseded",
+      "qualification": "not-authorized-by-this-receipt",
+      "superseded_reason": "The external YAML used rich objects where the authoritative kumwe-release-attestation/v2 schema requires strings; replace this receipt with a schema-valid independently verified successor receipt. Released Conversion0.1.4 also violates package-capabilities/v1: native_requirements is an array instead of null/object; this release needs an actual source successor."
+    }
+  ]
+}

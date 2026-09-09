@@ -70,6 +70,7 @@
       "@lint",
       "@docs",
       "@contract",
+      "@test:archive-boundary",
       "@api",
       "@manifests",
       "@test:package-set",
@@ -88,7 +89,8 @@
     "test:dependency-selection": "bash tools/test-dependency-selection.sh",
     "api": "php tools/public-api.php",
     "manifests": "php tools/verify-v2-metadata.php",
-    "test:package-set": "php tools/test-package-set-consumer.php"
+    "test:package-set": "php tools/test-package-set-consumer.php",
+    "test:archive-boundary": "php tools/test-archive-boundary.php"
   },
   "config": {
     "sort-packages": true
@@ -163,5 +165,11 @@
       "type": "vcs",
       "url": "https://github.com/kumwe/sequence.git"
     }
-  ]
+  ],
+  "archive": {
+    "exclude": [
+      "/evidence",
+      "/evidence/**"
+    ]
+  }
 }
