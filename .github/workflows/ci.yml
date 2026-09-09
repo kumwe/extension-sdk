@@ -210,8 +210,8 @@ jobs:
         run: |
           php tools/install-source-candidate.php --no-dev
           composer smoke
-      - name: Verify production-only authoritative archive consumer
-        run: php tools/verify-clean-consumer.php
+      - name: Verify archive and generated project consumers
+        run: php tools/verify-clean-consumer.php --scaffold
       - name: Record source candidate scope
         run: |
           cat ../candidate-dependency-evidence.json

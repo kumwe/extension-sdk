@@ -89,7 +89,12 @@ foreach($dependencies as $name=>$dependency){
  $source[$name]=['path'=>$path,'version'=>$dependency['version']];
  $evidence[$name]=$identity;
 }
-$config['minimum-stability']='dev';$config['prefer-stable']=true;
+$hasDevelopmentSelection=false;
+foreach($dependencies as $dependency){
+ if(str_starts_with($dependency['version'],'dev-'))$hasDevelopmentSelection=true;
+}
+$config['minimum-stability']=$hasDevelopmentSelection?'dev':($manifest['minimum-stability']??'stable');
+$config['prefer-stable']=true;
 $plan=json_encode($config,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_THROW_ON_ERROR);
 $temporary=$root.'/.composer.candidate.json';$temporaryLock=$root.'/.composer.candidate.lock';
 if($snapshot!==null&&(($snapshot['composer_plan_sha256']??null)!==hash('sha256',$plan)
@@ -106,7 +111,8 @@ unlink($temporary);
 if($status!==0){@unlink($temporaryLock);exit($status);}
 if(!is_file($temporaryLock)||!copy($temporaryLock,$lockPath))throw new RuntimeException('Cannot preserve the successful Composer lock.');
 unlink($temporaryLock);
-$consumer=['repositories'=>$config['repositories'],'require'=>array_intersect_key($config['require'],$dependencies)];
+$consumer=['repositories'=>$config['repositories'],'require'=>array_intersect_key($config['require'],$dependencies),
+ 'minimum-stability'=>$config['minimum-stability']];
 $consumerPath=$root.'/../candidate-consumer.json';file_put_contents($consumerPath,json_encode($consumer,JSON_PRETTY_PRINT|JSON_UNESCAPED_SLASHES|JSON_THROW_ON_ERROR));
 file_put_contents($snapshotPath,json_encode(['release_attestation'=>false,'install_succeeded'=>true,
  'source_inputs'=>$inputs,'composer_plan_sha256'=>hash('sha256',$plan),

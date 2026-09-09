@@ -201,8 +201,8 @@ jobs:
           php tools/install-source-candidate.php
       - name: Run complete SDK checks with actual native runtime
         run: composer check
-      - name: Verify production-only authoritative archive consumer
-        run: php tools/verify-clean-consumer.php
+      - name: Verify archive and generated project consumers
+        run: php tools/verify-clean-consumer.php --scaffold
       - name: Record source candidate scope
         run: |
           cat ../candidate-dependency-evidence.json

@@ -127,6 +127,7 @@ GITHUB_RUN_ID= GITHUB_RUN_ATTEMPT= GITHUB_JOB= reject_fixture 'Unavailable or un
 
 new_fixture stable-tag 0.1.0
 install_fixture
+php -r '$c=json_decode(file_get_contents($argv[1]),true,64,JSON_THROW_ON_ERROR);if(($c["minimum-stability"]??null)!=="stable"){throw new RuntimeException("Stable source graph was relaxed to development stability.");}' "$SDK_TEST_CASE/candidate-consumer.json"
 touch "$SDK_TEST_CASE/deleted"
 reject_fixture 'Unavailable or unrelated source coordinate' --no-dev
 [[ $(wc -l < "$SDK_TEST_CASE/remote.log") -eq 2 ]]

@@ -53,7 +53,13 @@ App retains composition, trust, authorization, persistence, delivery, lifecycle 
 The package's test ownership gate checks the actual test runner's discovered methods.
 
 Both CI lanes run `composer check` with the exact native candidate, followed by production-only
-installation and a fresh authoritative archive consumer. They must pass at the final reviewed head.
+installation and a fresh authoritative archive consumer. The archive consumer then generates a
+complete component using the installed SDK ZIP and actual native encoder, installs that component's
+own Composer requirements, runs its generated PHPUnit suite and removes development dependencies.
+Its final authoritative production smoke loads every generated runtime type and executes the real
+delivery dependency without PHPUnit or Computation in the author runtime. Source dependency
+selections remain explicit and stable; these checks do not qualify unpublished native artifacts.
+Both lanes must pass at the final reviewed head.
 The standard App package reader recognizes this pre-Version-2 SDK format as `legacy-unmanifested`,
 as it does Conversion and Producer; no partial Version 2 manifest claim is introduced here. The
 SDK-owned classification and resource manifests remain independently enforced by its source gates.
