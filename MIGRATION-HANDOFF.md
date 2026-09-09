@@ -70,7 +70,7 @@
       },
       {
         "path": "resources/capabilities/v1.json",
-        "sha256": "6cba01028a8ef151892229815955e2a8d55c4a3a8ae67e729d5290417bfadb29"
+        "sha256": "187a66f10e23aed418c48b0abd6a645311fb8a5fc93061a0680c7969e4dd9de8"
       },
       {
         "path": "resources/service-map/v1.json",
@@ -86,7 +86,7 @@
       },
       {
         "path": "resources/PIN.json",
-        "sha256": "674ed5a7e51e3753e1648eea22100ab16c25e719644e539a34ea2238b2095c91"
+        "sha256": "88ff4c13d055ae8b97a87a86f64e015dea0db7a62c4541c088316b8c09a78ccf"
       }
     ],
     "intentionally_excluded": [

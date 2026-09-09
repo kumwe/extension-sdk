@@ -35,6 +35,7 @@ foreach (['capabilities' => $capabilities, 'service-map' => $services] as $kind 
     $require($manifest['release'] === $release, $kind . ' release identity');
 }
 $require($capabilities['namespace'] === $api['namespace'], 'capability namespace');
+$require(array_key_exists('native_requirements', $capabilities) && $capabilities['native_requirements'] === null, 'portable SDK native requirements use the canonical null representation');
 $covered = [];
 $ids = [];
 foreach ($capabilities['capabilities'] as $capability) {

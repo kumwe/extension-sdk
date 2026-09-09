@@ -6,7 +6,7 @@
     "files": [
         {
             "file": "capabilities/v1.json",
-            "sha256": "6cba01028a8ef151892229815955e2a8d55c4a3a8ae67e729d5290417bfadb29"
+            "sha256": "187a66f10e23aed418c48b0abd6a645311fb8a5fc93061a0680c7969e4dd9de8"
         },
         {
             "file": "contract/README.md",
