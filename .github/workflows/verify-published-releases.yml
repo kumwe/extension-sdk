@@ -24,12 +24,15 @@ jobs:
     timeout-minutes: 5
     outputs:
       releases: ${{ steps.matrix.outputs.releases }}
+      complete: ${{ steps.complete.outputs.complete }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
       - id: matrix
         run: node -e 'const fs = require("fs"); fs.appendFileSync(process.env.GITHUB_OUTPUT, "releases=" + JSON.stringify(JSON.parse(fs.readFileSync("tools/release-verification/releases.json"))) + "\n");'
+      - id: complete
+        run: node -e 'const fs=require("fs"); const p=JSON.parse(fs.readFileSync("tools/release-verification/releases.json")); fs.appendFileSync(process.env.GITHUB_OUTPUT,"complete="+(p.length===31 && p.some(x=>x.name==="kumwe/extension-sdk"))+"\n")'
   release:
     name: Verify ${{ matrix.release.name }} ${{ matrix.release.version }}
     needs: coordinates
@@ -87,5 +90,43 @@ jobs:
         with:
           name: release-attestation-${{ env.RELEASE_SLUG }}
           path: ${{ runner.temp }}/release-verification/RELEASE-ATTESTATION.yaml
+          retention-days: 90
+          if-no-files-found: error
+
+  complete-package-set:
+    name: All 31 published PHP packages / portable consumer
+    needs: [coordinates, release]
+    if: needs.coordinates.outputs.complete == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+        with:
+          php-version: '8.5'
+          extensions: dom, intl, json, mbstring, sodium, xml, xmlwriter, zip
+          coverage: none
+          tools: composer:v2
+      - name: Install locked verification parsers
+        working-directory: tools/release-verification
+        run: npm ci --ignore-scripts --no-audit
+      - name: Retrieve this successful run's independent source evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" --pattern 'release-evidence-*' --dir "$RUNNER_TEMP/independent-releases"
+      - name: Assemble verified original archives
+        run: node tools/release-verification/assemble-package-set.mjs tools/release-verification/releases.json "$RUNNER_TEMP/independent-releases" "$RUNNER_TEMP/package-set"
+      - name: Install the complete graph and replay its immutable lock offline
+        env:
+          COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ github.token }}"}}'
+        run: php tools/verify-package-set-consumer.php "$RUNNER_TEMP/package-set/verified-package-set.json" "$RUNNER_TEMP/package-set/consumer-verification.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: complete-portable-package-set-verification
+          path: |
+            ${{ runner.temp }}/package-set/verified-package-set.json
+            ${{ runner.temp }}/package-set/consumer-verification.json
           retention-days: 90
           if-no-files-found: error
