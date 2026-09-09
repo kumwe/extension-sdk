@@ -1,6 +1,6 @@
 <?php
 
-/** Independently install the complete portable extraction graph from verified ZIPs. @since 0.3.0 */
+/** Install the complete released PHP graph in separately qualified portable/native modes. @since 0.3.0 */
 
 declare(strict_types=1);
 
@@ -20,6 +20,151 @@ function packageSetTargets(): array
     ]);
 }
 
+/** @return list<string> Complete extraction graph including legacy roots and its SDK consumer. @since 0.3.0 */
+function packageSetRequiredPackages(): array
+{
+    return [...packageSetTargets(), 'kumwe/conversion', 'kumwe/producer', 'kumwe/extension-sdk'];
+}
+
+/** @param mixed $input Verifier input. @return string Explicit qualification mode. @since 0.3.0 */
+function packageSetMode(mixed $input): string
+{
+    $mode = is_array($input) ? ($input['graph_mode'] ?? 'portable') : null;
+    if (!in_array($mode, ['portable', 'native'], true)) {
+        throw new RuntimeException('Unsupported package graph mode.');
+    }
+    if ($mode === 'portable' && array_key_exists('native', $input)) {
+        throw new RuntimeException('Portable qualification cannot carry native evidence.');
+    }
+    return $mode;
+}
+
+/** @param mixed $value Candidate version. @return bool Exact stable semantic version. @since 0.3.0 */
+function packageSetStable(mixed $value): bool
+{
+    return is_string($value)
+        && preg_match('/^(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)\.(?:0|[1-9][0-9]*)$/D', $value) === 1;
+}
+
+/** @param mixed $path Local file. @param mixed $digest Expected SHA-256. @return void @since 0.3.0 */
+function packageSetEvidenceFile(mixed $path, mixed $digest): void
+{
+    if (!is_string($path) || !str_starts_with($path, '/') || realpath($path) !== $path
+        || is_link($path) || !is_file($path) || !is_string($digest)
+        || preg_match('/^[0-9a-f]{64}$/D', $digest) !== 1 || hash_file('sha256', $path) !== $digest) {
+        throw new RuntimeException('Native evidence file identity or digest differs.');
+    }
+}
+
+/**
+ * Bind inputs already qualified by the native release verifier to immutable local evidence.
+ * This consumer verifies bytes and runtime equality; publisher signatures and attestation semantics
+ * remain the independent native verifier's responsibility, never an inferred result of hashing.
+ * @param array<string, mixed> $input External verifier input.
+ * @return ?array<string, mixed> Stable native identity, or null for the portable graph.
+ * @since 0.3.0
+ */
+function packageSetNativeInput(array $input): ?array
+{
+    if (packageSetMode($input) === 'portable') {
+        return null;
+    }
+    $native = $input['native'] ?? null;
+    if (!is_array($native) || !packageSetStable($native['extension_version'] ?? null)
+        || !is_array($native['compatibility_tuple'] ?? null)) {
+        throw new RuntimeException('Native qualification requires stable evidence and the full expected runtime tuple.');
+    }
+    foreach (['engine' => 'kumwe/engine', 'extension' => 'kumwe/kumwe-engine'] as $kind => $package) {
+        $entry = $native[$kind] ?? null;
+        if (!is_array($entry) || ($entry['package'] ?? null) !== $package
+            || !packageSetStable($entry['version'] ?? null) || ($entry['tag'] ?? null) !== 'v' . $entry['version']
+            || !is_string($entry['commit'] ?? null) || preg_match('/^[0-9a-f]{40}$/D', $entry['commit']) !== 1
+            || !is_string($entry['archive_sha256'] ?? null)
+            || preg_match('/^[0-9a-f]{64}$/D', $entry['archive_sha256']) !== 1) {
+            throw new RuntimeException('Native release coordinates must be canonical, exact and stable.');
+        }
+        $attestation = $entry['attestation'] ?? null;
+        if (!is_array($attestation) || !is_string($attestation['uri'] ?? null)
+            || preg_match('~^https://github\.com/kumwe/[a-z0-9-]+/[^\s]+$~D', $attestation['uri']) !== 1
+            || ($attestation['member'] ?? null) !== 'RELEASE-ATTESTATION.yaml') {
+            throw new RuntimeException('Native verification evidence needs its immutable attestation location and member.');
+        }
+        packageSetEvidenceFile($attestation['archive_path'] ?? null, $attestation['sha256'] ?? null);
+        packageSetEvidenceFile($attestation['member_path'] ?? null, $attestation['member_sha256'] ?? null);
+        $zip = new ZipArchive();
+        if ($zip->open($attestation['archive_path']) !== true) {
+            throw new RuntimeException('Native attestation archive is not readable.');
+        }
+        try {
+            $matches = 0;
+            for ($index = 0; $index < $zip->numFiles; $index++) {
+                if ($zip->getNameIndex($index) === $attestation['member']) {
+                    $matches++;
+                }
+            }
+            $stat = $zip->statName($attestation['member']);
+            if ($matches !== 1 || !is_array($stat) || $stat['size'] > 16777216
+                || $zip->getFromName($attestation['member']) !== file_get_contents($attestation['member_path'])) {
+                throw new RuntimeException('Native attestation ZIP member differs from the verified YAML bytes.');
+            }
+        } finally {
+            $zip->close();
+        }
+    }
+    // A prefix-free raw git-archive TAR is embedded. Its digest is deliberately distinct from the
+    // published prefixed/compressed Engine source archive recorded by the native release verifier.
+    packageSetEvidenceFile($native['engine']['embedding_archive_path'] ?? null,
+        $native['engine']['embedding_archive_sha256'] ?? null);
+    $tuple = $native['compatibility_tuple'];
+    if (($tuple['engine'] ?? null) !== 'kumwe/engine'
+        || ($tuple['version'] ?? null) !== $native['engine']['version']
+        || !in_array($tuple['abi_status'] ?? null, ['stable', 'frozen'], true)
+        || ($tuple['semantic_release_verified'] ?? null) !== true
+        || ($tuple['computation']['engine_version'] ?? null) !== $native['engine']['version']
+        || !packageSetStable($tuple['computation']['api_version'] ?? null)
+        || ($tuple['extension_package'] ?? null) !== 'kumwe/kumwe-engine'
+        || ($tuple['extension_module'] ?? null) !== 'kumwe_engine'
+        || ($tuple['extension_version'] ?? null) !== $native['extension_version']
+        || $native['extension']['version'] !== $native['extension_version']
+        || ($tuple['embedded_engine_commit'] ?? null) !== $native['engine']['commit']
+        || ($tuple['embedded_source_sha256'] ?? null) !== $native['engine']['embedding_archive_sha256']) {
+        throw new RuntimeException('Native tuple does not match the stable independently verified source coordinates.');
+    }
+    return $native;
+}
+
+/** @param mixed $value Tuple member. @return mixed Key-sorted objects, preserving typed values and list order. @since 0.3.0 */
+function packageSetTupleValue(mixed $value): mixed
+{
+    if (!is_array($value)) {
+        return $value;
+    }
+    if (!array_is_list($value)) {
+        ksort($value, SORT_STRING);
+    }
+    return array_map(packageSetTupleValue(...), $value);
+}
+
+/** @param ?array<string, mixed> $native Expected native input. @return void @since 0.3.0 */
+function packageSetAssertRuntime(?array $native): void
+{
+    if ($native === null) {
+        if (extension_loaded('kumwe_engine')) {
+            throw new RuntimeException('Portable package qualification must execute without the native extension.');
+        }
+        return;
+    }
+    if (!extension_loaded('kumwe_engine') || phpversion('kumwe_engine') !== $native['extension_version']
+        || !class_exists('Kumwe\\Engine\\Runtime', false)
+        || !(new ReflectionClass('Kumwe\\Engine\\Runtime'))->isInternal()) {
+        throw new RuntimeException('Native qualification requires the actual selected stable extension.');
+    }
+    $observed = (new Kumwe\Engine\Runtime())->capabilities();
+    if (packageSetTupleValue($observed) !== packageSetTupleValue($native['compatibility_tuple'])) {
+        throw new RuntimeException('The actual native runtime differs from the independently supplied exact tuple.');
+    }
+}
+
 /**
  * Validate the external verifier's complete archive set before starting Composer.
  *
@@ -33,6 +178,8 @@ function packageSetInput(mixed $input): array
         || !is_array($input['packages'] ?? null) || !array_is_list($input['packages'])) {
         throw new RuntimeException('Expected a verified PHP package set with the supported schema.');
     }
+    $mode = packageSetMode($input);
+    $native = packageSetNativeInput($input);
     $packages = [];
     foreach ($input['packages'] as $entry) {
         if (!is_array($entry) || !is_string($entry['name'] ?? null)
@@ -66,7 +213,12 @@ function packageSetInput(mixed $input): array
         }
         foreach ($entry['composer']['require'] ?? [] as $name => $constraint) {
             if ($name === 'ext-kumwe_engine') {
-                throw new RuntimeException('The portable extraction graph must not require the native extension.');
+                if ($mode === 'portable') {
+                    throw new RuntimeException('The portable extraction graph must not require the native extension.');
+                }
+                if ($entry['name'] !== 'kumwe/computation' || $constraint !== $native['extension_version']) {
+                    throw new RuntimeException('Only the qualified Computation successor may require the exact stable native extension.');
+                }
             }
             if (str_starts_with($name, 'kumwe/')
                 && (!is_string($constraint)
@@ -76,9 +228,13 @@ function packageSetInput(mixed $input): array
         }
         $packages[$entry['name']] = $entry;
     }
-    $missing = array_diff(packageSetTargets(), array_keys($packages));
+    $missing = array_diff(packageSetRequiredPackages(), array_keys($packages));
     if ($missing !== []) {
         throw new RuntimeException('The portable extraction set is incomplete: ' . implode(', ', $missing));
+    }
+    if ($mode === 'native' && ($packages['kumwe/computation']['composer']['require']['ext-kumwe_engine'] ?? null)
+        !== $native['extension_version']) {
+        throw new RuntimeException('The native graph must select the stable native Computation successor.');
     }
     foreach ($packages as $entry) {
         foreach ($entry['composer']['require'] ?? [] as $name => $constraint) {
@@ -136,10 +292,11 @@ function verifyPackageSetMain(array $arguments): void
     if (file_exists($arguments[2]) || is_link($arguments[2])) {
         throw new RuntimeException('Consumer evidence output must not already exist.');
     }
-    if (extension_loaded('kumwe_engine')) {
-        throw new RuntimeException('Portable package qualification must execute without the native extension.');
-    }
-    $packages = packageSetInput(json_decode((string) file_get_contents($arguments[1]), true, 128, JSON_THROW_ON_ERROR));
+    $input = json_decode((string) file_get_contents($arguments[1]), true, 128, JSON_THROW_ON_ERROR);
+    $packages = packageSetInput($input);
+    $mode = packageSetMode($input);
+    $native = packageSetNativeInput($input);
+    packageSetAssertRuntime($native);
     $workspace = sys_get_temp_dir() . '/kumwe-package-set-' . bin2hex(random_bytes(12));
     if (!mkdir($workspace, 0700)) {
         throw new RuntimeException('Cannot create the isolated package set consumer.');
@@ -206,10 +363,10 @@ function verifyPackageSetMain(array $arguments): void
             throw new RuntimeException('Offline package reinstallation changed the qualified Composer lock.');
         }
         $loader = require $workspace . '/vendor/autoload.php';
-        if (!$loader->isClassMapAuthoritative() || class_exists('PHPUnit\\Framework\\TestCase')
-            || extension_loaded('kumwe_engine')) {
-            throw new RuntimeException('Qualification requires authoritative, development-free and native-free runtime loading.');
+        if (!$loader->isClassMapAuthoritative() || class_exists('PHPUnit\\Framework\\TestCase')) {
+            throw new RuntimeException('Qualification requires authoritative, development-free runtime loading.');
         }
+        packageSetAssertRuntime($native);
         $classmap = $loader->getClassMap();
         $report = [];
         foreach ($packages as $name => $entry) {
@@ -248,19 +405,40 @@ function verifyPackageSetMain(array $arguments): void
                 'runtime_types_loaded' => $loaded, 'optional_phpunit_bridges' => $optional,
                 'runtime_requirements' => $entry['composer']['require'] ?? []];
         }
+        if ($native !== null) {
+            $tuple = $native['compatibility_tuple'];
+            $compatibility = new Kumwe\Computation\NativeCompatibility(
+                Kumwe\Computation\CapabilitySet::fromArray($tuple['computation']),
+                $tuple['extension_version'], $tuple['embedded_engine_commit'], $tuple['embedded_source_sha256'],
+                $tuple['binding_build_digest'],
+            );
+            $encoder = new Kumwe\Computation\NativeCanonicalEncoder(new Kumwe\Engine\Runtime(), $compatibility);
+            if ($encoder->encode(['b' => 2, 'a' => 1]) !== '{"a":1,"b":2}'
+                || $encoder->digest(['b' => 2, 'a' => 1]) !== hash('sha256', '{"a":1,"b":2}')) {
+                throw new RuntimeException('The installed native Computation adapter failed its production call.');
+            }
+            packageSetNativeInput($input);
+        }
         $result = ['schema' => 'kumwe-php-package-set-consumer/v1', 'status' => 'passed',
-            'graph' => 'portable-extraction', 'required_extraction_count' => count(packageSetTargets()),
+            'graph' => $mode === 'portable' ? 'portable-extraction' : 'native-acceleration',
+            'graph_mode' => $mode, 'required_extraction_count' => count(packageSetTargets()),
+            'required_package_count' => count(packageSetRequiredPackages()),
             'package_count' => count($report), 'php_version' => PHP_VERSION,
-            'native_extension_loaded' => false, 'no_dev' => true, 'classmap_authoritative' => true,
+            'native_extension_loaded' => $native !== null, 'no_dev' => true, 'classmap_authoritative' => true,
             'source_fallback' => false, 'source_fallback_scope' => 'verified-kumwe-archives',
             'offline_reinstall' => true, 'offline_mode' => 'COMPOSER_DISABLE_NETWORK=1',
             'composer_cache_scope' => 'isolated-consumer', 'composer_lock_sha256' => $lockDigest,
             'packages' => $report];
+        if ($native !== null) {
+            $result['native'] = $native;
+            $result['native']['verification_scope'] = 'Exact stable coordinate, attestation ZIP/member byte identity and actual runtime tuple equality; publisher signatures and attestation semantics are verified by the upstream native release verifier.';
+            $result['native']['adapter_production_call'] = true;
+        }
         $bytes = json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR) . "\n";
         if (file_put_contents($arguments[2], $bytes, LOCK_EX) !== strlen($bytes)) {
             throw new RuntimeException('Cannot write complete package consumer evidence.');
         }
-        echo 'Portable extraction package consumer passed: ' . count($report) . ' packages, all 28 extraction owners.' . "\n";
+        echo ucfirst($mode) . ' package consumer passed: ' . count($report) . ' packages, all 31 required owners and SDK.' . "\n";
     } finally {
         packageSetRemoveDirectory($workspace);
     }

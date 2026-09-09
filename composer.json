@@ -72,6 +72,7 @@
       "@contract",
       "@api",
       "@manifests",
+      "@test:package-set",
       "@test:ownership",
       "@test:source-install",
       "@test",
@@ -86,7 +87,8 @@
     "test:source-install": "bash tools/test-source-candidate.sh",
     "test:dependency-selection": "bash tools/test-dependency-selection.sh",
     "api": "php tools/public-api.php",
-    "manifests": "php tools/verify-v2-metadata.php"
+    "manifests": "php tools/verify-v2-metadata.php",
+    "test:package-set": "php tools/test-package-set-consumer.php"
   },
   "config": {
     "sort-packages": true

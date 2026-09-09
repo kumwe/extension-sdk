@@ -60,5 +60,9 @@ Independent release verification is a later observation over actual stable sourc
 archive identities. The combined package-set consumer selects only independently checked archives,
 installs the complete graph into a fresh project, audits it, deletes its vendor tree and repeats the
 same lock with Composer network access disabled and a private warmed cache. It does not use SDK
-vendor packages to qualify another artifact. Native successor evidence is recorded separately from
-the extension-free Computation baseline. App namespace replacement and composition are a later task.
+vendor packages to qualify another artifact. Both final graphs require all 31 PHP packages: the 28 catalog owners, Conversion, Producer and SDK.
+The portable mode refuses a loaded extension or any runtime extension requirement. Native mode
+requires the qualified stable Computation successor, immutable native attestations and complete
+expected runtime tuple, then performs a real installed-adapter call after its offline replay.
+See [release qualification](release-qualification.md) for the distinct input and evidence boundaries.
+App namespace replacement and composition are a later task.

@@ -168,6 +168,6 @@
             ]
         }
     ],
-    "native_requirements": [],
+    "native_requirements": null,
     "deprecations": []
 }
