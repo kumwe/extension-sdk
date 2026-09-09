@@ -18,6 +18,8 @@ Both the required SDK source job and the additional native candidate job build t
 
 Within one CI job, production reinstallation reuses the successfully installed Composer plan and lock after checking the same SDK inputs and dependency commits, trees and clean contents. This keeps an already verified development checkout usable if its branch is merged and deleted during the job. Initial installation still verifies every remote coordinate; stable tags are checked again during reinstallation. Snapshots from another job or altered inputs are refused.
 
-Every PHP dependency is selected by its published stable version and exact tag commit. Both native lanes build binding `566f6ff650290627275cca836363165608391469` with optimized Engine `b82304169af6936e502afe72f883bd5d9c76413c`.
+Every PHP dependency is selected by its published stable version and exact tag commit. Both native lanes build binding `584e910b5902c7d3c2bda006586692d572ac1154` with Engine `72fd09632e740f0bfd1bb09cc87749110ca21b90`.
 
 The changelog records `0.3.0` as the canonical API successor. Version `0.2.5` remains the previously published API until maintainer merge and successful publication. Green source tests alone do not create that release.
+
+The candidate includes bounded binary transport, optional opaque compiled results and an explicit stable-source refusal while the portable Computation contract baseline is unresolved. Production selection still requires the ordered verified release train.
