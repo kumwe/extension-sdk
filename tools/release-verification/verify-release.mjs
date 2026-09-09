@@ -65,6 +65,7 @@ function command(args, cwd, log, env = {}) {
   try {
     const result = spawnSync(args[0], args.slice(1), { cwd, env: { ...process.env, ...env },
       stdio: ['ignore', fd, fd], timeout: 1200000 });
+    if (result.status !== 0) console.error(fs.readFileSync(log, 'utf8').slice(-16000));
     requireFact(result.status === 0, `Command failed (${result.status}): ${args.join(' ')}; see ${log}`);
   } finally { fs.closeSync(fd); }
 }

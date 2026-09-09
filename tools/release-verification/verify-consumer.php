@@ -16,8 +16,15 @@ $metadata['version'] = $input['version'];
 unset($metadata['source']);
 $metadata['dist'] = ['type' => 'zip', 'url' => 'file://' . $input['archive_path'],
     'reference' => $input['source_commit'], 'shasum' => sha1_file($input['archive_path'])];
+$consumerRequirements = [$input['name'] => $input['version']];
+// The published package's documented Laminas example needs an actual host container.
+// Make that host dependency explicit; never import test frameworks or all require-dev.
+if (isset($metadata['require-dev']['laminas/laminas-servicemanager'])
+    && ($input['handoff']['framework_php']['dependency_injection']['mode'] ?? 'direct') !== 'direct') {
+    $consumerRequirements['laminas/laminas-servicemanager'] = $metadata['require-dev']['laminas/laminas-servicemanager'];
+}
 file_put_contents($root . '/composer.json', json_encode(['name' => 'kumwe/independent-release-consumer',
-    'license' => 'proprietary', 'require' => [$input['name'] => $input['version']],
+    'license' => 'proprietary', 'require' => $consumerRequirements,
     'repositories' => [['type' => 'package', 'package' => $metadata]],
     'config' => ['allow-plugins' => false]], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) . "\n");
 putenv('COMPOSER_CACHE_DIR=' . $root . '/cache');
@@ -63,8 +70,16 @@ if (!$loader->isClassMapAuthoritative() || class_exists('PHPUnit\\Framework\\Tes
 $package = $root . '/vendor/' . $input['name'];
 $classmap = require $root . '/vendor/composer/autoload_classmap.php';
 $classes = [];
+$optionalBridges = [];
+$phpunitBridges = ['Kumwe\\Extension\\Toolchain\\ExtensionConformanceTestCase',
+    'Kumwe\\Extension\\Toolchain\\ExtensionLifecycleTestCase'];
 foreach ($classmap as $name => $file) {
     if (str_starts_with(realpath($file), realpath($package) . '/')) {
+        if ($input['name'] === 'kumwe/extension-sdk' && in_array($name, $phpunitBridges, true)
+            && !class_exists('PHPUnit\\Framework\\TestCase')) {
+            $optionalBridges[] = $name;
+            continue;
+        }
         if (!class_exists($name) && !interface_exists($name) && !trait_exists($name) && !enum_exists($name)) {
             throw new RuntimeException('Runtime class failed to load: ' . $name);
         }
@@ -89,6 +104,7 @@ file_put_contents($argv[2], json_encode(['schema' => 'kumwe-independent-release-
     'source_commit' => $input['source_commit'], 'archive_sha256' => $input['archive_sha256'],
     'no_dev' => true, 'classmap_authoritative' => true, 'offline_reinstall' => true,
     'composer_lock_sha256' => $lockDigest, 'runtime_types_loaded' => count($classes),
-    'runtime_classes' => $classes, 'examples' => $input['examples'], 'php' => PHP_VERSION,
+    'runtime_classes' => $classes, 'optional_phpunit_bridges' => $optionalBridges,
+    'consumer_host_requirements' => array_diff_key($consumerRequirements, [$input['name'] => true]), 'examples' => $input['examples'], 'php' => PHP_VERSION,
     'php_zts' => PHP_ZTS, 'os' => PHP_OS_FAMILY, 'architecture' => php_uname('m'),
     'native_extension_loaded' => extension_loaded('kumwe_engine')], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) . "\n");
