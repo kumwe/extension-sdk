@@ -19,15 +19,16 @@ use Kumwe\Extension\Tests\TestCase;
  * `docs/migration-map.json` and `tools/generate-migration-map.php` — because they record the
  * historical-to-canonical adoption for the App: their whole purpose is to name historical FQCNs
  * next to their canonical replacements, and they are neither shipped runtime nor release
- * authority. Everything else committed — source, resources, tools, tests, workflows — must stay
- * canonical.
+ * authority. Preserved external verification receipts in `evidence/` describe other repositories
+ * and retain their original bytes; both Git and Composer must exclude that directory from every
+ * SDK archive. Everything else committed — source, resources, tools, tests, workflows — must stay canonical.
  *
  * @since  0.2.0
  */
 final class CanonicalNamespaceBoundaryTest extends TestCase
 {
     /**
-     * No committed text file outside the three adoption records carries the historical namespace.
+     * No SDK text file outside the three adoption records carries the historical namespace.
      *
      * Doubled backslashes are collapsed before matching so the escaped forms inside JSON strings
      * and PHP string literals cannot hide the historical prefix.
@@ -47,9 +48,16 @@ final class CanonicalNamespaceBoundaryTest extends TestCase
             'docs/migration-map.json',
             'tools/generate-migration-map.php',
         ];
+        $composer = json_decode((string) file_get_contents($root . '/composer.json'), true, flags: JSON_THROW_ON_ERROR);
+        $this->assertTrue(
+            in_array('/evidence', $composer['archive']['exclude'] ?? [], true)
+                && in_array('/evidence/**', $composer['archive']['exclude'] ?? [], true)
+                && preg_match('~^/evidence export-ignore$~m', (string) file_get_contents($root . '/.gitattributes')) === 1,
+            'External verification history is separate only when both SDK archive formats explicitly exclude it.',
+        );
         $violations = [];
         foreach ($files as $relative) {
-            if (in_array($relative, $exempt, true)) {
+            if (in_array($relative, $exempt, true) || str_starts_with($relative, 'evidence/')) {
                 continue;
             }
             if (preg_match('/\.(?:php|md|json|tpl|xml|ya?ml)$/D', $relative) !== 1) {
@@ -72,7 +80,7 @@ final class CanonicalNamespaceBoundaryTest extends TestCase
         $this->assertSame(
             [],
             $violations,
-            'Committed SDK files outside the recorded adoption exemptions must not publish a historical host namespace.',
+            'SDK files outside the recorded adoption exemptions must not publish a historical host namespace.',
         );
     }
 }

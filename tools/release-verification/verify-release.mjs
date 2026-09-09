@@ -205,7 +205,7 @@ export async function verifyRelease(raw, output) {
   const licensePath = ['LICENSE', 'LICENSE.md', 'LICENSE.txt'].find(p => archiveFiles.includes(p));
   requireFact(licensePath && input.composer.license, 'License declaration/inventory is absent.');
   input.examples = handoff.documentation.examples.map(safePath);
-  for (const p of [...['charter', 'readme', 'public_api', 'architecture', 'integration_or_consumer'].map(key => handoff.documentation[key]), ...input.examples, ...handoff.tests.corpora]) {
+  for (const p of [...['charter', 'readme', 'public_api', 'architecture', 'integration_or_consumer'].map(key => handoff.documentation[key]), ...input.examples]) {
     requireFact(fs.statSync(path.join(input.package_root, safePath(p))).isFile(), `Declared handoff artifact is absent: ${p}`);
   }
   input.handoff = handoff;

@@ -171,8 +171,10 @@ async function verifyUpstreams(root, input, output) {
   if (input.kind === 'php_extension') {
     const lock = json(path.join(root, 'resources/engine-lock.json'));
     requireFact(lock.release_verified === true, 'Embedded Engine has no independent verified release.');
+    requireFact(lock.release === `v${lock.version}` && /^[a-f0-9]{64}$/.test(lock.release_archive_sha256 || ''),
+      'Embedded Engine must distinguish its stable release and compressed release archive from the raw embedding TAR.');
     result.push(await upstreamReceipt(lock.external_attestation, { name: 'kumwe/engine',
-      version: lock.release.replace(/^v/, ''), commit: lock.commit }, output, result.length));
+      version: lock.version, commit: lock.commit, archive_sha256: lock.release_archive_sha256 }, output, result.length));
   }
   return result;
 }
@@ -312,7 +314,9 @@ export async function verifyNative(raw, destination) {
       sha256: hash(fs.readFileSync(path.join(asset.name === 'build-provenance.sigstore.json' ? output : bundle, asset.name))) })),
     abi_and_capabilities: { abi_major: caps.abi_major, capabilities: caps.capabilities,
       corpus_digests: caps.corpora.map(c => c.sha256) }, upstreams,
-    embedded_engine: { source_commit: engineCommit, raw_tar_sha256: rawDigest }, build: buildResult });
+    embedded_engine: { source_commit: engineCommit, raw_tar_sha256: rawDigest,
+      release_archive_sha256: input.kind === 'native_cpp' ? input.archive_sha256
+        : json(path.join(root, 'resources/engine-lock.json')).release_archive_sha256 }, build: buildResult });
   console.log(`Independently verified actual ${input.name} ${input.version}; external attestation is finalized separately.`);
 }
 
