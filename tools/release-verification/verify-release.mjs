@@ -157,7 +157,7 @@ export async function verifyRelease(raw, output) {
   const release = await get(`/releases/tags/${input.tag}`);
   requireFact(!release.draft && !release.prerelease && release.tag_name === input.tag && release.published_at, 'Release is not published stable.');
   const allRuns = (await get(`/actions/runs?head_sha=${input.source_commit}&per_page=100`)).workflow_runs;
-  const releaseRuns = allRuns.filter(r => r.head_sha === input.source_commit && /release/i.test(r.name)
+  const releaseRuns = allRuns.filter(r => r.head_sha === input.source_commit && r.path === '.github/workflows/release-on-record.yml'
     && r.status === 'completed' && r.conclusion === 'success' && ['push', 'workflow_dispatch'].includes(r.event));
   requireFact(releaseRuns.length > 0, 'No successful release-on-record workflow for the actual released source.');
   const mergePulls = (await get(`/commits/${input.source_commit}/pulls`)).filter(p => p.merged_at && p.merge_commit_sha === input.source_commit);
@@ -205,6 +205,9 @@ export async function verifyRelease(raw, output) {
   const licensePath = ['LICENSE', 'LICENSE.md', 'LICENSE.txt'].find(p => archiveFiles.includes(p));
   requireFact(licensePath && input.composer.license, 'License declaration/inventory is absent.');
   input.examples = handoff.documentation.examples.map(safePath);
+  for (const p of [...['charter', 'readme', 'public_api', 'architecture', 'integration_or_consumer'].map(key => handoff.documentation[key]), ...input.examples, ...handoff.tests.corpora]) {
+    requireFact(fs.statSync(path.join(input.package_root, safePath(p))).isFile(), `Declared handoff artifact is absent: ${p}`);
+  }
   input.handoff = handoff;
   write(path.join(output, 'prepared-package.json'), input);
   write(path.join(output, 'github-evidence.json'), { tag, release, release_runs: releaseRuns, merge_pull_requests: mergePulls,
@@ -214,6 +217,22 @@ export async function verifyRelease(raw, output) {
     `https://github.com/${input.name}.git`, checkout], output, path.join(output, 'source-checkout.log'));
   const head = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: checkout, encoding: 'utf8' });
   requireFact(head.status === 0 && head.stdout.trim() === input.source_commit, 'Verification checkout moved from immutable source.');
+  const exportZip = path.resolve(output, 'reference-export.zip');
+  command(['git', '-c', 'core.attributesfile=/dev/null', 'archive', '--format=zip', '--prefix=reference/',
+    `--output=${exportZip}`, input.source_commit], checkout, path.join(output, 'reference-export.log'), { GIT_ATTR_NOSYSTEM: '1' });
+  const exportDirectory = path.resolve(output, 'reference-export');
+  command(['php', path.join(here, 'extract-archive.php'), exportZip, exportDirectory], output, path.join(output, 'reference-export-extract.log'));
+  const exportRoot = path.join(exportDirectory, 'reference');
+  const expectedFiles = filesBelow(exportRoot);
+  requireFact(JSON.stringify(expectedFiles) === JSON.stringify(archiveFiles), 'Published archive differs from the complete git export inventory.');
+  const exportInventory = expectedFiles.map(p => {
+    const expected = fs.readFileSync(path.join(exportRoot, p));
+    requireFact(expected.equals(fs.readFileSync(path.join(input.package_root, p))), `Published archive differs from complete git export bytes: ${p}`);
+    return { path: p, sha256: sha256(expected), bytes: expected.length };
+  });
+  write(path.join(output, 'archive-inventory-verification.json'), { status: 'passed', source_commit: input.source_commit,
+    export_ignore_honored: true, omitted_files: [], additional_files: [], files: exportInventory });
+  fs.unlinkSync(exportZip);
   for (const directory of ['tools/governance', 'tools/schema-validator', 'tools/release-verification']) {
     if (fs.existsSync(path.join(checkout, directory, 'package-lock.json'))) {
       command(['npm', 'ci', '--ignore-scripts', '--no-audit'], path.join(checkout, directory),
@@ -236,7 +255,7 @@ export async function verifyRelease(raw, output) {
     canonical_schema_validation: canonicalValidation,
     manifests_and_corpora: [...manifests, ...corpusFiles.filter(p => !manifests.some(m => m.path === p))
       .map(p => ({ path: p, sha256: sha256(fs.readFileSync(path.join(input.package_root, p))) }))],
-    archived_files: archiveFiles.length, handoff_sha256: sha256(fs.readFileSync(path.join(input.package_root, 'MIGRATION-HANDOFF.md'))),
+    archived_files: archiveFiles.length, complete_git_export_matched: true, handoff_sha256: sha256(fs.readFileSync(path.join(input.package_root, 'MIGRATION-HANDOFF.md'))),
     license: { declaration: input.composer.license, path: licensePath, sha256: sha256(fs.readFileSync(path.join(input.package_root, licensePath))) },
     release_workflow: releaseRuns[0].html_url, merged_pull_request: mergePulls[0].html_url,
     platform_immutable_flag: release.immutable === true, observed_at: observed,
@@ -260,6 +279,10 @@ export function finalize(output, evidenceUrl) {
   const evidence = json(path.join(output, 'verification.json'));
   requireFact(evidence.status === 'passed' && evidence.verifier.run_url, 'Only a completed hosted verification can attest.');
   const { input } = evidence;
+  requireFact(evidence.complete_git_export_matched === true, 'Complete git export inventory must match before attesting.');
+  requireFact(evidence.consumer.installed_dist_identity_verified === true
+    && Number.isInteger(evidence.consumer.canonical_api_exports_verified) && evidence.consumer.canonical_api_exports_verified > 0
+    && evidence.consumer.consumer_dependency_audit === 'passed', 'Complete canonical API and installed consumer identity/security must pass before attesting.');
   const canonicalProof = json(path.join(output, 'canonical-schema-verification.json'));
   requireFact(canonicalProof.status === 'passed' && canonicalProof.manifests?.length === 3
     && evidence.canonical_schema_validation?.length === 3, 'All canonical manifest schemas must pass before attesting.');
@@ -277,7 +300,8 @@ export function finalize(output, evidenceUrl) {
     release_workflow: `${evidence.release_workflow}; success at source ${input.source_commit}`,
     registry_or_pie_verification: [`https://repo.packagist.org/p2/${input.name}.json; source/dist=${input.source_commit}; evidence=${artifact('github-evidence.json')}`],
     clean_consumer_or_build_verification: [`${artifact('consumer-verification.json')}; sha256=${sha256(fs.readFileSync(path.join(output, 'consumer-verification.json')))}; no-dev=true; classmap-authoritative=true; fresh-offline-reinstall=true; runtime-types=${evidence.consumer.runtime_types_loaded}`,
-      `${artifact('canonical-schema-verification.json')}; all three canonical manifests and complete handoff schema passed`],
+      `${artifact('canonical-schema-verification.json')}; all three canonical manifests and complete handoff schema passed`,
+      `${artifact('archive-inventory-verification.json')}; complete git export path/byte inventory matched; canonical API exports=${evidence.consumer.canonical_api_exports_verified}`],
     verified_at: evidence.observed_at, verified_by: `${evidence.verifier.repository}@${evidence.verifier.commit}; ${evidence.verifier.run_url}`, status: 'verified' };
   requireFact(validateAttestation(record), `Attestation schema failed: ${JSON.stringify(validateAttestation.errors)}`);
   fs.writeFileSync(path.join(output, 'RELEASE-ATTESTATION.yaml'), YAML.stringify(record));
