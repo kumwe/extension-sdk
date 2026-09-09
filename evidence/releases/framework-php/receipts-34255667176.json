@@ -1,0 +1,69 @@
+{
+  "schema": "kumwe-preserved-release-evidence/v1",
+  "kind": "framework_php",
+  "status": "verified-per-owner",
+  "note": "The Canonical JSON owner job passed all mandatory checks in run34255667176. ZIP/member bytes remain unchanged.",
+  "entries": [
+    {
+      "name": "kumwe/canonical-json",
+      "version": "0.1.1",
+      "tag": "v0.1.1",
+      "source_commit": "e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58",
+      "archive_sha256": "06ee813d1b917d32563670fa113f21931f85b1e3b282aed8c8a1cef364812c09",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34255667176",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34255667176/artifacts/10067760920",
+          "sha256": "4c76ca7a0c07cd5160cc5241bde2f913a4b5bfc2d9c9c531211ca6ebd454144f",
+          "path": "evidence/releases/framework-php/canonical-json/0.1.1/34255667176/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34255667176/artifacts/10067759986",
+          "sha256": "8de18239ef483a9e8dc7c22dc583d610b52088c71cda9df05460e1cebef9f8cd",
+          "path": "evidence/releases/framework-php/canonical-json/0.1.1/34255667176/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/canonical-json/0.1.1/34255667176/RELEASE-ATTESTATION.yaml",
+        "sha256": "4180a78d2480dee8734acae414379eda3a3b1e25ef668e84fccf97df7ff6e1b4",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "4180a78d2480dee8734acae414379eda3a3b1e25ef668e84fccf97df7ff6e1b4"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "43b126b3215555482b3d439cc2521808f16d252a99e0036138d6607a3c3a3465"
+        },
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "fba51564639daa35180b354084649bacff466728ba531c2104b0a93d5136143b"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "a9426334ed36972ab82781a64ace58bbac058aed884d5aa091354bbeb82e4108"
+        },
+        {
+          "path": "resources/semantics/v1.json",
+          "sha256": "621b7dfae136ce7635a234f047e7b744a06e2b7ad57c28ae09aeaa4a4308979c"
+        },
+        {
+          "path": "resources/ownership/v1.json",
+          "sha256": "a2f66ab45521f54f1fc8145f6805ee8827cf098e44f33d8bae8c0f4f9fb34934"
+        },
+        {
+          "path": "resources/corpus/v1.json",
+          "sha256": "84d21b12e7a2bfd752356d9a6e664bcb332e209d19017e7634e7485a4fa4e250"
+        },
+        {
+          "path": "resources/corpus/v1.sha256",
+          "sha256": "b7c340b7d8df32bacd2b16a8f575a43b99052642b2c38cd7896370acbc947350"
+        }
+      ],
+      "require": {
+        "php": "^8.5"
+      },
+      "native_bindings_present": false
+    }
+  ]
+}
