@@ -1,0 +1,82 @@
+{
+  "schema": "kumwe-package-capabilities/v1",
+  "package": "kumwe/computation",
+  "release": "0.1.1",
+  "namespace": "Kumwe\\Computation\\",
+  "responsibility": "Bounded execution transport, exact compatibility identities and compiler/executor contracts.",
+  "non_responsibilities": [
+    "Engine algorithms, expression/decimal semantics and document normalization.",
+    "Canonical JSON and arbitrary user-data serialization.",
+    "Native binding, C ABI implementation, provisioning and container services.",
+    "Authorization, persistence, transactions, cache lifetime and App adoption."
+  ],
+  "capabilities": [
+    {
+      "id": "computation.identity",
+      "title": "Exact execution identities",
+      "description": "Semantic/capability coordinates, fail-closed compatibility and complete plan/cache identities.",
+      "symbols": [
+        "Kumwe\\Computation\\ContractIdentity",
+        "Kumwe\\Computation\\CapabilitySet",
+        "Kumwe\\Computation\\CompatibilityRequirement",
+        "Kumwe\\Computation\\PlanIdentity",
+        "Kumwe\\Computation\\PlanCacheKey"
+      ],
+      "documentation": [
+        "docs/public-api.md",
+        "docs/integration.md",
+        "docs/conformance.md"
+      ]
+    },
+    {
+      "id": "computation.transport",
+      "title": "Bounded opaque execution transport",
+      "description": "Finite resource limits, versioned program/artifact envelopes and ordered request/result batches.",
+      "symbols": [
+        "Kumwe\\Computation\\ExecutionLimits",
+        "Kumwe\\Computation\\ProgramEnvelope",
+        "Kumwe\\Computation\\CompiledProgram",
+        "Kumwe\\Computation\\DocumentInput",
+        "Kumwe\\Computation\\DocumentBatch",
+        "Kumwe\\Computation\\ExecutionResult",
+        "Kumwe\\Computation\\BatchResult"
+      ],
+      "documentation": [
+        "docs/public-api.md",
+        "docs/native-boundary.md"
+      ]
+    },
+    {
+      "id": "computation.findings",
+      "title": "Ordered machine findings and refusals",
+      "description": "Typed paths and stable severities, source order and safe infrastructure refusal codes.",
+      "symbols": [
+        "Kumwe\\Computation\\FindingPath",
+        "Kumwe\\Computation\\FindingSeverity",
+        "Kumwe\\Computation\\SourceLocation",
+        "Kumwe\\Computation\\Finding",
+        "Kumwe\\Computation\\RefusalCode",
+        "Kumwe\\Computation\\ExecutionRefused"
+      ],
+      "documentation": [
+        "docs/public-api.md",
+        "docs/security.md"
+      ]
+    },
+    {
+      "id": "computation.execution-contracts",
+      "title": "Coarse compilation and execution contracts",
+      "description": "Portable Engine ports without an implementation, fallback, native dependency or adapter.",
+      "symbols": [
+        "Kumwe\\Computation\\Compiler",
+        "Kumwe\\Computation\\Executor"
+      ],
+      "documentation": [
+        "docs/public-api.md",
+        "docs/native-boundary.md"
+      ]
+    }
+  ],
+  "native_requirements": null,
+  "deprecations": []
+}

@@ -11,7 +11,26 @@ const sha256 = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const json = p => JSON.parse(fs.readFileSync(p, 'utf8'));
 const write = (p, value) => fs.writeFileSync(p, JSON.stringify(value, null, 2) + '\n');
 const requireFact = (fact, description) => { if (!fact) throw new Error(description); };
-const validateSchema = new Ajv({ strict: false, allErrors: true }).compile(json(path.join(here, 'migration-handoff.schema.json')));
+const ajv = new Ajv({ strict: false, allErrors: true });
+const validateSchema = ajv.compile(json(path.join(here, 'migration-handoff.schema.json')));
+const validateAttestation = ajv.compile(json(path.join(here, 'release-attestation.v2.schema.json')));
+const canonicalSchemas = { public_api_manifest: 'package-public-api.v1.schema.json',
+  capability_manifest: 'package-capabilities.v1.schema.json', service_map: 'package-service-map.v1.schema.json' };
+const canonicalValidators = Object.fromEntries(Object.entries(canonicalSchemas).map(([key, file]) =>
+  [key, ajv.compile(json(path.join(here, file)))]));
+
+export function canonicalDocument(key, document) {
+  const validate = canonicalValidators[key];
+  requireFact(validate && validate(document), `Canonical ${key} schema failed: ${JSON.stringify(validate?.errors)}`);
+}
+
+export function canonicalManifests(packageRoot, handoff) {
+  return Object.entries(canonicalValidators).map(([key, validate]) => {
+    const p = safePath(handoff.framework_php[key]);
+    canonicalDocument(key, json(path.join(packageRoot, p)));
+    return { path: p, schema: canonicalSchemas[key], sha256: sha256(fs.readFileSync(path.join(packageRoot, p))) };
+  });
+}
 
 export function coordinate(input) {
   requireFact(input && /^kumwe\/[a-z][a-z0-9-]*$/.test(input.name), 'Invalid package identity.');
@@ -48,7 +67,11 @@ async function request(url, binary = false) {
       if (initial.hostname === 'api.github.com' && process.env.GH_TOKEN) headers.Authorization = `Bearer ${process.env.GH_TOKEN}`;
       const response = await fetch(url, { headers, signal: AbortSignal.timeout(60000) });
       requireFact(['api.github.com', 'repo.packagist.org', 'codeload.github.com', 'github.com'].includes(new URL(response.url).hostname), 'Unapproved artifact redirect.');
-      if (!response.ok) throw new Error(`HTTP ${response.status} for ${url}`);
+      if (!response.ok) {
+        const reason = (await response.text()).slice(0, 1500);
+        const limits = { remaining: response.headers.get('x-ratelimit-remaining'), reset: response.headers.get('x-ratelimit-reset'), retry_after: response.headers.get('retry-after') };
+        throw new Error(`HTTP ${response.status} for ${url}; ${JSON.stringify(limits)}; ${reason}`);
+      }
       const bytes = Buffer.from(await response.arrayBuffer());
       requireFact(bytes.length <= 150000000, 'Response exceeds verification budget.');
       return binary ? bytes : JSON.parse(bytes.toString('utf8'));
@@ -148,6 +171,8 @@ export async function verifyRelease(raw, output) {
     requireFact(blobs.get(p)?.sha === object, `Published archive content differs from source: ${p}`);
   }
   const handoff = handoffRecord(fs.readFileSync(path.join(input.package_root, 'MIGRATION-HANDOFF.md'), 'utf8'), input);
+  const canonicalValidation = canonicalManifests(input.package_root, handoff);
+  write(path.join(output, 'canonical-schema-verification.json'), { status: 'passed', validators: json(path.join(here, 'schema-sources.json')), manifests: canonicalValidation });
   const manifests = handoff.ownership.public_manifests.map(m => {
     const p = safePath(m.path); const actual = sha256(fs.readFileSync(path.join(input.package_root, p)));
     requireFact(actual === m.sha256, `Released handoff digest drift: ${p}`);
@@ -182,6 +207,7 @@ export async function verifyRelease(raw, output) {
   write(path.join(output, 'source.spdx.json'), spdx(input, archiveFiles, input.package_root, observed));
   const corpusFiles = archiveFiles.filter(p => p.startsWith('resources/conformance/') || p.startsWith('resources/corpus/'));
   const evidence = { schema: 'kumwe-independent-release-verification/v1', status: 'passed', input,
+    canonical_schema_validation: canonicalValidation,
     manifests_and_corpora: [...manifests, ...corpusFiles.filter(p => !manifests.some(m => m.path === p))
       .map(p => ({ path: p, sha256: sha256(fs.readFileSync(path.join(input.package_root, p))) }))],
     archived_files: archiveFiles.length, handoff_sha256: sha256(fs.readFileSync(path.join(input.package_root, 'MIGRATION-HANDOFF.md'))),
@@ -208,6 +234,11 @@ export function finalize(output, evidenceUrl) {
   const evidence = json(path.join(output, 'verification.json'));
   requireFact(evidence.status === 'passed' && evidence.verifier.run_url, 'Only a completed hosted verification can attest.');
   const { input } = evidence;
+  const canonicalProof = json(path.join(output, 'canonical-schema-verification.json'));
+  requireFact(canonicalProof.status === 'passed' && canonicalProof.manifests?.length === 3
+    && evidence.canonical_schema_validation?.length === 3, 'All canonical manifest schemas must pass before attesting.');
+  canonicalManifests(input.package_root, input.handoff);
+  requireFact(sha256(fs.readFileSync(input.archive_path)) === input.archive_sha256, 'Source archive changed before attestation.');
   const artifact = p => `${evidenceUrl}#${p}`;
   const record = { schema: 'kumwe-release-attestation/v2', artifact_kind: 'framework_php',
     migration_id: input.handoff.migration_id, change_set: input.handoff.change_set,
@@ -216,15 +247,13 @@ export function finalize(output, evidenceUrl) {
     artifacts: [{ identity: `${input.name}:${input.version}`, url: input.archive_url, sha256: input.archive_sha256 }],
     manifests_and_corpora: evidence.manifests_and_corpora, abi_and_capabilities: null,
     sbom: { url: artifact('source.spdx.json'), sha256: sha256(fs.readFileSync(path.join(output, 'source.spdx.json'))) },
-    provenance: { url: artifact('verification-provenance.json'), sha256: sha256(fs.readFileSync(path.join(output, 'verification-provenance.json'))),
-      kind: 'independent-verification', publisher_build_provenance: false },
-    release_workflow: { url: evidence.release_workflow, result: 'success', source_commit: input.source_commit },
-    registry_or_pie_verification: [{ registry: `https://repo.packagist.org/p2/${input.name}.json`,
-      source_commit: input.source_commit, dist_commit: input.source_commit, evidence: artifact('github-evidence.json') }],
-    clean_consumer_or_build_verification: [{ evidence: artifact('consumer-verification.json'),
-      sha256: sha256(fs.readFileSync(path.join(output, 'consumer-verification.json'))), no_dev: true,
-      classmap_authoritative: true, offline_reinstall: true, runtime_types_loaded: evidence.consumer.runtime_types_loaded }],
-    verified_at: evidence.observed_at, verified_by: evidence.verifier, status: 'verified' };
+    provenance: `Independent verification, not publisher build provenance: ${artifact('verification-provenance.json')}; sha256=${sha256(fs.readFileSync(path.join(output, 'verification-provenance.json')))}`,
+    release_workflow: `${evidence.release_workflow}; success at source ${input.source_commit}`,
+    registry_or_pie_verification: [`https://repo.packagist.org/p2/${input.name}.json; source/dist=${input.source_commit}; evidence=${artifact('github-evidence.json')}`],
+    clean_consumer_or_build_verification: [`${artifact('consumer-verification.json')}; sha256=${sha256(fs.readFileSync(path.join(output, 'consumer-verification.json')))}; no-dev=true; classmap-authoritative=true; fresh-offline-reinstall=true; runtime-types=${evidence.consumer.runtime_types_loaded}`,
+      `${artifact('canonical-schema-verification.json')}; all three canonical manifests and complete handoff schema passed`],
+    verified_at: evidence.observed_at, verified_by: `${evidence.verifier.repository}@${evidence.verifier.commit}; ${evidence.verifier.run_url}`, status: 'verified' };
+  requireFact(validateAttestation(record), `Attestation schema failed: ${JSON.stringify(validateAttestation.errors)}`);
   fs.writeFileSync(path.join(output, 'RELEASE-ATTESTATION.yaml'), YAML.stringify(record));
 }
 
