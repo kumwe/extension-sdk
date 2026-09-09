@@ -1,0 +1,463 @@
+{
+  "schema": "kumwe-independent-release-verification/v1",
+  "status": "passed",
+  "input": {
+    "name": "kumwe/canonical-json",
+    "version": "0.1.1",
+    "source_commit": "e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58",
+    "repository": "kumwe/canonical-json",
+    "tag": "v0.1.1",
+    "archive_url": "https://api.github.com/repos/kumwe/canonical-json/zipball/e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58",
+    "archive_path": "/home/runner/work/_temp/release-verification/source.zip",
+    "archive_sha256": "06ee813d1b917d32563670fa113f21931f85b1e3b282aed8c8a1cef364812c09",
+    "package_root": "/home/runner/work/_temp/release-verification/archive/kumwe-canonical-json-e7006a2",
+    "composer": {
+      "name": "kumwe/canonical-json",
+      "description": "Canonical JSON semantic profile, bounded operation metadata and language-neutral conformance corpus.",
+      "type": "library",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/kumwe/canonical-json",
+      "support": {
+        "issues": "https://github.com/kumwe/canonical-json/issues",
+        "source": "https://github.com/kumwe/canonical-json"
+      },
+      "require": {
+        "php": "^8.5"
+      },
+      "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "squizlabs/php_codesniffer": "^4.0"
+      },
+      "autoload": {
+        "psr-4": {
+          "Kumwe\\CanonicalJson\\": "src/"
+        }
+      },
+      "autoload-dev": {
+        "psr-4": {
+          "Kumwe\\CanonicalJson\\Tests\\": "tests/"
+        }
+      },
+      "scripts": {
+        "composer:validate": "composer validate --strict",
+        "security:audit": "composer audit --abandoned=fail",
+        "release:check": "bash tools/test-release-record.sh",
+        "lint": "php tools/lint.php",
+        "docs": "php tools/check-docblocks.php",
+        "architecture": "php tools/verify-architecture.php",
+        "manifests": "php tools/verify-manifests.php",
+        "manifests:record": "php tools/verify-manifests.php --write",
+        "autoload:smoke": "php resources/toolchain/autoload-smoke.php",
+        "examples": "php examples/typed-consumer.php",
+        "cs": "phpcs -q",
+        "cs:fix": "phpcbf",
+        "analyse": "phpstan analyse --no-progress --memory-limit=1G",
+        "test": "php tests/run.php",
+        "clean-consumer": "php tools/verify-clean-consumer.php",
+        "check": [
+          "@composer:validate",
+          "@security:audit",
+          "@release:check",
+          "@lint",
+          "@docs",
+          "@architecture",
+          "@boundary:tokens",
+          "@manifests",
+          "@autoload:smoke",
+          "@examples",
+          "@cs",
+          "@analyse",
+          "@test:ownership",
+          "@test",
+          "@clean-consumer",
+          "@release:integrity"
+        ],
+        "test:ownership": "php tools/verify-test-ownership.php --self-test",
+        "boundary:tokens": "php tools/verify-boundary-tokens.php --self-test",
+        "release:integrity": "bash tools/test-release-integrity.sh"
+      },
+      "config": {
+        "sort-packages": true
+      },
+      "minimum-stability": "stable",
+      "prefer-stable": true
+    },
+    "examples": [
+      "examples/typed-consumer.php"
+    ],
+    "handoff": {
+      "schema": "kumwe-migration-handoff/v2",
+      "artifact_kind": "framework_php",
+      "migration_id": "KUMWE-MIG-2026-007",
+      "change_set": "KUMWE-CS-2026-007",
+      "state": "draft_pr_open",
+      "source": {
+        "app": {
+          "repository": "https://github.com/kumwe/app",
+          "baseline_commit": "960ce8ec00cf724a7cae03e5ba09c4852c9ab54e",
+          "examined_paths": [
+            "src/Shared/Domain/CanonicalJson.php",
+            "src/BusinessDefinition/Domain/CanonicalDefinitionJson.php",
+            "src/Extension/Runtime/RuntimeCanonicalJson.php",
+            "src/OpenApi/Infrastructure/CanonicalOpenApiJson.php",
+            "src",
+            "tests",
+            "composer.json",
+            "composer.lock",
+            "AGENTS.md",
+            "docs/architecture/governance/decisions.md",
+            "build/capability-index/v1.json"
+          ],
+          "old_namespace_roots": [],
+          "capability_index_sha256": "87ded886f35f74878ca9eb8db4c36e23d681c4a49891f76dfc3210f385a7ce39"
+        },
+        "semantic_inputs": [
+          {
+            "owner": "kumwe/app",
+            "version_or_commit": "960ce8ec00cf724a7cae03e5ba09c4852c9ab54e",
+            "manifest_or_corpus": "src/Shared/Domain/CanonicalJson.php",
+            "sha256": "df80b60dd4cf382a443894b69971fb92fe31cdc62318e5d1b185571534af41a1"
+          }
+        ],
+        "examined_dependencies": [
+          "Producer 0.2.0 canonical profile is distinct: UTF-16, safe integers, objects, SRI digest.",
+          "Extension SDK 0.2.4 has a distinct definition/manifest canonicalizer that rejects floats.",
+          "Conversion 0.1.2 owns exact decimal values; no runtime dependency selected.",
+          "No Kumwe runtime dependencies; inspected installed sources establish exclusions only."
+        ],
+        "active_related_pull_requests": [
+          "https://github.com/kumwe/app/pull/135"
+        ]
+      },
+      "target": {
+        "repository": "https://github.com/kumwe/canonical-json",
+        "artifact_identity": "kumwe/canonical-json",
+        "canonical_namespace_or_abi": "Kumwe\\CanonicalJson",
+        "branch": "agent/canonical-encoder-port-v2",
+        "pull_request": "https://github.com/kumwe/canonical-json/pull/7"
+      },
+      "ownership": {
+        "responsibility": "Generic canonical JSON semantic profile, budgets, findings and language-neutral corpus.",
+        "non_responsibilities": [
+          "Production encoding, hashing, native ABI implementation and binding.",
+          "Definition, Runtime, Producer/Studio and OpenAPI canonical profiles.",
+          "App authorization, persistence, transactions, crypto policy, delivery and readiness."
+        ],
+        "allowed_dependency_ceiling": [],
+        "implementation_owner": "kumwe/canonical-json",
+        "next_consumer": "kumwe/app",
+        "public_manifests": [
+          {
+            "path": "resources/public-api/v1.json",
+            "sha256": "43b126b3215555482b3d439cc2521808f16d252a99e0036138d6607a3c3a3465"
+          },
+          {
+            "path": "resources/capabilities/v1.json",
+            "sha256": "fba51564639daa35180b354084649bacff466728ba531c2104b0a93d5136143b"
+          },
+          {
+            "path": "resources/service-map/v1.json",
+            "sha256": "a9426334ed36972ab82781a64ace58bbac058aed884d5aa091354bbeb82e4108"
+          },
+          {
+            "path": "resources/semantics/v1.json",
+            "sha256": "621b7dfae136ce7635a234f047e7b744a06e2b7ad57c28ae09aeaa4a4308979c"
+          },
+          {
+            "path": "resources/ownership/v1.json",
+            "sha256": "a2f66ab45521f54f1fc8145f6805ee8827cf098e44f33d8bae8c0f4f9fb34934"
+          },
+          {
+            "path": "resources/corpus/v1.json",
+            "sha256": "84d21b12e7a2bfd752356d9a6e664bcb332e209d19017e7634e7485a4fa4e250"
+          }
+        ],
+        "intentionally_excluded": [
+          "src/Shared/Domain/CanonicalJson.php remains the App production executor.",
+          "Definition, Runtime, OpenAPI and installed Producer/SDK canonicalizers retain separate ownership.",
+          "tests/Oracle is test-only and excluded from every runtime archive.",
+          "Native concrete signatures require a separate joint ownership agreement before native implementation."
+        ]
+      },
+      "framework_php": {
+        "composer_package": "kumwe/canonical-json",
+        "canonical_namespace": "Kumwe\\CanonicalJson",
+        "public_api_manifest": "resources/public-api/v1.json",
+        "capability_manifest": "resources/capabilities/v1.json",
+        "service_map": "resources/service-map/v1.json",
+        "extracted_symbols": [],
+        "consumers": {
+          "app_code": [
+            "src/Administrator/Http/Handler/AdministratorAccessControlHandler.php",
+            "src/Application/Automation/ChangePlan.php",
+            "src/Application/Automation/IdempotencyRecord.php",
+            "src/Application/Automation/IdempotencyResult.php",
+            "src/Application/Automation/JobEnvelope.php",
+            "src/Application/Automation/ScheduleOccurrenceKey.php",
+            "src/Audit/Domain/AuditAnchorDigest.php",
+            "src/Audit/Domain/AuditEventDigest.php",
+            "src/BusinessIntegration/Application/EventContractRegistry.php",
+            "src/BusinessIntegration/Domain/RecordedEventEnvelope.php",
+            "src/BusinessIntegration/Infrastructure/DoctrineOutboxStore.php",
+            "src/BusinessReporting/Infrastructure/DoctrineProjectionStore.php",
+            "src/Identity/Application/Administration/AccessControlService.php"
+          ],
+          "configuration_and_di": [],
+          "reflection_and_string_references": [],
+          "fixtures_and_examples": [
+            "tests/Unit/Application/Automation/CanonicalJsonTest.php",
+            "tests/Unit/Identity/Application/Administration/AccessControlServiceTest.php"
+          ],
+          "external": [
+            "kumwe/engine future C ABI corpus replay",
+            "kumwe/kumwe-engine future PHPT corpus replay",
+            "kumwe/computation future semantic adapter/readiness agreement"
+          ]
+        },
+        "dependency_injection": {
+          "mode": "direct",
+          "provider": null,
+          "factories": [],
+          "aliases": [],
+          "service_lifetimes": [
+            "Immutable semantic values are supplied explicitly per operation."
+          ],
+          "configuration_keys": [],
+          "provider_absence_reason": "Explicit CanonicalEncoder port; Computation owns future native binding."
+        }
+      },
+      "native_cpp": null,
+      "php_extension": null,
+      "tests": {
+        "moved_or_added": [
+          "tests/Case/CorpusTest.php",
+          "tests/Case/MetadataTest.php",
+          "tests/Case/CanonicalEncoderTest.php",
+          "tests/Case/ArchitectureTest.php",
+          "tests/Oracle/CanonicalJson.php frozen test-only semantic oracle",
+          "tests/Oracle/Replay.php test-only bounded replay"
+        ],
+        "remain_in_app_or_consumer": [
+          "tests/Unit/Application/Automation/CanonicalJsonTest.php",
+          "tests/Unit/Identity/Application/Administration/AccessControlServiceTest.php",
+          "App audit, job, idempotency, integration, projection, security, database, lifecycle and delivery tests.",
+          "Definition/Runtime/OpenAPI/Producer/Studio executor tests remain with those distinct owners."
+        ],
+        "split_tests": [
+          "Corpus preserves generic source ordering/INF semantics; App still tests its active executor."
+        ],
+        "prohibited_duplicates": [
+          "Do not copy this package unit/corpus suite into App against vendor types.",
+          "Do not remove active PHP executor tests during semantic-only adoption."
+        ],
+        "corpora": [
+          "resources/corpus/v1.json; digest in resources/corpus/v1.sha256; 79 exact vectors."
+        ]
+      },
+      "documentation": {
+        "charter": "CHARTER.md",
+        "readme": "README.md",
+        "public_api": "docs/public-api.md",
+        "architecture": "docs/architecture.md",
+        "integration_or_consumer": "docs/integration.md",
+        "examples": [
+          "examples/typed-consumer.php"
+        ],
+        "changelog_record": "CHANGELOG.md / 0.1.1"
+      },
+      "release_expectations": {
+        "version_policy": "SemVer; pre-1.0 exact pins; profile changes need reviewed minor successor.",
+        "expected_artifact_types": [
+          "Composer source ZIP",
+          "GitHub immutable release and version tag"
+        ],
+        "required_checks": [
+          "composer check",
+          "Protected main before publication; GitHub immutable releases enabled beforehand.",
+          "Independent source/tag/archive/API/corpus/registry verification after human merge."
+        ],
+        "required_registry_or_installer": "Packagist / Composer",
+        "required_external_attestation": true
+      },
+      "next_task": {
+        "phase_name": "Canonical JSON Phase 2 semantic/API/corpus adoption only",
+        "permitted_only_when": [
+          "Human merge and immutable release-on-record publication are observed.",
+          "Fresh external RELEASE-ATTESTATION.yaml verifies the exact artifact, manifests, corpus and clean consumer.",
+          "App source drift has been reviewed without deleting newer portable behavior."
+        ],
+        "consumer_repository": "kumwe/app",
+        "dependency_or_native_change": "Exact-pin verified semantic package only; no extension requirement or runtime switch.",
+        "namespace_or_api_replacements": [],
+        "files_to_update": [
+          "composer.json",
+          "composer.lock",
+          "build/capability-index/v1.json",
+          "build/capability-index/v1.sha256",
+          "docs/architecture/capability-index.md",
+          "CHANGELOG.md",
+          "docs/architecture/migrations/KUMWE-MIG-2026-007.yaml",
+          "docs/architecture/migrations/change-sets/KUMWE-CS-2026-007.yaml",
+          "docs/architecture/non-roadmap/NRM-2026-009.yaml"
+        ],
+        "files_to_remove": [],
+        "tests_to_remove": [],
+        "tests_to_retain_or_add": [
+          "Retain generic App executor tests and all host responsibility tests.",
+          "Add exact installed semantic profile/corpus identity and capability-index integration proof."
+        ],
+        "di_or_provisioning_changes": [
+          "None; native provisioning and Computation cutover are separate later tasks."
+        ],
+        "capability_index_changes": [
+          "Record canonical-json.semantics from the exact installed package manifests."
+        ],
+        "changelog_and_evidence_changes": [
+          "Record semantic-only adoption; NRM-2026-009; no runtime or roadmap completion claim.",
+          "Commit the external release attestation unchanged and record a serialized integration train."
+        ],
+        "verification_commands": [
+          "composer install",
+          "composer check-platform-reqs",
+          "composer kumwe:capability-index",
+          "composer kumwe:capability-index-check",
+          "composer kumwe:core-growth-check",
+          "composer qa",
+          "Run the App database/browser/deployment and affected acceptance CI matrix."
+        ]
+      },
+      "concurrency": {
+        "likely_conflict_files": [
+          "composer.json",
+          "composer.lock",
+          "CHANGELOG.md",
+          "build/capability-index/v1.json",
+          "docs/architecture/governance/core-growth-baseline.json",
+          "src/Shared/Domain/CanonicalJson.php"
+        ],
+        "related_migrations": [],
+        "ownership_conflicts": [],
+        "integration_train": null,
+        "resolution_rule": "semantic-preservation"
+      },
+      "governance": {
+        "roadmap_source_sha256": "a202155ef1a65f5ab293d4f8397ebf4ac430db7f1e877c776bbe7851e6fe18d8",
+        "roadmap_refs": [],
+        "non_roadmap_refs": [
+          "NRM-2026-009"
+        ],
+        "completion_claim": false
+      },
+      "decisions": [
+        "Three metadata types and the CanonicalEncoder port; production execution remains outside this package.",
+        "Generic-v1 freezes finite binary64 rendering with serialize_precision=-1 behavior.",
+        "Explicit input/depth/node/output limits are safety refinements requiring later App cutover proof.",
+        "CanonicalEncoder is an injected port; no provider, concrete executor, native class or PHP fallback.",
+        "Empty extracted_symbols is intentional: the new DTO/enums have no historical App FQCN."
+      ],
+      "blockers": [
+        "App adoption awaits independent immutable release verification.",
+        "Native concrete FQCN/ABI agreement and Engine/extension releases remain separate work.",
+        "Before initial publishing merge, maintainers must protect main and enable immutable releases."
+      ]
+    }
+  },
+  "canonical_schema_validation": [
+    {
+      "path": "resources/public-api/v1.json",
+      "schema": "package-public-api.v1.schema.json",
+      "sha256": "43b126b3215555482b3d439cc2521808f16d252a99e0036138d6607a3c3a3465"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "schema": "package-capabilities.v1.schema.json",
+      "sha256": "fba51564639daa35180b354084649bacff466728ba531c2104b0a93d5136143b"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "schema": "package-service-map.v1.schema.json",
+      "sha256": "a9426334ed36972ab82781a64ace58bbac058aed884d5aa091354bbeb82e4108"
+    }
+  ],
+  "manifests_and_corpora": [
+    {
+      "path": "resources/public-api/v1.json",
+      "sha256": "43b126b3215555482b3d439cc2521808f16d252a99e0036138d6607a3c3a3465"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "sha256": "fba51564639daa35180b354084649bacff466728ba531c2104b0a93d5136143b"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "sha256": "a9426334ed36972ab82781a64ace58bbac058aed884d5aa091354bbeb82e4108"
+    },
+    {
+      "path": "resources/semantics/v1.json",
+      "sha256": "621b7dfae136ce7635a234f047e7b744a06e2b7ad57c28ae09aeaa4a4308979c"
+    },
+    {
+      "path": "resources/ownership/v1.json",
+      "sha256": "a2f66ab45521f54f1fc8145f6805ee8827cf098e44f33d8bae8c0f4f9fb34934"
+    },
+    {
+      "path": "resources/corpus/v1.json",
+      "sha256": "84d21b12e7a2bfd752356d9a6e664bcb332e209d19017e7634e7485a4fa4e250"
+    },
+    {
+      "path": "resources/corpus/v1.sha256",
+      "sha256": "b7c340b7d8df32bacd2b16a8f575a43b99052642b2c38cd7896370acbc947350"
+    }
+  ],
+  "archived_files": 32,
+  "complete_git_export_matched": true,
+  "handoff_sha256": "a0b6e32a94436b889d1f23c1d3b2eef0df7b4617c7661bd1a3ae3cac8cd1f75c",
+  "license": {
+    "declaration": "Apache-2.0",
+    "path": "LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  "release_workflow": "https://github.com/kumwe/canonical-json/actions/runs/34157162566",
+  "merged_pull_request": "https://github.com/kumwe/canonical-json/pull/7",
+  "platform_immutable_flag": false,
+  "observed_at": "2026-09-08T17:12:57Z",
+  "verifier": {
+    "repository": "kumwe/extension-sdk",
+    "commit": "51c37ed0ce0b3f6c0f2a58f9857cea794c1e18d3",
+    "run_url": "https://github.com/kumwe/extension-sdk/actions/runs/34255667176"
+  },
+  "consumer": {
+    "schema": "kumwe-independent-release-consumer/v1",
+    "status": "passed",
+    "name": "kumwe/canonical-json",
+    "version": "0.1.1",
+    "source_commit": "e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58",
+    "archive_sha256": "06ee813d1b917d32563670fa113f21931f85b1e3b282aed8c8a1cef364812c09",
+    "no_dev": true,
+    "classmap_authoritative": true,
+    "offline_reinstall": true,
+    "composer_lock_sha256": "77ad689423ffd294a6081d690f94de878ff9421be114219de334d33ad4c405e4",
+    "runtime_types_loaded": 4,
+    "consumer_dependency_audit": "passed",
+    "canonical_api_exports_verified": 4,
+    "installed_dist_identity_verified": true,
+    "runtime_classes": [
+      "Kumwe\\CanonicalJson\\CanonicalEncoder",
+      "Kumwe\\CanonicalJson\\FindingCode",
+      "Kumwe\\CanonicalJson\\Limits",
+      "Kumwe\\CanonicalJson\\Profile"
+    ],
+    "optional_phpunit_bridges": [],
+    "consumer_host_requirements": [],
+    "examples": [
+      "examples/typed-consumer.php"
+    ],
+    "php": "8.5.10",
+    "php_zts": false,
+    "os": "Linux",
+    "architecture": "x86_64",
+    "native_extension_loaded": false
+  }
+}
