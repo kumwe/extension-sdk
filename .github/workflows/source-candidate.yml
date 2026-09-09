@@ -22,7 +22,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/kumwe-engine
-          ref: 566f6ff650290627275cca836363165608391469
+          ref: 584e910b5902c7d3c2bda006586692d572ac1154
           path: native
           persist-credentials: false
       - name: Check out access-control source
@@ -182,7 +182,7 @@ jobs:
       - name: Build and load pinned native extension
         working-directory: native
         run: |
-          test "$(git rev-parse HEAD)" = 566f6ff650290627275cca836363165608391469
+          test "$(git rev-parse HEAD)" = 584e910b5902c7d3c2bda006586692d572ac1154
           php tools/generate-arginfo.php --check
           php tools/verify-binding.php
           php tools/verify-engine.php
