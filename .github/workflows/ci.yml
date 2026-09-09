@@ -167,7 +167,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/producer
-          ref: e746b9f019482c78a34df04375f00c35ad5961af
+          ref: e8b2def866b95981b8e7ac521c16420a0f7955c8
           path: dependencies/producer
           persist-credentials: false
       - name: Check out computation source
@@ -201,7 +201,9 @@ jobs:
           echo "PHPRC=$native_ini" >> "$GITHUB_ENV"
           echo "KUMWE_NATIVE_EXPECTED_TUPLE=$PWD/candidate-compatibility.json" >> "$GITHUB_ENV"
       - name: Install explicit source dependency graph
-        run: php tools/install-source-candidate.php
+        run: |
+          php tools/verify-dependency-selection.php
+          php tools/install-source-candidate.php
       - name: Run complete SDK checks with actual native runtime
         run: composer check
       - name: Verify production-only installation

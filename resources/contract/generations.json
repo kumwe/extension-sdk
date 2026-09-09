@@ -1,7 +1,7 @@
 {
     "format": "kumwe-extension-sdk-generations-v1",
     "package": "kumwe/extension-sdk",
-    "release_line": "0.2",
+    "release_line": "0.3",
     "authority": "resources/fixtures/generations and the canonical SDK manifest parser",
     "note": "Canonical SDK generations. The signed manifest is the sole declaration source; providers bind executable implementations only to validated identifiers.",
     "classification": "contract/classification.json",

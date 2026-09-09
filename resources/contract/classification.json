@@ -1,7 +1,7 @@
 {
     "format": "kumwe-extension-sdk-public-api-v1",
     "package": "kumwe/extension-sdk",
-    "release_line": "0.2",
+    "release_line": "0.3",
     "authority": "SDK source under src/; Support is internal.",
     "note": "Canonical package-owned API. Type membership and source digests are recorded from this repository only.",
     "public_namespaces": [

@@ -75,7 +75,7 @@ function recordPublicApi(string $root): array
     return [
         'format' => 'kumwe-extension-sdk-public-api-v1',
         'package' => 'kumwe/extension-sdk',
-        'release_line' => '0.2',
+        'release_line' => '0.3',
         'authority' => 'SDK source under src/; Support is internal.',
         'note' => 'Canonical package-owned API. Type membership and source digests are recorded from this repository only.',
         'public_namespaces' => [
@@ -201,7 +201,7 @@ function recordGenerations(string $root): array
     return [
         'format' => 'kumwe-extension-sdk-generations-v1',
         'package' => 'kumwe/extension-sdk',
-        'release_line' => '0.2',
+        'release_line' => '0.3',
         'authority' => 'resources/fixtures/generations and the canonical SDK manifest parser',
         'note' => 'Canonical SDK generations. The signed manifest is the sole declaration source; providers bind executable implementations only to validated identifiers.',
         'classification' => 'contract/classification.json',
@@ -247,7 +247,7 @@ function recordResourcePin(string $root): array
     return [
         'format' => 'kumwe-extension-sdk-resource-pin-v2',
         'package' => 'kumwe/extension-sdk',
-        'release_line' => '0.2',
+        'release_line' => '0.3',
         'note' => 'SDK-owned digest inventory. It proves the canonical resources shipped by this package and names no host repository as an authority.',
         'files' => $files,
     ];

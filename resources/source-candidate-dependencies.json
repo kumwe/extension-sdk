@@ -2,147 +2,147 @@
   {
     "package": "kumwe/access-context",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/access-context.git",
     "requested_ref": "34241cbd0cc67934536d2921eca14b063be6fb81"
   },
   {
     "package": "kumwe/access-control",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/access-control.git",
     "requested_ref": "54dbaa1dbffeb09ba390a5e75e8adc951c437a41"
   },
   {
     "package": "kumwe/administrator-contract",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/administrator-contract.git",
     "requested_ref": "7e678280ec05304b3d606fdd54d37426de1ea363"
   },
   {
     "package": "kumwe/automation",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/automation.git",
     "requested_ref": "88e62d37e5c7e79ba6daf85e05faad641d6aaf3c"
   },
   {
     "package": "kumwe/business-definition",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/business-definition.git",
     "requested_ref": "f3b86f8af1469066637fd1b4b8f71c4df634adf8"
   },
   {
     "package": "kumwe/business-policy",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/business-policy.git",
     "requested_ref": "7fbccb7d4d2bcbe8f128eace9b83ad3f8996a04d"
   },
   {
     "package": "kumwe/business-surface-contract",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/business-surface-contract.git",
     "requested_ref": "3dad970d0fa18b9bf9cf486fd4c1e857f26be5ee"
   },
   {
     "package": "kumwe/canonical-json",
     "version": "0.1.1",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/canonical-json.git",
     "requested_ref": "e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58"
   },
   {
     "package": "kumwe/computation",
     "version": "0.2.1",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/computation.git",
     "requested_ref": "6ac52321c2a5089f52d44e20cfa6374064960e8a"
   },
   {
     "package": "kumwe/contribution",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/contribution.git",
     "requested_ref": "0504e87c836ca61edadc92df4203d6ccba8f0eca"
   },
   {
     "package": "kumwe/conversion",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/conversion.git",
     "requested_ref": "b1ae15e3ccddaffe709e01d20bf59a9e8a14714d"
   },
   {
     "package": "kumwe/idempotency",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/idempotency.git",
     "requested_ref": "26ec2ac31c493a088dd2bd01983b7428692bd1ea"
   },
   {
     "package": "kumwe/integration",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/integration.git",
     "requested_ref": "5fae6869a125ef240a0b7cdd206f72bd64f420ed"
   },
   {
     "package": "kumwe/localization",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/localization.git",
     "requested_ref": "672e330e2cae89dc71769d647f6d01fd2c1dea08"
   },
   {
     "package": "kumwe/portal-contract",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/portal-contract.git",
     "requested_ref": "903f2b4ab444442f3964834bebd5e6a1f0969e6b"
   },
   {
     "package": "kumwe/producer",
-    "version": "0.2.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "version": "0.2.1",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/producer.git",
-    "requested_ref": "e746b9f019482c78a34df04375f00c35ad5961af"
+    "requested_ref": "e8b2def866b95981b8e7ac521c16420a0f7955c8"
   },
   {
     "package": "kumwe/record-model",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/record-model.git",
     "requested_ref": "d7955e6beae2c3a9fa30052aea5ec3478af7dffc"
   },
   {
     "package": "kumwe/record-query",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/record-query.git",
     "requested_ref": "64b9036cbebc4f41007e5bc04acde807054efe94"
   },
   {
     "package": "kumwe/record-values",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/record-values.git",
     "requested_ref": "191c5b53fbda0179f3387f6a819716f4bc8f2be2"
   },
   {
     "package": "kumwe/reporting",
     "version": "0.1.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/reporting.git",
     "requested_ref": "d8cae56726170d39cd6e95e45b0ffcb085920849"
   },
   {
     "package": "kumwe/sequence",
     "version": "0.2.0",
-    "state": "Source candidate input; exact checkout commit is emitted by CI, not a release attestation.",
+    "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/sequence.git",
     "requested_ref": "021c63f5f768daadcdb476f810e8d1fdbf2e2938"
   }

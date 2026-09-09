@@ -1,4 +1,4 @@
-# Kumwe Extension SDK 0.2 contract
+# Kumwe Extension SDK 0.3 contract
 
 This directory records the canonical author-facing contract owned by `kumwe/extension-sdk`. It is
 generated and verified from this repository. No host repository, copied namespace, compatibility alias,
