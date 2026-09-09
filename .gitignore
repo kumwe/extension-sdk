@@ -1,3 +1,5 @@
 /vendor/
 /var/
 /composer.lock
+
+/tools/release-verification/node_modules/
