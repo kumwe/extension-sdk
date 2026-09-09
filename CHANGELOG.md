@@ -3,13 +3,18 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
-## Unreleased
+## 0.3.0 — 2026-09-07
 
+- Require a coherent exact stable PHP dependency selection, update Producer to 0.2.1,
+  and reject drift between Composer, dependency records and either CI workflow with regression coverage.
+- Correct the public scaffolder API reference and replace obsolete PHP development-dependency claims
+  with the actual remaining native, scaffold and ordered-release prerequisites.
 - Move portable SDK definitions to their canonical package owners and require explicit canonical encoder injection.
 - Exercise the actual native runtime and exact dependency source graph in both SDK test lanes.
 - Preserve the verified source graph and Composer lock across production reinstallation when branches are merged mid-job.
 - Select the published Business Surface Contract and Reporting 0.1.0 releases by their exact tag commits.
-- A successor release number remains pending; this candidate is not part of v0.2.5.
+- Record the canonical API successor as 0.3.0 and generate scaffolds against that exact version;
+  publication remains the maintainer-merged release workflow's responsibility.
 
 ## 0.2.5 — 2026-09-07
 

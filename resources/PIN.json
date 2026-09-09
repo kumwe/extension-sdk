@@ -1,20 +1,20 @@
 {
     "format": "kumwe-extension-sdk-resource-pin-v2",
     "package": "kumwe/extension-sdk",
-    "release_line": "0.2",
+    "release_line": "0.3",
     "note": "SDK-owned digest inventory. It proves the canonical resources shipped by this package and names no host repository as an authority.",
     "files": [
         {
             "file": "contract/README.md",
-            "sha256": "987b97f609ba48f39f2a5be15ca9435f05aa20947cfed4305789166d1aca90b7"
+            "sha256": "d8ec1f5ea31bc929efeb292b741e2b3a21af1cfe3d800fd5b4531f65e3310838"
         },
         {
             "file": "contract/classification.json",
-            "sha256": "5786d72a0240548916c7fdf9d1474df4d6d9957ae8a328e234105a0401075889"
+            "sha256": "15b7d5438d48af1df35f985eba131292e7a46184fc8d5f7436b8a17b95df9c7c"
         },
         {
             "file": "contract/generations.json",
-            "sha256": "277795f4f128c40ef094e10dfbc35f46dbae29a146578555d5dc4d130a6802bf"
+            "sha256": "78b0138c24f267200c3350bbffcedfb836127d3d2db99f9eda77a8d607bd3b30"
         },
         {
             "file": "extension-scaffold/complete-component/.gitignore.tpl",
@@ -26,7 +26,7 @@
         },
         {
             "file": "extension-scaffold/complete-component/composer.json.tpl",
-            "sha256": "574753378eb4ffbb8388bc065f805cb2d35085cc6611c1b95919a4793b3065ef"
+            "sha256": "d6873fc61ab9ed9ae7884e910301ded0f7cc98b437a43fedf7c6678418a7091c"
         },
         {
             "file": "extension-scaffold/complete-component/docs/authoring.md.tpl",
@@ -270,11 +270,11 @@
         },
         {
             "file": "source-candidate-dependencies.json",
-            "sha256": "76be5bb5d5fa1d33e6364081f4a87f7f91d3ef5f3d9b19b6c3d4969c954a76fa"
+            "sha256": "85e18320e377210406aeef0ceb8bc82f6b8a64707842b9c4922d5a1672e689ad"
         },
         {
             "file": "source-ci-dependencies.json",
-            "sha256": "404a2b9b3606b00d8da6c2a1878cad027d5d2e5a0e38e1f4dd75440314051cd3"
+            "sha256": "1e101beb8c7ad1c7ed28f988e6a64e4b366d5f917b9914421f01921538541c00"
         }
     ]
 }

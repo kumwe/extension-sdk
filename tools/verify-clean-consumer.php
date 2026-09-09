@@ -58,7 +58,6 @@ try {
             || !is_array($candidate['require'] ?? null)) {
             throw new RuntimeException('Explicit source consumer configuration is invalid.');
         }
-        $version = 'dev-agent/canonical-package-boundary-v2';
     }
     $archivedMetadata['version'] = $version;
     $archivedMetadata['dist'] = ['type' => 'zip', 'url' => 'file://' . $archive, 'shasum' => sha1_file($archive)];

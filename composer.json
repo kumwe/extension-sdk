@@ -21,11 +21,11 @@
     "kumwe/business-surface-contract": "0.1.0",
     "kumwe/canonical-json": "0.1.1",
     "kumwe/contribution": "0.1.0",
-    "kumwe/conversion": "^0.1",
+    "kumwe/conversion": "0.1.0",
     "kumwe/idempotency": "0.1.0",
     "kumwe/integration": "0.1.0",
     "kumwe/portal-contract": "0.1.0",
-    "kumwe/producer": "^0.2",
+    "kumwe/producer": "0.2.1",
     "kumwe/record-model": "0.1.0",
     "kumwe/record-query": "0.1.0",
     "kumwe/record-values": "0.1.0",
@@ -65,6 +65,7 @@
     "smoke": "php tools/autoload-smoke.php",
     "check": [
       "@validate-package",
+      "@test:dependency-selection",
       "@autoload",
       "@lint",
       "@docs",
@@ -80,7 +81,8 @@
     "test:ownership": "php tools/verify-test-ownership.php --self-test",
     "release-record": "bash tools/test-release-record.sh",
     "release:integrity": "bash tools/test-release-integrity.sh",
-    "test:source-install": "bash tools/test-source-candidate.sh"
+    "test:source-install": "bash tools/test-source-candidate.sh",
+    "test:dependency-selection": "bash tools/test-dependency-selection.sh"
   },
   "config": {
     "sort-packages": true
@@ -88,7 +90,7 @@
   "suggest": {
     "kumwe/computation": "Required by the native CLI composition root; install the documented candidate with ext-kumwe_engine and an exact compatibility tuple."
   },
-  "minimum-stability": "dev",
+  "minimum-stability": "stable",
   "prefer-stable": true,
   "repositories": [
     {
