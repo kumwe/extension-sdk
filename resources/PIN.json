@@ -5,6 +5,10 @@
     "note": "SDK-owned digest inventory. It proves the canonical resources shipped by this package and names no host repository as an authority.",
     "files": [
         {
+            "file": "capabilities/v1.json",
+            "sha256": "6cba01028a8ef151892229815955e2a8d55c4a3a8ae67e729d5290417bfadb29"
+        },
+        {
             "file": "contract/README.md",
             "sha256": "d8ec1f5ea31bc929efeb292b741e2b3a21af1cfe3d800fd5b4531f65e3310838"
         },
@@ -267,6 +271,18 @@
         {
             "file": "fixtures/schemas/schema-4/kumwe.json",
             "sha256": "d1410f96ea3b6d0036813384e03d4b91d72694d49ae49c87d098ff5602ec4402"
+        },
+        {
+            "file": "public-api/signature-details-v1.json",
+            "sha256": "e8edf1e40eabb1b4b08c656d03b901502e9d378f42cabab533bf6c21dd7d5650"
+        },
+        {
+            "file": "public-api/v1.json",
+            "sha256": "caba5424749ff7fa24138b3ffcbd075792ce4579f5f49844a6629e89b954282e"
+        },
+        {
+            "file": "service-map/v1.json",
+            "sha256": "afb10425ca8276fa86ede5413b8a3fbb8fcb87773c7f66bbac6e5a312812539c"
         },
         {
             "file": "source-candidate-dependencies.json",
