@@ -1,0 +1,61 @@
+schema: kumwe-release-attestation/v2
+artifact_kind: framework_php
+migration_id: KUMWE-MIG-2026-010
+change_set: KUMWE-CS-2026-010
+repository: https://github.com/kumwe/business-definition
+merge_commit: 1cb59229f311067e8cfdd773a34e34cfeb501791
+version: 0.1.2
+tag: v0.1.2
+source_archive:
+  url: https://api.github.com/repos/kumwe/business-definition/zipball/1cb59229f311067e8cfdd773a34e34cfeb501791
+  sha256: 68de06e87d006f48315402018325a134e51c0b1d6663871ff8c597fe90a10872
+artifacts:
+  - identity: kumwe/business-definition:0.1.2
+    url: https://api.github.com/repos/kumwe/business-definition/zipball/1cb59229f311067e8cfdd773a34e34cfeb501791
+    sha256: 68de06e87d006f48315402018325a134e51c0b1d6663871ff8c597fe90a10872
+manifests_and_corpora:
+  - path: resources/public-api/v1.json
+    sha256: 3df7be6ece4d1e4641cb1f4bea82d14c09a646b17e965ffb9a294f93d8575fbf
+  - path: resources/capabilities/v1.json
+    sha256: 7fcdbf45a74c50036f4b3250e3367d16546f7d0d45cf4a1bdee5849232d57455
+  - path: resources/service-map/v1.json
+    sha256: de7d6161f1aa527a44d746ecdc04d02859bab27adf8b7125f580eda7d580856f
+  - path: resources/native-ownership/v1.json
+    sha256: eb0ed6131fd12b32d4fa73991bdfdd53ba42a0614587317108e05cd0687a13b7
+  - path: resources/corpus/formula-v1.json
+    sha256: 11033679b018fdc9a192e954ef11089444a00a1d89c6279d3c192be9252cf42f
+  - path: resources/corpus/definition-v1.json
+    sha256: 3d5b5c2d218e95aa9f8310d88b88b373ccd31c16b03d303fa1432c72dc533b4e
+  - path: resources/corpus/provenance-v1.json
+    sha256: 74c05b98eb9d13ced22092d819b5a1ed54e986f2502800192bd5397a3118dd7f
+abi_and_capabilities: null
+sbom:
+  url: https://github.com/kumwe/extension-sdk/actions/runs/34251165962/artifacts/10066120086#source.spdx.json
+  sha256: ce9ff34eb568211761b3142d832e78fd4cfa07936dfc0e7d4a9f819c2d68707a
+provenance:
+  url: https://github.com/kumwe/extension-sdk/actions/runs/34251165962/artifacts/10066120086#verification-provenance.json
+  sha256: 4ace18dc94e8308f3d342a39edf3c0bdd0dbf4b7dbc02491ad55de17b1e97156
+  kind: independent-verification
+  publisher_build_provenance: false
+release_workflow:
+  url: https://github.com/kumwe/business-definition/actions/runs/34248071466
+  result: success
+  source_commit: 1cb59229f311067e8cfdd773a34e34cfeb501791
+registry_or_pie_verification:
+  - registry: https://repo.packagist.org/p2/kumwe/business-definition.json
+    source_commit: 1cb59229f311067e8cfdd773a34e34cfeb501791
+    dist_commit: 1cb59229f311067e8cfdd773a34e34cfeb501791
+    evidence: https://github.com/kumwe/extension-sdk/actions/runs/34251165962/artifacts/10066120086#github-evidence.json
+clean_consumer_or_build_verification:
+  - evidence: https://github.com/kumwe/extension-sdk/actions/runs/34251165962/artifacts/10066120086#consumer-verification.json
+    sha256: 36c457e0f42dcd0d4b5d60e52996cfaf90b524e0c1714fcb075c27635597c0ee
+    no_dev: true
+    classmap_authoritative: true
+    offline_reinstall: true
+    runtime_types_loaded: 42
+verified_at: 2026-09-08T16:29:47Z
+verified_by:
+  repository: kumwe/extension-sdk
+  commit: 8a0e76edb2f622d870c9e5749f5eb1668e548bec
+  run_url: https://github.com/kumwe/extension-sdk/actions/runs/34251165962
+status: verified

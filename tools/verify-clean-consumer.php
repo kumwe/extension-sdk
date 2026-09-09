@@ -50,7 +50,7 @@ try {
     }
     for ($index = 0; $index < $zip->numFiles; $index++) {
         $path = $zip->getNameIndex($index);
-        if (!is_string($path) || preg_match('~^(?:tests|vendor|\.github|\.git)/~D', $path) === 1) {
+        if (!is_string($path) || preg_match('~^(?:tests|vendor|evidence|\.github|\.git)/~D', $path) === 1) {
             throw new RuntimeException('Archive contains development state: ' . (string) $path);
         }
     }

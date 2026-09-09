@@ -1,0 +1,393 @@
+{
+  "schema": "kumwe-independent-release-verification/v1",
+  "status": "passed",
+  "input": {
+    "name": "kumwe/computation",
+    "version": "0.1.1",
+    "source_commit": "fc9d049f8b675c8e19fd1672d49b5e206c9ad52a",
+    "repository": "kumwe/computation",
+    "tag": "v0.1.1",
+    "archive_url": "https://api.github.com/repos/kumwe/computation/zipball/fc9d049f8b675c8e19fd1672d49b5e206c9ad52a",
+    "archive_path": "/home/runner/work/_temp/release-verification/source.zip",
+    "archive_sha256": "2d132618efa233ec3bf0c648234c4892b7eb3d5cc1c378ea91a757a91617c223",
+    "package_root": "/home/runner/work/_temp/release-verification/archive/kumwe-computation-fc9d049",
+    "composer": {
+      "name": "kumwe/computation",
+      "description": "Portable bounded computation contracts and transport identities for native execution.",
+      "type": "library",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/kumwe/computation",
+      "support": {
+        "issues": "https://github.com/kumwe/computation/issues",
+        "source": "https://github.com/kumwe/computation"
+      },
+      "require": {
+        "php": "^8.5",
+        "php-64bit": "^8.5"
+      },
+      "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "squizlabs/php_codesniffer": "^4.0"
+      },
+      "autoload": {
+        "psr-4": {
+          "Kumwe\\Computation\\": "src/"
+        }
+      },
+      "autoload-dev": {
+        "psr-4": {
+          "Kumwe\\Computation\\Tests\\": "tests/"
+        }
+      },
+      "scripts": {
+        "composer:validate": "composer validate --strict",
+        "security:audit": "composer audit --abandoned=fail",
+        "release:check": "bash tools/test-release-record.sh",
+        "lint": "php tools/lint.php",
+        "docs": "php tools/check-docblocks.php",
+        "architecture": "php tools/verify-architecture.php",
+        "manifests": "php tools/verify-manifests.php",
+        "manifests:record": "php tools/verify-manifests.php --write",
+        "autoload:smoke": "php resources/toolchain/autoload-smoke.php",
+        "examples": "php examples/typed-consumer.php",
+        "cs": "phpcs -q",
+        "cs:fix": "phpcbf",
+        "analyse": "phpstan analyse --no-progress --memory-limit=1G",
+        "test": "php tests/run.php",
+        "clean-consumer": "php tools/verify-clean-consumer.php",
+        "check": [
+          "@composer:validate",
+          "@security:audit",
+          "@release:check",
+          "@lint",
+          "@docs",
+          "@architecture",
+          "@boundary:tokens",
+          "@manifests",
+          "@native-ownership",
+          "@autoload:smoke",
+          "@examples",
+          "@cs",
+          "@analyse",
+          "@test:ownership",
+          "@test",
+          "@test:extension-free",
+          "@clean-consumer",
+          "@release:integrity"
+        ],
+        "native-ownership": "php tools/verify-native-ownership.php --self-test",
+        "test:ownership": "php tools/verify-test-ownership.php --self-test",
+        "boundary:tokens": "php tools/verify-boundary-tokens.php --self-test",
+        "release:integrity": "bash tools/test-release-integrity.sh",
+        "test:extension-free": "php -n tests/run.php"
+      },
+      "config": {
+        "sort-packages": true
+      },
+      "minimum-stability": "stable",
+      "prefer-stable": true
+    },
+    "examples": [
+      "examples/typed-consumer.php"
+    ],
+    "handoff": {
+      "schema": "kumwe-migration-handoff/v2",
+      "artifact_kind": "framework_php",
+      "migration_id": "KUMWE-MIG-2026-008",
+      "change_set": "KUMWE-CS-2026-008",
+      "state": "draft_pr_open",
+      "source": {
+        "app": {
+          "repository": "https://github.com/kumwe/app",
+          "baseline_commit": "960ce8ec00cf724a7cae03e5ba09c4852c9ab54e",
+          "examined_paths": [
+            "src/BusinessDefinition/Domain",
+            "src/BusinessRecord/Application",
+            "tests/Unit/BusinessDefinition/Domain",
+            "tests/Unit/BusinessRecord/Application",
+            "composer.json",
+            "composer.lock",
+            "docs/architecture/capability-index.md"
+          ],
+          "old_namespace_roots": [],
+          "capability_index_sha256": "87ded886f35f74878ca9eb8db4c36e23d681c4a49891f76dfc3210f385a7ce39"
+        },
+        "semantic_inputs": [],
+        "examined_dependencies": [
+          "php ^8.5",
+          "php-64bit ^8.5"
+        ],
+        "active_related_pull_requests": []
+      },
+      "target": {
+        "repository": "https://github.com/kumwe/computation",
+        "artifact_identity": "kumwe/computation",
+        "canonical_namespace_or_abi": "Kumwe\\Computation",
+        "branch": "codex/portable-contract-baseline",
+        "pull_request": "https://github.com/kumwe/computation/pull/12"
+      },
+      "ownership": {
+        "responsibility": "Phase 1A portable execution transport, compatibility and deterministic refusals.",
+        "non_responsibilities": [
+          "Host trust and final authorization",
+          "Persistence, durable transactions, worker and transport lifecycle",
+          "App runtime adoption and native release publication"
+        ],
+        "allowed_dependency_ceiling": [
+          "php",
+          "php-64bit"
+        ],
+        "implementation_owner": "kumwe/computation",
+        "next_consumer": "kumwe/engine",
+        "public_manifests": [
+          {
+            "path": "resources/public-api/v1.json",
+            "sha256": "bb0a1630682953413acc20a540471b9308cf14c62cdb9162d5fa1bd5b55af9a4"
+          },
+          {
+            "path": "resources/capabilities/v1.json",
+            "sha256": "b0b5a5df7f527685a3f069c3f1ff8418dbb29f51850ee074d2ab849e834ae7e7"
+          },
+          {
+            "path": "resources/service-map/v1.json",
+            "sha256": "63d04ed230e1f70b88910aa27b11f09e50458d8d8a9722c5f30feb6954fb9fce"
+          },
+          {
+            "path": "resources/contract-baseline/v1.json",
+            "sha256": "7067acda3b4bcb412e887d7c9711efe0257573530b874a3e48302717e07b9499"
+          }
+        ],
+        "intentionally_excluded": [
+          "Engine owns algorithms; extension owns C ABI/Zend binding.",
+          "No App extraction, native runtime binding or runtime adoption occurs in this baseline."
+        ]
+      },
+      "framework_php": {
+        "composer_package": "kumwe/computation",
+        "canonical_namespace": "Kumwe\\Computation",
+        "public_api_manifest": "resources/public-api/v1.json",
+        "capability_manifest": "resources/capabilities/v1.json",
+        "service_map": "resources/service-map/v1.json",
+        "extracted_symbols": [],
+        "consumers": {
+          "app_code": [],
+          "configuration_and_di": [],
+          "reflection_and_string_references": [
+            "Re-scan current App dynamic, reflected and same-namespace references before adoption."
+          ],
+          "fixtures_and_examples": [
+            "examples/typed-consumer.php"
+          ],
+          "external": []
+        },
+        "dependency_injection": {
+          "mode": "direct",
+          "provider": null,
+          "factories": [],
+          "aliases": [],
+          "service_lifetimes": [],
+          "configuration_keys": [],
+          "provider_absence_reason": "Direct immutable portable contracts; no runtime implementation or native binding."
+        }
+      },
+      "native_cpp": null,
+      "php_extension": null,
+      "tests": {
+        "moved_or_added": [
+          "tests/run.php"
+        ],
+        "remain_in_app_or_consumer": [
+          "Retain host composition, authority, persistence and integration assertions in App."
+        ],
+        "split_tests": [
+          "Remove vendor implementation assertions only after verified App adoption."
+        ],
+        "prohibited_duplicates": [
+          "App must not duplicate package implementation unit tests after adoption."
+        ],
+        "corpora": [
+          "resources/conformance/v1.json"
+        ]
+      },
+      "documentation": {
+        "charter": "CHARTER.md",
+        "readme": "README.md",
+        "public_api": "docs/public-api.md",
+        "architecture": "docs/architecture.md",
+        "integration_or_consumer": "docs/integration.md",
+        "examples": [
+          "examples/typed-consumer.php"
+        ],
+        "changelog_record": "CHANGELOG.md / 0.1.1"
+      },
+      "release_expectations": {
+        "version_policy": "0.1.1 portable maintenance proposal; no semantic dependencies or publication claim.",
+        "expected_artifact_types": [
+          "Composer package archive",
+          "GitHub source archive"
+        ],
+        "required_checks": [
+          "composer check",
+          "Final hosted package CI",
+          "Machine handoff and consumer schema validation"
+        ],
+        "required_registry_or_installer": "Composer",
+        "required_external_attestation": true
+      },
+      "next_task": {
+        "phase_name": "Phase 1B native-binding successor after verified baseline, Engine and extension releases",
+        "permitted_only_when": [
+          "The extension-free 0.1 maintenance release is published and independently verified.",
+          "Engine and kumwe-engine stable releases and exact compatibility tuple are independently verified.",
+          "Reconcile current native main against the exact released portable API and corpus without semantic duplication."
+        ],
+        "consumer_repository": "https://github.com/kumwe/computation",
+        "dependency_or_native_change": "Qualify the preserved native adapter against actual stable Engine/extension releases.",
+        "namespace_or_api_replacements": [],
+        "files_to_update": [
+          "composer.json",
+          "src/NativeCompatibility.php",
+          "resources/native-adapter.json",
+          "resources/native-ownership/v1.json",
+          "resources/public-api/v1.json",
+          "resources/capabilities/v1.json",
+          "resources/service-map/v1.json",
+          "MIGRATION-HANDOFF.md"
+        ],
+        "files_to_remove": [],
+        "tests_to_remove": [],
+        "tests_to_retain_or_add": [
+          "Retain portable behavior/boundary/conformance tests and tests/ownership.json.",
+          "Qualify preserved native adapter, factory, explicit tuple and actual extension archive tests."
+        ],
+        "di_or_provisioning_changes": [
+          "Baseline has no provider; the successor qualifies explicit native factories after stable tuple verification."
+        ],
+        "capability_index_changes": [
+          "Update package native capabilities; App capability-index work belongs to the later App integration."
+        ],
+        "changelog_and_evidence_changes": [
+          "Record baseline and native release attestations externally; propose the reviewed native successor record."
+        ],
+        "verification_commands": [
+          "composer check",
+          "Actual native compatibility and archive-consumer gates against the verified extension tuple"
+        ]
+      },
+      "concurrency": {
+        "likely_conflict_files": [
+          "App composer.json",
+          "App composer.lock",
+          "App provider configuration"
+        ],
+        "related_migrations": [],
+        "ownership_conflicts": [],
+        "integration_train": null,
+        "resolution_rule": "semantic-preservation"
+      },
+      "governance": {
+        "roadmap_source_sha256": "a202155ef1a65f5ab293d4f8397ebf4ac430db7f1e877c776bbe7851e6fe18d8",
+        "roadmap_refs": [],
+        "non_roadmap_refs": [
+          "NRM-2026-008"
+        ],
+        "completion_claim": false
+      },
+      "decisions": [
+        "Reconstruct Phase 1A on maintenance/portable-contracts and preserve native main and every existing tag.",
+        "Keep the 20 public portable source files, Internal/Guard and transport corpus identical to reviewed native main.",
+        "Select no runtime semantic dependency; no native adapter, provider, native requirement or algorithm is shipped.",
+        "The 0.1.1 record selects a future release; verified_release and external attestation remain null."
+      ],
+      "blockers": [
+        "Maintainer review/merge and actual portable publication are pending.",
+        "Independent released-artifact verification must precede native release admission.",
+        "Engine/extension remain development candidates; Phase 1B qualification waits for their verified stable releases."
+      ]
+    }
+  },
+  "manifests_and_corpora": [
+    {
+      "path": "resources/public-api/v1.json",
+      "sha256": "bb0a1630682953413acc20a540471b9308cf14c62cdb9162d5fa1bd5b55af9a4"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "sha256": "b0b5a5df7f527685a3f069c3f1ff8418dbb29f51850ee074d2ab849e834ae7e7"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "sha256": "63d04ed230e1f70b88910aa27b11f09e50458d8d8a9722c5f30feb6954fb9fce"
+    },
+    {
+      "path": "resources/contract-baseline/v1.json",
+      "sha256": "7067acda3b4bcb412e887d7c9711efe0257573530b874a3e48302717e07b9499"
+    },
+    {
+      "path": "resources/conformance/v1.json",
+      "sha256": "30a64cf682a46c38ca99544d5abcad43cda7071bb9702621226bf297411b8bfc"
+    }
+  ],
+  "archived_files": 50,
+  "handoff_sha256": "7c1ecfe099db6ba6e16e62281ba661bb92c975e39ec53b7de62d33c06ad8ef47",
+  "license": {
+    "declaration": "Apache-2.0",
+    "path": "LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  "release_workflow": "https://github.com/kumwe/computation/actions/runs/34248840142",
+  "merged_pull_request": "https://github.com/kumwe/computation/pull/12",
+  "platform_immutable_flag": false,
+  "observed_at": "2026-09-08T16:19:54Z",
+  "verifier": {
+    "repository": "kumwe/extension-sdk",
+    "commit": "ecc90c060f9b64154d7feb346912bc63f40dcd9c",
+    "run_url": "https://github.com/kumwe/extension-sdk/actions/runs/34250329345"
+  },
+  "consumer": {
+    "schema": "kumwe-independent-release-consumer/v1",
+    "status": "passed",
+    "name": "kumwe/computation",
+    "version": "0.1.1",
+    "source_commit": "fc9d049f8b675c8e19fd1672d49b5e206c9ad52a",
+    "archive_sha256": "2d132618efa233ec3bf0c648234c4892b7eb3d5cc1c378ea91a757a91617c223",
+    "no_dev": true,
+    "classmap_authoritative": true,
+    "offline_reinstall": true,
+    "composer_lock_sha256": "d2b084defc8d4d8f046f894c99a1423cf3ea5b456b2762be113fb69e5e47bec7",
+    "runtime_types_loaded": 21,
+    "runtime_classes": [
+      "Kumwe\\Computation\\BatchResult",
+      "Kumwe\\Computation\\CapabilitySet",
+      "Kumwe\\Computation\\CompatibilityRequirement",
+      "Kumwe\\Computation\\CompiledProgram",
+      "Kumwe\\Computation\\Compiler",
+      "Kumwe\\Computation\\ContractIdentity",
+      "Kumwe\\Computation\\DocumentBatch",
+      "Kumwe\\Computation\\DocumentInput",
+      "Kumwe\\Computation\\ExecutionLimits",
+      "Kumwe\\Computation\\ExecutionRefused",
+      "Kumwe\\Computation\\ExecutionResult",
+      "Kumwe\\Computation\\Executor",
+      "Kumwe\\Computation\\Finding",
+      "Kumwe\\Computation\\FindingPath",
+      "Kumwe\\Computation\\FindingSeverity",
+      "Kumwe\\Computation\\Internal\\Guard",
+      "Kumwe\\Computation\\PlanCacheKey",
+      "Kumwe\\Computation\\PlanIdentity",
+      "Kumwe\\Computation\\ProgramEnvelope",
+      "Kumwe\\Computation\\RefusalCode",
+      "Kumwe\\Computation\\SourceLocation"
+    ],
+    "examples": [
+      "examples/typed-consumer.php"
+    ],
+    "php": "8.5.10",
+    "php_zts": false,
+    "os": "Linux",
+    "architecture": "x86_64",
+    "native_extension_loaded": false
+  }
+}
