@@ -9,12 +9,36 @@ const need = (fact, message) => { if (!fact) throw new Error(message); };
 const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const json = file => JSON.parse(fs.readFileSync(file, 'utf8'));
 const quote = value => `'${value.replaceAll("'", "'\\''")}'`;
+const ordered = value => Array.isArray(value) ? value.map(ordered) : value && typeof value === 'object'
+  ? Object.fromEntries(Object.keys(value).sort().map(key => [key, ordered(value[key])])) : value;
+
+export function nativeSelectionBinding(result) {
+  const selection = nativeSelection(result.selection);
+  need(result.native?.extension_version === selection.extension.version, 'Native runtime version differs from its qualified selection.');
+  for (const kind of ['engine', 'extension']) {
+    const selected = selection[kind]; const native = result.native[kind];
+    need(native?.package === selected.name && native.version === selected.version && native.tag === `v${selected.version}`
+      && native.commit === selected.source_commit && native.archive_sha256 === selected.archive_sha256,
+    'Native owner coordinates differ from the independently qualified selection.');
+    need(native.attestation?.uri === selected.attestation.zip_uri
+      && native.attestation.sha256 === selected.attestation.zip_sha256
+      && native.attestation.member === selected.attestation.member
+      && native.attestation.member_sha256 === selected.attestation.member_sha256,
+    'Native owner attestation differs from the independently qualified selection.');
+  }
+  return selection;
+}
+
+export function packageSetNativeBinding(input, qualified) {
+  need(input?.graph_mode === 'native' && JSON.stringify(ordered(input.native)) === JSON.stringify(ordered(qualified.native)),
+    'Native package-set inputs differ from the independently qualified fixture selection.');
+}
 
 /** Apply a verified fixture to individual subprocesses; never mutate the base PHP environment. */
 export function nativeFixtureScope(file, directory) {
   const result = json(file);
   need(result.schema === 'kumwe-qualified-native-fixture/v1' && result.status === 'passed', 'A qualified stable native fixture is required.');
-  const selection = nativeSelection(result.selection);
+  const selection = nativeSelectionBinding(result);
   const fixture = result.fixture;
   need(fixture?.schema === 'kumwe-native-build-fixture/v1' && fixture.status === 'passed'
     && fixture.package === selection.extension.name && fixture.version === selection.extension.version
@@ -45,8 +69,6 @@ export function nativeFixtureScope(file, directory) {
   const environment = { ...fixture.environment, PATH: `${directory}${path.delimiter}${process.env.PATH}` };
   const probe = spawnSync(fixture.php_binary, ['-r', nativeFixtureRuntimeProbe],
     { env: { ...process.env, ...environment }, encoding: 'utf8' });
-  const ordered = value => Array.isArray(value) ? value.map(ordered) : value && typeof value === 'object'
-    ? Object.fromEntries(Object.keys(value).sort().map(key => [key, ordered(value[key])])) : value;
   need(probe.status === 0 && JSON.stringify(ordered(JSON.parse(probe.stdout))) === JSON.stringify(ordered(json(fixture.expected_runtime_tuple)))
     && JSON.stringify(ordered(result.native.compatibility_tuple)) === JSON.stringify(ordered(json(fixture.expected_runtime_tuple))),
   'Scoped actual native module differs from its source/build-derived expected tuple.');

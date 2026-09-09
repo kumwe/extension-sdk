@@ -1,0 +1,796 @@
+{
+  "schema": "kumwe-independent-release-verification/v1",
+  "status": "passed",
+  "input": {
+    "name": "kumwe/secret-envelope",
+    "version": "0.1.1",
+    "source_commit": "3bf2d66d4090da697bf148c9eb866a9839f1af45",
+    "repository": "kumwe/secret-envelope",
+    "tag": "v0.1.1",
+    "archive_url": "https://api.github.com/repos/kumwe/secret-envelope/zipball/3bf2d66d4090da697bf148c9eb866a9839f1af45",
+    "archive_path": "/home/runner/work/_temp/release-verification/source.zip",
+    "archive_sha256": "37539b5263f8af299d87c731f43db1cafb8df9320478e292fe4f06f767afcea7",
+    "package_root": "/home/runner/work/_temp/release-verification/archive/kumwe-secret-envelope-3bf2d66",
+    "composer": {
+      "name": "kumwe/secret-envelope",
+      "description": "Portable authenticated encrypted-envelope contracts for the Kumwe family: the versioned envelope value, key identifiers, key material and key-ring values, purpose separation, the cipher and key-provider ports, and the libsodium XChaCha20-Poly1305 implementation. Key custody, rotation and audit stay with the host.",
+      "type": "library",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/kumwe/secret-envelope",
+      "support": {
+        "issues": "https://github.com/kumwe/secret-envelope/issues",
+        "source": "https://github.com/kumwe/secret-envelope"
+      },
+      "require": {
+        "php": "^8.5",
+        "ext-sodium": "*",
+        "psr/container": "^2.0"
+      },
+      "require-dev": {
+        "laminas/laminas-servicemanager": "^4.5",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "squizlabs/php_codesniffer": "^4.0"
+      },
+      "autoload": {
+        "psr-4": {
+          "Kumwe\\Secret\\": "src/"
+        }
+      },
+      "autoload-dev": {
+        "psr-4": {
+          "Kumwe\\Secret\\Tests\\": "tests/"
+        }
+      },
+      "scripts": {
+        "composer:validate": "composer validate --strict",
+        "lint": "php tools/lint.php",
+        "docs": "php tools/check-docblocks.php",
+        "architecture": "php tools/verify-architecture.php --self-test",
+        "api": "php tools/verify-public-api.php",
+        "api:record": "php tools/verify-public-api.php --write",
+        "manifests": "php tools/verify-manifests.php",
+        "handoff": "php tools/verify-handoff.php",
+        "autoload:smoke": "php resources/toolchain/autoload-smoke.php",
+        "cs": "phpcs -q",
+        "cs:fix": "phpcbf",
+        "analyse": "phpstan analyse --no-progress --memory-limit=1G",
+        "test": "php tests/run.php",
+        "examples": "php tools/run-examples.php",
+        "consumer": "php tools/clean-consumer.php",
+        "check": [
+          "@composer:validate",
+          "@lint",
+          "@docs",
+          "@architecture",
+          "@boundary:tokens",
+          "@api",
+          "@api:docs",
+          "@manifests",
+          "@handoff",
+          "@autoload:smoke",
+          "@cs",
+          "@analyse",
+          "@test:ownership",
+          "@test",
+          "@examples",
+          "@consumer",
+          "@security:audit",
+          "@release:parser",
+          "@release:integrity"
+        ],
+        "api:docs": "php tools/verify-public-docs.php",
+        "api:docs:record": "php tools/verify-public-docs.php --write",
+        "security:audit": "composer audit --abandoned=fail",
+        "release:parser": "bash tools/test-release-record.sh",
+        "test:ownership": "php tools/verify-test-ownership.php --self-test",
+        "release:integrity": "bash tools/test-release-integrity.sh",
+        "boundary:tokens": "php tools/verify-boundary-tokens.php --self-test"
+      },
+      "config": {
+        "sort-packages": true
+      },
+      "minimum-stability": "stable",
+      "prefer-stable": true
+    },
+    "examples": [
+      "examples/round-trip.php",
+      "examples/rotation.php",
+      "examples/container.php"
+    ],
+    "handoff": {
+      "schema": "kumwe-migration-handoff/v2",
+      "artifact_kind": "framework_php",
+      "migration_id": "KUMWE-MIG-2026-003",
+      "change_set": "KUMWE-CS-2026-003",
+      "state": "draft_pr_open",
+      "source": {
+        "app": {
+          "repository": "https://github.com/kumwe/app",
+          "baseline_commit": "960ce8ec00cf724a7cae03e5ba09c4852c9ab54e",
+          "examined_paths": [
+            "composer.json",
+            "composer.lock",
+            "docs/architecture/capability-index.md",
+            "src/BusinessRecord/Application/RecordSecretRotation.php",
+            "src/BusinessRecord/Application/RecordValueCodec.php",
+            "src/BusinessRecord/Application/SecretAssociatedData.php",
+            "src/BusinessRecord/Application/SecretCipher.php",
+            "src/BusinessRecord/Application/SecretKeyProvider.php",
+            "src/BusinessRecord/Domain/EncryptedEnvelope.php",
+            "src/BusinessRecord/Domain/RecordValueGuard.php",
+            "src/BusinessRecord/Domain/SecretKeyMaterial.php",
+            "src/BusinessRecord/Domain/SecretKeyPurpose.php",
+            "src/BusinessRecord/Domain/SecretKeyRing.php",
+            "src/BusinessRecord/Domain/SecretKeyUnavailable.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineRecordSecretRotation.php",
+            "src/BusinessRecord/Infrastructure/Security/ConfiguredSecretKeyRings.php",
+            "src/BusinessRecord/Infrastructure/Security/KeyRingSecretCipher.php",
+            "src/BusinessRecord/Infrastructure/Security/KeyRingSecretKeyProvider.php",
+            "src/BusinessRecord/Infrastructure/Security/SodiumSecretCipher.php",
+            "src/BusinessSurface/Application/BusinessMutationPlanService.php",
+            "src/BusinessSurface/Application/MutationPlanCipher.php",
+            "src/BusinessSurface/Infrastructure/Security/KeyRingMutationPlanCipher.php",
+            "src/Identity/Application/StepUp/StepUpSecretCipher.php",
+            "src/Identity/Application/StepUp/TotpStepUpProvider.php",
+            "src/Identity/Infrastructure/StepUp/SodiumStepUpSecretCipher.php",
+            "src/Kernel/Configuration/RecordEncryptionConfiguration.php",
+            "src/Kernel/ContainerFactory.php",
+            "tests/Architecture/MoneyConversionBoundaryTest.php",
+            "tests/Architecture/ProductionArtifactsTest.php",
+            "tests/Architecture/UnitConversionBoundaryTest.php",
+            "tests/Deployment/record-key-rotation-strand.php",
+            "tests/Integration/BusinessRecord/RecordSecretRotationIntegrationTest.php",
+            "tests/Support/BusinessRuntimeBackupAcceptance.php",
+            "tests/Support/RestoreSecurityAcceptance.php",
+            "tests/Unit/BusinessRecord/Application/AggregateInvariantValidationTest.php",
+            "tests/Unit/BusinessRecord/Application/BusinessRecordRelationshipCoordinatorTest.php",
+            "tests/Unit/BusinessRecord/Application/PostingPeriodLockTest.php",
+            "tests/Unit/BusinessRecord/Application/RecordRuleValidatorTest.php",
+            "tests/Unit/BusinessRecord/Domain/EncryptedEnvelopeTest.php",
+            "tests/Unit/BusinessRecord/Domain/ExactValueCodecTest.php",
+            "tests/Unit/BusinessRecord/Domain/RecordIntegrityTest.php",
+            "tests/Unit/BusinessRecord/Infrastructure/SecretKeyLifecycleTest.php",
+            "tests/Unit/BusinessRecord/Infrastructure/SodiumSecretCipherTest.php",
+            "tests/Unit/BusinessSurface/Application/BusinessMutationPlanServiceTest.php",
+            "tests/Unit/Identity/Application/StepUp/TotpStepUpProviderTest.php",
+            "tests/Unit/Identity/Infrastructure/StepUp/SodiumStepUpSecretCipherTest.php"
+          ],
+          "old_namespace_roots": [
+            "Kumwe\\App\\BusinessRecord\\"
+          ],
+          "capability_index_sha256": "8fb2a8680bed6ac1456183bc9e48fe040194923b6d1b3331f04cea28bd5a9b2f"
+        },
+        "semantic_inputs": [],
+        "examined_dependencies": [
+          "App composer.lock and the installed legacy conversion, extension-sdk and producer capability boundaries",
+          "No Kumwe dependency selected; Sodium owns the cryptographic primitive; PSR-11 only binds host services"
+        ],
+        "active_related_pull_requests": []
+      },
+      "target": {
+        "repository": "https://github.com/kumwe/secret-envelope",
+        "artifact_identity": "kumwe/secret-envelope",
+        "canonical_namespace_or_abi": "Kumwe\\Secret",
+        "branch": "fix/complete-extraction-release-gates",
+        "pull_request": "https://github.com/kumwe/secret-envelope/pull/2"
+      },
+      "ownership": {
+        "responsibility": "Portable authenticated encrypted-envelope format, key values and cipher/provider contracts.",
+        "non_responsibilities": [
+          "Master-key custody, derivation, environment/KMS/HSM access, host purpose selection and authorization",
+          "Persistence, rotation/re-encryption jobs, audit, recovery, CLI/HTTP operations and deployment"
+        ],
+        "allowed_dependency_ceiling": [
+          "ext-sodium",
+          "psr/container"
+        ],
+        "implementation_owner": "kumwe/secret-envelope",
+        "next_consumer": "kumwe/app",
+        "public_manifests": [
+          {
+            "path": "resources/public-api/v1.json",
+            "sha256": "21bed5fdd15b8e205f3881df1e41bd13df5b969ea13307ef645112b6fd56dd65"
+          },
+          {
+            "path": "resources/capabilities/v1.json",
+            "sha256": "fb927883d0cfaef771eb02b83fe771b1344349ad2ae5737ec2cdc327f2e8f38e"
+          },
+          {
+            "path": "resources/service-map/v1.json",
+            "sha256": "742e7619b6fd94dbea2595794b9d81cf5e270030ad732b6affa96d3e11a8e2bf"
+          }
+        ],
+        "intentionally_excluded": [
+          "src/BusinessRecord/Domain/SecretKeyPurpose.php remains host policy; update canonical imports/delegation only.",
+          "src/BusinessRecord/Application/SecretAssociatedData.php remains host policy; update canonical imports/delegation only.",
+          "src/BusinessRecord/Infrastructure/Security/ConfiguredSecretKeyRings.php remains host policy; update canonical imports/delegation only.",
+          "src/BusinessSurface/Infrastructure/Security/KeyRingMutationPlanCipher.php remains host policy; update canonical imports/delegation only."
+        ]
+      },
+      "framework_php": {
+        "composer_package": "kumwe/secret-envelope",
+        "canonical_namespace": "Kumwe\\Secret",
+        "public_api_manifest": "resources/public-api/v1.json",
+        "capability_manifest": "resources/capabilities/v1.json",
+        "service_map": "resources/service-map/v1.json",
+        "extracted_symbols": [
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Domain\\EncryptedEnvelope",
+            "new_fqcn": "Kumwe\\Secret\\Value\\EncryptedEnvelope",
+            "source_path": "src/BusinessRecord/Domain/EncryptedEnvelope.php",
+            "target_path": "src/Value/EncryptedEnvelope.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "fromStorage",
+              "toStorage"
+            ],
+            "public_properties": [
+              "algorithm",
+              "ciphertext",
+              "keyId",
+              "nonce"
+            ],
+            "public_constants": [
+              "ALGORITHM",
+              "MAXIMUM_CIPHERTEXT_BYTES",
+              "MINIMUM_CIPHERTEXT_BYTES",
+              "NONCE_BYTES"
+            ],
+            "exceptions": [
+              "Kumwe\\Secret\\Exception\\SecretException"
+            ],
+            "serialization_contract": "Base64 ciphertext, nonce, key_id and fixed algorithm preserved.",
+            "compatibility": "Namespace migration; typed errors and documented validation hardening; see architecture decisions."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Domain\\SecretKeyMaterial",
+            "new_fqcn": "Kumwe\\Secret\\Value\\KeyMaterial",
+            "source_path": "src/BusinessRecord/Domain/SecretKeyMaterial.php",
+            "target_path": "src/Value/KeyMaterial.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "__debugInfo",
+              "__serialize",
+              "material"
+            ],
+            "public_properties": [
+              "keyId"
+            ],
+            "public_constants": [
+              "KEY_BYTES"
+            ],
+            "exceptions": [
+              "Kumwe\\Secret\\Exception\\SecretException"
+            ],
+            "serialization_contract": null,
+            "compatibility": "Namespace migration; typed errors and documented validation hardening; see architecture decisions."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Domain\\SecretKeyRing",
+            "new_fqcn": "Kumwe\\Secret\\Value\\KeyRing",
+            "source_path": "src/BusinessRecord/Domain/SecretKeyRing.php",
+            "target_path": "src/Value/KeyRing.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "keyFor",
+              "keyIds"
+            ],
+            "public_properties": [
+              "active"
+            ],
+            "public_constants": [
+              "MAXIMUM_RETIRED_KEYS"
+            ],
+            "exceptions": [
+              "Kumwe\\Secret\\Exception\\SecretException"
+            ],
+            "serialization_contract": null,
+            "compatibility": "Namespace migration; typed errors and documented validation hardening; see architecture decisions."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Domain\\SecretKeyUnavailable",
+            "new_fqcn": "Kumwe\\Secret\\Exception\\KeyUnavailable",
+            "source_path": "src/BusinessRecord/Domain/SecretKeyUnavailable.php",
+            "target_path": "src/Exception/KeyUnavailable.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "keyId"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [
+              "Kumwe\\Secret\\Exception\\SecretException"
+            ],
+            "serialization_contract": null,
+            "compatibility": "Namespace migration; typed errors and documented validation hardening; see architecture decisions."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Application\\SecretCipher",
+            "new_fqcn": "Kumwe\\Secret\\Contract\\EnvelopeCipher",
+            "source_path": "src/BusinessRecord/Application/SecretCipher.php",
+            "target_path": "src/Contract/EnvelopeCipher.php",
+            "kind": "interface",
+            "public_methods": [
+              "decrypt",
+              "encrypt"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [
+              "Kumwe\\Secret\\Exception\\SecretException"
+            ],
+            "serialization_contract": null,
+            "compatibility": "Namespace migration; typed errors and documented validation hardening; see architecture decisions."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Application\\SecretKeyProvider",
+            "new_fqcn": "Kumwe\\Secret\\Contract\\KeyProvider",
+            "source_path": "src/BusinessRecord/Application/SecretKeyProvider.php",
+            "target_path": "src/Contract/KeyProvider.php",
+            "kind": "interface",
+            "public_methods": [
+              "activeKey",
+              "activeKeyId",
+              "keyFor",
+              "knownKeyIds"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [
+              "Kumwe\\Secret\\Exception\\SecretException"
+            ],
+            "serialization_contract": null,
+            "compatibility": "Namespace migration; typed errors and documented validation hardening; see architecture decisions."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Infrastructure\\Security\\SodiumSecretCipher",
+            "new_fqcn": "Kumwe\\Secret\\Cipher\\SodiumEnvelopeCipher",
+            "source_path": "src/BusinessRecord/Infrastructure/Security/SodiumSecretCipher.php",
+            "target_path": "src/Cipher/SodiumEnvelopeCipher.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "decrypt",
+              "encrypt",
+              "keyId"
+            ],
+            "public_properties": [],
+            "public_constants": [
+              "MAXIMUM_ASSOCIATED_DATA_BYTES",
+              "MAXIMUM_PLAINTEXT_BYTES"
+            ],
+            "exceptions": [
+              "Kumwe\\Secret\\Exception\\SecretException"
+            ],
+            "serialization_contract": null,
+            "compatibility": "Namespace migration; typed errors and documented validation hardening; see architecture decisions."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Infrastructure\\Security\\KeyRingSecretCipher",
+            "new_fqcn": "Kumwe\\Secret\\Cipher\\KeyRingEnvelopeCipher",
+            "source_path": "src/BusinessRecord/Infrastructure/Security/KeyRingSecretCipher.php",
+            "target_path": "src/Cipher/KeyRingEnvelopeCipher.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "decrypt",
+              "encrypt"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [
+              "Kumwe\\Secret\\Exception\\SecretException"
+            ],
+            "serialization_contract": null,
+            "compatibility": "Namespace migration; typed errors and documented validation hardening; see architecture decisions."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Infrastructure\\Security\\KeyRingSecretKeyProvider",
+            "new_fqcn": "Kumwe\\Secret\\Provider\\KeyRingKeyProvider",
+            "source_path": "src/BusinessRecord/Infrastructure/Security/KeyRingSecretKeyProvider.php",
+            "target_path": "src/Provider/KeyRingKeyProvider.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "activeKey",
+              "activeKeyId",
+              "keyFor",
+              "knownKeyIds"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [
+              "Kumwe\\Secret\\Exception\\SecretException"
+            ],
+            "serialization_contract": null,
+            "compatibility": "Namespace migration; typed errors and documented validation hardening; see architecture decisions."
+          }
+        ],
+        "consumers": {
+          "app_code": [
+            "src/BusinessRecord/Application/SecretAssociatedData.php",
+            "src/BusinessRecord/Application/SecretCipher.php",
+            "src/BusinessRecord/Application/RecordSecretRotation.php",
+            "src/BusinessRecord/Application/RecordValueCodec.php",
+            "src/BusinessRecord/Application/SecretKeyProvider.php",
+            "src/Kernel/Configuration/RecordEncryptionConfiguration.php",
+            "src/Kernel/ContainerFactory.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineRecordSecretRotation.php",
+            "src/BusinessRecord/Infrastructure/Security/KeyRingSecretCipher.php",
+            "src/BusinessRecord/Infrastructure/Security/ConfiguredSecretKeyRings.php",
+            "src/BusinessRecord/Infrastructure/Security/KeyRingSecretKeyProvider.php",
+            "src/BusinessRecord/Infrastructure/Security/SodiumSecretCipher.php",
+            "src/BusinessRecord/Domain/SecretKeyUnavailable.php",
+            "src/BusinessRecord/Domain/SecretKeyRing.php",
+            "src/BusinessRecord/Domain/SecretKeyPurpose.php",
+            "src/BusinessRecord/Domain/EncryptedEnvelope.php",
+            "src/BusinessRecord/Domain/SecretKeyMaterial.php",
+            "src/BusinessRecord/Domain/RecordValueGuard.php",
+            "src/Identity/Infrastructure/StepUp/SodiumStepUpSecretCipher.php",
+            "src/Identity/Application/StepUp/StepUpSecretCipher.php",
+            "src/Identity/Application/StepUp/TotpStepUpProvider.php",
+            "src/BusinessSurface/Application/MutationPlanCipher.php",
+            "src/BusinessSurface/Application/BusinessMutationPlanService.php",
+            "src/BusinessSurface/Infrastructure/Security/KeyRingMutationPlanCipher.php"
+          ],
+          "configuration_and_di": [
+            "src/Kernel/ContainerFactory.php"
+          ],
+          "reflection_and_string_references": [],
+          "fixtures_and_examples": [
+            "tests/Integration/BusinessRecord/RecordSecretRotationIntegrationTest.php",
+            "tests/Architecture/ProductionArtifactsTest.php",
+            "tests/Architecture/MoneyConversionBoundaryTest.php",
+            "tests/Architecture/UnitConversionBoundaryTest.php",
+            "tests/Unit/BusinessSurface/Application/BusinessMutationPlanServiceTest.php",
+            "tests/Deployment/record-key-rotation-strand.php",
+            "tests/Unit/Identity/Application/StepUp/TotpStepUpProviderTest.php",
+            "tests/Unit/BusinessRecord/Application/PostingPeriodLockTest.php",
+            "tests/Unit/BusinessRecord/Application/RecordRuleValidatorTest.php",
+            "tests/Unit/BusinessRecord/Application/BusinessRecordRelationshipCoordinatorTest.php",
+            "tests/Unit/BusinessRecord/Application/AggregateInvariantValidationTest.php",
+            "tests/Unit/BusinessRecord/Infrastructure/SecretKeyLifecycleTest.php",
+            "tests/Unit/BusinessRecord/Infrastructure/SodiumSecretCipherTest.php",
+            "tests/Unit/BusinessRecord/Domain/EncryptedEnvelopeTest.php",
+            "tests/Unit/BusinessRecord/Domain/RecordIntegrityTest.php",
+            "tests/Unit/BusinessRecord/Domain/ExactValueCodecTest.php",
+            "tests/Unit/Identity/Infrastructure/StepUp/SodiumStepUpSecretCipherTest.php",
+            "tests/Support/BusinessRuntimeBackupAcceptance.php",
+            "tests/Support/RestoreSecurityAcceptance.php"
+          ],
+          "external": []
+        },
+        "dependency_injection": {
+          "mode": "config-provider",
+          "provider": "Kumwe\\Secret\\ConfigProvider",
+          "factories": [
+            "Kumwe\\Secret\\Container\\KeyRingEnvelopeCipherFactory"
+          ],
+          "aliases": [
+            "Kumwe\\Secret\\Contract\\EnvelopeCipher -> Kumwe\\Secret\\Cipher\\KeyRingEnvelopeCipher"
+          ],
+          "service_lifetimes": [
+            "KeyRingEnvelopeCipher shared; host KeyProvider stable per request/job"
+          ],
+          "configuration_keys": [],
+          "provider_absence_reason": null
+        }
+      },
+      "native_cpp": null,
+      "php_extension": null,
+      "tests": {
+        "moved_or_added": [
+          "tests/run.php",
+          "tests/TestCase.php",
+          "tests/Support/ScriptedServiceNotFound.php",
+          "tests/Support/ScriptedKeyProvider.php",
+          "tests/Support/Fixture.php",
+          "tests/Support/ScriptedContainer.php",
+          "tests/Case/KeyRingTest.php",
+          "tests/Case/ConfigProviderTest.php",
+          "tests/Case/SodiumEnvelopeCipherTest.php",
+          "tests/Case/ServiceResolutionTest.php",
+          "tests/Case/PropertyTest.php",
+          "tests/Case/KeyRingEnvelopeCipherFactoryTest.php",
+          "tests/Case/KeyPurposeTest.php",
+          "tests/Case/KeyMaterialTest.php",
+          "tests/Case/EncryptedEnvelopeTest.php",
+          "tests/Case/KeyRingKeyProviderTest.php",
+          "tests/Case/CorpusTest.php",
+          "tests/Case/KeyIdentifierTest.php",
+          "tests/Case/AssociatedDataTest.php",
+          "tests/Case/KeyRingEnvelopeCipherTest.php"
+        ],
+        "remain_in_app_or_consumer": [
+          "tests/Integration/BusinessRecord/RecordSecretRotationIntegrationTest.php",
+          "tests/Architecture/ProductionArtifactsTest.php",
+          "tests/Architecture/MoneyConversionBoundaryTest.php",
+          "tests/Architecture/UnitConversionBoundaryTest.php",
+          "tests/Unit/BusinessSurface/Application/BusinessMutationPlanServiceTest.php",
+          "tests/Deployment/record-key-rotation-strand.php",
+          "tests/Unit/Identity/Application/StepUp/TotpStepUpProviderTest.php",
+          "tests/Unit/BusinessRecord/Application/PostingPeriodLockTest.php",
+          "tests/Unit/BusinessRecord/Application/RecordRuleValidatorTest.php",
+          "tests/Unit/BusinessRecord/Application/BusinessRecordRelationshipCoordinatorTest.php",
+          "tests/Unit/BusinessRecord/Application/AggregateInvariantValidationTest.php",
+          "tests/Unit/BusinessRecord/Infrastructure/SecretKeyLifecycleTest.php",
+          "tests/Unit/BusinessRecord/Domain/RecordIntegrityTest.php",
+          "tests/Unit/BusinessRecord/Domain/ExactValueCodecTest.php",
+          "tests/Unit/Identity/Infrastructure/StepUp/SodiumStepUpSecretCipherTest.php",
+          "tests/Support/BusinessRuntimeBackupAcceptance.php",
+          "tests/Support/RestoreSecurityAcceptance.php"
+        ],
+        "split_tests": [
+          "SecretKeyLifecycleTest retains configured custody/derivation, rotation and purpose integration; remove direct key/ring units."
+        ],
+        "prohibited_duplicates": [
+          "tests/Unit/BusinessRecord/Domain/EncryptedEnvelopeTest.php",
+          "tests/Unit/BusinessRecord/Infrastructure/SodiumSecretCipherTest.php"
+        ],
+        "corpora": [
+          "resources/corpus/v1/envelopes.json; publicly documented synthetic keys; SHA-256 865deefd162de7557ad5dbb3c95b40ae54bcb64a3b139112f0364d417e4d7260"
+        ]
+      },
+      "documentation": {
+        "charter": "CHARTER.md",
+        "readme": "README.md",
+        "public_api": "docs/public-api.md",
+        "architecture": "docs/architecture.md",
+        "integration_or_consumer": "docs/integration.md",
+        "examples": [
+          "examples/round-trip.php",
+          "examples/rotation.php",
+          "examples/container.php"
+        ],
+        "changelog_record": "CHANGELOG.md ## 0.1.1"
+      },
+      "release_expectations": {
+        "version_policy": "SemVer; CHANGELOG.md selects 0.1.1; exact consumer pin after independent release verification.",
+        "expected_artifact_types": [
+          "Composer source ZIP",
+          "GitHub source archive"
+        ],
+        "required_checks": [
+          "composer check",
+          "PHP 8.5 CI",
+          "security audit",
+          "runtime-only archive consumer",
+          "Laminas consumer",
+          "Protected main and an immutable, stable, non-draft GitHub release of the exact recorded version"
+        ],
+        "required_registry_or_installer": "Packagist",
+        "required_external_attestation": true
+      },
+      "next_task": {
+        "phase_name": "Independent release verification, then a separate App Phase 2 adoption",
+        "permitted_only_when": [
+          "A human has merged the package PR and release-on-record has published the immutable release.",
+          "A separate verifying session has produced a successful external RELEASE-ATTESTATION.yaml.",
+          "Source/import/test drift against the recorded App baseline has been reconciled."
+        ],
+        "consumer_repository": "https://github.com/kumwe/app",
+        "dependency_or_native_change": "Use Composer to require the exact verified release and regenerate composer.lock.",
+        "namespace_or_api_replacements": [
+          "Kumwe\\App\\BusinessRecord\\Domain\\EncryptedEnvelope -> Kumwe\\Secret\\Value\\EncryptedEnvelope",
+          "Kumwe\\App\\BusinessRecord\\Domain\\SecretKeyMaterial -> Kumwe\\Secret\\Value\\KeyMaterial",
+          "Kumwe\\App\\BusinessRecord\\Domain\\SecretKeyRing -> Kumwe\\Secret\\Value\\KeyRing",
+          "Kumwe\\App\\BusinessRecord\\Domain\\SecretKeyUnavailable -> Kumwe\\Secret\\Exception\\KeyUnavailable",
+          "Kumwe\\App\\BusinessRecord\\Application\\SecretCipher -> Kumwe\\Secret\\Contract\\EnvelopeCipher",
+          "Kumwe\\App\\BusinessRecord\\Application\\SecretKeyProvider -> Kumwe\\Secret\\Contract\\KeyProvider",
+          "Kumwe\\App\\BusinessRecord\\Infrastructure\\Security\\SodiumSecretCipher -> Kumwe\\Secret\\Cipher\\SodiumEnvelopeCipher",
+          "Kumwe\\App\\BusinessRecord\\Infrastructure\\Security\\KeyRingSecretCipher -> Kumwe\\Secret\\Cipher\\KeyRingEnvelopeCipher",
+          "Kumwe\\App\\BusinessRecord\\Infrastructure\\Security\\KeyRingSecretKeyProvider -> Kumwe\\Secret\\Provider\\KeyRingKeyProvider"
+        ],
+        "files_to_update": [
+          "composer.json",
+          "composer.lock",
+          "tests/Integration/BusinessRecord/RecordSecretRotationIntegrationTest.php",
+          "src/BusinessRecord/Application/SecretAssociatedData.php",
+          "src/BusinessRecord/Application/RecordSecretRotation.php",
+          "src/BusinessRecord/Application/RecordValueCodec.php",
+          "src/Kernel/Configuration/RecordEncryptionConfiguration.php",
+          "src/Kernel/ContainerFactory.php",
+          "tests/Architecture/ProductionArtifactsTest.php",
+          "tests/Architecture/MoneyConversionBoundaryTest.php",
+          "tests/Architecture/UnitConversionBoundaryTest.php",
+          "src/BusinessRecord/Infrastructure/Persistence/DoctrineRecordSecretRotation.php",
+          "src/BusinessRecord/Infrastructure/Security/ConfiguredSecretKeyRings.php",
+          "src/BusinessRecord/Domain/SecretKeyPurpose.php",
+          "src/BusinessRecord/Domain/RecordValueGuard.php",
+          "src/Identity/Infrastructure/StepUp/SodiumStepUpSecretCipher.php",
+          "src/Identity/Application/StepUp/StepUpSecretCipher.php",
+          "src/Identity/Application/StepUp/TotpStepUpProvider.php",
+          "src/BusinessSurface/Application/MutationPlanCipher.php",
+          "src/BusinessSurface/Application/BusinessMutationPlanService.php",
+          "src/BusinessSurface/Infrastructure/Security/KeyRingMutationPlanCipher.php",
+          "tests/Unit/BusinessSurface/Application/BusinessMutationPlanServiceTest.php",
+          "tests/Deployment/record-key-rotation-strand.php",
+          "tests/Unit/Identity/Application/StepUp/TotpStepUpProviderTest.php",
+          "tests/Unit/BusinessRecord/Application/PostingPeriodLockTest.php",
+          "tests/Unit/BusinessRecord/Application/RecordRuleValidatorTest.php",
+          "tests/Unit/BusinessRecord/Application/BusinessRecordRelationshipCoordinatorTest.php",
+          "tests/Unit/BusinessRecord/Application/AggregateInvariantValidationTest.php",
+          "tests/Unit/BusinessRecord/Infrastructure/SecretKeyLifecycleTest.php",
+          "tests/Unit/BusinessRecord/Domain/RecordIntegrityTest.php",
+          "tests/Unit/BusinessRecord/Domain/ExactValueCodecTest.php",
+          "tests/Unit/Identity/Infrastructure/StepUp/SodiumStepUpSecretCipherTest.php",
+          "tests/Support/BusinessRuntimeBackupAcceptance.php",
+          "tests/Support/RestoreSecurityAcceptance.php"
+        ],
+        "files_to_remove": [
+          "src/BusinessRecord/Domain/EncryptedEnvelope.php",
+          "src/BusinessRecord/Domain/SecretKeyMaterial.php",
+          "src/BusinessRecord/Domain/SecretKeyRing.php",
+          "src/BusinessRecord/Domain/SecretKeyUnavailable.php",
+          "src/BusinessRecord/Application/SecretCipher.php",
+          "src/BusinessRecord/Application/SecretKeyProvider.php",
+          "src/BusinessRecord/Infrastructure/Security/SodiumSecretCipher.php",
+          "src/BusinessRecord/Infrastructure/Security/KeyRingSecretCipher.php",
+          "src/BusinessRecord/Infrastructure/Security/KeyRingSecretKeyProvider.php"
+        ],
+        "tests_to_remove": [
+          "tests/Unit/BusinessRecord/Domain/EncryptedEnvelopeTest.php",
+          "tests/Unit/BusinessRecord/Infrastructure/SodiumSecretCipherTest.php"
+        ],
+        "tests_to_retain_or_add": [
+          "Configured key-ring legacy derivation, dedicated-key rotation, restore, audit and CLI integration",
+          "Host SecretAssociatedData scope binding and SecretKeyPurpose frozen derivation-label behavior"
+        ],
+        "di_or_provisioning_changes": [
+          "Bind canonical KeyProvider to records ring; compose record EnvelopeCipher with explicit factory.",
+          "Keep mutation-plan provider/cipher separate, using mutationPlans ring; never alias both purposes together.",
+          "Single-key constructor now accepts KeyMaterial rather than keyId/raw bytes."
+        ],
+        "capability_index_changes": [
+          "Regenerate App capability index from verified package manifests."
+        ],
+        "changelog_and_evidence_changes": [
+          "Complete migration/change-set 003, a release attestation and integration train; cite allocated NRM, no roadmap claim."
+        ],
+        "verification_commands": [
+          "composer install --no-interaction --prefer-dist",
+          "composer check",
+          "Run App architecture, secret rotation, restore, persistence, authorization and relevant database gates."
+        ]
+      },
+      "concurrency": {
+        "likely_conflict_files": [
+          "composer.json",
+          "composer.lock",
+          "src/Kernel/ContainerFactory.php"
+        ],
+        "related_migrations": [],
+        "ownership_conflicts": [],
+        "integration_train": null,
+        "resolution_rule": "semantic-preservation"
+      },
+      "governance": {
+        "roadmap_source_sha256": "a202155ef1a65f5ab293d4f8397ebf4ac430db7f1e877c776bbe7851e6fe18d8",
+        "roadmap_refs": [],
+        "non_roadmap_refs": [],
+        "completion_claim": false
+      },
+      "decisions": [
+        "Initial draft merged unfinished: this successor completes Phase 1 without adopting App or claiming a release.",
+        "Retain App purpose enum, HKDF labels and field-coordinate wrapper; generic package values do not replace host policy.",
+        "Preserve stored algorithm/base64 shape; add typed errors, serialization refusal and bounded parser safeguards.",
+        "PSR-11 dependency is limited to explicit container integration; no domain service receives the container."
+      ],
+      "blockers": []
+    }
+  },
+  "canonical_schema_validation": [
+    {
+      "path": "resources/public-api/v1.json",
+      "schema": "package-public-api.v1.schema.json",
+      "sha256": "21bed5fdd15b8e205f3881df1e41bd13df5b969ea13307ef645112b6fd56dd65"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "schema": "package-capabilities.v1.schema.json",
+      "sha256": "fb927883d0cfaef771eb02b83fe771b1344349ad2ae5737ec2cdc327f2e8f38e"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "schema": "package-service-map.v1.schema.json",
+      "sha256": "742e7619b6fd94dbea2595794b9d81cf5e270030ad732b6affa96d3e11a8e2bf"
+    }
+  ],
+  "manifests_and_corpora": [
+    {
+      "path": "resources/public-api/v1.json",
+      "sha256": "21bed5fdd15b8e205f3881df1e41bd13df5b969ea13307ef645112b6fd56dd65"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "sha256": "fb927883d0cfaef771eb02b83fe771b1344349ad2ae5737ec2cdc327f2e8f38e"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "sha256": "742e7619b6fd94dbea2595794b9d81cf5e270030ad732b6affa96d3e11a8e2bf"
+    },
+    {
+      "path": "resources/corpus/v1/envelopes.json",
+      "sha256": "865deefd162de7557ad5dbb3c95b40ae54bcb64a3b139112f0364d417e4d7260"
+    }
+  ],
+  "archived_files": 46,
+  "complete_git_export_matched": true,
+  "handoff_sha256": "d959b1464dddace1889b18230cfaf09b18d5a9e2ec81440fe9763dc1f81694cb",
+  "license": {
+    "declaration": "Apache-2.0",
+    "path": "LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  "release_workflow": "https://github.com/kumwe/secret-envelope/actions/runs/34155210827",
+  "merged_pull_request": "https://github.com/kumwe/secret-envelope/pull/7",
+  "platform_immutable_flag": false,
+  "observed_at": "2026-09-08T17:31:54Z",
+  "verifier": {
+    "repository": "kumwe/extension-sdk",
+    "commit": "15759b763a964b3f7c497f9dafe748f1b3b592be",
+    "workflow_event_commit": "2df6b2c4fc80ca6dca43711908911218bf9dbd3b",
+    "run_url": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329"
+  },
+  "consumer": {
+    "schema": "kumwe-independent-release-consumer/v1",
+    "status": "passed",
+    "name": "kumwe/secret-envelope",
+    "version": "0.1.1",
+    "source_commit": "3bf2d66d4090da697bf148c9eb866a9839f1af45",
+    "archive_sha256": "37539b5263f8af299d87c731f43db1cafb8df9320478e292fe4f06f767afcea7",
+    "no_dev": true,
+    "classmap_authoritative": true,
+    "offline_reinstall": true,
+    "composer_lock_sha256": "c48cbc2109b71dfbb57f182841de4196ef0666a83f61bed8d45bb38708521276",
+    "runtime_types_loaded": 22,
+    "consumer_dependency_audit": "passed",
+    "canonical_api_exports_verified": 22,
+    "installed_dist_identity_verified": true,
+    "runtime_classes": [
+      "Kumwe\\Secret\\Cipher\\KeyRingEnvelopeCipher",
+      "Kumwe\\Secret\\Cipher\\SodiumEnvelopeCipher",
+      "Kumwe\\Secret\\ConfigProvider",
+      "Kumwe\\Secret\\Container\\KeyRingEnvelopeCipherFactory",
+      "Kumwe\\Secret\\Contract\\EnvelopeCipher",
+      "Kumwe\\Secret\\Contract\\KeyProvider",
+      "Kumwe\\Secret\\Exception\\AuthenticationFailed",
+      "Kumwe\\Secret\\Exception\\EncryptionFailed",
+      "Kumwe\\Secret\\Exception\\InvalidEnvelope",
+      "Kumwe\\Secret\\Exception\\InvalidInput",
+      "Kumwe\\Secret\\Exception\\InvalidKeyMaterial",
+      "Kumwe\\Secret\\Exception\\KeyUnavailable",
+      "Kumwe\\Secret\\Exception\\SecretDisclosureRefused",
+      "Kumwe\\Secret\\Exception\\SecretException",
+      "Kumwe\\Secret\\Exception\\ServiceBindingRefused",
+      "Kumwe\\Secret\\Provider\\KeyRingKeyProvider",
+      "Kumwe\\Secret\\Value\\AssociatedData",
+      "Kumwe\\Secret\\Value\\EncryptedEnvelope",
+      "Kumwe\\Secret\\Value\\KeyIdentifier",
+      "Kumwe\\Secret\\Value\\KeyMaterial",
+      "Kumwe\\Secret\\Value\\KeyPurpose",
+      "Kumwe\\Secret\\Value\\KeyRing"
+    ],
+    "optional_phpunit_bridges": [],
+    "consumer_host_requirements": {
+      "laminas/laminas-servicemanager": "^4.5"
+    },
+    "examples": [
+      "examples/round-trip.php",
+      "examples/rotation.php",
+      "examples/container.php"
+    ],
+    "php": "8.5.10",
+    "php_zts": false,
+    "os": "Linux",
+    "architecture": "x86_64",
+    "native_extension_loaded": false
+  },
+  "native_fixture": null
+}

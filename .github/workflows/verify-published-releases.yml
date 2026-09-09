@@ -63,6 +63,7 @@ jobs:
         run: |
           node tools/release-verification/test-verifier.mjs
           node tools/release-verification/test-native-evidence.mjs
+          php tools/release-verification/test-example-command.php
           php tools/test-package-set-consumer.php
       - name: Build the required fixture from independently verified stable native releases
         if: matrix.release.name == 'kumwe/extension-sdk' || (matrix.release.name == 'kumwe/computation' && matrix.release.version == '0.3.1')

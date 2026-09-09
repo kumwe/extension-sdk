@@ -5,7 +5,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import YAML from 'yaml';
 import { durableUri, nativeSelection, validateNativeEnvelope } from './materialize-native-evidence.mjs';
-import { nativeFixtureScope } from './native-fixture-scope.mjs';
+import { nativeFixtureScope, nativeSelectionBinding, packageSetNativeBinding } from './native-fixture-scope.mjs';
 
 const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const commit = 'a'.repeat(40);
@@ -20,6 +20,23 @@ const owner = name => ({ name, version: '1.0.0', source_commit: commit, archive_
   evidence: { zip_uri: prefix + 'evidence.zip', zip_sha256: 'e'.repeat(64), verification_member: 'verification.json' } });
 const selection = { schema: 'kumwe-verified-native-selection/v1', engine: owner('kumwe/engine'), extension: owner('kumwe/kumwe-engine') };
 nativeSelection(selection);
+const native = { extension_version: selection.extension.version, compatibility_tuple: {} };
+for (const kind of ['engine', 'extension']) {
+  const selected = selection[kind];
+  native[kind] = { package: selected.name, version: selected.version, tag: `v${selected.version}`,
+    commit: selected.source_commit, archive_sha256: selected.archive_sha256,
+    attestation: { uri: selected.attestation.zip_uri, sha256: selected.attestation.zip_sha256,
+      member: selected.attestation.member, member_sha256: selected.attestation.member_sha256 } };
+}
+const qualified = { selection, native };
+nativeSelectionBinding(qualified); packageSetNativeBinding({ graph_mode: 'native', native }, qualified);
+for (const edit of [r => { r.native.engine.archive_sha256 = '0'.repeat(64); },
+  r => { r.native.extension.commit = '0'.repeat(40); }, r => { r.native.engine.attestation.uri = prefix + 'other/attestation.zip'; },
+  r => { r.native.extension.attestation.member_sha256 = '0'.repeat(64); }]) {
+  const changed = structuredClone(qualified); edit(changed);
+  assert.throws(() => nativeSelectionBinding(changed));
+  assert.throws(() => packageSetNativeBinding({ graph_mode: 'native', native: changed.native }, qualified));
+}
 for (const edit of [s => { s.engine.version = '0.0.0-dev'; }, s => { s.extension.source_commit = 'main'; },
   s => { s.engine.attestation.member = '../RELEASE-ATTESTATION.yaml'; }, s => { s.extension.evidence.zip_sha256 = null; }]) {
   const bad = structuredClone(selection); edit(bad); assert.throws(() => nativeSelection(bad));
@@ -90,7 +107,7 @@ try {
       release_attestation: false, module: file('module.so'), module_sha256: hash('{}'), php_binary: process.execPath,
       expected_runtime_tuple: file('expected-runtime-tuple.json'), expected_runtime_tuple_sha256: hash('{}'),
       environment: { PHPRC: file('php.ini'), KUMWE_NATIVE_EXPECTED_TUPLE: file('expected-compatibility.json') },
-      php_ini_sha256: hash('{}'), expected_compatibility_sha256: hash('{}') }, native: { compatibility_tuple: {} } };
+      php_ini_sha256: hash('{}'), expected_compatibility_sha256: hash('{}') }, native };
   for (const edit of [r => { r.fixture.php_ini_sha256 = null; }, r => { r.fixture.expected_compatibility_sha256 = null; },
     r => { r.fixture.environment.PHPRC = file('expected-compatibility.json'); },
     r => { r.fixture.environment.KUMWE_NATIVE_EXPECTED_TUPLE = file('php.ini'); }]) {
@@ -103,4 +120,4 @@ try {
   fs.writeFileSync(file('php.ini'), '{}'); fs.writeFileSync(file('expected-compatibility.json'), 'changed');
   assert.throws(() => nativeFixtureScope(file('fixture.json'), file('scope')), /INI or expected compatibility bytes changed/);
 } finally { fs.rmSync(scopeRoot, { recursive: true, force: true }); }
-console.log('Native evidence validation passed synthetic inputs and 27 hostile cases; no native release is claimed.');
+console.log('Native evidence validation passed synthetic inputs and 35 hostile checks; no native release is claimed.');

@@ -4,6 +4,7 @@ import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { coordinate } from './verify-release.mjs';
+import { nativeSelectionBinding } from './native-fixture-scope.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const [selectionPath, source, destination, fixturePath] = process.argv.slice(2);
@@ -42,6 +43,7 @@ const fixture = fixturePath ? JSON.parse(fs.readFileSync(fixturePath, 'utf8')) :
 if (fixture && (fixture.schema !== 'kumwe-qualified-native-fixture/v1' || fixture.status !== 'passed')) {
   throw new Error('Native graph assembly requires its qualified actual-build fixture.');
 }
+if (fixture) nativeSelectionBinding(fixture);
 fs.writeFileSync(path.join(out, 'verified-package-set.json'), JSON.stringify({
   schema: 'kumwe-verified-php-package-set/v1', graph_mode: fixture ? 'native' : 'portable', packages,
   ...(fixture ? { native: fixture.native } : {}),

@@ -1,0 +1,811 @@
+{
+  "schema": "kumwe-independent-release-verification/v1",
+  "status": "passed",
+  "input": {
+    "name": "kumwe/transaction",
+    "version": "0.1.2",
+    "source_commit": "56c8eb14a70bd3f1ed7eaeae7196a07d6627bf03",
+    "repository": "kumwe/transaction",
+    "tag": "v0.1.2",
+    "archive_url": "https://api.github.com/repos/kumwe/transaction/zipball/56c8eb14a70bd3f1ed7eaeae7196a07d6627bf03",
+    "archive_path": "/home/runner/work/_temp/release-verification/source.zip",
+    "archive_sha256": "e6a769da5aeb7a8257e4f75e69c7b55939265bc806b9e987eb125b2dc4f97256",
+    "package_root": "/home/runner/work/_temp/release-verification/archive/kumwe-transaction-56c8eb1",
+    "composer": {
+      "name": "kumwe/transaction",
+      "description": "The storage-neutral transaction port of the Kumwe family; hosts bind their own adapter.",
+      "type": "library",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/kumwe/transaction",
+      "support": {
+        "issues": "https://github.com/kumwe/transaction/issues",
+        "source": "https://github.com/kumwe/transaction"
+      },
+      "require": {
+        "php": "^8.5"
+      },
+      "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "squizlabs/php_codesniffer": "^4.0"
+      },
+      "autoload": {
+        "psr-4": {
+          "Kumwe\\Transaction\\": "src/"
+        }
+      },
+      "autoload-dev": {
+        "psr-4": {
+          "Kumwe\\Transaction\\Tests\\": "tests/"
+        }
+      },
+      "scripts": {
+        "composer:validate": "composer validate --strict",
+        "security:audit": "composer audit --abandoned=fail",
+        "release:check": "bash tools/test-release-record.sh",
+        "lint": "php tools/lint.php",
+        "docs": "php tools/check-docblocks.php",
+        "architecture": "php tools/verify-architecture.php",
+        "manifests": "php tools/verify-manifests.php",
+        "manifests:record": "php tools/verify-manifests.php --write",
+        "autoload:smoke": "php resources/toolchain/autoload-smoke.php",
+        "examples": "php examples/typed-consumer.php",
+        "cs": "phpcs -q",
+        "cs:fix": "phpcbf",
+        "analyse": "phpstan analyse --no-progress --memory-limit=1G",
+        "test": "php tests/run.php",
+        "clean-consumer": "php tools/verify-clean-consumer.php",
+        "check": [
+          "@composer:validate",
+          "@security:audit",
+          "@release:check",
+          "@lint",
+          "@docs",
+          "@architecture",
+          "@boundary:tokens",
+          "@manifests",
+          "@autoload:smoke",
+          "@examples",
+          "@cs",
+          "@analyse",
+          "@test:ownership",
+          "@test",
+          "@clean-consumer",
+          "@release:integrity"
+        ],
+        "test:ownership": "php tools/verify-test-ownership.php --self-test",
+        "release:integrity": "bash tools/test-release-integrity.sh",
+        "boundary:tokens": "php tools/verify-boundary-tokens.php --self-test"
+      },
+      "config": {
+        "sort-packages": true
+      },
+      "minimum-stability": "stable",
+      "prefer-stable": true
+    },
+    "examples": [
+      "examples/typed-consumer.php",
+      "examples/README.md"
+    ],
+    "handoff": {
+      "schema": "kumwe-migration-handoff/v2",
+      "artifact_kind": "framework_php",
+      "migration_id": "KUMWE-MIG-2026-001",
+      "change_set": "KUMWE-CS-2026-001",
+      "state": "draft_pr_open",
+      "source": {
+        "app": {
+          "repository": "https://github.com/kumwe/app",
+          "baseline_commit": "6f9e42cb59a84ba3ca523a70475cf4d7263c68e7",
+          "examined_paths": [
+            "src/Application/Persistence/TransactionManager.php",
+            "src/Application/Persistence/TransactionState.php",
+            "src/Infrastructure/Persistence/DoctrineTransactionManager.php",
+            "src/Infrastructure/Persistence/DoctrineTransactionState.php",
+            "src/Kernel/ContainerFactory.php",
+            "src",
+            "tests/Support/ImmediateTransactionManager.php",
+            "tests/Architecture/TransactionSeamBoundaryTest.php",
+            "tests/Unit/Infrastructure/Persistence/DoctrineTransactionStateTest.php",
+            "tests/Integration/Persistence/DoctrineTransactionManagerTest.php",
+            "tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php",
+            "tests",
+            "config",
+            "bootstrap",
+            "examples",
+            "composer.json",
+            "composer.lock",
+            "docs/architecture/layers.json",
+            "docs/architecture/capability-index.md",
+            "docs/architecture/governance/core-growth-baseline.json",
+            "docs/architecture/governance/legacy-packages.json",
+            "vendor/kumwe/conversion",
+            "vendor/kumwe/extension-sdk",
+            "vendor/kumwe/producer"
+          ],
+          "old_namespace_roots": [
+            "Kumwe\\App\\Application\\Persistence\\"
+          ],
+          "capability_index_sha256": "87ded886f35f74878ca9eb8db4c36e23d681c4a49891f76dfc3210f385a7ce39"
+        },
+        "semantic_inputs": [],
+        "examined_dependencies": [
+          "kumwe/conversion 0.1.2 (installed, legacy-unmanifested); owns conversion semantics, no transaction port",
+          "kumwe/extension-sdk 0.2.4 (installed, legacy-unmanifested); extension contracts, no transaction port",
+          "kumwe/producer 0.2.0 (installed, legacy-unmanifested); a host-atomic mutation boundary, not a transaction port",
+          "no Kumwe dependency selected; the allowed ceiling is None and the runtime requirement is php ^8.5 alone"
+        ],
+        "active_related_pull_requests": []
+      },
+      "target": {
+        "repository": "https://github.com/kumwe/transaction",
+        "artifact_identity": "kumwe/transaction (Composer library)",
+        "canonical_namespace_or_abi": "Kumwe\\Transaction",
+        "branch": "fix/unified-package-release",
+        "pull_request": "https://github.com/kumwe/transaction/pull/4"
+      },
+      "ownership": {
+        "responsibility": "Storage-neutral transaction port: atomic scopes, settlement hooks and an open-transaction view.",
+        "non_responsibilities": [
+          "Any transaction implementation: driver adapters, connections, savepoints and isolation levels stay in the host.",
+          "Nested-transaction, retry, deadlock and timeout policy.",
+          "Logging, audit, outbox and event coordination around a transaction.",
+          "Container registration: the host binds its adapter to the contract identifiers; there is no provider.",
+          "Real-database evidence, which the host proves on the engines it supports."
+        ],
+        "allowed_dependency_ceiling": [],
+        "implementation_owner": "kumwe/transaction",
+        "next_consumer": "kumwe/app",
+        "public_manifests": [
+          {
+            "path": "resources/public-api/v1.json",
+            "sha256": "f9589717354cc969ecb87e18d27c3e7f9e501f551bce80cadb698c3989cf2b75"
+          },
+          {
+            "path": "resources/capabilities/v1.json",
+            "sha256": "4e3fc6c4f014183eafad06b39e5c34a10c5e889c305ae09836f813d67cf5795c"
+          },
+          {
+            "path": "resources/service-map/v1.json",
+            "sha256": "ec72f2fbda46e326380795664c62c4d7cf38ec557c7e2a9bac40a905ee62d5f5"
+          }
+        ],
+        "intentionally_excluded": [
+          "DoctrineTransactionManager stays in App; it owns the DBAL connection and the nesting policy",
+          "DoctrineTransactionState stays in App; it reads the DBAL connection",
+          "The two share() bindings in src/Kernel/ContainerFactory.php stay in App; composition is host authority",
+          "The App's inline scope-recording test doubles stay in App; they are test-local probes, not package behaviour",
+          "Retry, deadlock, timeout, logging, audit and outbox coordination stay in App; they are policy around the port"
+        ]
+      },
+      "framework_php": {
+        "composer_package": "kumwe/transaction",
+        "canonical_namespace": "Kumwe\\Transaction",
+        "public_api_manifest": "resources/public-api/v1.json",
+        "capability_manifest": "resources/capabilities/v1.json",
+        "service_map": "resources/service-map/v1.json",
+        "extracted_symbols": [
+          {
+            "old_fqcn": "Kumwe\\App\\Application\\Persistence\\TransactionManager",
+            "new_fqcn": "Kumwe\\Transaction\\Contract\\TransactionManager",
+            "source_path": "src/Application/Persistence/TransactionManager.php",
+            "target_path": "src/Contract/TransactionManager.php",
+            "kind": "interface",
+            "public_methods": [
+              "transactional",
+              "afterCommit",
+              "afterRollback"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Application\\Persistence\\TransactionState",
+            "new_fqcn": "Kumwe\\Transaction\\Contract\\TransactionState",
+            "source_path": "src/Application/Persistence/TransactionState.php",
+            "target_path": "src/Contract/TransactionState.php",
+            "kind": "interface",
+            "public_methods": [
+              "isActive"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Tests\\Support\\ImmediateTransactionManager",
+            "new_fqcn": "Kumwe\\Transaction\\Testing\\ImmediateTransactionManager",
+            "source_path": "tests/Support/ImmediateTransactionManager.php",
+            "target_path": "src/Testing/ImmediateTransactionManager.php",
+            "kind": "class",
+            "public_methods": [
+              "transactional",
+              "afterCommit",
+              "afterRollback"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved; declared final readonly instead of final, no behavioural change"
+          }
+        ],
+        "consumers": {
+          "app_code": [
+            "src/Administrator/Http/Handler/AdministratorAccessControlHandler.php",
+            "src/Administrator/Http/Handler/AdministratorBusinessSecurityHandler.php",
+            "src/Application/Authorization/ResourceOwnershipScopeService.php",
+            "src/Application/Authorization/SiteGroupAdministration.php",
+            "src/Application/Automation/AutomationManagementService.php",
+            "src/Application/Presentation/Preference/PresentationPreferenceManager.php",
+            "src/Audit/Infrastructure/Persistence/DoctrineAuditAnchorWriter.php",
+            "src/Audit/Infrastructure/Persistence/DoctrineAuditRetentionService.php",
+            "src/Audit/Infrastructure/Persistence/DoctrineAuditTrailExporter.php",
+            "src/BusinessDefinition/Application/BusinessDefinitionService.php",
+            "src/BusinessIntegration/Application/IntegrationEventConsumerDispatcher.php",
+            "src/BusinessIntegration/Application/IntegrationOperationsService.php",
+            "src/BusinessIntegration/Application/ProcessWorkDispatcher.php",
+            "src/BusinessIntegration/Infrastructure/ContributedScheduleSynchronizer.php",
+            "src/BusinessIntegration/Infrastructure/DoctrineInboxStore.php",
+            "src/BusinessIntegration/Infrastructure/DoctrineOutboxStore.php",
+            "src/BusinessIntegration/Infrastructure/DoctrineProcessManagerStore.php",
+            "src/BusinessRecord/Application/BusinessRecordIdempotencyPurger.php",
+            "src/BusinessRecord/Application/BusinessRecordService.php",
+            "src/BusinessRecord/Application/PostingPeriodService.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineRecordSecretRotation.php",
+            "src/BusinessReporting/Application/ExportAttemptPublisher.php",
+            "src/BusinessReporting/Application/ExportGenerationService.php",
+            "src/BusinessReporting/Application/ExportService.php",
+            "src/BusinessReporting/Infrastructure/DoctrineExportArtifactRepository.php",
+            "src/BusinessReporting/Infrastructure/DoctrineProjectionRuntime.php",
+            "src/BusinessReporting/Infrastructure/DoctrineProjectionStore.php",
+            "src/BusinessReporting/Infrastructure/FilesystemExportArtifactRepository.php",
+            "src/BusinessSchema/Application/BusinessSchemaExecutor.php",
+            "src/BusinessSchema/Application/BusinessSchemaPlanner.php",
+            "src/BusinessSchema/Application/BusinessSchemaService.php",
+            "src/BusinessSecurity/Application/Administration/BusinessSecurityAdministrationService.php",
+            "src/BusinessSecurity/Application/Approval/ApprovalService.php",
+            "src/BusinessSurface/Application/BusinessMutationPlanService.php",
+            "src/BusinessSurface/Application/BusinessOperationStatusService.php",
+            "src/BusinessSurface/Application/BusinessSurfaceCatalog.php",
+            "src/BusinessSurface/Application/BusinessSurfaceService.php",
+            "src/BusinessSurface/Application/CustomBusinessActionExecutor.php",
+            "src/BusinessSurface/Application/GeneratedBusinessActionStepUp.php",
+            "src/Content/Application/ContentModelService.php",
+            "src/Content/Application/ContentService.php",
+            "src/Delivery/Http/Api/Idempotency/PersistentIdempotencyMiddleware.php",
+            "src/Delivery/Http/Api/Idempotency/SecretOnceIdempotencyMiddleware.php",
+            "src/Demo/Infrastructure/DemoAccessProvisioner.php",
+            "src/Demo/Infrastructure/DemoContentProfileInstaller.php",
+            "src/Demo/Infrastructure/VdmBusinessDemoInstaller.php",
+            "src/Extension/Application/Trust/TrustStore.php",
+            "src/Extension/Infrastructure/DoctrineExtensionManager.php",
+            "src/Identity/Application/Administration/AccessControlService.php",
+            "src/Identity/Application/StepUp/TotpStepUpProvider.php",
+            "src/Identity/Infrastructure/Administration/DoctrineAdministratorIdentityGateway.php",
+            "src/Identity/Infrastructure/Administration/DoctrineAdministratorSessionStore.php",
+            "src/Infrastructure/Automation/DoctrineJobQueue.php",
+            "src/Infrastructure/Automation/DoctrineQueueRuntimeOperations.php",
+            "src/Infrastructure/Automation/DoctrineScheduler.php",
+            "src/Infrastructure/Mcp/McpMutationGuard.php",
+            "src/Infrastructure/Persistence/DoctrineTransactionManager.php",
+            "src/Infrastructure/Persistence/DoctrineTransactionState.php",
+            "src/Infrastructure/Persistence/Migration/MigrationRunner.php",
+            "src/Localization/Application/MessageOverrideService.php",
+            "src/Media/Application/MediaService.php",
+            "src/Navigation/Application/NavigationService.php",
+            "src/Portal/Http/Handler/PortalApprovalHandler.php",
+            "src/Portal/Infrastructure/Session/DoctrinePortalSessionStore.php",
+            "src/Presentation/Infrastructure/DoctrineAdministratorThemeRecovery.php",
+            "src/Site/Infrastructure/Persistence/DoctrineSiteSettings.php",
+            "src/Studio/Application/Composition/StudioContentCompositionService.php",
+            "src/Studio/Application/Host/StudioProducerHostFactory.php",
+            "src/Studio/Application/Host/StudioProducerMutationBoundary.php",
+            "src/Studio/Application/Media/StudioMediaService.php"
+          ],
+          "configuration_and_di": [
+            "src/Kernel/ContainerFactory.php"
+          ],
+          "reflection_and_string_references": [
+            "tests/Architecture/TransactionSeamBoundaryTest.php (asserts the old namespace prefix and port directory)",
+            "docs/architecture/governance/core-growth-baseline.json (baseline entries for both old FQCNs)"
+          ],
+          "fixtures_and_examples": [
+            "tests/Architecture/TransactionSeamBoundaryTest.php",
+            "tests/Integration/Automation/AutomationManagementIntegrationTest.php",
+            "tests/Integration/BusinessIntegration/PoisonAndDeadLetterIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessNumberSequenceIdentityIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessRecordHistoryPagingIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessRecordInverseRelationshipIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessRecordRelationshipIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessRecordRuntimeIntegrationTest.php",
+            "tests/Integration/BusinessSchema/BusinessSchemaExecutionStateGuardIntegrationTest.php",
+            "tests/Integration/BusinessSchema/BusinessSchemaRecoveryIntegrationTest.php",
+            "tests/Integration/BusinessSurface/GeneratedBusinessQueryBudgetIntegrationTest.php",
+            "tests/Integration/Localization/MessageOverrideIntegrationTest.php",
+            "tests/Integration/Mcp/McpMutationGuardIntegrationTest.php",
+            "tests/Integration/Mcp/McpTrustLifecycleIntegrationTest.php",
+            "tests/Integration/Persistence/DoctrineTransactionManagerTest.php",
+            "tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php",
+            "tests/Integration/Studio/StudioArtifactRecoveryVectorReplayIntegrationTest.php",
+            "tests/Support/ImmediateTransactionManager.php",
+            "tests/Support/NeutralBusinessFixture.php",
+            "tests/Support/TestKernelFactory.php",
+            "tests/Support/TransientBusinessDefinitionFixtureScope.php",
+            "tests/Support/prepare-browser-contribution.php",
+            "tests/Unit/Administrator/Http/Handler/AdministratorAccessControlHandlerTest.php",
+            "tests/Unit/Administrator/Http/Handler/AdministratorContentEditorRetentionTest.php",
+            "tests/Unit/Administrator/Http/Handler/AdministratorDashboardHandlerTest.php",
+            "tests/Unit/Administrator/Http/Handler/AdministratorStudioHostHandlerTest.php",
+            "tests/Unit/Application/Authorization/AdapterAuthorizationParityTest.php",
+            "tests/Unit/Application/Authorization/ApplicationAuthorizationTest.php",
+            "tests/Unit/Application/Authorization/ResourceOwnershipScopeServiceTest.php",
+            "tests/Unit/Application/Authorization/SiteGroupAdministrationTest.php",
+            "tests/Unit/Application/Automation/AutomationManagementServiceTest.php",
+            "tests/Unit/Application/Automation/PurgeBusinessRecordIdempotencyHandlerTest.php",
+            "tests/Unit/BusinessIntegration/ConsumerDispatcherTest.php",
+            "tests/Unit/BusinessIntegration/Infrastructure/RuntimeIntegrationEventTransportTest.php",
+            "tests/Unit/BusinessIntegration/IntegrationOperationsServiceTest.php",
+            "tests/Unit/BusinessIntegration/ProcessWorkDispatcherTest.php",
+            "tests/Unit/BusinessRecord/Application/PostingPeriodServiceTest.php",
+            "tests/Unit/BusinessReporting/ExportGenerationPolicyFenceTest.php",
+            "tests/Unit/BusinessReporting/ExportServiceTransactionTest.php",
+            "tests/Unit/BusinessReporting/RecordExportPipelineTest.php",
+            "tests/Unit/BusinessSecurity/Application/ApprovalServiceTest.php",
+            "tests/Unit/BusinessSecurity/Application/BusinessSecurityAdministrationServiceTest.php",
+            "tests/Unit/BusinessSurface/Application/BusinessMutationPlanServiceTest.php",
+            "tests/Unit/BusinessSurface/Application/BusinessSurfaceCatalogTest.php",
+            "tests/Unit/BusinessSurface/Application/BusinessSurfaceServiceTest.php",
+            "tests/Unit/BusinessSurface/Application/Custom/CustomBusinessActionExecutorTest.php",
+            "tests/Unit/BusinessSurface/Application/GeneratedBusinessActionStepUpTest.php",
+            "tests/Unit/Content/Application/ContentTranslationServiceTest.php",
+            "tests/Unit/Content/Application/ContributedContentTranslationTest.php",
+            "tests/Unit/Content/Presentation/TranslationGroupPresenterTest.php",
+            "tests/Unit/Delivery/Console/Command/DemoInstallCommandTest.php",
+            "tests/Unit/Delivery/Console/Command/ManagePostingPeriodsCommandTest.php",
+            "tests/Unit/Delivery/Http/Api/Automation/AutomationApiHandlerTest.php",
+            "tests/Unit/Delivery/Http/Api/Business/BusinessOperationStatusApiHandlerTest.php",
+            "tests/Unit/Delivery/Http/Api/Business/BusinessRecordApiHandlerTest.php",
+            "tests/Unit/Delivery/Http/Api/Business/PostingPeriodApiHandlerTest.php",
+            "tests/Unit/Delivery/Http/Api/Idempotency/PersistentIdempotencyAuthorizationTest.php",
+            "tests/Unit/Delivery/Http/Api/Idempotency/PersistentIdempotencyMiddlewareTest.php",
+            "tests/Unit/Demo/Infrastructure/DemoExampleExtensionInstallerTest.php",
+            "tests/Unit/Demo/Infrastructure/VdmBusinessDemoInstallerTest.php",
+            "tests/Unit/Extension/Application/Trust/TrustStoreTest.php",
+            "tests/Unit/Extension/Runtime/TrustEnforcingJobHandlerTest.php",
+            "tests/Unit/Http/Handler/HomePageHandlerTest.php",
+            "tests/Unit/Http/Handler/PublishedContentHandlerTest.php",
+            "tests/Unit/Identity/Application/Administration/AccessControlServiceTest.php",
+            "tests/Unit/Identity/Application/StepUp/TotpStepUpProviderTest.php",
+            "tests/Unit/Identity/Infrastructure/Administration/DoctrineAdministratorSessionStoreTest.php",
+            "tests/Unit/Infrastructure/Persistence/Migration/MigrationRunnerTest.php",
+            "tests/Unit/InterfaceStandard/PresentationPreferenceManagerTest.php",
+            "tests/Unit/Localization/Application/MessageOverrideServiceTest.php",
+            "tests/Unit/Navigation/Application/NavigationServiceTest.php",
+            "tests/Unit/Site/Application/PublicPageLocatorTest.php",
+            "tests/Unit/Site/Infrastructure/Persistence/DoctrineSiteSettingsTest.php",
+            "tests/Unit/Studio/Application/Authoring/ContentStudioAuthoringContextAuthorityTest.php",
+            "tests/Unit/Studio/Application/Host/StudioProducerMutationBoundaryTest.php",
+            "tests/Unit/Studio/Application/Media/StudioMediaAuditTest.php",
+            "tests/Unit/Studio/Application/Media/StudioMediaLifecycleTest.php",
+            "tests/Unit/Studio/Application/Preview/ContentStudioPreviewBindingSourceTest.php",
+            "tests/Unit/Studio/Application/Projection/ContentStudioResourceSearchProviderTest.php",
+            "tests/Unit/Studio/Application/Projection/StudioContentProjectionServiceTest.php",
+            "tests/Unit/Support/TransientBusinessDefinitionFixtureScopeTest.php"
+          ],
+          "external": []
+        },
+        "dependency_injection": {
+          "mode": "direct",
+          "provider": null,
+          "factories": [],
+          "aliases": [],
+          "service_lifetimes": [
+            "Kumwe\\Transaction\\Contract\\TransactionManager: request-supplied (bound to one connection by the host)",
+            "Kumwe\\Transaction\\Contract\\TransactionState: request-supplied (bound to one connection by the host)"
+          ],
+          "configuration_keys": [],
+          "provider_absence_reason": "Contracts only, no runtime service: the host binds its adapter to the contract FQCNs."
+        }
+      },
+      "native_cpp": null,
+      "php_extension": null,
+      "tests": {
+        "moved_or_added": [
+          "tests/Case/TransactionManagerContractTest.php",
+          "tests/Case/TransactionStateContractTest.php",
+          "tests/Case/ImmediateTransactionManagerTest.php",
+          "tests/Case/ManifestsTest.php",
+          "tests/Case/ArchitectureTest.php",
+          "tests/Case/ExamplesTest.php",
+          "tests/Case/DocumentationTest.php"
+        ],
+        "remain_in_app_or_consumer": [
+          "tests/Integration/Persistence/DoctrineTransactionManagerTest.php",
+          "tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php",
+          "tests/Unit/Infrastructure/Persistence/DoctrineTransactionStateTest.php",
+          "tests/Architecture/TransactionSeamBoundaryTest.php",
+          "every App test that composes a service over the port (fixtures_and_examples above), imports updated"
+        ],
+        "split_tests": [
+          "TransactionSeamBoundaryTest.php: ownership assertion moves here; driver-type and layer assertions stay in App"
+        ],
+        "prohibited_duplicates": [
+          "tests/Support/ImmediateTransactionManager.php",
+          "tests/Unit/Application/Automation/PurgeBusinessRecordIdempotencyHandlerTest.php (inline double)"
+        ],
+        "corpora": []
+      },
+      "documentation": {
+        "charter": "CHARTER.md",
+        "readme": "README.md",
+        "public_api": "docs/public-api.md",
+        "architecture": "docs/architecture.md",
+        "integration_or_consumer": "docs/integration.md",
+        "examples": [
+          "examples/typed-consumer.php",
+          "examples/README.md"
+        ],
+        "changelog_record": "CHANGELOG.md ## 0.1.2"
+      },
+      "release_expectations": {
+        "version_policy": "SemVer, exact pins while pre-1.0; the newest CHANGELOG.md heading (## 0.1.2) is the release record",
+        "expected_artifact_types": [
+          "Composer dist archive of the tag release-on-record creates from the changelog heading, then Packagist"
+        ],
+        "required_checks": [
+          "composer check (validate, lint, docs, architecture, manifests, autoload smoke, example, cs, analyse, test)",
+          "composer clean-consumer (the last step of composer check: built archive, no-dev install, smoke, example)",
+          "no-dev classmap-authoritative install in the checkout with autoload smoke and example",
+          "composer audit --abandoned=fail",
+          "GitHub Actions: Transaction CI on the pull request head, Release on record on main"
+        ],
+        "required_registry_or_installer": "Packagist",
+        "required_external_attestation": true
+      },
+      "next_task": {
+        "phase_name": "Phase 2 App adoption of kumwe/transaction",
+        "permitted_only_when": [
+          "a human has merged this pull request to main and Release on record has published the recorded version",
+          "a fresh session produced RELEASE-ATTESTATION.yaml with status verified for the published kumwe/transaction",
+          "the App governance bootstrap pull request (NRM-2026-001) is merged on kumwe/app master",
+          "the extracted symbols and their tests were diffed between the baseline commit and current master (D-GOV-7)"
+        ],
+        "consumer_repository": "kumwe/app",
+        "dependency_or_native_change": "composer require kumwe/transaction:<verified>; exact pin; Composer regenerates the lock",
+        "namespace_or_api_replacements": [
+          "Kumwe\\App\\Application\\Persistence\\TransactionManager -> Kumwe\\Transaction\\Contract\\TransactionManager",
+          "Kumwe\\App\\Application\\Persistence\\TransactionState -> Kumwe\\Transaction\\Contract\\TransactionState",
+          "Kumwe\\App\\Tests\\Support\\ImmediateTransactionManager -> Kumwe\\Transaction\\Testing\\ImmediateTransactionManager"
+        ],
+        "files_to_update": [
+          "composer.json",
+          "src/Kernel/ContainerFactory.php",
+          "src/Administrator/Http/Handler/AdministratorAccessControlHandler.php",
+          "src/Administrator/Http/Handler/AdministratorBusinessSecurityHandler.php",
+          "src/Application/Authorization/ResourceOwnershipScopeService.php",
+          "src/Application/Authorization/SiteGroupAdministration.php",
+          "src/Application/Automation/AutomationManagementService.php",
+          "src/Application/Presentation/Preference/PresentationPreferenceManager.php",
+          "src/Audit/Infrastructure/Persistence/DoctrineAuditAnchorWriter.php",
+          "src/Audit/Infrastructure/Persistence/DoctrineAuditRetentionService.php",
+          "src/Audit/Infrastructure/Persistence/DoctrineAuditTrailExporter.php",
+          "src/BusinessDefinition/Application/BusinessDefinitionService.php",
+          "src/BusinessIntegration/Application/IntegrationEventConsumerDispatcher.php",
+          "src/BusinessIntegration/Application/IntegrationOperationsService.php",
+          "src/BusinessIntegration/Application/ProcessWorkDispatcher.php",
+          "src/BusinessIntegration/Infrastructure/ContributedScheduleSynchronizer.php",
+          "src/BusinessIntegration/Infrastructure/DoctrineInboxStore.php",
+          "src/BusinessIntegration/Infrastructure/DoctrineOutboxStore.php",
+          "src/BusinessIntegration/Infrastructure/DoctrineProcessManagerStore.php",
+          "src/BusinessRecord/Application/BusinessRecordIdempotencyPurger.php",
+          "src/BusinessRecord/Application/BusinessRecordService.php",
+          "src/BusinessRecord/Application/PostingPeriodService.php",
+          "src/BusinessRecord/Infrastructure/Persistence/DoctrineRecordSecretRotation.php",
+          "src/BusinessReporting/Application/ExportAttemptPublisher.php",
+          "src/BusinessReporting/Application/ExportGenerationService.php",
+          "src/BusinessReporting/Application/ExportService.php",
+          "src/BusinessReporting/Infrastructure/DoctrineExportArtifactRepository.php",
+          "src/BusinessReporting/Infrastructure/DoctrineProjectionRuntime.php",
+          "src/BusinessReporting/Infrastructure/DoctrineProjectionStore.php",
+          "src/BusinessReporting/Infrastructure/FilesystemExportArtifactRepository.php",
+          "src/BusinessSchema/Application/BusinessSchemaExecutor.php",
+          "src/BusinessSchema/Application/BusinessSchemaPlanner.php",
+          "src/BusinessSchema/Application/BusinessSchemaService.php",
+          "src/BusinessSecurity/Application/Administration/BusinessSecurityAdministrationService.php",
+          "src/BusinessSecurity/Application/Approval/ApprovalService.php",
+          "src/BusinessSurface/Application/BusinessMutationPlanService.php",
+          "src/BusinessSurface/Application/BusinessOperationStatusService.php",
+          "src/BusinessSurface/Application/BusinessSurfaceCatalog.php",
+          "src/BusinessSurface/Application/BusinessSurfaceService.php",
+          "src/BusinessSurface/Application/CustomBusinessActionExecutor.php",
+          "src/BusinessSurface/Application/GeneratedBusinessActionStepUp.php",
+          "src/Content/Application/ContentModelService.php",
+          "src/Content/Application/ContentService.php",
+          "src/Delivery/Http/Api/Idempotency/PersistentIdempotencyMiddleware.php",
+          "src/Delivery/Http/Api/Idempotency/SecretOnceIdempotencyMiddleware.php",
+          "src/Demo/Infrastructure/DemoAccessProvisioner.php",
+          "src/Demo/Infrastructure/DemoContentProfileInstaller.php",
+          "src/Demo/Infrastructure/VdmBusinessDemoInstaller.php",
+          "src/Extension/Application/Trust/TrustStore.php",
+          "src/Extension/Infrastructure/DoctrineExtensionManager.php",
+          "src/Identity/Application/Administration/AccessControlService.php",
+          "src/Identity/Application/StepUp/TotpStepUpProvider.php",
+          "src/Identity/Infrastructure/Administration/DoctrineAdministratorIdentityGateway.php",
+          "src/Identity/Infrastructure/Administration/DoctrineAdministratorSessionStore.php",
+          "src/Infrastructure/Automation/DoctrineJobQueue.php",
+          "src/Infrastructure/Automation/DoctrineQueueRuntimeOperations.php",
+          "src/Infrastructure/Automation/DoctrineScheduler.php",
+          "src/Infrastructure/Mcp/McpMutationGuard.php",
+          "src/Infrastructure/Persistence/DoctrineTransactionManager.php",
+          "src/Infrastructure/Persistence/DoctrineTransactionState.php",
+          "src/Infrastructure/Persistence/Migration/MigrationRunner.php",
+          "src/Localization/Application/MessageOverrideService.php",
+          "src/Media/Application/MediaService.php",
+          "src/Navigation/Application/NavigationService.php",
+          "src/Portal/Http/Handler/PortalApprovalHandler.php",
+          "src/Portal/Infrastructure/Session/DoctrinePortalSessionStore.php",
+          "src/Presentation/Infrastructure/DoctrineAdministratorThemeRecovery.php",
+          "src/Site/Infrastructure/Persistence/DoctrineSiteSettings.php",
+          "src/Studio/Application/Composition/StudioContentCompositionService.php",
+          "src/Studio/Application/Host/StudioProducerHostFactory.php",
+          "src/Studio/Application/Host/StudioProducerMutationBoundary.php",
+          "src/Studio/Application/Media/StudioMediaService.php",
+          "tests/Architecture/TransactionSeamBoundaryTest.php",
+          "tests/Integration/Automation/AutomationManagementIntegrationTest.php",
+          "tests/Integration/BusinessIntegration/PoisonAndDeadLetterIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessNumberSequenceIdentityIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessRecordHistoryPagingIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessRecordInverseRelationshipIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessRecordRelationshipIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessRecordRuntimeIntegrationTest.php",
+          "tests/Integration/BusinessSchema/BusinessSchemaExecutionStateGuardIntegrationTest.php",
+          "tests/Integration/BusinessSchema/BusinessSchemaRecoveryIntegrationTest.php",
+          "tests/Integration/BusinessSurface/GeneratedBusinessQueryBudgetIntegrationTest.php",
+          "tests/Integration/Localization/MessageOverrideIntegrationTest.php",
+          "tests/Integration/Mcp/McpMutationGuardIntegrationTest.php",
+          "tests/Integration/Mcp/McpTrustLifecycleIntegrationTest.php",
+          "tests/Integration/Persistence/DoctrineTransactionManagerTest.php",
+          "tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php",
+          "tests/Integration/Studio/StudioArtifactRecoveryVectorReplayIntegrationTest.php",
+          "tests/Support/ImmediateTransactionManager.php",
+          "tests/Support/NeutralBusinessFixture.php",
+          "tests/Support/TestKernelFactory.php",
+          "tests/Support/TransientBusinessDefinitionFixtureScope.php",
+          "tests/Support/prepare-browser-contribution.php",
+          "tests/Unit/Administrator/Http/Handler/AdministratorAccessControlHandlerTest.php",
+          "tests/Unit/Administrator/Http/Handler/AdministratorContentEditorRetentionTest.php",
+          "tests/Unit/Administrator/Http/Handler/AdministratorDashboardHandlerTest.php",
+          "tests/Unit/Administrator/Http/Handler/AdministratorStudioHostHandlerTest.php",
+          "tests/Unit/Application/Authorization/AdapterAuthorizationParityTest.php",
+          "tests/Unit/Application/Authorization/ApplicationAuthorizationTest.php",
+          "tests/Unit/Application/Authorization/ResourceOwnershipScopeServiceTest.php",
+          "tests/Unit/Application/Authorization/SiteGroupAdministrationTest.php",
+          "tests/Unit/Application/Automation/AutomationManagementServiceTest.php",
+          "tests/Unit/Application/Automation/PurgeBusinessRecordIdempotencyHandlerTest.php",
+          "tests/Unit/BusinessIntegration/ConsumerDispatcherTest.php",
+          "tests/Unit/BusinessIntegration/Infrastructure/RuntimeIntegrationEventTransportTest.php",
+          "tests/Unit/BusinessIntegration/IntegrationOperationsServiceTest.php",
+          "tests/Unit/BusinessIntegration/ProcessWorkDispatcherTest.php",
+          "tests/Unit/BusinessRecord/Application/PostingPeriodServiceTest.php",
+          "tests/Unit/BusinessReporting/ExportGenerationPolicyFenceTest.php",
+          "tests/Unit/BusinessReporting/ExportServiceTransactionTest.php",
+          "tests/Unit/BusinessReporting/RecordExportPipelineTest.php",
+          "tests/Unit/BusinessSecurity/Application/ApprovalServiceTest.php",
+          "tests/Unit/BusinessSecurity/Application/BusinessSecurityAdministrationServiceTest.php",
+          "tests/Unit/BusinessSurface/Application/BusinessMutationPlanServiceTest.php",
+          "tests/Unit/BusinessSurface/Application/BusinessSurfaceCatalogTest.php",
+          "tests/Unit/BusinessSurface/Application/BusinessSurfaceServiceTest.php",
+          "tests/Unit/BusinessSurface/Application/Custom/CustomBusinessActionExecutorTest.php",
+          "tests/Unit/BusinessSurface/Application/GeneratedBusinessActionStepUpTest.php",
+          "tests/Unit/Content/Application/ContentTranslationServiceTest.php",
+          "tests/Unit/Content/Application/ContributedContentTranslationTest.php",
+          "tests/Unit/Content/Presentation/TranslationGroupPresenterTest.php",
+          "tests/Unit/Delivery/Console/Command/DemoInstallCommandTest.php",
+          "tests/Unit/Delivery/Console/Command/ManagePostingPeriodsCommandTest.php",
+          "tests/Unit/Delivery/Http/Api/Automation/AutomationApiHandlerTest.php",
+          "tests/Unit/Delivery/Http/Api/Business/BusinessOperationStatusApiHandlerTest.php",
+          "tests/Unit/Delivery/Http/Api/Business/BusinessRecordApiHandlerTest.php",
+          "tests/Unit/Delivery/Http/Api/Business/PostingPeriodApiHandlerTest.php",
+          "tests/Unit/Delivery/Http/Api/Idempotency/PersistentIdempotencyAuthorizationTest.php",
+          "tests/Unit/Delivery/Http/Api/Idempotency/PersistentIdempotencyMiddlewareTest.php",
+          "tests/Unit/Demo/Infrastructure/DemoExampleExtensionInstallerTest.php",
+          "tests/Unit/Demo/Infrastructure/VdmBusinessDemoInstallerTest.php",
+          "tests/Unit/Extension/Application/Trust/TrustStoreTest.php",
+          "tests/Unit/Extension/Runtime/TrustEnforcingJobHandlerTest.php",
+          "tests/Unit/Http/Handler/HomePageHandlerTest.php",
+          "tests/Unit/Http/Handler/PublishedContentHandlerTest.php",
+          "tests/Unit/Identity/Application/Administration/AccessControlServiceTest.php",
+          "tests/Unit/Identity/Application/StepUp/TotpStepUpProviderTest.php",
+          "tests/Unit/Identity/Infrastructure/Administration/DoctrineAdministratorSessionStoreTest.php",
+          "tests/Unit/Infrastructure/Persistence/Migration/MigrationRunnerTest.php",
+          "tests/Unit/InterfaceStandard/PresentationPreferenceManagerTest.php",
+          "tests/Unit/Localization/Application/MessageOverrideServiceTest.php",
+          "tests/Unit/Navigation/Application/NavigationServiceTest.php",
+          "tests/Unit/Site/Application/PublicPageLocatorTest.php",
+          "tests/Unit/Site/Infrastructure/Persistence/DoctrineSiteSettingsTest.php",
+          "tests/Unit/Studio/Application/Authoring/ContentStudioAuthoringContextAuthorityTest.php",
+          "tests/Unit/Studio/Application/Host/StudioProducerMutationBoundaryTest.php",
+          "tests/Unit/Studio/Application/Media/StudioMediaAuditTest.php",
+          "tests/Unit/Studio/Application/Media/StudioMediaLifecycleTest.php",
+          "tests/Unit/Studio/Application/Preview/ContentStudioPreviewBindingSourceTest.php",
+          "tests/Unit/Studio/Application/Projection/ContentStudioResourceSearchProviderTest.php",
+          "tests/Unit/Studio/Application/Projection/StudioContentProjectionServiceTest.php",
+          "tests/Unit/Support/TransientBusinessDefinitionFixtureScopeTest.php",
+          "docs/architecture/layers.json",
+          "docs/architecture/capability-index.md",
+          "docs/architecture/governance/core-growth-baseline.json",
+          "docs/quality/baseline.json",
+          "CHANGELOG.md"
+        ],
+        "files_to_remove": [
+          "src/Application/Persistence/TransactionManager.php",
+          "src/Application/Persistence/TransactionState.php",
+          "tests/Support/ImmediateTransactionManager.php"
+        ],
+        "tests_to_remove": [
+          "tests/Unit/Application/Automation/PurgeBusinessRecordIdempotencyHandlerTest.php (inline double)"
+        ],
+        "tests_to_retain_or_add": [
+          "tests/Integration/Persistence/DoctrineTransactionManagerTest.php",
+          "tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php",
+          "tests/Unit/Infrastructure/Persistence/DoctrineTransactionStateTest.php",
+          "tests/Architecture/TransactionSeamBoundaryTest.php with its ownership assertion rewritten to the package FQCNs",
+          "every consumer test in fixtures_and_examples, updated to the canonical imports and the package double"
+        ],
+        "di_or_provisioning_changes": [
+          "keep both share() bindings in src/Kernel/ContainerFactory.php keyed by the package FQCNs; no alias or fallback",
+          "no ConfigProvider to register: the package ships none"
+        ],
+        "capability_index_changes": [
+          "composer kumwe:capability-index adds the v2-manifested kumwe/transaction entry with its three capabilities",
+          "docs/architecture/layers.json: add Kumwe\\Transaction to first_party_namespaces and classify Contract as shared",
+          "docs/architecture/layers.json: classify Testing only if the graph tool requires it; src/ must never reference it",
+          "composer kumwe:core-growth-record removes the two retired FQCNs from the baseline"
+        ],
+        "changelog_and_evidence_changes": [
+          "CHANGELOG.md entry citing NRM-2026-002 and the App pull request",
+          "docs/architecture/non-roadmap/NRM-2026-002.yaml, this migration's non-roadmap record",
+          "docs/architecture/migrations/KUMWE-MIG-2026-001.yaml with handoff_sha256 of the installed handoff",
+          "docs/architecture/migrations/change-sets/KUMWE-CS-2026-001.yaml at state app-pr-ready",
+          "docs/architecture/migrations/trains/<train id>.yaml, a single-PR train (D-GOV-8)",
+          "docs/architecture/migrations/evidence/KUMWE-MIG-2026-001/RELEASE-ATTESTATION.yaml copied unchanged"
+        ],
+        "verification_commands": [
+          "composer qa",
+          "composer kumwe:capability-index && composer kumwe:capability-index-check",
+          "composer kumwe:core-growth-record && composer kumwe:core-growth-check",
+          "composer baseline:record",
+          "composer test:unit",
+          "the merge workflow's MariaDB, MySQL and PostgreSQL matrix over tests/Integration/Persistence",
+          "grep -rn 'Kumwe.App.Application.Persistence' src tests config bootstrap docs/architecture returns nothing"
+        ]
+      },
+      "concurrency": {
+        "likely_conflict_files": [
+          "composer.json",
+          "composer.lock",
+          "src/Kernel/ContainerFactory.php",
+          "docs/architecture/layers.json",
+          "docs/architecture/capability-index.md",
+          "docs/architecture/governance/core-growth-baseline.json",
+          "docs/architecture/governance/legacy-packages.json",
+          "docs/quality/baseline.json",
+          "CHANGELOG.md"
+        ],
+        "related_migrations": [],
+        "ownership_conflicts": [],
+        "integration_train": null,
+        "resolution_rule": "semantic-preservation"
+      },
+      "governance": {
+        "roadmap_source_sha256": "a202155ef1a65f5ab293d4f8397ebf4ac430db7f1e877c776bbe7851e6fe18d8",
+        "roadmap_refs": [],
+        "non_roadmap_refs": [
+          "NRM-2026-002"
+        ],
+        "completion_claim": false
+      },
+      "decisions": [
+        "D1: ship the App test double as Testing\\ImmediateTransactionManager, test-scoped and never bound (section 5)",
+        "D2: contract-only package with no ConfigProvider, factory or alias; the host binds its adapter to the FQCNs",
+        "D3: every signature and documented semantic is preserved; @since restarts at 0.1.0 in this package",
+        "D4: runtime php ^8.5 alone; local gates ran on PHP 8.4.19 with --ignore-platform-req=php, CI proves 8.5",
+        "D5: the first release is 0.1.0, the newest CHANGELOG.md heading (D-GOV-6); no tag or digest is predicted",
+        "D6: NRM-2026-002 is allocated for the App adoption record, the next free id at the baseline (D-GOV-3)",
+        "D7: the archive gate requires this handoff, so the pre-handoff head fails only that gate, by design",
+        "D8: roadmap_refs stay empty; Sessions 3, 6 and 7 name transaction as enabling, the change set records refs",
+        "D9: the suite is the dependency-free runner (tests/run.php), the pattern kumwe/conversion uses"
+      ],
+      "blockers": []
+    }
+  },
+  "canonical_schema_validation": [
+    {
+      "path": "resources/public-api/v1.json",
+      "schema": "package-public-api.v1.schema.json",
+      "sha256": "f9589717354cc969ecb87e18d27c3e7f9e501f551bce80cadb698c3989cf2b75"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "schema": "package-capabilities.v1.schema.json",
+      "sha256": "4e3fc6c4f014183eafad06b39e5c34a10c5e889c305ae09836f813d67cf5795c"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "schema": "package-service-map.v1.schema.json",
+      "sha256": "ec72f2fbda46e326380795664c62c4d7cf38ec557c7e2a9bac40a905ee62d5f5"
+    }
+  ],
+  "manifests_and_corpora": [
+    {
+      "path": "resources/public-api/v1.json",
+      "sha256": "f9589717354cc969ecb87e18d27c3e7f9e501f551bce80cadb698c3989cf2b75"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "sha256": "4e3fc6c4f014183eafad06b39e5c34a10c5e889c305ae09836f813d67cf5795c"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "sha256": "ec72f2fbda46e326380795664c62c4d7cf38ec557c7e2a9bac40a905ee62d5f5"
+    }
+  ],
+  "archived_files": 23,
+  "complete_git_export_matched": true,
+  "handoff_sha256": "32dce75a78252d88cb297d3f57b3620577b63f012c3d3962697bc4964c8e9a1f",
+  "license": {
+    "declaration": "Apache-2.0",
+    "path": "LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  "release_workflow": "https://github.com/kumwe/transaction/actions/runs/34154321176",
+  "merged_pull_request": "https://github.com/kumwe/transaction/pull/6",
+  "platform_immutable_flag": false,
+  "observed_at": "2026-09-08T17:29:28Z",
+  "verifier": {
+    "repository": "kumwe/extension-sdk",
+    "commit": "15759b763a964b3f7c497f9dafe748f1b3b592be",
+    "workflow_event_commit": "2df6b2c4fc80ca6dca43711908911218bf9dbd3b",
+    "run_url": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329"
+  },
+  "consumer": {
+    "schema": "kumwe-independent-release-consumer/v1",
+    "status": "passed",
+    "name": "kumwe/transaction",
+    "version": "0.1.2",
+    "source_commit": "56c8eb14a70bd3f1ed7eaeae7196a07d6627bf03",
+    "archive_sha256": "e6a769da5aeb7a8257e4f75e69c7b55939265bc806b9e987eb125b2dc4f97256",
+    "no_dev": true,
+    "classmap_authoritative": true,
+    "offline_reinstall": true,
+    "composer_lock_sha256": "2e9c11c43274c8f84fa27d75526acd95a1cdf3b975778d5177244883afb0d8b9",
+    "runtime_types_loaded": 3,
+    "consumer_dependency_audit": "passed",
+    "canonical_api_exports_verified": 3,
+    "installed_dist_identity_verified": true,
+    "runtime_classes": [
+      "Kumwe\\Transaction\\Contract\\TransactionManager",
+      "Kumwe\\Transaction\\Contract\\TransactionState",
+      "Kumwe\\Transaction\\Testing\\ImmediateTransactionManager"
+    ],
+    "optional_phpunit_bridges": [],
+    "consumer_host_requirements": [],
+    "examples": [
+      "examples/typed-consumer.php",
+      "examples/README.md"
+    ],
+    "php": "8.5.10",
+    "php_zts": false,
+    "os": "Linux",
+    "architecture": "x86_64",
+    "native_extension_loaded": false
+  },
+  "native_fixture": null
+}
