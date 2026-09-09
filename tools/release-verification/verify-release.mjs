@@ -24,10 +24,14 @@ export function canonicalDocument(key, document) {
   requireFact(validate && validate(document), `Canonical ${key} schema failed: ${JSON.stringify(validate?.errors)}`);
 }
 
-export function canonicalManifests(packageRoot, handoff) {
+export function canonicalManifests(packageRoot, handoff, expectedVersion = null) {
   return Object.entries(canonicalValidators).map(([key, validate]) => {
     const p = safePath(handoff.framework_php[key]);
-    canonicalDocument(key, json(path.join(packageRoot, p)));
+    const document = json(path.join(packageRoot, p));
+    canonicalDocument(key, document);
+    requireFact(document.package === handoff.framework_php.composer_package, `Canonical package identity drift: ${p}`);
+    requireFact(expectedVersion === null || document.release.replace(/^v/, '') === expectedVersion, `Canonical release identity drift: ${p}`);
+    requireFact(!document.namespace || document.namespace.replace(/\\$/, '') === handoff.framework_php.canonical_namespace.replace(/\\$/, ''), `Canonical namespace identity drift: ${p}`);
     return { path: p, schema: canonicalSchemas[key], sha256: sha256(fs.readFileSync(path.join(packageRoot, p))) };
   });
 }
@@ -69,15 +73,31 @@ async function request(url, binary = false) {
       requireFact(['api.github.com', 'repo.packagist.org', 'codeload.github.com', 'github.com'].includes(new URL(response.url).hostname), 'Unapproved artifact redirect.');
       if (!response.ok) {
         const reason = (await response.text()).slice(0, 1500);
-        const limits = { remaining: response.headers.get('x-ratelimit-remaining'), reset: response.headers.get('x-ratelimit-reset'), retry_after: response.headers.get('retry-after') };
-        throw new Error(`HTTP ${response.status} for ${url}; ${JSON.stringify(limits)}; ${reason}`);
+        const limits = { limit: response.headers.get('x-ratelimit-limit'), resource: response.headers.get('x-ratelimit-resource'), remaining: response.headers.get('x-ratelimit-remaining'), reset: response.headers.get('x-ratelimit-reset'), retry_after: response.headers.get('retry-after') };
+        const error = new Error(`HTTP ${response.status} for ${url}; ${JSON.stringify(limits)}; ${reason}`);
+        if (response.status === 429 || (response.status === 403 && limits.remaining === '0')) {
+          const retry = Number(limits.retry_after);
+          error.waitSeconds = retry > 0 ? retry : Math.max(1, Number(limits.reset) - Math.floor(Date.now() / 1000) + 2);
+        }
+        throw error;
       }
       const bytes = Buffer.from(await response.arrayBuffer());
       requireFact(bytes.length <= 150000000, 'Response exceeds verification budget.');
       return binary ? bytes : JSON.parse(bytes.toString('utf8'));
     } catch (error) {
       last = error;
-      if (attempt < 2) await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+      if (attempt < 2) {
+        if (error.waitSeconds) {
+          requireFact(Number.isFinite(error.waitSeconds) && error.waitSeconds <= 900, `Rate-limit reset exceeds this bounded retry budget; ${error.message}`);
+          let remaining = error.waitSeconds;
+          while (remaining > 0) {
+            console.log(`Respecting GitHub rate-limit reset; retry in ${remaining} seconds.`);
+            const pause = Math.min(remaining, 60);
+            await new Promise(resolve => setTimeout(resolve, pause * 1000));
+            remaining -= pause;
+          }
+        } else await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+      }
     }
   }
   throw last;
@@ -171,7 +191,7 @@ export async function verifyRelease(raw, output) {
     requireFact(blobs.get(p)?.sha === object, `Published archive content differs from source: ${p}`);
   }
   const handoff = handoffRecord(fs.readFileSync(path.join(input.package_root, 'MIGRATION-HANDOFF.md'), 'utf8'), input);
-  const canonicalValidation = canonicalManifests(input.package_root, handoff);
+  const canonicalValidation = canonicalManifests(input.package_root, handoff, input.version);
   write(path.join(output, 'canonical-schema-verification.json'), { status: 'passed', validators: json(path.join(here, 'schema-sources.json')), manifests: canonicalValidation });
   const manifests = handoff.ownership.public_manifests.map(m => {
     const p = safePath(m.path); const actual = sha256(fs.readFileSync(path.join(input.package_root, p)));
@@ -194,6 +214,12 @@ export async function verifyRelease(raw, output) {
     `https://github.com/${input.name}.git`, checkout], output, path.join(output, 'source-checkout.log'));
   const head = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: checkout, encoding: 'utf8' });
   requireFact(head.status === 0 && head.stdout.trim() === input.source_commit, 'Verification checkout moved from immutable source.');
+  for (const directory of ['tools/governance', 'tools/schema-validator', 'tools/release-verification']) {
+    if (fs.existsSync(path.join(checkout, directory, 'package-lock.json'))) {
+      command(['npm', 'ci', '--ignore-scripts', '--no-audit'], path.join(checkout, directory),
+        path.join(output, directory.replaceAll('/', '-') + '-npm-install.log'));
+    }
+  }
   command(['composer', 'install', '--no-interaction', '--prefer-dist', '--no-progress'], checkout, path.join(output, 'package-install.log'));
   command(['composer', '--no-plugins', 'check'], checkout, path.join(output, 'package-check.log'));
   command(['composer', 'audit', '--abandoned=fail', '--format=json'], checkout, path.join(output, 'security-audit.log'));
@@ -237,7 +263,7 @@ export function finalize(output, evidenceUrl) {
   const canonicalProof = json(path.join(output, 'canonical-schema-verification.json'));
   requireFact(canonicalProof.status === 'passed' && canonicalProof.manifests?.length === 3
     && evidence.canonical_schema_validation?.length === 3, 'All canonical manifest schemas must pass before attesting.');
-  canonicalManifests(input.package_root, input.handoff);
+  canonicalManifests(input.package_root, input.handoff, input.version);
   requireFact(sha256(fs.readFileSync(input.archive_path)) === input.archive_sha256, 'Source archive changed before attestation.');
   const artifact = p => `${evidenceUrl}#${p}`;
   const record = { schema: 'kumwe-release-attestation/v2', artifact_kind: 'framework_php',
