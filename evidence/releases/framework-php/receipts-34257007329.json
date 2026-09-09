@@ -1,0 +1,608 @@
+{
+  "schema": "kumwe-preserved-release-evidence/v1",
+  "kind": "framework_php",
+  "status": "verified-per-owner",
+  "note": "These twelve owner jobs passed all mandatory checks in run34257007329. Five other jobs in that run failed and are not admitted by this index. The verifier used actual SDK branch source15759b763a964b3f7c497f9dafe748f1b3b592be, distinct from its separately recorded workflow event commit. ZIP/member bytes remain unchanged.",
+  "entries": [
+    {
+      "name": "kumwe/access-context",
+      "version": "0.1.2",
+      "tag": "v0.1.2",
+      "source_commit": "132c3cd7c229ceda4398e19140d1477512c27ebf",
+      "archive_sha256": "519186ae6ef014d5d9c398ec6199125759f63ae9b1369086221856110ea29bdb",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068288271",
+          "sha256": "102fa5aa4bc2d277036c5796189bd44aae18f7d97d504fd6cb04696ca8c41904",
+          "path": "evidence/releases/framework-php/access-context/0.1.2/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068287525",
+          "sha256": "3f218f8a1750c1ea08672d88e68d648c732194d14c6e392dcb14f0a425267ae3",
+          "path": "evidence/releases/framework-php/access-context/0.1.2/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/access-context/0.1.2/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "333066c5b1118224d8612dbc6bba420cfeee317c392d1984732001502e66ada1",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "333066c5b1118224d8612dbc6bba420cfeee317c392d1984732001502e66ada1"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "109b5449f343a28a2ab523c7460d7b7c4ee6d1c109f2cdaf96dd0d2124e681ba"
+        },
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "fcd9597350e055c32b33ea442f51b952ba2621776a16069fa5ece318c909ea02"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "88da845b4839b312723ec55bd5b1f3def42649683797e728d0ed6a124a8ab195"
+        }
+      ],
+      "require": {
+        "php": "^8.5"
+      },
+      "native_bindings_present": false
+    },
+    {
+      "name": "kumwe/record-query",
+      "version": "0.1.3",
+      "tag": "v0.1.3",
+      "source_commit": "18b1f8ca8dce5eb3ca3cb8c4c3a0443599d232d9",
+      "archive_sha256": "4b1ade9abeb9cc752f8101aac80e8aa0bdbd5202d2aa74b9f2e57b90a65d1b9d",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068295990",
+          "sha256": "3528eed8406b478cbe8f45edc80c5e3450698c5f893ef19dbef4f056e27a22ca",
+          "path": "evidence/releases/framework-php/record-query/0.1.3/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068295128",
+          "sha256": "62bf9605206acf9244b89aad29515b58fee251b7a840b677d2fcfe5b2e561b5d",
+          "path": "evidence/releases/framework-php/record-query/0.1.3/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/record-query/0.1.3/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "900d6da2aba09f3ec8529d1125cd158fd1e2f3761067e4a163d791d72aeee3dc",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "900d6da2aba09f3ec8529d1125cd158fd1e2f3761067e4a163d791d72aeee3dc"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "8757ea552ed1b1f89cbc0accb82daab1cb9ad3091f9b5b6a219473af253e60ec"
+        },
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "d7ee277a5acbdc59fcb5588efb2d5fe62406c822e4718a179997eb61ad394620"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "86d96e1265d9e9681fc59b94b67f1b87854323f6a65d2018d7aa2f46822eaf08"
+        },
+        {
+          "path": "resources/test-ownership/v1.json",
+          "sha256": "08bdae130eb5b0e360c30cfdb8680ab1440b4c2c7abc7fef4a2b07abc12afcaf"
+        }
+      ],
+      "require": {
+        "php": "^8.5",
+        "php-64bit": "*",
+        "ext-json": "*",
+        "kumwe/record-values": "0.1.4",
+        "kumwe/business-definition": "0.1.2",
+        "kumwe/conversion": "0.1.5",
+        "ext-mbstring": "*"
+      },
+      "native_bindings_present": false
+    },
+    {
+      "name": "kumwe/contribution",
+      "version": "0.1.1",
+      "tag": "v0.1.1",
+      "source_commit": "2fc75742aa5a7d78418d2f586fa3043271e70082",
+      "archive_sha256": "2de76e88f8ca576480422d72a918867b36ce5ea27aefd73a9c001a4ba94d6788",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068312986",
+          "sha256": "8b24daaff4ce007753fc80dabeca2dfc9ca1b78b0a2fb091097521b96bf55fc6",
+          "path": "evidence/releases/framework-php/contribution/0.1.1/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068312030",
+          "sha256": "f80d325e0d9c359b115dc5fac0d7bc27bc8d23244667759ab3de13c2d891727b",
+          "path": "evidence/releases/framework-php/contribution/0.1.1/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/contribution/0.1.1/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "f0221e8914794476eaa5f641cbf493fda41339d7856f67313f7e7085162909ec",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "f0221e8914794476eaa5f641cbf493fda41339d7856f67313f7e7085162909ec"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "85202012eef68919fd3eed8894e5e17d7760dbc2a751d65ae244f3a2abea2cf6"
+        },
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "e50defb725e5f03e74480fe8b6965ff020147be57dedd5915a495f6175c2f785"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "12d4602942c1ebd9f01e5046f7c7f3457f673fb1b655c3b4c95399ff085ef742"
+        }
+      ],
+      "require": {
+        "php": "^8.5"
+      },
+      "native_bindings_present": false
+    },
+    {
+      "name": "kumwe/localization",
+      "version": "0.1.1",
+      "tag": "v0.1.1",
+      "source_commit": "8571ab575b9b9f2dc1b8a25b3c902d9cf44093cb",
+      "archive_sha256": "d0c3341f2e6126c83499a07d3aeb9490799228f55019b265d1c8c5e765dadcae",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068320939",
+          "sha256": "a6959013d118251e1d00e97233ea01ce856c8185c92f6b40dc85ec22c68fb50e",
+          "path": "evidence/releases/framework-php/localization/0.1.1/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068320287",
+          "sha256": "ec35d9b911cb45e232e4aa73224f3ddc1f35842378eeffa9f02545ebf6edda3f",
+          "path": "evidence/releases/framework-php/localization/0.1.1/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/localization/0.1.1/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "5c724d9717b6308a57c57ea9a6f73261115919d4ff19effc84c6819fb3977d16",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "5c724d9717b6308a57c57ea9a6f73261115919d4ff19effc84c6819fb3977d16"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "645454cdf3893932af21fba20fc8a1b6652619ca1ef7b91f05a5f23a5b9c5bbc"
+        },
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "e5ffa4984b444276f5135bb541026734e5a85354d112642bdb244d08972a8697"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "c7e70a8b5e5ea7bfd70d19cccbb17f111357f7f0f61fcabc7bd14cf5437eca3e"
+        }
+      ],
+      "require": {
+        "php": "^8.5",
+        "ext-intl": "*",
+        "psr/container": "^2.0"
+      },
+      "native_bindings_present": false
+    },
+    {
+      "name": "kumwe/producer",
+      "version": "0.2.2",
+      "tag": "v0.2.2",
+      "source_commit": "6b892c3382db02999dac92be1f9afde94ec284f9",
+      "archive_sha256": "715b2e2eb778a84359d0a033931f68d0aff48e8542052ac04de56ff6798d1ff7",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068331613",
+          "sha256": "3d169c1e34cb2759fad18b4e2a4ceb582869c98e2817ab220f698b1a0fa63f93",
+          "path": "evidence/releases/framework-php/producer/0.2.2/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068330823",
+          "sha256": "795be5f4a219606244986cd78b0434c0b5158911516ab80dcc7f1bc366ad1ab5",
+          "path": "evidence/releases/framework-php/producer/0.2.2/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/producer/0.2.2/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "d19258ddac6ed9e30a97b13a09671d2cfb2aeca9a251a1313f01245c68b28b2f",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "d19258ddac6ed9e30a97b13a09671d2cfb2aeca9a251a1313f01245c68b28b2f"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "f6c031833a1ecf066486c939052c8452398e001939cb9e41269ba93c2148e269"
+        },
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "d62056117c2c8b02a28b79753013d2a6dc1e6c13f807c9350ca42acc1cbd8071"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "32e3206648abbb1d3e94e6ac37705cc9e0069c3eec9e1aa9404a7133924626e1"
+        },
+        {
+          "path": "resources/public-api.json",
+          "sha256": "ccccb11b9c027928b66a7ec0633ef701bc0e2ca58585892035b60e51c705e61e"
+        },
+        {
+          "path": "resources/studio-contract/PIN.json",
+          "sha256": "3c1b094e59c5bbdeb867b2f12df0b8a88a4855ae61003913444dda8222b4ee77"
+        },
+        {
+          "path": "resources/studio-contract/protocol/schemas/manifest.json",
+          "sha256": "b7d41d6cbe71a770f433ddce12bdcd5582a2be0249191f4845ad5278079ff6e9"
+        },
+        {
+          "path": "resources/studio-contract/testkit/corpus-manifest.json",
+          "sha256": "3eea5d655bfe86d234c1dedb9c5b7055d173858541ec3c535e1faf8a204294d3"
+        }
+      ],
+      "require": {
+        "php": ">=8.1",
+        "ext-json": "*",
+        "ext-mbstring": "*"
+      },
+      "native_bindings_present": false
+    },
+    {
+      "name": "kumwe/transaction",
+      "version": "0.1.2",
+      "tag": "v0.1.2",
+      "source_commit": "56c8eb14a70bd3f1ed7eaeae7196a07d6627bf03",
+      "archive_sha256": "e6a769da5aeb7a8257e4f75e69c7b55939265bc806b9e987eb125b2dc4f97256",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068422003",
+          "sha256": "735209012c1aaa8615e043ceaab6b4e5fc8cc041517e8100a46fc52b12e24ad9",
+          "path": "evidence/releases/framework-php/transaction/0.1.2/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068421292",
+          "sha256": "595e42b633ecddc0a5a701493c61f14b3c66dbc64677b4b0cae399c4fe8554c8",
+          "path": "evidence/releases/framework-php/transaction/0.1.2/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/transaction/0.1.2/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "ec223e9458f590806efa477970bcc666ae2f6ef6d2e9ec494481a74d22739247",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "ec223e9458f590806efa477970bcc666ae2f6ef6d2e9ec494481a74d22739247"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "f9589717354cc969ecb87e18d27c3e7f9e501f551bce80cadb698c3989cf2b75"
+        },
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "4e3fc6c4f014183eafad06b39e5c34a10c5e889c305ae09836f813d67cf5795c"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "ec72f2fbda46e326380795664c62c4d7cf38ec557c7e2a9bac40a905ee62d5f5"
+        }
+      ],
+      "require": {
+        "php": "^8.5"
+      },
+      "native_bindings_present": false
+    },
+    {
+      "name": "kumwe/idempotency",
+      "version": "0.1.2",
+      "tag": "v0.1.2",
+      "source_commit": "283ddd7d862295078e354ebe7ebfa6e41af1dd94",
+      "archive_sha256": "0d496969f2510594dc1af6aa26e4ac3116bfb3a1e9f18355f3184531be273312",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068486934",
+          "sha256": "9a3a6a73a964fd0dd9f1470a75d76591bdcdfca4f0333ec8fa51fbe6db8521cf",
+          "path": "evidence/releases/framework-php/idempotency/0.1.2/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068485859",
+          "sha256": "b1fcf46154df2878ebbdfee377a8a7aad86c1f0fb73f3108b7324eb340aff47a",
+          "path": "evidence/releases/framework-php/idempotency/0.1.2/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/idempotency/0.1.2/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "142a142e539b7326b104c6df1508f9a187228a6e784fc23df79872cb100dc857",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "142a142e539b7326b104c6df1508f9a187228a6e784fc23df79872cb100dc857"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "1239150786e1ac847d0229b0dc56b3092fc92961aa77d342ec23a3943e54b981"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "1243b15876b134c88b20990836e4ff60d7b7d32aa3155f41f7f3ec2e7b70846d"
+        },
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "eb2b62d538984de8b0caa603b2dc8a2c82a30c8848686c9683182b620ef92104"
+        }
+      ],
+      "require": {
+        "php": "^8.5",
+        "ext-json": "*",
+        "kumwe/canonical-json": "0.1.1"
+      },
+      "native_bindings_present": false
+    },
+    {
+      "name": "kumwe/business-schema",
+      "version": "0.1.2",
+      "tag": "v0.1.2",
+      "source_commit": "c201b6b386c4140ca7c181fc57e37339160e0f88",
+      "archive_sha256": "caf1209e6ee82259b090f601b8e1cdc551db48de36d21ade118f6e5b12b708ae",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068460445",
+          "sha256": "7bc187a934cbce9241431de92553efd35da8abe135a47c7bbd3a8b8e734c1a73",
+          "path": "evidence/releases/framework-php/business-schema/0.1.2/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068459332",
+          "sha256": "170bd7ee63ab5b750b02c636db1613043d59f55b54994b028d0f859ef9163c4f",
+          "path": "evidence/releases/framework-php/business-schema/0.1.2/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/business-schema/0.1.2/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "ad1f695fe9ab2bba018b8721ffe938a0b5b9c6915a01d8f329341c562dff5405",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "ad1f695fe9ab2bba018b8721ffe938a0b5b9c6915a01d8f329341c562dff5405"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "d5979bb72732468b17d96e782b0eefa68e8db2736c7b341bf6acd5178ec3c849"
+        },
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "d2aa251dd2cb143061704a260bab2fcb13f9d1388a13237991307275d667f525"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "d4dcc5e002dbffad1d2ce998749856fae0384e449e69fe0f6672969126f17555"
+        },
+        {
+          "path": "resources/test-ownership/v1.json",
+          "sha256": "521a23ad134253ec00f84192ab66b09d767d9d3dee338943a2845201922d9bcf"
+        }
+      ],
+      "require": {
+        "php": "^8.5",
+        "php-64bit": "*",
+        "ext-json": "*",
+        "kumwe/business-definition": "0.1.2",
+        "ramsey/uuid": "^4.9",
+        "kumwe/sequence": "0.2.1",
+        "ext-mbstring": "*",
+        "psr/container": "^2.0"
+      },
+      "native_bindings_present": false
+    },
+    {
+      "name": "kumwe/audit",
+      "version": "0.1.2",
+      "tag": "v0.1.2",
+      "source_commit": "e97da93a29e69183b9592e71c1b68065dc2a87f6",
+      "archive_sha256": "bf4417fe028c79cc90788087feb30da9d8958802eb9c8e5799c7a5de571d7770",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068484460",
+          "sha256": "45e3942862b1ac9c8f460a18c5428d638f2b6c90732db0e6c3ce45d3f1bd0c35",
+          "path": "evidence/releases/framework-php/audit/0.1.2/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068483536",
+          "sha256": "f7be4532bd40bc33cf7cdb0b31fb46be6c0c2f7a4a99b8e13fdd460f49234dd9",
+          "path": "evidence/releases/framework-php/audit/0.1.2/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/audit/0.1.2/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "4074aef9104de380d230df1c86340ee94971571f4e9199e641b1ca8ec56bab0e",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "4074aef9104de380d230df1c86340ee94971571f4e9199e641b1ca8ec56bab0e"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "40d0b9d532edc419c22513022a9ce97eb22ed5544f1e7ba927136049bd651a1e"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "01464f2aa14a01add0e74b24a2b516257c8d614af9ed4a6498a5875a731d7225"
+        },
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "2c6dc77bf3f6ae1d1d23a5a6cc137639a12cdab895dfeeb26804cdbeead985b0"
+        }
+      ],
+      "require": {
+        "php": "^8.5",
+        "ext-json": "*",
+        "kumwe/canonical-json": "0.1.1",
+        "kumwe/access-context": "0.1.2"
+      },
+      "native_bindings_present": false
+    },
+    {
+      "name": "kumwe/sequence",
+      "version": "0.2.1",
+      "tag": "v0.2.1",
+      "source_commit": "142c3e74a7596935ef42c8fa744ca705fd3b4b4f",
+      "archive_sha256": "ffdc4708354ea72824d0f83bb996eed277e0e19f17a78109f99a496101cfca67",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068505396",
+          "sha256": "b812e02c23496c3d1b14b1aef37aca0516d8713f169663ad4496ee9ab84bf51f",
+          "path": "evidence/releases/framework-php/sequence/0.2.1/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068504807",
+          "sha256": "ea2dbf7211315b4ccd156c007e10afd6be4cda861cee4ad7228fc30c3e61bf85",
+          "path": "evidence/releases/framework-php/sequence/0.2.1/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/sequence/0.2.1/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "549baec3c9508c0ff13860593eddbc0ba0169c46845ea9dec22c341380f0eeb9",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "549baec3c9508c0ff13860593eddbc0ba0169c46845ea9dec22c341380f0eeb9"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "01f26a717405438d10bd76e33dda4edaae16fa03f3976dc26d8ccde2a30c1964"
+        },
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "13c07a238124b08486f53e3d4c7dccd7a0990d95b40ec017c302acc2357c9ea7"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "34ee30e7c49f707bafaa0a7e5d6d1964f32af98124a396424ecc678aae266ed0"
+        }
+      ],
+      "require": {
+        "php": "^8.5"
+      },
+      "native_bindings_present": false
+    },
+    {
+      "name": "kumwe/secret-envelope",
+      "version": "0.1.1",
+      "tag": "v0.1.1",
+      "source_commit": "3bf2d66d4090da697bf148c9eb866a9839f1af45",
+      "archive_sha256": "37539b5263f8af299d87c731f43db1cafb8df9320478e292fe4f06f767afcea7",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068521901",
+          "sha256": "07fc62a767c87dbaef6bab31a8bacce4431eac6a0aeaf3f20c812c01859c8967",
+          "path": "evidence/releases/framework-php/secret-envelope/0.1.1/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068521111",
+          "sha256": "f195bab06d202f6d35bcb93135dd0c7cd22cdbff4807dbab3aedfcc6952cc5d9",
+          "path": "evidence/releases/framework-php/secret-envelope/0.1.1/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/secret-envelope/0.1.1/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "68464ed9f4b1a89930976212ed1948514265cc59058e8155538aebde6f5cb60a",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "68464ed9f4b1a89930976212ed1948514265cc59058e8155538aebde6f5cb60a"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "21bed5fdd15b8e205f3881df1e41bd13df5b969ea13307ef645112b6fd56dd65"
+        },
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "fb927883d0cfaef771eb02b83fe771b1344349ad2ae5737ec2cdc327f2e8f38e"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "742e7619b6fd94dbea2595794b9d81cf5e270030ad732b6affa96d3e11a8e2bf"
+        },
+        {
+          "path": "resources/corpus/v1/envelopes.json",
+          "sha256": "865deefd162de7557ad5dbb3c95b40ae54bcb64a3b139112f0364d417e4d7260"
+        }
+      ],
+      "require": {
+        "php": "^8.5",
+        "ext-sodium": "*",
+        "psr/container": "^2.0"
+      },
+      "native_bindings_present": false
+    },
+    {
+      "name": "kumwe/record-values",
+      "version": "0.1.4",
+      "tag": "v0.1.4",
+      "source_commit": "04a3f5f8094861771682b3ba83536ec8828dc704",
+      "archive_sha256": "41407515fda9a0385f1210a4e9b873e39de396c90a2f05995cd2defb79f9d5fb",
+      "status": "verified",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "artifacts": {
+        "attestation": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068536051",
+          "sha256": "f4b5b35582f19799bf8e30ed1fea6ca0ba1347f0e0466e3048e7c8bf577930c9",
+          "path": "evidence/releases/framework-php/record-values/0.1.4/34257007329/attestation.zip"
+        },
+        "evidence": {
+          "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068535131",
+          "sha256": "b9a2f8ed0b41cf8bbf4e3daddd96f697cf291689d2c787a74c0f847914fd3d84",
+          "path": "evidence/releases/framework-php/record-values/0.1.4/34257007329/evidence.zip"
+        }
+      },
+      "attestation": {
+        "path": "evidence/releases/framework-php/record-values/0.1.4/34257007329/RELEASE-ATTESTATION.yaml",
+        "sha256": "c84c63d9637b6fe4bc41cd339563060b73bb71f0fbe68d19eb2afecd08ee56b9",
+        "member": "RELEASE-ATTESTATION.yaml",
+        "member_sha256": "c84c63d9637b6fe4bc41cd339563060b73bb71f0fbe68d19eb2afecd08ee56b9"
+      },
+      "manifests_and_corpora": [
+        {
+          "path": "resources/public-api/v1.json",
+          "sha256": "ca6e82ea1697041424ce2644b5fa0566c805d60da2f8d36ada2c19b16756b8b3"
+        },
+        {
+          "path": "resources/capabilities/v1.json",
+          "sha256": "fa79ef590b02bae4f958bbbd8544e9a1f7a271cde45d2f2bac761e6a01b4308c"
+        },
+        {
+          "path": "resources/service-map/v1.json",
+          "sha256": "b266081c33d866630f97b49b5e164eb090f0c54811a426031f9a4456f3fed111"
+        },
+        {
+          "path": "resources/test-ownership/v1.json",
+          "sha256": "843a739040638f4bcc14cc7932826ac1b23aa8eb0ba503d3a441ec77e6031703"
+        }
+      ],
+      "require": {
+        "php": "^8.5",
+        "php-64bit": "*",
+        "ext-json": "*",
+        "kumwe/conversion": "0.1.5",
+        "ext-mbstring": "*"
+      },
+      "native_bindings_present": false
+    }
+  ]
+}

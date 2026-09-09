@@ -1,0 +1,645 @@
+{
+  "schema": "kumwe-independent-release-verification/v1",
+  "status": "passed",
+  "input": {
+    "name": "kumwe/sequence",
+    "version": "0.2.1",
+    "source_commit": "142c3e74a7596935ef42c8fa744ca705fd3b4b4f",
+    "repository": "kumwe/sequence",
+    "tag": "v0.2.1",
+    "archive_url": "https://api.github.com/repos/kumwe/sequence/zipball/142c3e74a7596935ef42c8fa744ca705fd3b4b4f",
+    "archive_path": "/home/runner/work/_temp/release-verification/source.zip",
+    "archive_sha256": "ffdc4708354ea72824d0f83bb996eed277e0e19f17a78109f99a496101cfca67",
+    "package_root": "/home/runner/work/_temp/release-verification/archive/kumwe-sequence-142c3e7",
+    "composer": {
+      "name": "kumwe/sequence",
+      "description": "Portable document numbering: format, reset and scope values and the storage-neutral allocator port.",
+      "type": "library",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/kumwe/sequence",
+      "support": {
+        "issues": "https://github.com/kumwe/sequence/issues",
+        "source": "https://github.com/kumwe/sequence"
+      },
+      "require": {
+        "php": "^8.5"
+      },
+      "require-dev": {
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "squizlabs/php_codesniffer": "^4.0"
+      },
+      "autoload": {
+        "psr-4": {
+          "Kumwe\\Sequence\\": "src/"
+        }
+      },
+      "autoload-dev": {
+        "psr-4": {
+          "Kumwe\\Sequence\\Tests\\": "tests/"
+        }
+      },
+      "scripts": {
+        "composer:validate": "composer validate --strict",
+        "security:audit": "composer audit --abandoned=fail",
+        "release:check": "bash tools/test-release-record.sh",
+        "lint": "php tools/lint.php",
+        "docs": "php tools/check-docblocks.php",
+        "architecture": "php tools/verify-architecture.php",
+        "manifests": "php tools/verify-manifests.php",
+        "manifests:record": "php tools/verify-manifests.php --write",
+        "autoload:smoke": "php resources/toolchain/autoload-smoke.php",
+        "examples": "php examples/allocate-and-render.php",
+        "cs": "phpcs -q",
+        "cs:fix": "phpcbf",
+        "analyse": "phpstan analyse --no-progress --memory-limit=1G",
+        "test": "php tests/run.php",
+        "clean-consumer": "php tools/verify-clean-consumer.php",
+        "check": [
+          "@composer:validate",
+          "@security:audit",
+          "@release:check",
+          "@lint",
+          "@docs",
+          "@architecture",
+          "@boundary:tokens",
+          "@manifests",
+          "@autoload:smoke",
+          "@examples",
+          "@cs",
+          "@analyse",
+          "@test:ownership",
+          "@test",
+          "@clean-consumer",
+          "@release:integrity"
+        ],
+        "test:ownership": "php tools/verify-test-ownership.php --self-test",
+        "release:integrity": "bash tools/test-release-integrity.sh",
+        "boundary:tokens": "php tools/verify-boundary-tokens.php --self-test"
+      },
+      "config": {
+        "sort-packages": true
+      },
+      "minimum-stability": "stable",
+      "prefer-stable": true
+    },
+    "examples": [
+      "examples/allocate-and-render.php",
+      "examples/README.md"
+    ],
+    "handoff": {
+      "schema": "kumwe-migration-handoff/v2",
+      "artifact_kind": "framework_php",
+      "migration_id": "KUMWE-MIG-2026-002",
+      "change_set": "KUMWE-CS-2026-002",
+      "state": "draft_pr_open",
+      "source": {
+        "app": {
+          "repository": "https://github.com/kumwe/app",
+          "baseline_commit": "960ce8ec00cf724a7cae03e5ba09c4852c9ab54e",
+          "examined_paths": [
+            "src/BusinessDefinition/Domain/NumberSequenceFormat.php",
+            "src/BusinessDefinition/Domain/NumberSequenceReset.php",
+            "src/BusinessDefinition/Domain/NumberSequenceScope.php",
+            "src/BusinessRecord/Application/BusinessNumberSequenceAllocator.php",
+            "src/BusinessRecord/Application/Exception/BusinessRecordTemporarilyUnavailable.php",
+            "src/BusinessRecord/Application/BusinessRecordService.php",
+            "src/BusinessRecord/Application/RecordValueCodec.php",
+            "src/BusinessRecord/Application/RecordRuleValidator.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessNumberSequenceAllocator.php",
+            "src/BusinessDefinition/Application/BusinessDefinitionValidator.php",
+            "src/BusinessSchema/Infrastructure/Schema/CanonicalDefinitionPhysicalSchemaCompiler.php",
+            "src/Infrastructure/Persistence/Migration/BusinessNumberSequenceMigration.php",
+            "src/Kernel/ContainerFactory.php",
+            "src",
+            "tests/Unit/BusinessDefinition/Domain/NumberSequenceFormatTest.php",
+            "tests/Unit/BusinessDefinition/Application/AllocatedNumberFieldRuleTest.php",
+            "tests/Unit/BusinessDefinition/Application/FiscalPeriodSequenceCoherenceTest.php",
+            "tests/Unit/BusinessDefinition/Application/NumberSequenceScopeCoherenceTest.php",
+            "tests/Integration/BusinessRecord/BusinessNumberSequenceContentionIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessNumberSequenceHotPathIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessNumberSequenceIdentityIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessRecordClientReferenceIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessRecordDeadlockIntegrationTest.php",
+            "tests/Integration/BusinessRecord/FiscalPeriodSequenceIntegrationTest.php",
+            "tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php",
+            "tests/Architecture/ClientAssertedInstantBoundaryTest.php",
+            "tests",
+            "config",
+            "bootstrap",
+            "examples",
+            "composer.json",
+            "composer.lock",
+            "docs/architecture/layers.json",
+            "docs/architecture/capability-index.md",
+            "docs/architecture/governance/core-growth-baseline.json",
+            "docs/architecture/governance/legacy-packages.json",
+            "docs/architecture/non-roadmap",
+            "docs/quality/baseline.json",
+            "vendor/kumwe/conversion",
+            "vendor/kumwe/extension-sdk",
+            "vendor/kumwe/producer"
+          ],
+          "old_namespace_roots": [
+            "Kumwe\\App\\BusinessDefinition\\Domain\\",
+            "Kumwe\\App\\BusinessRecord\\Application\\"
+          ],
+          "capability_index_sha256": "87ded886f35f74878ca9eb8db4c36e23d681c4a49891f76dfc3210f385a7ce39"
+        },
+        "semantic_inputs": [],
+        "examined_dependencies": [
+          "kumwe/conversion 0.1.2 (installed, legacy-unmanifested); decimal and conversion semantics, no numbering",
+          "kumwe/extension-sdk 0.2.4 (installed, legacy-unmanifested); extension contracts, no numbering or counter",
+          "kumwe/producer 0.2.0 (installed, legacy-unmanifested); Studio wire operations, no numbering or counter",
+          "no Kumwe dependency selected; the allowed ceiling is None and the runtime requirement is php ^8.5 alone"
+        ],
+        "active_related_pull_requests": [
+          "https://github.com/kumwe/transaction/pull/1 (KUMWE-MIG-2026-001, Phase 1, ready for review)",
+          "https://github.com/kumwe/secret-envelope/pull/1 (KUMWE-MIG-2026-003, Phase 1, draft)",
+          "https://github.com/kumwe/access-context/pull/1 (KUMWE-MIG-2026-004, Phase 1, draft)"
+        ]
+      },
+      "target": {
+        "repository": "https://github.com/kumwe/sequence",
+        "artifact_identity": "kumwe/sequence (Composer library)",
+        "canonical_namespace_or_abi": "Kumwe\\Sequence",
+        "branch": "fix/unified-package-release",
+        "pull_request": "https://github.com/kumwe/sequence/pull/4"
+      },
+      "ownership": {
+        "responsibility": "Portable document numbering: format, reset and scope values, allocator port and one refusal.",
+        "non_responsibilities": [
+          "Any allocator implementation: counter store, transaction, locks, fencing, deadlock retry and unique constraints.",
+          "Business numbering policy: which documents are numbered, what an invoice or stock number is, and repair.",
+          "A fiscal calendar: a fiscal-period key is a posting period the host declared; the package only renders it.",
+          "Site and organization authority: the record scope a counter is keyed by is resolved and enforced by the host.",
+          "Container registration: values, port and refusal are constructed directly; the host binds its adapter.",
+          "Real-database evidence, which the host proves on the engines it supports."
+        ],
+        "allowed_dependency_ceiling": [],
+        "implementation_owner": "kumwe/sequence",
+        "next_consumer": "kumwe/app",
+        "public_manifests": [
+          {
+            "path": "resources/public-api/v1.json",
+            "sha256": "01f26a717405438d10bd76e33dda4edaae16fa03f3976dc26d8ccde2a30c1964"
+          },
+          {
+            "path": "resources/capabilities/v1.json",
+            "sha256": "13c07a238124b08486f53e3d4c7dccd7a0990d95b40ec017c302acc2357c9ea7"
+          },
+          {
+            "path": "resources/service-map/v1.json",
+            "sha256": "34ee30e7c49f707bafaa0a7e5d6d1964f32af98124a396424ecc678aae266ed0"
+          }
+        ],
+        "intentionally_excluded": [
+          "DoctrineBusinessNumberSequenceAllocator stays in App; it owns the counter row, its lock and compare-and-set",
+          "BusinessRecordTemporarilyUnavailable stays in App; it is the App's retryable record exception, not the port's",
+          "The share() binding in src/Kernel/ContainerFactory.php stays in App; composition is host authority",
+          "BusinessDefinitionValidator::validateSequence() stays in App; closed-field, column-width and scope-mode rules",
+          "The posting-period calendar and the fiscal-period key resolution in BusinessRecordService stay in App",
+          "BusinessNumberSequenceMigration and the business_number_sequences table stay in App; storage is the host's",
+          "Retry, lock-wait, deadlock and replay policy stay in App; they are policy around the port"
+        ]
+      },
+      "framework_php": {
+        "composer_package": "kumwe/sequence",
+        "canonical_namespace": "Kumwe\\Sequence",
+        "public_api_manifest": "resources/public-api/v1.json",
+        "capability_manifest": "resources/capabilities/v1.json",
+        "service_map": "resources/service-map/v1.json",
+        "extracted_symbols": [
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessDefinition\\Domain\\NumberSequenceFormat",
+            "new_fqcn": "Kumwe\\Sequence\\Value\\NumberSequenceFormat",
+            "source_path": "src/BusinessDefinition/Domain/NumberSequenceFormat.php",
+            "target_path": "src/Value/NumberSequenceFormat.php",
+            "kind": "class",
+            "public_methods": [
+              "fromConfiguration",
+              "counter",
+              "render"
+            ],
+            "public_properties": [
+              "scope",
+              "reset",
+              "prefix",
+              "padding",
+              "timezone"
+            ],
+            "public_constants": [
+              "MAXIMUM_PADDING",
+              "MAXIMUM_PREFIX",
+              "MAXIMUM_LENGTH"
+            ],
+            "exceptions": [
+              "InvalidArgumentException"
+            ],
+            "serialization_contract": null,
+            "compatibility": "0.2.0 correction (D13): counter() propagates the reserved organization marker refusal"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessDefinition\\Domain\\NumberSequenceReset",
+            "new_fqcn": "Kumwe\\Sequence\\Value\\NumberSequenceReset",
+            "source_path": "src/BusinessDefinition/Domain/NumberSequenceReset.php",
+            "target_path": "src/Value/NumberSequenceReset.php",
+            "kind": "enum",
+            "public_methods": [
+              "key"
+            ],
+            "public_properties": [],
+            "public_constants": [
+              "Never",
+              "Yearly",
+              "Monthly",
+              "FiscalPeriod"
+            ],
+            "exceptions": [
+              "InvalidArgumentException"
+            ],
+            "serialization_contract": "string-backed enum serialized as its value: never, yearly, monthly, fiscal-period",
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessDefinition\\Domain\\NumberSequenceScope",
+            "new_fqcn": "Kumwe\\Sequence\\Value\\NumberSequenceScope",
+            "source_path": "src/BusinessDefinition/Domain/NumberSequenceScope.php",
+            "target_path": "src/Value/NumberSequenceScope.php",
+            "kind": "enum",
+            "public_methods": [
+              "key"
+            ],
+            "public_properties": [],
+            "public_constants": [
+              "Site",
+              "Organization"
+            ],
+            "exceptions": [
+              "InvalidArgumentException"
+            ],
+            "serialization_contract": "string-backed enum; serializes as its backing value (site, organization)",
+            "compatibility": "0.2.0 correction (D13): organization identifier '-' is refused; other keys are unchanged"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Application\\BusinessNumberSequenceAllocator",
+            "new_fqcn": "Kumwe\\Sequence\\Contract\\NumberSequenceAllocator",
+            "source_path": "src/BusinessRecord/Application/BusinessNumberSequenceAllocator.php",
+            "target_path": "src/Contract/NumberSequenceAllocator.php",
+            "kind": "interface",
+            "public_methods": [
+              "allocate"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [
+              "Kumwe\\Sequence\\Exception\\NumberSequenceUnavailable"
+            ],
+            "serialization_contract": null,
+            "compatibility": "clean break (D1): @throws is NumberSequenceUnavailable, not BusinessRecordTemporarilyUnavailable"
+          }
+        ],
+        "consumers": {
+          "app_code": [
+            "src/BusinessDefinition/Application/BusinessDefinitionValidator.php",
+            "src/BusinessRecord/Application/BusinessRecordService.php",
+            "src/BusinessRecord/Application/RecordValueCodec.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessNumberSequenceAllocator.php",
+            "src/BusinessSchema/Infrastructure/Schema/CanonicalDefinitionPhysicalSchemaCompiler.php"
+          ],
+          "configuration_and_di": [
+            "src/Kernel/ContainerFactory.php"
+          ],
+          "reflection_and_string_references": [
+            "tests/Architecture/ClientAssertedInstantBoundaryTest.php (lists the port's App path among its inspected files)",
+            "docs/architecture/governance/core-growth-baseline.json (baseline entries for the four old FQCNs)",
+            "src/BusinessRecord/Application/RecordRuleValidator.php (a documentation block names the old port)",
+            "src/Infrastructure/Persistence/Migration/BusinessNumberSequenceMigration.php (prose names the adapter only)"
+          ],
+          "fixtures_and_examples": [
+            "tests/Unit/BusinessDefinition/Domain/NumberSequenceFormatTest.php",
+            "tests/Unit/BusinessDefinition/Application/AllocatedNumberFieldRuleTest.php",
+            "tests/Unit/BusinessDefinition/Application/FiscalPeriodSequenceCoherenceTest.php",
+            "tests/Unit/BusinessDefinition/Application/NumberSequenceScopeCoherenceTest.php",
+            "tests/Integration/BusinessRecord/BusinessNumberSequenceContentionIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessNumberSequenceHotPathIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessNumberSequenceIdentityIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessRecordDeadlockIntegrationTest.php",
+            "tests/Integration/BusinessRecord/FiscalPeriodSequenceIntegrationTest.php",
+            "tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php"
+          ],
+          "external": []
+        },
+        "dependency_injection": {
+          "mode": "direct",
+          "provider": null,
+          "factories": [],
+          "aliases": [],
+          "service_lifetimes": [
+            "Kumwe\\Sequence\\Contract\\NumberSequenceAllocator: request-supplied (bound to one connection by the host)",
+            "Kumwe\\Sequence\\Value\\NumberSequenceFormat: value, built per declaration; immutable and shareable",
+            "Kumwe\\Sequence\\Value\\NumberSequenceReset, NumberSequenceScope: enum cases; no lifetime",
+            "Kumwe\\Sequence\\Exception\\NumberSequenceUnavailable: thrown per refusal; never a service"
+          ],
+          "configuration_keys": [],
+          "provider_absence_reason": "Values, a port and a refusal, no service: the host binds its adapter to the port FQCN."
+        }
+      },
+      "native_cpp": null,
+      "php_extension": null,
+      "tests": {
+        "moved_or_added": [
+          "tests/Case/NumberSequenceFormatTest.php",
+          "tests/Case/NumberSequenceResetTest.php",
+          "tests/Case/NumberSequenceScopeTest.php",
+          "tests/Case/NumberSequenceAllocatorContractTest.php",
+          "tests/Case/NumberSequenceUnavailableTest.php",
+          "tests/Case/ManifestsTest.php",
+          "tests/Case/ArchitectureTest.php",
+          "tests/Case/ExamplesTest.php",
+          "tests/Case/DocumentationTest.php",
+          "tests/Support/ReferenceNumberSequenceAllocator.php"
+        ],
+        "remain_in_app_or_consumer": [
+          "tests/Integration/BusinessRecord/BusinessNumberSequenceContentionIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessNumberSequenceHotPathIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessNumberSequenceIdentityIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessRecordClientReferenceIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessRecordDeadlockIntegrationTest.php",
+          "tests/Integration/BusinessRecord/FiscalPeriodSequenceIntegrationTest.php",
+          "tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php",
+          "tests/Unit/BusinessDefinition/Application/AllocatedNumberFieldRuleTest.php",
+          "tests/Unit/BusinessDefinition/Application/FiscalPeriodSequenceCoherenceTest.php",
+          "tests/Unit/BusinessDefinition/Application/NumberSequenceScopeCoherenceTest.php",
+          "tests/Architecture/ClientAssertedInstantBoundaryTest.php"
+        ],
+        "split_tests": [
+          "BusinessNumberSequenceIdentityIntegrationTest.php: its CoversClass of the two values is dropped; the run stays",
+          "FiscalPeriodSequenceIntegrationTest.php: its CoversClass of Format and Reset is dropped; the calendar run stays"
+        ],
+        "prohibited_duplicates": [
+          "tests/Unit/BusinessDefinition/Domain/NumberSequenceFormatTest.php"
+        ],
+        "corpora": []
+      },
+      "documentation": {
+        "charter": "CHARTER.md",
+        "readme": "README.md",
+        "public_api": "docs/public-api.md",
+        "architecture": "docs/architecture.md",
+        "integration_or_consumer": "docs/integration.md",
+        "examples": [
+          "examples/allocate-and-render.php",
+          "examples/README.md"
+        ],
+        "changelog_record": "CHANGELOG.md ## 0.2.1"
+      },
+      "release_expectations": {
+        "version_policy": "SemVer, exact pins while pre-1.0; the newest CHANGELOG.md heading (## 0.2.1) is the release record",
+        "expected_artifact_types": [
+          "Composer dist archive of the tag release-on-record creates from the changelog heading, then Packagist"
+        ],
+        "required_checks": [
+          "composer check (validate, lint, docs, architecture, manifests, autoload smoke, example, cs, analyse, test)",
+          "composer clean-consumer (the last step of composer check: built archive, no-dev install, smoke, example)",
+          "no-dev classmap-authoritative install in the checkout with autoload smoke and example",
+          "composer audit --abandoned=fail",
+          "GitHub Actions: Sequence CI on the pull request head, Release on record on main"
+        ],
+        "required_registry_or_installer": "Packagist",
+        "required_external_attestation": true
+      },
+      "next_task": {
+        "phase_name": "Phase 2 App adoption of kumwe/sequence",
+        "permitted_only_when": [
+          "a human has merged this pull request to main and Release on record has published the recorded version",
+          "a fresh session produced RELEASE-ATTESTATION.yaml with status verified for the published kumwe/sequence",
+          "the App governance bootstrap (NRM-2026-001) is merged on kumwe/app master, as it is at the baseline",
+          "the extracted symbols and their tests were diffed between the baseline commit and current master (D-GOV-7)"
+        ],
+        "consumer_repository": "kumwe/app",
+        "dependency_or_native_change": "composer require kumwe/sequence:<verified>; exact pin; Composer regenerates the lock",
+        "namespace_or_api_replacements": [
+          "Kumwe\\App\\BusinessDefinition\\Domain\\NumberSequenceFormat -> Kumwe\\Sequence\\Value\\NumberSequenceFormat",
+          "Kumwe\\App\\BusinessDefinition\\Domain\\NumberSequenceReset -> Kumwe\\Sequence\\Value\\NumberSequenceReset",
+          "Kumwe\\App\\BusinessDefinition\\Domain\\NumberSequenceScope -> Kumwe\\Sequence\\Value\\NumberSequenceScope",
+          "Kumwe\\App\\BusinessRecord\\Application\\BusinessNumberSequenceAllocator is retired; its replacement follows",
+          "the port is Kumwe\\Sequence\\Contract\\NumberSequenceAllocator, same signature, parameter names and order",
+          "the adapter throws NumberSequenceUnavailable instead of BusinessRecordTemporarilyUnavailable",
+          "allocateNumbers() catches NumberSequenceUnavailable and rethrows BusinessRecordTemporarilyUnavailable"
+        ],
+        "files_to_update": [
+          "composer.json",
+          "src/Kernel/ContainerFactory.php",
+          "src/BusinessDefinition/Application/BusinessDefinitionValidator.php",
+          "src/BusinessRecord/Application/BusinessRecordService.php",
+          "src/BusinessRecord/Application/RecordValueCodec.php",
+          "src/BusinessRecord/Application/RecordRuleValidator.php",
+          "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessNumberSequenceAllocator.php",
+          "src/BusinessSchema/Infrastructure/Schema/CanonicalDefinitionPhysicalSchemaCompiler.php",
+          "tests/Architecture/ClientAssertedInstantBoundaryTest.php",
+          "tests/Unit/BusinessDefinition/Application/AllocatedNumberFieldRuleTest.php",
+          "tests/Unit/BusinessDefinition/Application/FiscalPeriodSequenceCoherenceTest.php",
+          "tests/Unit/BusinessDefinition/Application/NumberSequenceScopeCoherenceTest.php",
+          "tests/Integration/BusinessRecord/BusinessNumberSequenceContentionIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessNumberSequenceHotPathIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessNumberSequenceIdentityIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessRecordDeadlockIntegrationTest.php",
+          "tests/Integration/BusinessRecord/FiscalPeriodSequenceIntegrationTest.php",
+          "tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php",
+          "docs/architecture/layers.json",
+          "docs/architecture/capability-index.md",
+          "docs/architecture/governance/core-growth-baseline.json",
+          "docs/quality/baseline.json",
+          "CHANGELOG.md"
+        ],
+        "files_to_remove": [
+          "src/BusinessDefinition/Domain/NumberSequenceFormat.php",
+          "src/BusinessDefinition/Domain/NumberSequenceReset.php",
+          "src/BusinessDefinition/Domain/NumberSequenceScope.php",
+          "src/BusinessRecord/Application/BusinessNumberSequenceAllocator.php"
+        ],
+        "tests_to_remove": [
+          "tests/Unit/BusinessDefinition/Domain/NumberSequenceFormatTest.php"
+        ],
+        "tests_to_retain_or_add": [
+          "tests/Integration/BusinessRecord/BusinessNumberSequenceContentionIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessNumberSequenceHotPathIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessNumberSequenceIdentityIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessRecordClientReferenceIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessRecordDeadlockIntegrationTest.php",
+          "tests/Integration/BusinessRecord/FiscalPeriodSequenceIntegrationTest.php",
+          "tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php",
+          "tests/Unit/BusinessDefinition/Application/AllocatedNumberFieldRuleTest.php",
+          "tests/Unit/BusinessDefinition/Application/FiscalPeriodSequenceCoherenceTest.php",
+          "tests/Unit/BusinessDefinition/Application/NumberSequenceScopeCoherenceTest.php",
+          "tests/Architecture/ClientAssertedInstantBoundaryTest.php with the port's path replaced by the adapter's",
+          "add: the adapter raises NumberSequenceUnavailable with the driver failure chained (contention integration test)",
+          "add: BusinessRecordService translates NumberSequenceUnavailable into BusinessRecordTemporarilyUnavailable"
+        ],
+        "di_or_provisioning_changes": [
+          "keep the share() binding in src/Kernel/ContainerFactory.php keyed by the package port FQCN; no alias or fallback",
+          "no ConfigProvider to register: the package ships none"
+        ],
+        "capability_index_changes": [
+          "composer kumwe:capability-index adds the v2-manifested kumwe/sequence entry with its four capabilities",
+          "docs/architecture/layers.json: add Kumwe\\Sequence to first_party_namespaces",
+          "docs/architecture/layers.json: classify Kumwe\\Sequence\\Value, Contract and Exception as shared",
+          "composer kumwe:core-growth-record removes the four retired FQCNs from the baseline"
+        ],
+        "changelog_and_evidence_changes": [
+          "CHANGELOG.md entry citing NRM-2026-003 (or the next free NRM number, D6) and the App pull request",
+          "docs/architecture/non-roadmap/NRM-2026-003.yaml, this migration's non-roadmap record",
+          "docs/architecture/migrations/KUMWE-MIG-2026-002.yaml with handoff_sha256 of the installed handoff",
+          "docs/architecture/migrations/change-sets/KUMWE-CS-2026-002.yaml at state app-pr-ready",
+          "docs/architecture/migrations/trains/<train id>.yaml, a single-PR train (D-GOV-8)",
+          "docs/architecture/migrations/evidence/KUMWE-MIG-2026-002/RELEASE-ATTESTATION.yaml copied unchanged"
+        ],
+        "verification_commands": [
+          "composer qa",
+          "composer kumwe:capability-index && composer kumwe:capability-index-check",
+          "composer kumwe:core-growth-record && composer kumwe:core-growth-check",
+          "composer baseline:record",
+          "composer test:unit",
+          "the merge workflow's MariaDB, MySQL and PostgreSQL matrix over tests/Integration/BusinessRecord",
+          "the same matrix over tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php",
+          "grep -rn 'BusinessNumberSequenceAllocator\\|Domain.NumberSequence' src tests config bootstrap docs"
+        ]
+      },
+      "concurrency": {
+        "likely_conflict_files": [
+          "composer.json",
+          "composer.lock",
+          "src/Kernel/ContainerFactory.php",
+          "src/BusinessRecord/Application/BusinessRecordService.php",
+          "tests/Integration/Persistence/TransactionBoundaryEngineIntegrationTest.php",
+          "tests/Integration/BusinessRecord/BusinessNumberSequenceIdentityIntegrationTest.php",
+          "docs/architecture/layers.json",
+          "docs/architecture/capability-index.md",
+          "docs/architecture/governance/core-growth-baseline.json",
+          "docs/architecture/governance/legacy-packages.json",
+          "docs/architecture/non-roadmap",
+          "docs/quality/baseline.json",
+          "CHANGELOG.md"
+        ],
+        "related_migrations": [
+          "KUMWE-MIG-2026-001",
+          "KUMWE-MIG-2026-003",
+          "KUMWE-MIG-2026-004"
+        ],
+        "ownership_conflicts": [],
+        "integration_train": null,
+        "resolution_rule": "semantic-preservation"
+      },
+      "governance": {
+        "roadmap_source_sha256": "a202155ef1a65f5ab293d4f8397ebf4ac430db7f1e877c776bbe7851e6fe18d8",
+        "roadmap_refs": [],
+        "non_roadmap_refs": [
+          "NRM-2026-003"
+        ],
+        "completion_claim": false
+      },
+      "decisions": [
+        "D1: the port declares the package-owned NumberSequenceUnavailable, the one authorised clean break (section 1)",
+        "D2: value and port package with no ConfigProvider, factory or alias; the host binds its adapter to the port FQCN",
+        "D3: every constant, grammar, default, message, signature and parameter name is the App's; @since restarts at 0.1.0",
+        "D4: runtime php ^8.5 alone; local gates ran on PHP 8.4.19 with --ignore-platform-req=php, CI proves 8.5",
+        "D5: the first release is 0.1.0, the newest CHANGELOG.md heading (D-GOV-6); no tag or digest is predicted",
+        "D6: NRM-2026-003 is allocated in migration-number order among four concurrent Phase 1 handoffs (section 6)",
+        "D7: the archive gate requires this handoff, so the pre-handoff head fails only that gate, by design",
+        "D8: roadmap_refs stay empty; Session 2 names sequence as enabling, the change set records refs",
+        "D9: the suite is the dependency-free runner (tests/run.php), the pattern kumwe/conversion uses",
+        "D10: no allocator ships in src/, not even a test double; the in-memory reference lives under tests/ and examples/",
+        "D11: the App's unit corpus for the three values is replayed here case by case and extended (section 5)",
+        "D12: the refusal's message, code 0 and chained previous are the fixed identity a retry policy and a log see",
+        "D13: 0.2.0 rejects reserved organization key '-' to enforce disjoint scopes; supersedes D3 only for that input"
+      ],
+      "blockers": []
+    }
+  },
+  "canonical_schema_validation": [
+    {
+      "path": "resources/public-api/v1.json",
+      "schema": "package-public-api.v1.schema.json",
+      "sha256": "01f26a717405438d10bd76e33dda4edaae16fa03f3976dc26d8ccde2a30c1964"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "schema": "package-capabilities.v1.schema.json",
+      "sha256": "13c07a238124b08486f53e3d4c7dccd7a0990d95b40ec017c302acc2357c9ea7"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "schema": "package-service-map.v1.schema.json",
+      "sha256": "34ee30e7c49f707bafaa0a7e5d6d1964f32af98124a396424ecc678aae266ed0"
+    }
+  ],
+  "manifests_and_corpora": [
+    {
+      "path": "resources/public-api/v1.json",
+      "sha256": "01f26a717405438d10bd76e33dda4edaae16fa03f3976dc26d8ccde2a30c1964"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "sha256": "13c07a238124b08486f53e3d4c7dccd7a0990d95b40ec017c302acc2357c9ea7"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "sha256": "34ee30e7c49f707bafaa0a7e5d6d1964f32af98124a396424ecc678aae266ed0"
+    }
+  ],
+  "archived_files": 25,
+  "complete_git_export_matched": true,
+  "handoff_sha256": "733ea4ab21a16a00565e81a513b9d3f1d36f79be3c473c2cf991bfa3145fd7db",
+  "license": {
+    "declaration": "Apache-2.0",
+    "path": "LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  "release_workflow": "https://github.com/kumwe/sequence/actions/runs/34155339114",
+  "merged_pull_request": "https://github.com/kumwe/sequence/pull/6",
+  "platform_immutable_flag": false,
+  "observed_at": "2026-09-08T17:31:30Z",
+  "verifier": {
+    "repository": "kumwe/extension-sdk",
+    "commit": "15759b763a964b3f7c497f9dafe748f1b3b592be",
+    "workflow_event_commit": "2df6b2c4fc80ca6dca43711908911218bf9dbd3b",
+    "run_url": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329"
+  },
+  "consumer": {
+    "schema": "kumwe-independent-release-consumer/v1",
+    "status": "passed",
+    "name": "kumwe/sequence",
+    "version": "0.2.1",
+    "source_commit": "142c3e74a7596935ef42c8fa744ca705fd3b4b4f",
+    "archive_sha256": "ffdc4708354ea72824d0f83bb996eed277e0e19f17a78109f99a496101cfca67",
+    "no_dev": true,
+    "classmap_authoritative": true,
+    "offline_reinstall": true,
+    "composer_lock_sha256": "a6a4dd126ab6430a77d7f307dac4550251033a4b7342e2f2802fe8fea8a04505",
+    "runtime_types_loaded": 5,
+    "consumer_dependency_audit": "passed",
+    "canonical_api_exports_verified": 5,
+    "installed_dist_identity_verified": true,
+    "runtime_classes": [
+      "Kumwe\\Sequence\\Contract\\NumberSequenceAllocator",
+      "Kumwe\\Sequence\\Exception\\NumberSequenceUnavailable",
+      "Kumwe\\Sequence\\Value\\NumberSequenceFormat",
+      "Kumwe\\Sequence\\Value\\NumberSequenceReset",
+      "Kumwe\\Sequence\\Value\\NumberSequenceScope"
+    ],
+    "optional_phpunit_bridges": [],
+    "consumer_host_requirements": [],
+    "examples": [
+      "examples/allocate-and-render.php",
+      "examples/README.md"
+    ],
+    "php": "8.5.10",
+    "php_zts": false,
+    "os": "Linux",
+    "architecture": "x86_64",
+    "native_extension_loaded": false
+  },
+  "native_fixture": null
+}

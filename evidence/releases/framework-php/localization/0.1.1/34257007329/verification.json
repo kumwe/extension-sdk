@@ -1,0 +1,1125 @@
+{
+  "schema": "kumwe-independent-release-verification/v1",
+  "status": "passed",
+  "input": {
+    "name": "kumwe/localization",
+    "version": "0.1.1",
+    "source_commit": "8571ab575b9b9f2dc1b8a25b3c902d9cf44093cb",
+    "repository": "kumwe/localization",
+    "tag": "v0.1.1",
+    "archive_url": "https://api.github.com/repos/kumwe/localization/zipball/8571ab575b9b9f2dc1b8a25b3c902d9cf44093cb",
+    "archive_path": "/home/runner/work/_temp/release-verification/source.zip",
+    "archive_sha256": "d0c3341f2e6126c83499a07d3aeb9490799228f55019b265d1c8c5e765dadcae",
+    "package_root": "/home/runner/work/_temp/release-verification/archive/kumwe-localization-8571ab5",
+    "composer": {
+      "name": "kumwe/localization",
+      "description": "Portable locale negotiation, layered message catalogues and ICU formatting.",
+      "type": "library",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/kumwe/localization",
+      "support": {
+        "issues": "https://github.com/kumwe/localization/issues",
+        "source": "https://github.com/kumwe/localization"
+      },
+      "require": {
+        "php": "^8.5",
+        "ext-intl": "*",
+        "psr/container": "^2.0"
+      },
+      "require-dev": {
+        "ext-zip": "*",
+        "laminas/laminas-servicemanager": "^4.0",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-deprecation-rules": "^2.0",
+        "phpstan/phpstan-strict-rules": "^2.0",
+        "phpunit/phpunit": "^12.0",
+        "squizlabs/php_codesniffer": "^4.0"
+      },
+      "autoload": {
+        "psr-4": {
+          "Kumwe\\Localization\\": "src/"
+        }
+      },
+      "autoload-dev": {
+        "psr-4": {
+          "Kumwe\\Localization\\Tests\\": "tests/"
+        }
+      },
+      "scripts": {
+        "composer:validate": "composer validate --strict",
+        "release:check": "bash tools/test-release-record.sh",
+        "lint": "php tools/lint.php",
+        "docs": "php tools/check-docblocks.php",
+        "architecture": "php tools/verify-architecture.php",
+        "manifests": "php tools/verify-manifests.php",
+        "manifests:record": "php tools/verify-manifests.php --write",
+        "autoload:smoke": "php resources/toolchain/autoload-smoke.php",
+        "examples": "php examples/translate.php",
+        "cs": "phpcs -q",
+        "cs:fix": "phpcbf",
+        "analyse": "phpstan analyse --no-progress --memory-limit=1G",
+        "test": "phpunit",
+        "clean-consumer": "php tools/verify-clean-consumer.php",
+        "check": [
+          "@composer:validate",
+          "@security:audit",
+          "@release:check",
+          "@lint",
+          "@docs",
+          "@architecture",
+          "@boundary:tokens",
+          "@extraction:check",
+          "@manifests",
+          "@autoload:smoke",
+          "@examples",
+          "@cs",
+          "@analyse",
+          "@test:ownership",
+          "@test",
+          "@clean-consumer",
+          "@release:integrity"
+        ],
+        "security:audit": "composer audit --abandoned=fail",
+        "extraction:check": "php tools/verify-extraction.php",
+        "release:integrity": "bash tools/test-release-integrity.sh",
+        "test:ownership": "php tools/verify-test-ownership.php --self-test",
+        "boundary:tokens": "php tools/verify-boundary-tokens.php --self-test"
+      },
+      "config": {
+        "sort-packages": true
+      },
+      "minimum-stability": "stable",
+      "prefer-stable": true
+    },
+    "examples": [
+      "examples/translate.php",
+      "examples/container.php"
+    ],
+    "handoff": {
+      "schema": "kumwe-migration-handoff/v2",
+      "artifact_kind": "framework_php",
+      "migration_id": "KUMWE-MIG-2026-005",
+      "change_set": "KUMWE-CS-2026-005",
+      "state": "draft_pr_open",
+      "source": {
+        "app": {
+          "repository": "https://github.com/kumwe/app",
+          "baseline_commit": "960ce8ec00cf724a7cae03e5ba09c4852c9ab54e",
+          "examined_paths": [
+            "src/Localization",
+            "tests/Unit/Localization",
+            "tests/Integration/Localization",
+            "tests/Functional/Localization",
+            "src/Kernel/ContainerFactory.php",
+            "composer.lock",
+            "docs/architecture/capability-index.md",
+            "AGENTS.md",
+            "docs/architecture/governance/decisions.md"
+          ],
+          "old_namespace_roots": [
+            "Kumwe\\App\\Localization\\"
+          ],
+          "capability_index_sha256": "8fb2a8680bed6ac1456183bc9e48fe040194923b6d1b3331f04cea28bd5a9b2f"
+        },
+        "semantic_inputs": [],
+        "examined_dependencies": [
+          "kumwe/conversion v0.1.2",
+          "kumwe/extension-sdk v0.2.4",
+          "kumwe/producer v0.2.0",
+          "psr/container: factory signatures only; no Kumwe dependency selected",
+          "ext-intl: existing ICU formatting implementation"
+        ],
+        "active_related_pull_requests": [
+          "https://github.com/kumwe/app/pull/135"
+        ]
+      },
+      "target": {
+        "repository": "https://github.com/kumwe/localization",
+        "artifact_identity": "kumwe/localization",
+        "canonical_namespace_or_abi": "Kumwe\\Localization",
+        "branch": "fix/release-integrity-successor-20260907",
+        "pull_request": "https://github.com/kumwe/localization/pull/2"
+      },
+      "ownership": {
+        "responsibility": "Portable locale, catalogue, translation, formatting and negotiation behavior.",
+        "non_responsibilities": [
+          "Authorization, site settings, trusted scope and administered mutation workflows",
+          "Doctrine and persistence/transaction policy",
+          "File catalogue loading/compilation/cache policy, middleware, Twig and delivery"
+        ],
+        "allowed_dependency_ceiling": [],
+        "implementation_owner": "kumwe/localization",
+        "next_consumer": "kumwe/app",
+        "public_manifests": [
+          {
+            "path": "resources/public-api/v1.json",
+            "sha256": "645454cdf3893932af21fba20fc8a1b6652619ca1ef7b91f05a5f23a5b9c5bbc"
+          },
+          {
+            "path": "resources/capabilities/v1.json",
+            "sha256": "e5ffa4984b444276f5135bb541026734e5a85354d112642bdb244d08972a8697"
+          },
+          {
+            "path": "resources/service-map/v1.json",
+            "sha256": "c7e70a8b5e5ea7bfd70d19cccbb17f111357f7f0f61fcabc7bd14cf5437eca3e"
+          }
+        ],
+        "intentionally_excluded": [
+          "src/Localization/Application/SiteDefaultLocale.php",
+          "src/Localization/Application/MessageOverrideService.php",
+          "src/Localization/Infrastructure/DoctrineMessageOverrideRepository.php",
+          "src/Localization/Infrastructure/CompiledMessageCatalogueRepository.php",
+          "src/Localization/Infrastructure/MessageCatalogueCompiler.php",
+          "src/Localization/Infrastructure/XliffCatalogue.php",
+          "src/Localization/Infrastructure/XliffCatalogueReader.php",
+          "src/Localization/Infrastructure/ArrayMessageOverrideRepository.php",
+          "src/Localization/Http",
+          "src/Localization/Presentation"
+        ]
+      },
+      "framework_php": {
+        "composer_package": "kumwe/localization",
+        "canonical_namespace": "Kumwe\\Localization",
+        "public_api_manifest": "resources/public-api/v1.json",
+        "capability_manifest": "resources/capabilities/v1.json",
+        "service_map": "resources/service-map/v1.json",
+        "extracted_symbols": [
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\ActiveLocale",
+            "new_fqcn": "Kumwe\\Localization\\Application\\ActiveLocale",
+            "source_path": "src/Localization/Application/ActiveLocale.php",
+            "target_path": "src/Application/ActiveLocale.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "adoptLocale",
+              "adoptScope",
+              "begin",
+              "end",
+              "generation",
+              "locale",
+              "scope"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\CatalogueTranslator",
+            "new_fqcn": "Kumwe\\Localization\\Application\\CatalogueTranslator",
+            "source_path": "src/Localization/Application/CatalogueTranslator.php",
+            "target_path": "src/Application/CatalogueTranslator.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "attribution",
+              "has",
+              "translate"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\LocaleNegotiator",
+            "new_fqcn": "Kumwe\\Localization\\Application\\LocaleNegotiator",
+            "source_path": "src/Localization/Application/LocaleNegotiator.php",
+            "target_path": "src/Application/LocaleNegotiator.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "negotiate"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "Namespace moved; constructor SiteDefaultLocale becomes DefaultLocaleProvider (LOCALIZATION-001); executable behavior otherwise preserved."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\MessageCatalogueRepository",
+            "new_fqcn": "Kumwe\\Localization\\Application\\MessageCatalogueRepository",
+            "source_path": "src/Localization/Application/MessageCatalogueRepository.php",
+            "target_path": "src/Application/MessageCatalogueRepository.php",
+            "kind": "interface",
+            "public_methods": [
+              "catalogue"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\MessageFormattingFailed",
+            "new_fqcn": "Kumwe\\Localization\\Application\\MessageFormattingFailed",
+            "source_path": "src/Localization/Application/MessageFormattingFailed.php",
+            "target_path": "src/Application/MessageFormattingFailed.php",
+            "kind": "class",
+            "public_methods": [
+              "pattern"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\MessageOverrideRecord",
+            "new_fqcn": "Kumwe\\Localization\\Application\\MessageOverrideRecord",
+            "source_path": "src/Localization/Application/MessageOverrideRecord.php",
+            "target_path": "src/Application/MessageOverrideRecord.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "toArray"
+            ],
+            "public_properties": [
+              "identifier",
+              "layer",
+              "locale",
+              "organization",
+              "pattern",
+              "site",
+              "updatedAt"
+            ],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": "toArray retains layer/site/organization/locale/identifier/pattern/updated_at with RFC3339 timezone offset.",
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\MessageOverrideRepository",
+            "new_fqcn": "Kumwe\\Localization\\Application\\MessageOverrideRepository",
+            "source_path": "src/Localization/Application/MessageOverrideRepository.php",
+            "target_path": "src/Application/MessageOverrideRepository.php",
+            "kind": "interface",
+            "public_methods": [
+              "organizationOverrides",
+              "siteOverrides"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\MessageOverrideStore",
+            "new_fqcn": "Kumwe\\Localization\\Application\\MessageOverrideStore",
+            "source_path": "src/Localization/Application/MessageOverrideStore.php",
+            "target_path": "src/Application/MessageOverrideStore.php",
+            "kind": "interface",
+            "public_methods": [
+              "lockSite",
+              "overrides",
+              "put",
+              "remove"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\MessagePatternFormatter",
+            "new_fqcn": "Kumwe\\Localization\\Application\\MessagePatternFormatter",
+            "source_path": "src/Localization/Application/MessagePatternFormatter.php",
+            "target_path": "src/Application/MessagePatternFormatter.php",
+            "kind": "interface",
+            "public_methods": [
+              "format"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\MessagePatternValidator",
+            "new_fqcn": "Kumwe\\Localization\\Application\\MessagePatternValidator",
+            "source_path": "src/Localization/Application/MessagePatternValidator.php",
+            "target_path": "src/Application/MessagePatternValidator.php",
+            "kind": "interface",
+            "public_methods": [
+              "validate"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\SupportedLocales",
+            "new_fqcn": "Kumwe\\Localization\\Application\\SupportedLocales",
+            "source_path": "src/Localization/Application/SupportedLocales.php",
+            "target_path": "src/Application/SupportedLocales.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "all",
+              "best",
+              "carries",
+              "source",
+              "tags"
+            ],
+            "public_properties": [],
+            "public_constants": [
+              "SOURCE",
+              "VERSION_TWO"
+            ],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\TranslationScope",
+            "new_fqcn": "Kumwe\\Localization\\Application\\TranslationScope",
+            "source_path": "src/Localization/Application/TranslationScope.php",
+            "target_path": "src/Application/TranslationScope.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "default",
+              "key"
+            ],
+            "public_properties": [
+              "organization",
+              "site"
+            ],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Application\\Translator",
+            "new_fqcn": "Kumwe\\Localization\\Application\\Translator",
+            "source_path": "src/Localization/Application/Translator.php",
+            "target_path": "src/Application/Translator.php",
+            "kind": "interface",
+            "public_methods": [
+              "has",
+              "translate"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Domain\\InvalidLocaleTag",
+            "new_fqcn": "Kumwe\\Localization\\Domain\\InvalidLocaleTag",
+            "source_path": "src/Localization/Domain/InvalidLocaleTag.php",
+            "target_path": "src/Domain/InvalidLocaleTag.php",
+            "kind": "class",
+            "public_methods": [
+              "malformed",
+              "unsupported"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Domain\\InvalidMessageIdentifier",
+            "new_fqcn": "Kumwe\\Localization\\Domain\\InvalidMessageIdentifier",
+            "source_path": "src/Localization/Domain/InvalidMessageIdentifier.php",
+            "target_path": "src/Domain/InvalidMessageIdentifier.php",
+            "kind": "class",
+            "public_methods": [
+              "malformed",
+              "outsideNamespace",
+              "sourceText"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Domain\\LocaleTag",
+            "new_fqcn": "Kumwe\\Localization\\Domain\\LocaleTag",
+            "source_path": "src/Localization/Domain/LocaleTag.php",
+            "target_path": "src/Domain/LocaleTag.php",
+            "kind": "class",
+            "public_methods": [
+              "direction",
+              "equals",
+              "fallbacks",
+              "fromString",
+              "toString"
+            ],
+            "public_properties": [
+              "language",
+              "region",
+              "script"
+            ],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Domain\\MessageCatalogue",
+            "new_fqcn": "Kumwe\\Localization\\Domain\\MessageCatalogue",
+            "source_path": "src/Localization/Domain/MessageCatalogue.php",
+            "target_path": "src/Domain/MessageCatalogue.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "count",
+              "empty",
+              "has",
+              "identifiers",
+              "pattern"
+            ],
+            "public_properties": [
+              "layer",
+              "locale",
+              "messages"
+            ],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Domain\\MessageCatalogueChain",
+            "new_fqcn": "Kumwe\\Localization\\Domain\\MessageCatalogueChain",
+            "source_path": "src/Localization/Domain/MessageCatalogueChain.php",
+            "target_path": "src/Domain/MessageCatalogueChain.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "resolve",
+              "winningLayer"
+            ],
+            "public_properties": [
+              "layers",
+              "locale"
+            ],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Domain\\MessageCatalogueLayer",
+            "new_fqcn": "Kumwe\\Localization\\Domain\\MessageCatalogueLayer",
+            "source_path": "src/Localization/Domain/MessageCatalogueLayer.php",
+            "target_path": "src/Domain/MessageCatalogueLayer.php",
+            "kind": "enum",
+            "public_methods": [
+              "mostSpecificFirst"
+            ],
+            "public_properties": [],
+            "public_constants": [
+              "Core",
+              "Extension",
+              "Organization",
+              "Site"
+            ],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Domain\\MessageIdentifier",
+            "new_fqcn": "Kumwe\\Localization\\Domain\\MessageIdentifier",
+            "source_path": "src/Localization/Domain/MessageIdentifier.php",
+            "target_path": "src/Domain/MessageIdentifier.php",
+            "kind": "class",
+            "public_methods": [
+              "fromString",
+              "isValid",
+              "ownedBy",
+              "root"
+            ],
+            "public_properties": [
+              "value"
+            ],
+            "public_constants": [
+              "MAXIMUM_LENGTH",
+              "MINIMUM_SEGMENTS"
+            ],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Domain\\TextDirection",
+            "new_fqcn": "Kumwe\\Localization\\Domain\\TextDirection",
+            "source_path": "src/Localization/Domain/TextDirection.php",
+            "target_path": "src/Domain/TextDirection.php",
+            "kind": "enum",
+            "public_methods": [],
+            "public_properties": [],
+            "public_constants": [
+              "LeftToRight",
+              "RightToLeft"
+            ],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Infrastructure\\IntlExtensionMissing",
+            "new_fqcn": "Kumwe\\Localization\\Infrastructure\\IntlExtensionMissing",
+            "source_path": "src/Localization/Infrastructure/IntlExtensionMissing.php",
+            "target_path": "src/Infrastructure/IntlExtensionMissing.php",
+            "kind": "class",
+            "public_methods": [
+              "forMessageFormatting"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\Localization\\Infrastructure\\IntlMessagePatternFormatter",
+            "new_fqcn": "Kumwe\\Localization\\Infrastructure\\IntlMessagePatternFormatter",
+            "source_path": "src/Localization/Infrastructure/IntlMessagePatternFormatter.php",
+            "target_path": "src/Infrastructure/IntlMessagePatternFormatter.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "format",
+              "validate"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": null,
+            "compatibility": "preserved"
+          }
+        ],
+        "consumers": {
+          "app_code": [
+            "src/Administrator/Automation/AutomationJobFormRegistry.php",
+            "src/Administrator/Http/Handler/AdministratorBusinessSecurityHandler.php",
+            "src/Administrator/Http/Handler/AdministratorLoginHandler.php",
+            "src/Administrator/Http/Handler/AdministratorMediaHandler.php",
+            "src/Administrator/Http/Handler/AdministratorStudioCompositionHandler.php",
+            "src/Administrator/Http/Handler/AdministratorWordingHandler.php",
+            "src/Administrator/Http/Middleware/AdministratorCsrfMiddleware.php",
+            "src/Administrator/Presentation/SitePresentationFormMapper.php",
+            "src/BusinessDefinition/Domain/EntityTypeDefinition.php",
+            "src/BusinessDefinition/Domain/FieldDefinition.php",
+            "src/BusinessDefinition/Domain/LocalizedDefinitionText.php",
+            "src/BusinessSchema/Delivery/Administrator/BusinessSchemaPlansHandler.php",
+            "src/BusinessSurface/Application/BusinessSurfaceCatalog.php",
+            "src/BusinessSurface/Application/BusinessSurfaceService.php",
+            "src/BusinessSurface/Delivery/Administrator/AdministratorBusinessSurfaceHandler.php",
+            "src/BusinessSurface/Delivery/Browser/BusinessCustomViewPresenter.php",
+            "src/BusinessSurface/Delivery/Browser/BusinessCustomViewRequest.php",
+            "src/BusinessSurface/Delivery/Browser/BusinessSchemaForm.php",
+            "src/BusinessSurface/Delivery/Browser/BusinessStructuredFieldForm.php",
+            "src/BusinessSurface/Delivery/Browser/GeneratedBusinessBrowserController.php",
+            "src/BusinessSurface/Delivery/Portal/PortalBusinessSurfaceHandler.php",
+            "src/Content/Application/ContentService.php",
+            "src/Content/Application/TranslationGroupRepository.php",
+            "src/Content/Domain/ContentEntry.php",
+            "src/Content/Domain/TranslationGroup.php",
+            "src/Content/Domain/TranslationGroupMember.php",
+            "src/Content/Infrastructure/Persistence/DoctrineTranslationGroupRepository.php",
+            "src/Content/Presentation/TranslationGroupPresenter.php",
+            "src/Delivery/Console/StreamOutput.php",
+            "src/Extension/Contribution/TranslationGroupDeclaration.php",
+            "src/Http/Handler/HomePageHandler.php",
+            "src/Http/Handler/PublishedContentHandler.php",
+            "src/Kernel/ContainerFactory.php",
+            "src/Localization/Application/MessageOverrideService.php",
+            "src/Localization/Application/SiteDefaultLocale.php",
+            "src/Localization/Http/Middleware/LocaleNegotiationMiddleware.php",
+            "src/Localization/Http/Middleware/TranslationScopeMiddleware.php",
+            "src/Localization/Infrastructure/ArrayMessageOverrideRepository.php",
+            "src/Localization/Infrastructure/CompiledMessageCatalogueRepository.php",
+            "src/Localization/Infrastructure/DoctrineMessageOverrideRepository.php",
+            "src/Localization/Infrastructure/MessageCatalogueCompiler.php",
+            "src/Localization/Presentation/TranslationTwigExtension.php",
+            "src/Portal/Http/Handler/PortalApprovalHandler.php",
+            "src/Portal/Http/Handler/PortalLoginHandler.php",
+            "src/Portal/Http/Handler/PortalSecurityHandler.php",
+            "src/Portal/Http/Middleware/PortalCsrfMiddleware.php",
+            "src/Studio/Application/Host/StudioLocalizationHostPort.php"
+          ],
+          "configuration_and_di": [
+            "src/Kernel/ContainerFactory.php"
+          ],
+          "reflection_and_string_references": [
+            "docs/architecture/governance/core-growth-baseline.json",
+            "docs/interface-translation.md"
+          ],
+          "fixtures_and_examples": [
+            "tests/Integration/BusinessSurface/GeneratedBusinessBrowserIntegrationTest.php",
+            "tests/Integration/Content/MultilingualContentIntegrationTest.php",
+            "tests/Integration/Extension/ContributedContentTranslationIntegrationTest.php",
+            "tests/Integration/Localization/MessageOverrideIntegrationTest.php",
+            "tests/Support/InterfaceTranslation.php",
+            "tests/Support/TranslatesConsoleOutput.php",
+            "tests/Unit/Administrator/Http/Handler/AdministratorStudioHostHandlerTest.php",
+            "tests/Unit/Administrator/Http/Middleware/AdministratorAuthorizationMiddlewareTest.php",
+            "tests/Unit/BusinessDefinition/Domain/LocalizedDefinitionLabelTest.php",
+            "tests/Unit/BusinessSurface/Application/BusinessSurfaceCatalogTest.php",
+            "tests/Unit/Content/Application/ContentTranslationServiceTest.php",
+            "tests/Unit/Content/Application/ContributedContentTranslationTest.php",
+            "tests/Unit/Content/Application/ExtensionContentTranslationTest.php",
+            "tests/Unit/Content/Domain/ContentEntryTest.php",
+            "tests/Unit/Content/Domain/TranslationGroupTest.php",
+            "tests/Unit/Content/Infrastructure/Persistence/DoctrineContentRepositoryTest.php",
+            "tests/Unit/Content/Infrastructure/Persistence/DoctrineTranslationGroupRepositoryTest.php",
+            "tests/Unit/Content/Presentation/TranslationGroupPresenterTest.php",
+            "tests/Unit/Delivery/Console/CommandDescriptionTest.php",
+            "tests/Unit/Http/Handler/HomePageHandlerTest.php",
+            "tests/Unit/Http/Handler/PublishedContentHandlerTest.php",
+            "tests/Unit/Localization/Application/CatalogueTranslatorTest.php",
+            "tests/Unit/Localization/Application/LocaleNegotiationTest.php",
+            "tests/Unit/Localization/Application/MessageOverrideServiceTest.php",
+            "tests/Unit/Localization/Domain/LocaleTagTest.php",
+            "tests/Unit/Localization/Domain/MessageIdentifierTest.php",
+            "tests/Unit/Localization/Http/LocaleNegotiationMiddlewareTest.php",
+            "tests/Unit/Localization/Http/TranslationScopeMiddlewareTest.php",
+            "tests/Unit/Localization/Infrastructure/IntlMessagePatternFormatterTest.php",
+            "tests/Unit/Localization/Infrastructure/MessageCatalogueCompilerTest.php",
+            "tests/Unit/Site/Application/PublicPageLocatorTest.php",
+            "tests/Unit/Studio/Application/Host/StudioLocalizationTelemetryHostPortTest.php",
+            "tests/Unit/Studio/Application/Projection/StudioContentProjectionServiceTest.php"
+          ],
+          "external": []
+        },
+        "dependency_injection": {
+          "mode": "config-provider",
+          "provider": "Kumwe\\Localization\\ConfigProvider",
+          "factories": [
+            "Kumwe\\Localization\\Container\\CatalogueTranslatorFactory",
+            "Kumwe\\Localization\\Container\\LocaleNegotiatorFactory"
+          ],
+          "aliases": [
+            "Kumwe\\Localization\\Application\\Translator -> Kumwe\\Localization\\Application\\CatalogueTranslator"
+          ],
+          "service_lifetimes": [
+            "CatalogueTranslator and LocaleNegotiator: non-shared",
+            "ActiveLocale: explicitly host-supplied per operation; never global across concurrent requests",
+            "SupportedLocales and stateless formatter: direct construction, immutable/stateless sharing allowed",
+            "DefaultLocaleProvider: explicit host scope"
+          ],
+          "configuration_keys": [
+            "kumwe.localization.maximum_accept_language_bytes"
+          ],
+          "provider_absence_reason": null
+        }
+      },
+      "native_cpp": null,
+      "php_extension": null,
+      "tests": {
+        "moved_or_added": [
+          "tests/Support/ArrayMessageOverrideRepository.php",
+          "tests/Unit/ContainerTest.php",
+          "tests/Unit/Application/CatalogueTranslatorTest.php",
+          "tests/Unit/Application/LocaleNegotiatorTest.php",
+          "tests/Unit/Application/RecordAndCatalogueTest.php",
+          "tests/Unit/Domain/MessageIdentifierTest.php",
+          "tests/Unit/Domain/LocaleTagTest.php",
+          "tests/Unit/Infrastructure/IntlMessagePatternFormatterTest.php"
+        ],
+        "remain_in_app_or_consumer": [
+          "tests/Functional/Localization/ConsoleWordingTest.php",
+          "tests/Functional/Localization/ResolvedLocaleRenderingTest.php",
+          "tests/Integration/Localization/AdministratorWordingValidationIntegrationTest.php",
+          "tests/Integration/Localization/MessageOverrideIntegrationTest.php",
+          "tests/Unit/Localization/Application/LocaleNegotiationTest.php",
+          "tests/Unit/Localization/Application/MessageOverrideServiceTest.php",
+          "tests/Unit/Localization/Http/LocaleNegotiationMiddlewareTest.php",
+          "tests/Unit/Localization/Http/TranslationScopeMiddlewareTest.php",
+          "tests/Unit/Localization/Infrastructure/MessageCatalogueCompilerTest.php",
+          "tests/Unit/Localization/Presentation/TranslationTwigExtensionTest.php"
+        ],
+        "split_tests": [
+          "tests/Unit/Localization/Application/LocaleNegotiationTest.php: package takes negotiation/registry cases; App keeps SiteDefaultLocale settings reads, invalid settings, failing-store degradation and process caching cases.",
+          "ArrayMessageOverrideRepository copied only to tests/Support with changed namespace; do not ship fixture as a public implementation."
+        ],
+        "prohibited_duplicates": [
+          "tests/Unit/Localization/Domain/LocaleTagTest.php",
+          "tests/Unit/Localization/Domain/MessageIdentifierTest.php",
+          "tests/Unit/Localization/Application/CatalogueTranslatorTest.php",
+          "tests/Unit/Localization/Infrastructure/IntlMessagePatternFormatterTest.php"
+        ],
+        "corpora": [
+          "resources/extraction/v1.json: original-source and executable-token SHA256 baseline for 23 moved types",
+          "Moved locale/identifier/translation/ICU unit vectors; independent negotiation/record/provider regression matrices"
+        ]
+      },
+      "documentation": {
+        "charter": "CHARTER.md",
+        "readme": "README.md",
+        "public_api": "docs/public-api.md",
+        "architecture": "docs/architecture.md",
+        "integration_or_consumer": "docs/integration.md",
+        "examples": [
+          "examples/translate.php",
+          "examples/container.php"
+        ],
+        "changelog_record": "CHANGELOG.md: ## 0.1.1 (NRM-2026-006)"
+      },
+      "release_expectations": {
+        "version_policy": "SemVer; 0.1.1 successor under D-GOV-6; fresh verification required after publication.",
+        "expected_artifact_types": [
+          "Composer source archive",
+          "immutable GitHub tag/release after human merge"
+        ],
+        "required_checks": [
+          "Protected main before publication; exact stable published release reports immutable true.",
+          "composer check",
+          "PHP8.5 ext-intl/zip full lane",
+          "no-dev built-ZIP dependency consumer with authoritative autoloader and actual ServiceManager",
+          "independent tag/archive/source/API/registry/provenance verification"
+        ],
+        "required_registry_or_installer": "Composer/Packagist; first registry submission is maintainer-owned",
+        "required_external_attestation": true
+      },
+      "next_task": {
+        "phase_name": "Localization Phase 2 App adoption",
+        "permitted_only_when": [
+          "The release-integrity successor is published from protected main and independently verified.",
+          "Package PR human-merged",
+          "Immutable release independently verified by a fresh session",
+          "External RELEASE-ATTESTATION.yaml identifies exact source/archive/manifests and successful consumer install",
+          "No unported drift in extracted App symbols/tests since baseline"
+        ],
+        "consumer_repository": "https://github.com/kumwe/app",
+        "dependency_or_native_change": "Require the exact independently verified kumwe/localization release; regenerate composer.lock through Composer.",
+        "namespace_or_api_replacements": [
+          "Kumwe\\App\\Localization\\Application\\ActiveLocale -> Kumwe\\Localization\\Application\\ActiveLocale",
+          "Kumwe\\App\\Localization\\Application\\CatalogueTranslator -> Kumwe\\Localization\\Application\\CatalogueTranslator",
+          "Kumwe\\App\\Localization\\Application\\LocaleNegotiator -> Kumwe\\Localization\\Application\\LocaleNegotiator",
+          "Kumwe\\App\\Localization\\Application\\MessageCatalogueRepository -> Kumwe\\Localization\\Application\\MessageCatalogueRepository",
+          "Kumwe\\App\\Localization\\Application\\MessageFormattingFailed -> Kumwe\\Localization\\Application\\MessageFormattingFailed",
+          "Kumwe\\App\\Localization\\Application\\MessageOverrideRecord -> Kumwe\\Localization\\Application\\MessageOverrideRecord",
+          "Kumwe\\App\\Localization\\Application\\MessageOverrideRepository -> Kumwe\\Localization\\Application\\MessageOverrideRepository",
+          "Kumwe\\App\\Localization\\Application\\MessageOverrideStore -> Kumwe\\Localization\\Application\\MessageOverrideStore",
+          "Kumwe\\App\\Localization\\Application\\MessagePatternFormatter -> Kumwe\\Localization\\Application\\MessagePatternFormatter",
+          "Kumwe\\App\\Localization\\Application\\MessagePatternValidator -> Kumwe\\Localization\\Application\\MessagePatternValidator",
+          "Kumwe\\App\\Localization\\Application\\SupportedLocales -> Kumwe\\Localization\\Application\\SupportedLocales",
+          "Kumwe\\App\\Localization\\Application\\TranslationScope -> Kumwe\\Localization\\Application\\TranslationScope",
+          "Kumwe\\App\\Localization\\Application\\Translator -> Kumwe\\Localization\\Application\\Translator",
+          "Kumwe\\App\\Localization\\Domain\\InvalidLocaleTag -> Kumwe\\Localization\\Domain\\InvalidLocaleTag",
+          "Kumwe\\App\\Localization\\Domain\\InvalidMessageIdentifier -> Kumwe\\Localization\\Domain\\InvalidMessageIdentifier",
+          "Kumwe\\App\\Localization\\Domain\\LocaleTag -> Kumwe\\Localization\\Domain\\LocaleTag",
+          "Kumwe\\App\\Localization\\Domain\\MessageCatalogue -> Kumwe\\Localization\\Domain\\MessageCatalogue",
+          "Kumwe\\App\\Localization\\Domain\\MessageCatalogueChain -> Kumwe\\Localization\\Domain\\MessageCatalogueChain",
+          "Kumwe\\App\\Localization\\Domain\\MessageCatalogueLayer -> Kumwe\\Localization\\Domain\\MessageCatalogueLayer",
+          "Kumwe\\App\\Localization\\Domain\\MessageIdentifier -> Kumwe\\Localization\\Domain\\MessageIdentifier",
+          "Kumwe\\App\\Localization\\Domain\\TextDirection -> Kumwe\\Localization\\Domain\\TextDirection",
+          "Kumwe\\App\\Localization\\Infrastructure\\IntlExtensionMissing -> Kumwe\\Localization\\Infrastructure\\IntlExtensionMissing",
+          "Kumwe\\App\\Localization\\Infrastructure\\IntlMessagePatternFormatter -> Kumwe\\Localization\\Infrastructure\\IntlMessagePatternFormatter",
+          "Retained SiteDefaultLocale implements Kumwe\\Localization\\Application\\DefaultLocaleProvider; preserve its current settings/failure/cache behavior."
+        ],
+        "files_to_update": [
+          "docs/architecture/governance/core-growth-baseline.json",
+          "docs/interface-translation.md",
+          "src/Administrator/Automation/AutomationJobFormRegistry.php",
+          "src/Administrator/Http/Handler/AdministratorBusinessSecurityHandler.php",
+          "src/Administrator/Http/Handler/AdministratorLoginHandler.php",
+          "src/Administrator/Http/Handler/AdministratorMediaHandler.php",
+          "src/Administrator/Http/Handler/AdministratorStudioCompositionHandler.php",
+          "src/Administrator/Http/Handler/AdministratorWordingHandler.php",
+          "src/Administrator/Http/Middleware/AdministratorCsrfMiddleware.php",
+          "src/Administrator/Presentation/SitePresentationFormMapper.php",
+          "src/BusinessDefinition/Domain/EntityTypeDefinition.php",
+          "src/BusinessDefinition/Domain/FieldDefinition.php",
+          "src/BusinessDefinition/Domain/LocalizedDefinitionText.php",
+          "src/BusinessSchema/Delivery/Administrator/BusinessSchemaPlansHandler.php",
+          "src/BusinessSurface/Application/BusinessSurfaceCatalog.php",
+          "src/BusinessSurface/Application/BusinessSurfaceService.php",
+          "src/BusinessSurface/Delivery/Administrator/AdministratorBusinessSurfaceHandler.php",
+          "src/BusinessSurface/Delivery/Browser/BusinessCustomViewPresenter.php",
+          "src/BusinessSurface/Delivery/Browser/BusinessCustomViewRequest.php",
+          "src/BusinessSurface/Delivery/Browser/BusinessSchemaForm.php",
+          "src/BusinessSurface/Delivery/Browser/BusinessStructuredFieldForm.php",
+          "src/BusinessSurface/Delivery/Browser/GeneratedBusinessBrowserController.php",
+          "src/BusinessSurface/Delivery/Portal/PortalBusinessSurfaceHandler.php",
+          "src/Content/Application/ContentService.php",
+          "src/Content/Application/TranslationGroupRepository.php",
+          "src/Content/Domain/ContentEntry.php",
+          "src/Content/Domain/TranslationGroup.php",
+          "src/Content/Domain/TranslationGroupMember.php",
+          "src/Content/Infrastructure/Persistence/DoctrineTranslationGroupRepository.php",
+          "src/Content/Presentation/TranslationGroupPresenter.php",
+          "src/Delivery/Console/StreamOutput.php",
+          "src/Extension/Contribution/TranslationGroupDeclaration.php",
+          "src/Http/Handler/HomePageHandler.php",
+          "src/Http/Handler/PublishedContentHandler.php",
+          "src/Kernel/ContainerFactory.php",
+          "src/Localization/Application/MessageOverrideService.php",
+          "src/Localization/Application/SiteDefaultLocale.php",
+          "src/Localization/Http/Middleware/LocaleNegotiationMiddleware.php",
+          "src/Localization/Http/Middleware/TranslationScopeMiddleware.php",
+          "src/Localization/Infrastructure/ArrayMessageOverrideRepository.php",
+          "src/Localization/Infrastructure/CompiledMessageCatalogueRepository.php",
+          "src/Localization/Infrastructure/DoctrineMessageOverrideRepository.php",
+          "src/Localization/Infrastructure/MessageCatalogueCompiler.php",
+          "src/Localization/Presentation/TranslationTwigExtension.php",
+          "src/Portal/Http/Handler/PortalApprovalHandler.php",
+          "src/Portal/Http/Handler/PortalLoginHandler.php",
+          "src/Portal/Http/Handler/PortalSecurityHandler.php",
+          "src/Portal/Http/Middleware/PortalCsrfMiddleware.php",
+          "src/Studio/Application/Host/StudioLocalizationHostPort.php",
+          "tests/Integration/BusinessSurface/GeneratedBusinessBrowserIntegrationTest.php",
+          "tests/Integration/Content/MultilingualContentIntegrationTest.php",
+          "tests/Integration/Extension/ContributedContentTranslationIntegrationTest.php",
+          "tests/Integration/Localization/MessageOverrideIntegrationTest.php",
+          "tests/Support/InterfaceTranslation.php",
+          "tests/Support/TranslatesConsoleOutput.php",
+          "tests/Unit/Administrator/Http/Handler/AdministratorStudioHostHandlerTest.php",
+          "tests/Unit/Administrator/Http/Middleware/AdministratorAuthorizationMiddlewareTest.php",
+          "tests/Unit/BusinessDefinition/Domain/LocalizedDefinitionLabelTest.php",
+          "tests/Unit/BusinessSurface/Application/BusinessSurfaceCatalogTest.php",
+          "tests/Unit/Content/Application/ContentTranslationServiceTest.php",
+          "tests/Unit/Content/Application/ContributedContentTranslationTest.php",
+          "tests/Unit/Content/Application/ExtensionContentTranslationTest.php",
+          "tests/Unit/Content/Domain/ContentEntryTest.php",
+          "tests/Unit/Content/Domain/TranslationGroupTest.php",
+          "tests/Unit/Content/Infrastructure/Persistence/DoctrineContentRepositoryTest.php",
+          "tests/Unit/Content/Infrastructure/Persistence/DoctrineTranslationGroupRepositoryTest.php",
+          "tests/Unit/Content/Presentation/TranslationGroupPresenterTest.php",
+          "tests/Unit/Delivery/Console/CommandDescriptionTest.php",
+          "tests/Unit/Http/Handler/HomePageHandlerTest.php",
+          "tests/Unit/Http/Handler/PublishedContentHandlerTest.php",
+          "tests/Unit/Localization/Application/LocaleNegotiationTest.php",
+          "tests/Unit/Localization/Application/MessageOverrideServiceTest.php",
+          "tests/Unit/Localization/Http/LocaleNegotiationMiddlewareTest.php",
+          "tests/Unit/Localization/Http/TranslationScopeMiddlewareTest.php",
+          "tests/Unit/Localization/Infrastructure/MessageCatalogueCompilerTest.php",
+          "tests/Unit/Site/Application/PublicPageLocatorTest.php",
+          "tests/Unit/Studio/Application/Host/StudioLocalizationTelemetryHostPortTest.php",
+          "tests/Unit/Studio/Application/Projection/StudioContentProjectionServiceTest.php",
+          "composer.json",
+          "composer.lock",
+          "docs/architecture/capability-index.md"
+        ],
+        "files_to_remove": [
+          "src/Localization/Application/ActiveLocale.php",
+          "src/Localization/Application/CatalogueTranslator.php",
+          "src/Localization/Application/LocaleNegotiator.php",
+          "src/Localization/Application/MessageCatalogueRepository.php",
+          "src/Localization/Application/MessageFormattingFailed.php",
+          "src/Localization/Application/MessageOverrideRecord.php",
+          "src/Localization/Application/MessageOverrideRepository.php",
+          "src/Localization/Application/MessageOverrideStore.php",
+          "src/Localization/Application/MessagePatternFormatter.php",
+          "src/Localization/Application/MessagePatternValidator.php",
+          "src/Localization/Application/SupportedLocales.php",
+          "src/Localization/Application/TranslationScope.php",
+          "src/Localization/Application/Translator.php",
+          "src/Localization/Domain/InvalidLocaleTag.php",
+          "src/Localization/Domain/InvalidMessageIdentifier.php",
+          "src/Localization/Domain/LocaleTag.php",
+          "src/Localization/Domain/MessageCatalogue.php",
+          "src/Localization/Domain/MessageCatalogueChain.php",
+          "src/Localization/Domain/MessageCatalogueLayer.php",
+          "src/Localization/Domain/MessageIdentifier.php",
+          "src/Localization/Domain/TextDirection.php",
+          "src/Localization/Infrastructure/IntlExtensionMissing.php",
+          "src/Localization/Infrastructure/IntlMessagePatternFormatter.php"
+        ],
+        "tests_to_remove": [
+          "tests/Unit/Localization/Domain/LocaleTagTest.php",
+          "tests/Unit/Localization/Domain/MessageIdentifierTest.php",
+          "tests/Unit/Localization/Application/CatalogueTranslatorTest.php",
+          "tests/Unit/Localization/Infrastructure/IntlMessagePatternFormatterTest.php"
+        ],
+        "tests_to_retain_or_add": [
+          "tests/Functional/Localization/ConsoleWordingTest.php",
+          "tests/Functional/Localization/ResolvedLocaleRenderingTest.php",
+          "tests/Integration/Localization/AdministratorWordingValidationIntegrationTest.php",
+          "tests/Integration/Localization/MessageOverrideIntegrationTest.php",
+          "tests/Unit/Localization/Application/LocaleNegotiationTest.php",
+          "tests/Unit/Localization/Application/MessageOverrideServiceTest.php",
+          "tests/Unit/Localization/Http/LocaleNegotiationMiddlewareTest.php",
+          "tests/Unit/Localization/Http/TranslationScopeMiddlewareTest.php",
+          "tests/Unit/Localization/Infrastructure/MessageCatalogueCompilerTest.php",
+          "tests/Unit/Localization/Presentation/TranslationTwigExtensionTest.php",
+          "Host adapter parity for SiteDefaultLocale implementing DefaultLocaleProvider",
+          "ContainerFactory provider/port wiring, operation context isolation and translation integration"
+        ],
+        "di_or_provisioning_changes": [
+          "Register ConfigProvider explicitly; use only canonical interface aliases.",
+          "Bind retained SiteDefaultLocale under DefaultLocaleProvider.",
+          "Supply an operation-owned ActiveLocale and matching catalogue/override/formatter ports; remove superseded old-FQCN services."
+        ],
+        "capability_index_changes": [
+          "Generate capability index from exact locked release and committed manifests."
+        ],
+        "changelog_and_evidence_changes": [
+          "Record NRM-2026-006 and PR URL in App changelog.",
+          "Write KUMWE-CS-2026-005 central record, KUMWE-MIG-2026-005 migration ledger and integration train; include unchanged external attestation.",
+          "Do not claim a functional roadmap objective complete."
+        ],
+        "verification_commands": [
+          "bash tools/agent-setup.sh",
+          "composer qa",
+          "composer kumwe:capability-index",
+          "composer kumwe:core-growth-check",
+          "composer translation:check",
+          "composer translation:strings",
+          "Run retained Localization unit/integration/functional tests and affected database/browser delivery lanes"
+        ]
+      },
+      "concurrency": {
+        "likely_conflict_files": [
+          "composer.json",
+          "composer.lock",
+          "src/Kernel/ContainerFactory.php",
+          "docs/architecture/capability-index.md",
+          "CHANGELOG.md"
+        ],
+        "related_migrations": [],
+        "ownership_conflicts": [
+          "MessageOverrideService/SiteDefaultLocale are retained hosts; never move their authorization or settings policy into the package."
+        ],
+        "integration_train": null,
+        "resolution_rule": "semantic-preservation"
+      },
+      "governance": {
+        "roadmap_source_sha256": "a202155ef1a65f5ab293d4f8397ebf4ac430db7f1e877c776bbe7851e6fe18d8",
+        "roadmap_refs": [],
+        "non_roadmap_refs": [
+          "NRM-2026-006"
+        ],
+        "completion_claim": false
+      },
+      "decisions": [
+        "LOCALIZATION-001: replace LocaleNegotiator concrete host-settings dependency with DefaultLocaleProvider; host implements it in Phase2.",
+        "LOCALIZATION-002: planned21 portable types plus2 ICU types,1 narrow port and3 DI types yields27 exported types; compiler/cache/authorization remain host-owned.",
+        "LOCALIZATION-003: preserve executable tokens except namespace/interface inversion; do not claim stronger timezone, scope-key, quality-value or constructor validation semantics than App provides."
+      ],
+      "blockers": [
+        "Publication and independent release verification have not occurred; App adoption remains blocked."
+      ]
+    }
+  },
+  "canonical_schema_validation": [
+    {
+      "path": "resources/public-api/v1.json",
+      "schema": "package-public-api.v1.schema.json",
+      "sha256": "645454cdf3893932af21fba20fc8a1b6652619ca1ef7b91f05a5f23a5b9c5bbc"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "schema": "package-capabilities.v1.schema.json",
+      "sha256": "e5ffa4984b444276f5135bb541026734e5a85354d112642bdb244d08972a8697"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "schema": "package-service-map.v1.schema.json",
+      "sha256": "c7e70a8b5e5ea7bfd70d19cccbb17f111357f7f0f61fcabc7bd14cf5437eca3e"
+    }
+  ],
+  "manifests_and_corpora": [
+    {
+      "path": "resources/public-api/v1.json",
+      "sha256": "645454cdf3893932af21fba20fc8a1b6652619ca1ef7b91f05a5f23a5b9c5bbc"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "sha256": "e5ffa4984b444276f5135bb541026734e5a85354d112642bdb244d08972a8697"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "sha256": "c7e70a8b5e5ea7bfd70d19cccbb17f111357f7f0f61fcabc7bd14cf5437eca3e"
+    }
+  ],
+  "archived_files": 49,
+  "complete_git_export_matched": true,
+  "handoff_sha256": "6b1279c0292ea5b8baac07f8a997e6406fa0a9e2cc33cc1cc29a9830a99579ac",
+  "license": {
+    "declaration": "Apache-2.0",
+    "path": "LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  "release_workflow": "https://github.com/kumwe/localization/actions/runs/34155314875",
+  "merged_pull_request": "https://github.com/kumwe/localization/pull/6",
+  "platform_immutable_flag": false,
+  "observed_at": "2026-09-08T17:26:56Z",
+  "verifier": {
+    "repository": "kumwe/extension-sdk",
+    "commit": "15759b763a964b3f7c497f9dafe748f1b3b592be",
+    "workflow_event_commit": "2df6b2c4fc80ca6dca43711908911218bf9dbd3b",
+    "run_url": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329"
+  },
+  "consumer": {
+    "schema": "kumwe-independent-release-consumer/v1",
+    "status": "passed",
+    "name": "kumwe/localization",
+    "version": "0.1.1",
+    "source_commit": "8571ab575b9b9f2dc1b8a25b3c902d9cf44093cb",
+    "archive_sha256": "d0c3341f2e6126c83499a07d3aeb9490799228f55019b265d1c8c5e765dadcae",
+    "no_dev": true,
+    "classmap_authoritative": true,
+    "offline_reinstall": true,
+    "composer_lock_sha256": "268c8825c8010e86b61833de0ad00f3ecbcdc34cf3edd90af677cbf7e4006761",
+    "runtime_types_loaded": 27,
+    "consumer_dependency_audit": "passed",
+    "canonical_api_exports_verified": 27,
+    "installed_dist_identity_verified": true,
+    "runtime_classes": [
+      "Kumwe\\Localization\\Application\\ActiveLocale",
+      "Kumwe\\Localization\\Application\\CatalogueTranslator",
+      "Kumwe\\Localization\\Application\\DefaultLocaleProvider",
+      "Kumwe\\Localization\\Application\\LocaleNegotiator",
+      "Kumwe\\Localization\\Application\\MessageCatalogueRepository",
+      "Kumwe\\Localization\\Application\\MessageFormattingFailed",
+      "Kumwe\\Localization\\Application\\MessageOverrideRecord",
+      "Kumwe\\Localization\\Application\\MessageOverrideRepository",
+      "Kumwe\\Localization\\Application\\MessageOverrideStore",
+      "Kumwe\\Localization\\Application\\MessagePatternFormatter",
+      "Kumwe\\Localization\\Application\\MessagePatternValidator",
+      "Kumwe\\Localization\\Application\\SupportedLocales",
+      "Kumwe\\Localization\\Application\\TranslationScope",
+      "Kumwe\\Localization\\Application\\Translator",
+      "Kumwe\\Localization\\ConfigProvider",
+      "Kumwe\\Localization\\Container\\CatalogueTranslatorFactory",
+      "Kumwe\\Localization\\Container\\LocaleNegotiatorFactory",
+      "Kumwe\\Localization\\Domain\\InvalidLocaleTag",
+      "Kumwe\\Localization\\Domain\\InvalidMessageIdentifier",
+      "Kumwe\\Localization\\Domain\\LocaleTag",
+      "Kumwe\\Localization\\Domain\\MessageCatalogue",
+      "Kumwe\\Localization\\Domain\\MessageCatalogueChain",
+      "Kumwe\\Localization\\Domain\\MessageCatalogueLayer",
+      "Kumwe\\Localization\\Domain\\MessageIdentifier",
+      "Kumwe\\Localization\\Domain\\TextDirection",
+      "Kumwe\\Localization\\Infrastructure\\IntlExtensionMissing",
+      "Kumwe\\Localization\\Infrastructure\\IntlMessagePatternFormatter"
+    ],
+    "optional_phpunit_bridges": [],
+    "consumer_host_requirements": {
+      "laminas/laminas-servicemanager": "^4.0"
+    },
+    "examples": [
+      "examples/translate.php",
+      "examples/container.php"
+    ],
+    "php": "8.5.10",
+    "php_zts": false,
+    "os": "Linux",
+    "architecture": "x86_64",
+    "native_extension_loaded": false
+  },
+  "native_fixture": null
+}

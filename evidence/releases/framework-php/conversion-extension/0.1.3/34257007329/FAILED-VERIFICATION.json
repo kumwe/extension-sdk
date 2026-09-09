@@ -1,0 +1,5 @@
+{
+  "status": "failed",
+  "reason": "Command failed (255): php /home/runner/work/extension-sdk/extension-sdk/tools/release-verification/verify-consumer.php /home/runner/work/_temp/release-verification/prepared-package.json /home/runner/work/_temp/release-verification/consumer-verification.json; see /home/runner/work/_temp/release-verification/consumer-verification.log",
+  "observed_at": "2026-09-08T17:27:40.334Z"
+}

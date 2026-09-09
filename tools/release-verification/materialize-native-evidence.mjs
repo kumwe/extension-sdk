@@ -37,6 +37,8 @@ export function nativeSelection(raw) {
     }
     need(entry.attestation.member === 'RELEASE-ATTESTATION.yaml' && digest(entry.attestation.member_sha256)
       && entry.evidence.verification_member === 'verification.json', 'Unexpected native evidence member selection.');
+    need(/^https:\/\/raw\.githubusercontent\.com\/kumwe\/extension-sdk\/[a-f0-9]{40}\/evidence\/(?:[A-Za-z0-9_-][A-Za-z0-9._-]*\/)+attestation\.zip$/.test(entry.attestation.zip_uri),
+      'Native attestation ZIP must use the complete graph consumer durable URI convention.');
   }
   return raw;
 }

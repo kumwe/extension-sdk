@@ -1,6 +1,7 @@
 <?php
 /** Independently install the exact downloaded release archive, then replay its lock without network. */
 declare(strict_types=1);
+require __DIR__ . '/example-command.php';
 if ($argc !== 3) {
     fwrite(STDERR, "Usage: php verify-consumer.php INPUT_JSON REPORT_JSON\n");
     exit(2);
@@ -129,7 +130,7 @@ if ($classes === []) {
 }
 foreach ($input['examples'] as $example) {
     if (str_ends_with($example, '.php')) {
-        $run([PHP_BINARY, $package . '/' . $example, $root . '/vendor/autoload.php']);
+        $run(releaseVerificationExampleCommand(PHP_BINARY, $package . '/' . $example, $root . '/vendor/autoload.php'));
     }
 }
 $run(['composer', 'check-platform-reqs', '--no-dev']);
@@ -144,6 +145,7 @@ file_put_contents($argv[2], json_encode(['schema' => 'kumwe-independent-release-
     'composer_lock_sha256' => $lockDigest, 'runtime_types_loaded' => count($classes),
     'consumer_dependency_audit' => 'passed', 'canonical_api_exports_verified' => count($declaredSymbols), 'installed_dist_identity_verified' => true,
     'runtime_classes' => $classes, 'optional_phpunit_bridges' => $optionalBridges,
-    'consumer_host_requirements' => array_diff_key($consumerRequirements, [$input['name'] => true]), 'examples' => $input['examples'], 'php' => PHP_VERSION,
+    'consumer_host_requirements' => array_diff_key($consumerRequirements, [$input['name'] => true]), 'examples' => $input['examples'],
+    'example_autoload_preload' => 'actual no-dev consumer vendor/autoload.php', 'php' => PHP_VERSION,
     'php_zts' => PHP_ZTS, 'os' => PHP_OS_FAMILY, 'architecture' => php_uname('m'),
     'native_extension_loaded' => extension_loaded('kumwe_engine')], JSON_PRETTY_PRINT | JSON_THROW_ON_ERROR) . "\n");

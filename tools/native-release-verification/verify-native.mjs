@@ -152,9 +152,13 @@ async function verifyUpstreams(root, input, output) {
   const baseline = contracts.computation_baseline;
   requireFact(baseline?.state === 'release-verified' && baseline.native_bindings_present === false,
     'A verified extension-free portable baseline is required.');
+  const baselineManifests = { ...baseline.corpus_digests,
+    'resources/public-api/v1.json': baseline.api_digest, 'resources/capabilities/v1.json': baseline.capability_digest };
+  if (Object.hasOwn(baseline, 'service_map_digest')) {
+    baselineManifests['resources/service-map/v1.json'] = baseline.service_map_digest;
+  }
   result.push(await upstreamReceipt(baseline.attestation, { name: 'kumwe/computation', version: baseline.version,
-    commit: baseline.commit, archive_sha256: baseline.archive_sha256, corpora: { ...baseline.corpus_digests,
-      'resources/public-api/v1.json': baseline.api_digest, 'resources/capabilities/v1.json': baseline.capability_digest } },
+    commit: baseline.commit, archive_sha256: baseline.archive_sha256, corpora: baselineManifests },
   output, result.length));
   for (const module of contracts.modules) {
     const release = module.semantic_release;

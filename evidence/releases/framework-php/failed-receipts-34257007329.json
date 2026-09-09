@@ -1,0 +1,80 @@
+{
+  "schema": "kumwe-preserved-failed-verification/v1",
+  "entries": [
+    {
+      "name": "kumwe/business-surface-contract",
+      "version": "0.1.3",
+      "source_commit": "06c23a90b9fe9826276d1d57faef74729b5a1e38",
+      "status": "failed",
+      "release_verified": false,
+      "external_attestation": null,
+      "reason": "Verifier launched a guarded installed example without the real host Composer loader; verifier bootstrap correction required, not a package source defect.",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "evidence": {
+        "path": "evidence/releases/framework-php/business-surface-contract/0.1.3/34257007329/evidence.zip",
+        "sha256": "f2619a28247a623055b784fdc04ae74c027c614070b5097a3d448d06a024db63",
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068415476"
+      }
+    },
+    {
+      "name": "kumwe/integration",
+      "version": "0.2.2",
+      "source_commit": "ff42d4d52753a3fec338b930f665c4283a9f5805",
+      "status": "failed",
+      "release_verified": false,
+      "external_attestation": null,
+      "reason": "Actual published example unconditionally requires a nonexistent nested vendor autoloader; source successor required.",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "evidence": {
+        "path": "evidence/releases/framework-php/integration/0.2.2/34257007329/evidence.zip",
+        "sha256": "09233533ae996063f888a0f1ce2a466754aecda858a37f1d3cf1241eef2cd55b",
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068397484"
+      }
+    },
+    {
+      "name": "kumwe/navigation",
+      "version": "0.1.2",
+      "source_commit": "f620836d0fdd4964fdc703a35d0873202459b83d",
+      "status": "failed",
+      "release_verified": false,
+      "external_attestation": null,
+      "reason": "Verifier launched a guarded installed example without the real host Composer loader; verifier bootstrap correction required, not a package source defect.",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "evidence": {
+        "path": "evidence/releases/framework-php/navigation/0.1.2/34257007329/evidence.zip",
+        "sha256": "8bfa914b6b7e65738937f0ccf9d6ee0d15c719e05835dc3dcda00d6fcaf64690",
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068369478"
+      }
+    },
+    {
+      "name": "kumwe/automation",
+      "version": "0.2.1",
+      "source_commit": "6f09acc6696d11a7ab290e7507d0731bce475549",
+      "status": "failed",
+      "release_verified": false,
+      "external_attestation": null,
+      "reason": "Actual published example unconditionally requires a nonexistent nested vendor autoloader; source successor required.",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "evidence": {
+        "path": "evidence/releases/framework-php/automation/0.2.1/34257007329/evidence.zip",
+        "sha256": "e6c9625b2407d65c3aaf068aeb9bd93f09987f2b4f9b8543ad80cb89248ce362",
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068365131"
+      }
+    },
+    {
+      "name": "kumwe/conversion-extension",
+      "version": "0.1.3",
+      "source_commit": "2336014c457a30547fc6f15be1859b080d9ea1e4",
+      "status": "failed",
+      "release_verified": false,
+      "external_attestation": null,
+      "reason": "Verifier launched a guarded installed example without the real host Composer loader; verifier bootstrap correction required, not a package source defect.",
+      "workflow_run": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329",
+      "evidence": {
+        "path": "evidence/releases/framework-php/conversion-extension/0.1.3/34257007329/evidence.zip",
+        "sha256": "44e3cf2f5941b8d6b1ca538738f7386da1f8fa5a6d3b39489d865758c8404e86",
+        "original_uri": "https://github.com/kumwe/extension-sdk/actions/runs/34257007329/artifacts/10068349840"
+      }
+    }
+  ]
+}
