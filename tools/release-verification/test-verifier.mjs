@@ -2,7 +2,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { coordinate, safePath, handoffRecord, finalize } from './verify-release.mjs';
+import { coordinate, safePath, handoffRecord, canonicalDocument, canonicalManifests, finalize } from './verify-release.mjs';
+const capabilities=JSON.parse(fs.readFileSync(new URL('./fixtures/capabilities.json',import.meta.url),'utf8'));
+canonicalDocument('capability_manifest',capabilities);
+assert.throws(()=>canonicalDocument('capability_manifest',{...capabilities,native_requirements:[]}));
+assert.throws(()=>canonicalDocument('capability_manifest',{...capabilities,namespace:'Kumwe'}));
 const source = {name:'kumwe/computation',version:'0.1.1',source_commit:'f'.repeat(40)};
 assert.equal(coordinate(source).tag,'v0.1.1');
 for (const name of ['other/computation','kumwe/../bad','kumwe/x;bad']) assert.throws(()=>coordinate({...source,name}));
@@ -13,6 +17,11 @@ for (const p of ['/etc/passwd','../LICENSE','resources/../LICENSE','a\\b','a//b'
 assert.throws(()=>handoffRecord('no front matter',source));
 assert.throws(()=>handoffRecord('---\nschema: bad\n---\n',source));
 assert.throws(()=>handoffRecord('---\nschema: one\nschema: two\n---\n',source));
+const schemaFixture=fs.mkdtempSync(path.join(os.tmpdir(),'release-canonical-schema-'));
+try {
+  for(const f of ['api.json','capabilities.json','services.json']) fs.writeFileSync(path.join(schemaFixture,f),'{}');
+  assert.throws(()=>canonicalManifests(schemaFixture,{framework_php:{public_api_manifest:'api.json',capability_manifest:'capabilities.json',service_map:'services.json'}}));
+} finally {fs.rmSync(schemaFixture,{recursive:true,force:true});}
 const dir=fs.mkdtempSync(path.join(os.tmpdir(),'release-verifier-refusal-'));
 try {
   fs.writeFileSync(path.join(dir,'verification.json'),JSON.stringify({status:'failed',verifier:{run_url:'https://github.com/kumwe/extension-sdk/actions/runs/1'}}));
