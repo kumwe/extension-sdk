@@ -1,0 +1,804 @@
+{
+  "schema": "kumwe-independent-release-verification/v1",
+  "status": "passed",
+  "input": {
+    "name": "kumwe/record-model",
+    "version": "0.1.3",
+    "source_commit": "8d20cf75ee6ab915102bbf6a17567087971e9dfe",
+    "repository": "kumwe/record-model",
+    "tag": "v0.1.3",
+    "archive_url": "https://api.github.com/repos/kumwe/record-model/zipball/8d20cf75ee6ab915102bbf6a17567087971e9dfe",
+    "archive_path": "/home/runner/work/_temp/release-verification/source.zip",
+    "archive_sha256": "3e27ec64f6e1dffcb164af2a17d2b124afe7334224710eb049468d2d02a8ba40",
+    "package_root": "/home/runner/work/_temp/release-verification/archive/kumwe-record-model-8d20cf7",
+    "composer": {
+      "name": "kumwe/record-model",
+      "description": "Portable immutable records, revisions, replay outcomes and scope values.",
+      "type": "library",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/kumwe/record-model",
+      "require": {
+        "php": "^8.5",
+        "php-64bit": "*",
+        "ext-json": "*",
+        "kumwe/access-context": "0.1.2",
+        "kumwe/business-definition": "0.1.2",
+        "kumwe/record-values": "0.1.4",
+        "ramsey/uuid": "^4.9",
+        "ext-mbstring": "*"
+      },
+      "require-dev": {
+        "phpunit/phpunit": "^12.0 || ^13.0",
+        "phpstan/phpstan": "^2.1",
+        "squizlabs/php_codesniffer": "^4.0",
+        "ext-zip": "*"
+      },
+      "autoload": {
+        "psr-4": {
+          "Kumwe\\Record\\Model\\": "src/"
+        }
+      },
+      "autoload-dev": {
+        "psr-4": {
+          "Kumwe\\Record\\Model\\Tests\\": "tests/"
+        }
+      },
+      "scripts": {
+        "test": "phpunit",
+        "lint": "php tools/lint.php",
+        "analyse": "phpstan analyse --no-progress --memory-limit=1G",
+        "manifests": "php tools/manifests.php",
+        "check": [
+          "composer validate --strict",
+          "@schemas",
+          "@dependencies:check",
+          "@lint",
+          "@architecture",
+          "@test",
+          "@analyse",
+          "@cs",
+          "@manifests",
+          "@governance",
+          "@security:audit",
+          "@release:check",
+          "@clean-consumer"
+        ],
+        "cs": "phpcs -q",
+        "cs:fix": "phpcbf",
+        "clean-consumer": "php tools/verify-clean-consumer.php",
+        "security:audit": "composer audit --abandoned=fail",
+        "architecture": "php tools/architecture.php",
+        "release:check": [
+          "bash tools/test-release-record.sh",
+          "bash tools/test-release-integrity.sh",
+          "bash tools/test-release-on-record.sh",
+          "bash tools/test-configure-release-repositories.sh",
+          "bash tools/test-release-dependencies.sh",
+          "bash tools/test-package-dependencies.sh"
+        ],
+        "governance": "php tools/verify-governance.php",
+        "dependencies:check": [
+          "bash tools/check-dependency-readiness.sh",
+          "bash tools/test-dependency-readiness.sh"
+        ],
+        "schemas": "node tools/schema-validator/verify.cjs"
+      },
+      "config": {
+        "sort-packages": true
+      },
+      "archive": {
+        "exclude": [
+          "/vendor",
+          "/tests",
+          "/tools",
+          "/.github",
+          "/composer.local.json",
+          "/composer.local.lock",
+          "/composer.lock",
+          "/phpstan.neon",
+          "/phpcs.xml",
+          "/phpunit.xml",
+          "/.phpstan-cache",
+          "/.phpunit.cache",
+          "/.gitignore",
+          "/.gitattributes",
+          "/composer.candidate.json",
+          "/composer.candidate.lock"
+        ]
+      }
+    },
+    "examples": [
+      "examples/consumer.php"
+    ],
+    "handoff": {
+      "schema": "kumwe-migration-handoff/v2",
+      "artifact_kind": "framework_php",
+      "migration_id": "KUMWE-MIG-2026-032",
+      "change_set": "KUMWE-CS-2026-032",
+      "state": "draft_pr_open",
+      "source": {
+        "app": {
+          "repository": "https://github.com/kumwe/app",
+          "baseline_commit": "24ecf956423c18933e824b43cea1bfb9127a79a9",
+          "examined_paths": [
+            "docs/architecture/governance/core-growth-baseline.json",
+            "src/BusinessRecord/Application/BusinessRecordIdempotencyRepository.php",
+            "src/BusinessRecord/Application/BusinessRecordMutationPublication.php",
+            "src/BusinessRecord/Application/BusinessRecordReadRepository.php",
+            "src/BusinessRecord/Application/BusinessRecordRelationshipCoordinator.php",
+            "src/BusinessRecord/Application/BusinessRecordRevisionCursor.php",
+            "src/BusinessRecord/Application/BusinessRecordRevisionRepository.php",
+            "src/BusinessRecord/Application/BusinessRecordRevisionView.php",
+            "src/BusinessRecord/Application/BusinessRecordService.php",
+            "src/BusinessRecord/Application/BusinessRecordView.php",
+            "src/BusinessRecord/Application/BusinessRecordWriteRepository.php",
+            "src/BusinessRecord/Application/PostingPeriodLock.php",
+            "src/BusinessRecord/Application/RecordMutationResult.php",
+            "src/BusinessRecord/Application/RelationshipWriteResult.php",
+            "src/BusinessRecord/Domain/BusinessRecord.php",
+            "src/BusinessRecord/Domain/BusinessRecordReplayWindow.php",
+            "src/BusinessRecord/Domain/BusinessRecordRevision.php",
+            "src/BusinessRecord/Domain/RecordScope.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessRecordIdempotencyRepository.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessRecordQueryCompiler.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessRecordReadRepository.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessRecordRevisionRepository.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessRecordWriteRepository.php",
+            "src/BusinessReporting/Infrastructure/BusinessRecordExportPolicySnapshotProvider.php",
+            "src/BusinessSecurity/Application/BusinessRecordAccessCatalogPlanner.php",
+            "src/BusinessSecurity/Application/BusinessRecordAccessController.php",
+            "src/BusinessSecurity/Application/BusinessRecordAccessOperationCatalogPlanner.php",
+            "src/BusinessSecurity/Infrastructure/Persistence/DoctrineBusinessRecordAccessController.php",
+            "src/BusinessSurface/Application/BusinessMutationPlanService.php",
+            "src/BusinessSurface/Application/BusinessOperationStatusRepository.php",
+            "src/BusinessSurface/Application/BusinessOperationStatusService.php",
+            "src/BusinessSurface/Application/BusinessRecordProjector.php",
+            "src/BusinessSurface/Application/BusinessSurfaceCatalog.php",
+            "src/BusinessSurface/Application/CustomBusinessActionExecutor.php",
+            "src/BusinessSurface/Infrastructure/Persistence/DoctrineBusinessOperationStatusRepository.php",
+            "src/Delivery/Http/Api/Business/BusinessRecordApiPresenter.php",
+            "src/Delivery/Http/Api/Business/BusinessRecordApiResponder.php",
+            "src/Kernel/Configuration/ApplicationConfiguration.php",
+            "src/Kernel/Configuration/ConfigurationFactory.php",
+            "tests/Architecture/ClientAssertedInstantBoundaryTest.php",
+            "tests/Integration/BusinessRecord/AggregateDocumentIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessRecordHistoryPagingIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessRecordPolicyCompilerIntegrationTest.php",
+            "tests/Integration/BusinessSurface/GeneratedBusinessQueryBudgetIntegrationTest.php",
+            "tests/Support/NeutralBusinessFixture.php",
+            "tests/Unit/Application/Automation/PurgeBusinessRecordIdempotencyHandlerTest.php",
+            "tests/Unit/BusinessRecord/Application/BusinessRecordMutationPublicationTest.php",
+            "tests/Unit/BusinessRecord/Application/BusinessRecordRelationshipCoordinatorTest.php",
+            "tests/Unit/BusinessRecord/Application/BusinessRecordRevisionCursorTest.php",
+            "tests/Unit/BusinessRecord/Application/BusinessRecordViewTest.php",
+            "tests/Unit/BusinessRecord/Application/PostingPeriodLockTest.php",
+            "tests/Unit/BusinessRecord/Domain/BusinessRecordReplayWindowTest.php",
+            "tests/Unit/BusinessRecord/Domain/RecordIntegrityTest.php",
+            "tests/Unit/BusinessRecord/Domain/RecordScopeTest.php",
+            "tests/Unit/BusinessSecurity/Application/BusinessRecordAccessPlanTest.php",
+            "tests/Unit/BusinessSecurity/Infrastructure/Persistence/DoctrineBusinessRecordAccessControllerTest.php",
+            "tests/Unit/BusinessSurface/Application/BusinessSurfaceCatalogTest.php",
+            "tests/Unit/BusinessSurface/Application/Custom/CustomBusinessActionExecutorTest.php",
+            "tests/Unit/Delivery/Console/Command/BusinessRecordConsolePresenterTest.php",
+            "tests/Unit/Delivery/Http/Api/Business/BusinessOperationStatusApiHandlerTest.php",
+            "tests/Unit/Delivery/Http/Api/Business/BusinessRecordApiPresenterTest.php",
+            "tests/Unit/Delivery/Http/Api/Business/BusinessRecordApiResponderTest.php"
+          ],
+          "old_namespace_roots": [
+            "Kumwe\\App\\BusinessRecord\\",
+            "Kumwe\\App\\BusinessSchema\\",
+            "Kumwe\\App\\BusinessReporting\\"
+          ],
+          "capability_index_sha256": null
+        },
+        "semantic_inputs": [
+          {
+            "owner": "kumwe/extension-sdk",
+            "version_or_commit": "e8ec23f155c5836c6bd083f154a8efb6e50aec66",
+            "manifest_or_corpus": "resources/extraction/v1.json",
+            "sha256": "0cd7261673505264dba587203fab88e535a41c083376acd88068525b9fb49c66"
+          }
+        ],
+        "examined_dependencies": [
+          "kumwe/access-context 0.1.2; independent release attestation not asserted",
+          "kumwe/business-definition 0.1.2; independent release attestation not asserted",
+          "kumwe/record-values 0.1.4; independent release attestation not asserted"
+        ],
+        "active_related_pull_requests": []
+      },
+      "target": {
+        "repository": "https://github.com/kumwe/record-model",
+        "artifact_identity": "kumwe/record-model",
+        "canonical_namespace_or_abi": "Kumwe\\Record\\Model\\",
+        "branch": "fix/final-governed-dependencies",
+        "pull_request": "https://github.com/kumwe/record-model/pull/8"
+      },
+      "ownership": {
+        "responsibility": "Portable immutable records, revisions, replay outcomes and scope values.",
+        "non_responsibilities": [
+          "authorization",
+          "trusted generation selection",
+          "persistence",
+          "SQL execution",
+          "transactions",
+          "delivery",
+          "native execution"
+        ],
+        "allowed_dependency_ceiling": [
+          "php",
+          "php-64bit",
+          "ext-json",
+          "kumwe/access-context",
+          "kumwe/business-definition",
+          "kumwe/record-values",
+          "ramsey/uuid",
+          "ext-mbstring"
+        ],
+        "implementation_owner": "kumwe/record-model",
+        "next_consumer": "kumwe/app",
+        "public_manifests": [
+          {
+            "path": "resources/public-api/v1.json",
+            "sha256": "119608b245415e8f6af68d8faaf71c7fe4bdd19a9ac5821ae1d483f8d4bcd8c8"
+          },
+          {
+            "path": "resources/capabilities/v1.json",
+            "sha256": "539e33fa84b18ded21cd7bf09dab9cbc35baab3f1b789d26eeebe9d1b9dc973b"
+          },
+          {
+            "path": "resources/service-map/v1.json",
+            "sha256": "f18271ca0ea9271870f1081d9f7f29f6486289557dfe34a956fd12f9d8cc5458"
+          },
+          {
+            "path": "resources/test-ownership/v1.json",
+            "sha256": "d9dab3bf976158c3ce6307f2e5ec130c5937c90c9da37faae2b6b0e810f0e5ed"
+          },
+          {
+            "path": "resources/conformance/v1.json",
+            "sha256": "7e7baa8fdcda9c5b08619742b7ff52ef8f86a59a1c5afbf58a62241e83d9f07d"
+          }
+        ],
+        "intentionally_excluded": [
+          "App repositories, policy gates and lifecycle orchestration",
+          "production PHP native executor fallback"
+        ]
+      },
+      "framework_php": {
+        "composer_package": "kumwe/record-model",
+        "canonical_namespace": "Kumwe\\Record\\Model\\",
+        "public_api_manifest": "resources/public-api/v1.json",
+        "capability_manifest": "resources/capabilities/v1.json",
+        "service_map": "resources/service-map/v1.json",
+        "extracted_symbols": [
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Domain\\BusinessRecord",
+            "new_fqcn": "Kumwe\\Record\\Model\\BusinessRecord",
+            "source_path": "src/BusinessRecord/Domain/BusinessRecord.php",
+            "target_path": "src/BusinessRecord.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "values",
+              "value",
+              "updated",
+              "transitioned",
+              "archived",
+              "restored",
+              "softDeleted"
+            ],
+            "public_properties": [
+              "definitionId",
+              "definitionVersion",
+              "recordKey",
+              "recordId",
+              "scope",
+              "version",
+              "workflowState",
+              "createdBy",
+              "createdAt",
+              "updatedBy",
+              "updatedAt",
+              "archivedBy",
+              "archivedAt",
+              "deletedBy",
+              "deletedAt"
+            ],
+            "public_constants": [],
+            "exceptions": [
+              "InvalidArgumentException"
+            ],
+            "serialization_contract": "See docs/public-api.md and package conformance corpus for exact serialization.",
+            "compatibility": "Portable source closure; host authority stays with the consumer. See resources/extraction/v1.json for source ownership and extraction granularity."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Domain\\BusinessRecordRevision",
+            "new_fqcn": "Kumwe\\Record\\Model\\BusinessRecordRevision",
+            "source_path": "src/BusinessRecord/Domain/BusinessRecordRevision.php",
+            "target_path": "src/BusinessRecordRevision.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "snapshot",
+              "changedFields",
+              "checksum"
+            ],
+            "public_properties": [
+              "revisionId",
+              "definitionId",
+              "definitionVersion",
+              "siteIdentifier",
+              "organizationIdentifier",
+              "recordKey",
+              "recordIdentityDigest",
+              "recordVersion",
+              "revisionNumber",
+              "operation",
+              "actorId",
+              "occurredAt"
+            ],
+            "public_constants": [],
+            "exceptions": [
+              "InvalidArgumentException"
+            ],
+            "serialization_contract": "See docs/public-api.md and package conformance corpus for exact serialization.",
+            "compatibility": "Portable source closure; host authority stays with the consumer. See resources/extraction/v1.json for source ownership and extraction granularity."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Domain\\RecordScope",
+            "new_fqcn": "Kumwe\\Record\\Model\\RecordScope",
+            "source_path": "src/BusinessRecord/Domain/RecordScope.php",
+            "target_path": "src/RecordScope.php",
+            "kind": "class",
+            "public_methods": [
+              "forDefinition",
+              "reconstitute",
+              "assertRequest",
+              "toArray"
+            ],
+            "public_properties": [
+              "mode",
+              "siteIdentifier",
+              "organizationIdentifier"
+            ],
+            "public_constants": [],
+            "exceptions": [
+              "InvalidArgumentException"
+            ],
+            "serialization_contract": "See docs/public-api.md and package conformance corpus for exact serialization.",
+            "compatibility": "Portable source closure; host authority stays with the consumer. See resources/extraction/v1.json for source ownership and extraction granularity."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Domain\\BusinessRecordReplayWindow",
+            "new_fqcn": "Kumwe\\Record\\Model\\BusinessRecordReplayWindow",
+            "source_path": "src/BusinessRecord/Domain/BusinessRecordReplayWindow.php",
+            "target_path": "src/BusinessRecordReplayWindow.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "fromConfiguration",
+              "expiryFrom",
+              "admitsReplay"
+            ],
+            "public_properties": [
+              "replaySeconds",
+              "retentionSeconds"
+            ],
+            "public_constants": [
+              "MINIMUM_REPLAY_SECONDS",
+              "DEFAULT_REPLAY_SECONDS",
+              "MAXIMUM_REPLAY_SECONDS",
+              "DEFAULT_RETENTION_SECONDS",
+              "MAXIMUM_RETENTION_SECONDS"
+            ],
+            "exceptions": [
+              "InvalidArgumentException"
+            ],
+            "serialization_contract": "See docs/public-api.md and package conformance corpus for exact serialization.",
+            "compatibility": "Portable source closure; host authority stays with the consumer. See resources/extraction/v1.json for source ownership and extraction granularity."
+          },
+          {
+            "old_fqcn": "Kumwe\\App\\BusinessRecord\\Application\\RecordMutationResult",
+            "new_fqcn": "Kumwe\\Record\\Model\\RecordMutationResult",
+            "source_path": "src/BusinessRecord/Application/RecordMutationResult.php",
+            "target_path": "src/RecordMutationResult.php",
+            "kind": "class",
+            "public_methods": [
+              "__construct",
+              "asReplay",
+              "toArray",
+              "fromArray"
+            ],
+            "public_properties": [
+              "definitionId",
+              "definitionVersion",
+              "recordKey",
+              "recordId",
+              "version",
+              "workflowState",
+              "operation",
+              "deleted",
+              "replayed"
+            ],
+            "public_constants": [],
+            "exceptions": [
+              "InvalidArgumentException"
+            ],
+            "serialization_contract": "See docs/public-api.md and package conformance corpus for exact serialization.",
+            "compatibility": "Portable source closure; host authority stays with the consumer. See resources/extraction/v1.json for source ownership and extraction granularity."
+          },
+          {
+            "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordRequestGuard",
+            "new_fqcn": "Kumwe\\Record\\Model\\BusinessRecordRequestGuard",
+            "source_path": "src/Spi/BusinessRecord/Application/BusinessRecordRequestGuard.php",
+            "target_path": "src/BusinessRecordRequestGuard.php",
+            "kind": "class",
+            "public_methods": [
+              "definition",
+              "record",
+              "handle",
+              "organization",
+              "version",
+              "approval"
+            ],
+            "public_properties": [],
+            "public_constants": [],
+            "exceptions": [],
+            "serialization_contract": "See docs/public-api.md and package conformance corpus for exact serialization.",
+            "compatibility": "Portable source closure; host authority stays with the consumer. See resources/extraction/v1.json for source ownership and extraction granularity."
+          }
+        ],
+        "consumers": {
+          "app_code": [
+            "src/BusinessRecord/Application/BusinessRecordIdempotencyRepository.php",
+            "src/BusinessRecord/Application/BusinessRecordMutationPublication.php",
+            "src/BusinessRecord/Application/BusinessRecordReadRepository.php",
+            "src/BusinessRecord/Application/BusinessRecordRelationshipCoordinator.php",
+            "src/BusinessRecord/Application/BusinessRecordRevisionCursor.php",
+            "src/BusinessRecord/Application/BusinessRecordRevisionRepository.php",
+            "src/BusinessRecord/Application/BusinessRecordRevisionView.php",
+            "src/BusinessRecord/Application/BusinessRecordService.php",
+            "src/BusinessRecord/Application/BusinessRecordView.php",
+            "src/BusinessRecord/Application/BusinessRecordWriteRepository.php",
+            "src/BusinessRecord/Application/PostingPeriodLock.php",
+            "src/BusinessRecord/Application/RelationshipWriteResult.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessRecordIdempotencyRepository.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessRecordQueryCompiler.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessRecordReadRepository.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessRecordRevisionRepository.php",
+            "src/BusinessRecord/Infrastructure/Persistence/DoctrineBusinessRecordWriteRepository.php",
+            "src/BusinessReporting/Infrastructure/BusinessRecordExportPolicySnapshotProvider.php",
+            "src/BusinessSecurity/Application/BusinessRecordAccessCatalogPlanner.php",
+            "src/BusinessSecurity/Application/BusinessRecordAccessController.php",
+            "src/BusinessSecurity/Application/BusinessRecordAccessOperationCatalogPlanner.php",
+            "src/BusinessSecurity/Infrastructure/Persistence/DoctrineBusinessRecordAccessController.php",
+            "src/BusinessSurface/Application/BusinessMutationPlanService.php",
+            "src/BusinessSurface/Application/BusinessOperationStatusRepository.php",
+            "src/BusinessSurface/Application/BusinessOperationStatusService.php",
+            "src/BusinessSurface/Application/BusinessRecordProjector.php",
+            "src/BusinessSurface/Application/BusinessSurfaceCatalog.php",
+            "src/BusinessSurface/Application/CustomBusinessActionExecutor.php",
+            "src/BusinessSurface/Infrastructure/Persistence/DoctrineBusinessOperationStatusRepository.php",
+            "src/Delivery/Http/Api/Business/BusinessRecordApiPresenter.php",
+            "src/Delivery/Http/Api/Business/BusinessRecordApiResponder.php",
+            "src/Kernel/Configuration/ApplicationConfiguration.php",
+            "src/Kernel/Configuration/ConfigurationFactory.php"
+          ],
+          "configuration_and_di": [
+            "docs/architecture/governance/core-growth-baseline.json"
+          ],
+          "reflection_and_string_references": [],
+          "fixtures_and_examples": [
+            "tests/Architecture/ClientAssertedInstantBoundaryTest.php",
+            "tests/Integration/BusinessRecord/AggregateDocumentIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessRecordHistoryPagingIntegrationTest.php",
+            "tests/Integration/BusinessRecord/BusinessRecordPolicyCompilerIntegrationTest.php",
+            "tests/Integration/BusinessSurface/GeneratedBusinessQueryBudgetIntegrationTest.php",
+            "tests/Support/NeutralBusinessFixture.php",
+            "tests/Unit/Application/Automation/PurgeBusinessRecordIdempotencyHandlerTest.php",
+            "tests/Unit/BusinessRecord/Application/BusinessRecordMutationPublicationTest.php",
+            "tests/Unit/BusinessRecord/Application/BusinessRecordRelationshipCoordinatorTest.php",
+            "tests/Unit/BusinessRecord/Application/BusinessRecordRevisionCursorTest.php",
+            "tests/Unit/BusinessRecord/Application/BusinessRecordViewTest.php",
+            "tests/Unit/BusinessRecord/Application/PostingPeriodLockTest.php",
+            "tests/Unit/BusinessRecord/Domain/BusinessRecordReplayWindowTest.php",
+            "tests/Unit/BusinessRecord/Domain/RecordIntegrityTest.php",
+            "tests/Unit/BusinessRecord/Domain/RecordScopeTest.php",
+            "tests/Unit/BusinessSecurity/Application/BusinessRecordAccessPlanTest.php",
+            "tests/Unit/BusinessSecurity/Infrastructure/Persistence/DoctrineBusinessRecordAccessControllerTest.php",
+            "tests/Unit/BusinessSurface/Application/BusinessSurfaceCatalogTest.php",
+            "tests/Unit/BusinessSurface/Application/Custom/CustomBusinessActionExecutorTest.php",
+            "tests/Unit/Delivery/Console/Command/BusinessRecordConsolePresenterTest.php",
+            "tests/Unit/Delivery/Http/Api/Business/BusinessOperationStatusApiHandlerTest.php",
+            "tests/Unit/Delivery/Http/Api/Business/BusinessRecordApiPresenterTest.php",
+            "tests/Unit/Delivery/Http/Api/Business/BusinessRecordApiResponderTest.php"
+          ],
+          "external": [
+            "kumwe/extension-sdk coordinated successor"
+          ]
+        },
+        "dependency_injection": {
+          "mode": "direct",
+          "provider": null,
+          "factories": [],
+          "aliases": [],
+          "service_lifetimes": [],
+          "configuration_keys": [],
+          "provider_absence_reason": "Values, contracts and stateless deterministic operations are constructed directly. Host ports are explicit inputs; no global context is captured."
+        }
+      },
+      "native_cpp": null,
+      "php_extension": null,
+      "tests": {
+        "moved_or_added": [
+          "tools/schema-validator/verify.cjs: complete canonical manifest and handoff schemas with 12 rejection fixtures",
+          "tests/BusinessRecordReplayWindowTest.php (testTheDefaultWindowRemembersAClaimLongerThanItReplaysIt, testAClaimStillReplaysDaysAfterTheDayItUsedToExpireOn, testTheDeclaredBoundsAreEnforced, testConfigurationIsReadAsWholeSecondsOrRefused); provenance: resources/test-ownership/v1.json",
+          "tests/DocumentConformanceTest.php (testFrozenDocumentPlansRetainCanonicalDefinitionsAndPreparationFlags); provenance: resources/test-ownership/v1.json",
+          "tests/RecordBehaviorTest.php (testMutationPreservesOriginalAndIncrementsVersionOnce, testRevisionChecksumPreservesProtectedStorageAndFieldSet, testReplayRoundTripRetainsMutationPayload, testMalformedRecordFieldCannotEnterSnapshot); provenance: resources/test-ownership/v1.json",
+          "tests/RecordScopeTest.php (testSiteOrganizationScopeRequiresAndBindsBothDimensions, testInstallationAndSiteScopesRejectUnexpectedOrganizationInput); provenance: resources/test-ownership/v1.json",
+          "tests/RequestIdentityTest.php (testCanonicalRequestIdentityAndConcurrencyGrammar, testUnboundedRecordIdentityIsRefused); provenance: resources/test-ownership/v1.json",
+          "tests/ValueImmutabilityTest.php (testRecordAndRevisionDetachNestedCallerReferences, testRevisionRejectsUnboundedFieldsAndMalformedActors, testVersionExhaustionIsARefusalWithoutMutatingTheRecord); provenance: resources/test-ownership/v1.json"
+        ],
+        "remain_in_app_or_consumer": [
+          "SQL/database matrix",
+          "policy-before-query",
+          "authorization and generation fences",
+          "cryptographic envelope authenticity and key lifecycle",
+          "transaction/concurrency and recovery",
+          "export/delivery/adapters"
+        ],
+        "split_tests": [
+          "BusinessRecordReplayWindowTest package owns window math; App keeps BusinessRecordIdempotencyConflict stable-code behavior."
+        ],
+        "prohibited_duplicates": [
+          "Do not retain moved implementation tests in App/SDK after the separate verified adoption."
+        ],
+        "corpora": [
+          "resources/conformance/document-validation-v1.json",
+          "resources/conformance/document-validator-extension-v1.json",
+          "resources/conformance/document-preparation-v1.json",
+          "resources/conformance/document-normalized-values-v1.json",
+          "resources/conformance/document-validator-edges-v1.json",
+          "resources/conformance/document-computed-normalization-v1.json",
+          "resources/conformance/unicode-normalization-oracle-v1.json",
+          "resources/conformance/document-profile-v1.json"
+        ]
+      },
+      "documentation": {
+        "charter": "CHARTER.md",
+        "readme": "README.md",
+        "public_api": "docs/public-api.md",
+        "architecture": "docs/architecture.md",
+        "integration_or_consumer": "docs/integration.md",
+        "examples": [
+          "examples/consumer.php"
+        ],
+        "changelog_record": "CHANGELOG.md / 0.1.3"
+      },
+      "release_expectations": {
+        "version_policy": "SemVer maintenance release 0.1.3 after human merge. Direct Kumwe dependencies use coherent exact published stable versions. Independent final release verification precedes App adoption.",
+        "expected_artifact_types": [
+          "Composer source zip"
+        ],
+        "required_checks": [
+          "composer check",
+          "composer security:audit",
+          "composer clean-consumer",
+          "review dependency ceiling",
+          "immutable release and source/artifact manifests independently attested"
+        ],
+        "required_registry_or_installer": "Composer",
+        "required_external_attestation": true
+      },
+      "next_task": {
+        "phase_name": "Independent release verification, followed by separate App adoption",
+        "permitted_only_when": [
+          "Human merges package PR",
+          "Immutable upstream dependency releases and target release are independently verified",
+          "External RELEASE-ATTESTATION.yaml exists and matches all source/artifact identities"
+        ],
+        "consumer_repository": "https://github.com/kumwe/app",
+        "dependency_or_native_change": "Exact-pin the reviewed immutable package release and remove the former implementation. Never use this development branch as a released dependency.",
+        "namespace_or_api_replacements": [
+          "{\"old_owner\":\"app\",\"source_path\":\"src/BusinessRecord/Domain/BusinessRecord.php\",\"target_path\":\"src/BusinessRecord.php\",\"extraction_kind\":\"whole_file\"}",
+          "{\"old_owner\":\"app\",\"source_path\":\"src/BusinessRecord/Domain/BusinessRecordRevision.php\",\"target_path\":\"src/BusinessRecordRevision.php\",\"extraction_kind\":\"whole_file\"}",
+          "{\"old_owner\":\"app\",\"source_path\":\"src/BusinessRecord/Domain/RecordScope.php\",\"target_path\":\"src/RecordScope.php\",\"extraction_kind\":\"whole_file\"}",
+          "{\"old_owner\":\"app\",\"source_path\":\"src/BusinessRecord/Domain/BusinessRecordReplayWindow.php\",\"target_path\":\"src/BusinessRecordReplayWindow.php\",\"extraction_kind\":\"whole_file\"}",
+          "{\"old_owner\":\"app\",\"source_path\":\"src/BusinessRecord/Application/RecordMutationResult.php\",\"target_path\":\"src/RecordMutationResult.php\",\"extraction_kind\":\"whole_file\"}",
+          "{\"old_owner\":\"extension-sdk\",\"source_path\":\"src/Spi/BusinessRecord/Application/BusinessRecordRequestGuard.php\",\"target_path\":\"src/BusinessRecordRequestGuard.php\",\"extraction_kind\":\"whole_file\"}"
+        ],
+        "files_to_update": [
+          "composer.json",
+          "composer.lock",
+          "container configuration",
+          "capability index",
+          "migration ledger",
+          "CHANGELOG.md"
+        ],
+        "files_to_remove": [
+          "src/BusinessRecord/Domain/BusinessRecord.php",
+          "src/BusinessRecord/Domain/BusinessRecordRevision.php",
+          "src/BusinessRecord/Domain/RecordScope.php",
+          "src/BusinessRecord/Domain/BusinessRecordReplayWindow.php",
+          "src/BusinessRecord/Application/RecordMutationResult.php",
+          "src/Spi/BusinessRecord/Application/BusinessRecordRequestGuard.php"
+        ],
+        "tests_to_remove": [
+          "{\"owner\":\"app\",\"baseline_commit\":\"24ecf956423c18933e824b43cea1bfb9127a79a9\",\"path\":\"tests/Unit/BusinessRecord/Domain/BusinessRecordReplayWindowTest.php\",\"methods\":[\"testTheDefaultWindowRemembersAClaimLongerThanItReplaysIt\",\"testAClaimStillReplaysDaysAfterTheDayItUsedToExpireOn\",\"testTheDeclaredBoundsAreEnforced\",\"testConfigurationIsReadAsWholeSecondsOrRefused\"],\"retained_methods\":[\"testALateRepeatIsRefusedUnderItsOwnStableCode\"],\"remove_whole_file\":false}",
+          "{\"owner\":\"app\",\"baseline_commit\":\"24ecf956423c18933e824b43cea1bfb9127a79a9\",\"path\":\"tests/Unit/BusinessRecord/Domain/RecordScopeTest.php\",\"methods\":[\"testSiteOrganizationScopeRequiresAndBindsBothDimensions\",\"testInstallationAndSiteScopesRejectUnexpectedOrganizationInput\"],\"retained_methods\":[],\"remove_whole_file\":true}"
+        ],
+        "tests_to_retain_or_add": [
+          "Host responsibility cases listed above",
+          "Native parity against committed semantic corpus where applicable"
+        ],
+        "di_or_provisioning_changes": [],
+        "capability_index_changes": [
+          "Record actual release and package responsibility without declaring composed roadmap completion."
+        ],
+        "changelog_and_evidence_changes": [
+          "Record immutable artifact, attestation and remaining host acceptance gates."
+        ],
+        "verification_commands": [
+          "composer check",
+          "composer clean-consumer",
+          "App affected integration train and platform matrix"
+        ]
+      },
+      "concurrency": {
+        "likely_conflict_files": [
+          "App composer.json",
+          "App composer.lock",
+          "App capability and migration registries"
+        ],
+        "related_migrations": [
+          "KUMWE-MIG-2026-029",
+          "KUMWE-MIG-2026-030",
+          "KUMWE-MIG-2026-031",
+          "KUMWE-MIG-2026-033"
+        ],
+        "ownership_conflicts": [],
+        "integration_train": null,
+        "resolution_rule": "semantic-preservation"
+      },
+      "governance": {
+        "roadmap_source_sha256": "a202155ef1a65f5ab293d4f8397ebf4ac430db7f1e877c776bbe7851e6fe18d8",
+        "roadmap_refs": [],
+        "non_roadmap_refs": [
+          "NRM-2026-032"
+        ],
+        "completion_claim": false
+      },
+      "decisions": [
+        "Canonical namespace and approved value behavior retained.",
+        "No host authority or persistence moves into the package.",
+        "See CHARTER.md for explicit dependency amendments; no release approval is inferred."
+      ],
+      "blockers": [
+        "The 0.1.3 schema/dependency successor requires maintainer review and merge. Version 0.1.2 is already published.",
+        "Independent verification of the final maintenance release and its complete dependency closure remains a separate task before App adoption."
+      ]
+    }
+  },
+  "canonical_schema_validation": [
+    {
+      "path": "resources/public-api/v1.json",
+      "schema": "package-public-api.v1.schema.json",
+      "sha256": "119608b245415e8f6af68d8faaf71c7fe4bdd19a9ac5821ae1d483f8d4bcd8c8"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "schema": "package-capabilities.v1.schema.json",
+      "sha256": "539e33fa84b18ded21cd7bf09dab9cbc35baab3f1b789d26eeebe9d1b9dc973b"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "schema": "package-service-map.v1.schema.json",
+      "sha256": "f18271ca0ea9271870f1081d9f7f29f6486289557dfe34a956fd12f9d8cc5458"
+    }
+  ],
+  "manifests_and_corpora": [
+    {
+      "path": "resources/public-api/v1.json",
+      "sha256": "119608b245415e8f6af68d8faaf71c7fe4bdd19a9ac5821ae1d483f8d4bcd8c8"
+    },
+    {
+      "path": "resources/capabilities/v1.json",
+      "sha256": "539e33fa84b18ded21cd7bf09dab9cbc35baab3f1b789d26eeebe9d1b9dc973b"
+    },
+    {
+      "path": "resources/service-map/v1.json",
+      "sha256": "f18271ca0ea9271870f1081d9f7f29f6486289557dfe34a956fd12f9d8cc5458"
+    },
+    {
+      "path": "resources/test-ownership/v1.json",
+      "sha256": "d9dab3bf976158c3ce6307f2e5ec130c5937c90c9da37faae2b6b0e810f0e5ed"
+    },
+    {
+      "path": "resources/conformance/v1.json",
+      "sha256": "7e7baa8fdcda9c5b08619742b7ff52ef8f86a59a1c5afbf58a62241e83d9f07d"
+    },
+    {
+      "path": "resources/conformance/document-computed-normalization-v1.json",
+      "sha256": "6949c2763e05a1b76ea4f6c29cc7c2df57eb25d80ee625078a1d16545a8b41f4"
+    },
+    {
+      "path": "resources/conformance/document-normalized-values-v1.json",
+      "sha256": "752f41632d2ad38d74c5c61db5ff5f373b9427596d7766449b84398ddb15bce2"
+    },
+    {
+      "path": "resources/conformance/document-preparation-v1.json",
+      "sha256": "4eb1543929fcf5470eb8cae882127556cd57c02518109545483d8780266b561a"
+    },
+    {
+      "path": "resources/conformance/document-profile-v1.json",
+      "sha256": "84b6c2e55ae591c921536aa755cbb5a9a40a7a19847fe47415e55dce2614c177"
+    },
+    {
+      "path": "resources/conformance/document-validation-v1.json",
+      "sha256": "fce91bfe3c9614ec3862b50c0defc10a9b69ed021671f8382d774d8cb0a20668"
+    },
+    {
+      "path": "resources/conformance/document-validator-edges-v1.json",
+      "sha256": "65cde051396085a01e9723a120460c8e00519eb63acff80d7425533983f011b0"
+    },
+    {
+      "path": "resources/conformance/document-validator-extension-v1.json",
+      "sha256": "dbc005bd77fdd764c873bdde57261bc6cb79a8463164fb83e0da8cbe7603161c"
+    },
+    {
+      "path": "resources/conformance/unicode-normalization-oracle-v1.json",
+      "sha256": "8a1c1dce8686d09ca5e53d7b1971620e887237c6019a1189549bd873ec6a87da"
+    }
+  ],
+  "archived_files": 40,
+  "complete_git_export_matched": true,
+  "handoff_sha256": "2641325fbd3b26b3f581761fdcc11256037394bf3283120ebe21d848a4318721",
+  "license": {
+    "declaration": "Apache-2.0",
+    "path": "LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4"
+  },
+  "release_workflow": "https://github.com/kumwe/record-model/actions/runs/34253812301",
+  "merged_pull_request": "https://github.com/kumwe/record-model/pull/8",
+  "platform_immutable_flag": false,
+  "observed_at": "2026-09-08T17:09:01Z",
+  "verifier": {
+    "repository": "kumwe/extension-sdk",
+    "commit": "c145c1d6f92a790d0e40639e8c338d2acfaf801a",
+    "run_url": "https://github.com/kumwe/extension-sdk/actions/runs/34255198879"
+  },
+  "consumer": {
+    "schema": "kumwe-independent-release-consumer/v1",
+    "status": "passed",
+    "name": "kumwe/record-model",
+    "version": "0.1.3",
+    "source_commit": "8d20cf75ee6ab915102bbf6a17567087971e9dfe",
+    "archive_sha256": "3e27ec64f6e1dffcb164af2a17d2b124afe7334224710eb049468d2d02a8ba40",
+    "no_dev": true,
+    "classmap_authoritative": true,
+    "offline_reinstall": true,
+    "composer_lock_sha256": "f11fb5fc70997f6b6cbfb80d3a8aace4d6447555613ddb80933eb3d294680b10",
+    "runtime_types_loaded": 7,
+    "consumer_dependency_audit": "passed",
+    "canonical_api_exports_verified": 6,
+    "installed_dist_identity_verified": true,
+    "runtime_classes": [
+      "Kumwe\\Record\\Model\\BusinessRecord",
+      "Kumwe\\Record\\Model\\BusinessRecordReplayWindow",
+      "Kumwe\\Record\\Model\\BusinessRecordRequestGuard",
+      "Kumwe\\Record\\Model\\BusinessRecordRevision",
+      "Kumwe\\Record\\Model\\Internal\\ValueSnapshot",
+      "Kumwe\\Record\\Model\\RecordMutationResult",
+      "Kumwe\\Record\\Model\\RecordScope"
+    ],
+    "optional_phpunit_bridges": [],
+    "consumer_host_requirements": [],
+    "examples": [
+      "examples/consumer.php"
+    ],
+    "php": "8.5.10",
+    "php_zts": false,
+    "os": "Linux",
+    "architecture": "x86_64",
+    "native_extension_loaded": false
+  }
+}
