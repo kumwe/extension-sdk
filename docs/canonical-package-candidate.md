@@ -16,6 +16,12 @@ The complete SDK behavioral suite likewise requires the actual native extension 
 
 Both the required SDK source job and the additional native candidate job build the pinned native extension, install the explicit candidate graph, and run the complete SDK gate and fresh archive consumer. Release automation and the required aggregate Package gate remain unchanged.
 
+The archive consumer also generates a complete author project from the installed SDK ZIP. It solves
+the generated Composer requirements, runs the generated project's own PHPUnit configuration, then
+reinstalls without development dependencies and executes its production autoload and delivery smoke.
+The SDK checkout and development autoloader cannot satisfy missing author dependencies in this gate.
+Source selections retain stable Composer stability when every selected coordinate is stable.
+
 Within one CI job, production reinstallation reuses the successfully installed Composer plan and lock after checking the same SDK inputs and dependency commits, trees and clean contents. This keeps an already verified development checkout usable if its branch is merged and deleted during the job. Initial installation still verifies every remote coordinate; stable tags are checked again during reinstallation. Snapshots from another job or altered inputs are refused.
 
 Every PHP dependency is selected by its published stable version and exact tag commit. Both native lanes build binding `584e910b5902c7d3c2bda006586692d572ac1154` with Engine `72fd09632e740f0bfd1bb09cc87749110ca21b90`.

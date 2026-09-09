@@ -4,6 +4,10 @@
 declare(strict_types=1);
 
 $root = dirname(__DIR__);
+if (count($argv) > 2 || (isset($argv[1]) && $argv[1] !== '--scaffold')) {
+    throw new RuntimeException('Usage: verify-clean-consumer.php [--scaffold]');
+}
+$verifyScaffold = ($argv[1] ?? null) === '--scaffold';
 $metadata = json_decode((string) file_get_contents($root . '/composer.json'), true, 64, JSON_THROW_ON_ERROR);
 $ownership = json_decode((string) file_get_contents($root . '/tests/ownership.json'), true, 64, JSON_THROW_ON_ERROR);
 $packageName = $metadata['name'];
@@ -67,7 +71,7 @@ try {
         'name' => 'kumwe/isolated-consumer', 'license' => 'proprietary',
         'require' => [$packageName => $version] + ($candidate['require'] ?? []),
         'repositories' => array_merge([['type' => 'package', 'package' => $archivedMetadata]], $candidate['repositories'] ?? []),
-        'minimum-stability' => $candidate === null ? 'stable' : 'dev',
+        'minimum-stability' => $candidate['minimum-stability'] ?? 'stable',
         'prefer-stable' => true,
         'config' => ['allow-plugins' => false],
     ], JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . "\n");
@@ -128,6 +132,10 @@ echo "True archive dependency consumer passed: {$loaded} runtime exports; no dev
 SMOKE;
     file_put_contents($consumer . '/smoke.php', $smoke . "\n");
     runConsumerCommand(['php', $consumer . '/smoke.php', $packageName, $apiPath]);
+    if ($verifyScaffold) {
+        require $root . '/tools/verify-scaffold-consumer.php';
+        verifyScaffoldConsumer($root, $workspace, $consumer, $archivedMetadata, $candidate);
+    }
     if ($candidate !== null) {
         echo 'Source candidate only; archive SHA-256 ' . hash_file('sha256', $archive) . "; no release attestation.\n";
     }
