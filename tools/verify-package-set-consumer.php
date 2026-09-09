@@ -110,15 +110,21 @@ function packageSetCommand(array $arguments, array $environment = []): void
 /** @param string $root Private consumer directory to remove, without following links. @return void @since 0.3.0 */
 function packageSetRemoveDirectory(string $root): void
 {
-    if (!str_starts_with($root, sys_get_temp_dir() . '/kumwe-package-set-') || is_link($root)) {
+    if (!str_starts_with($root, sys_get_temp_dir() . '/kumwe-package-set-') || is_link($root)
+        || realpath($root) !== $root || !is_dir($root)) {
         throw new RuntimeException('Refusing to remove a directory outside the private consumer.');
     }
     $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root,
         FilesystemIterator::SKIP_DOTS), RecursiveIteratorIterator::CHILD_FIRST);
     foreach ($files as $file) {
-        $file->isDir() && !$file->isLink() ? rmdir($file->getPathname()) : unlink($file->getPathname());
+        $removed = $file->isDir() && !$file->isLink() ? rmdir($file->getPathname()) : unlink($file->getPathname());
+        if (!$removed) {
+            throw new RuntimeException('Cannot remove the previous private consumer installation.');
+        }
     }
-    rmdir($root);
+    if (!rmdir($root) || file_exists($root) || is_link($root)) {
+        throw new RuntimeException('The previous private consumer installation remains present.');
+    }
 }
 
 /** @param list<string> $arguments Command line arguments. @return void @since 0.3.0 */

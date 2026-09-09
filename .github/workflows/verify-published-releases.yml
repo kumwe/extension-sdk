@@ -1,0 +1,90 @@
+name: Independent published release verification
+
+on:
+  pull_request:
+    paths:
+      - tools/release-verification/**
+      - tools/verify-package-set-consumer.php
+      - tools/test-package-set-consumer.php
+      - .github/workflows/verify-published-releases.yml
+  push:
+    branches: [main, master]
+    paths:
+      - tools/release-verification/**
+      - .github/workflows/verify-published-releases.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  coordinates:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      releases: ${{ steps.matrix.outputs.releases }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - id: matrix
+        run: node -e 'const fs = require("fs"); fs.appendFileSync(process.env.GITHUB_OUTPUT, "releases=" + JSON.stringify(JSON.parse(fs.readFileSync("tools/release-verification/releases.json"))) + "\n");'
+  release:
+    name: Verify ${{ matrix.release.name }} ${{ matrix.release.version }}
+    needs: coordinates
+    strategy:
+      fail-fast: false
+      matrix:
+        release: ${{ fromJSON(needs.coordinates.outputs.releases) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+        with:
+          php-version: '8.5'
+          extensions: dom, intl, json, mbstring, sodium, xml, xmlwriter, zip
+          coverage: none
+          tools: composer:v2
+      - name: Install verifier parsers from the exact lock
+        working-directory: tools/release-verification
+        run: npm ci --ignore-scripts --no-audit
+      - name: Test refusal of invalid evidence
+        run: |
+          node tools/release-verification/test-verifier.mjs
+          php tools/test-package-set-consumer.php
+      - name: Verify immutable release and clean offline consumer
+        env:
+          RELEASE_COORDINATE: ${{ toJSON(matrix.release) }}
+          GH_TOKEN: ${{ github.token }}
+          COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ github.token }}"}}'
+        run: |
+          node -e 'require("fs").writeFileSync(process.env.RUNNER_TEMP + "/release-coordinate.json", process.env.RELEASE_COORDINATE)'
+          node tools/release-verification/verify-release.mjs verify "$RUNNER_TEMP/release-coordinate.json" "$RUNNER_TEMP/release-verification"
+      - name: Prepare evidence envelope
+        if: always()
+        run: |
+          mkdir -p "$RUNNER_TEMP/release-envelope"
+          node tools/release-verification/collect-evidence.mjs "$RUNNER_TEMP/release-verification" "$RUNNER_TEMP/release-envelope"
+          node -e 'const fs=require("fs"); const r=${{ toJSON(matrix.release) }}; fs.appendFileSync(process.env.GITHUB_ENV,"RELEASE_SLUG="+r.name.replace("kumwe/","")+"-"+r.version+"\n")'
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        id: evidence
+        if: always()
+        with:
+          name: release-evidence-${{ env.RELEASE_SLUG }}
+          path: ${{ runner.temp }}/release-envelope
+          retention-days: 90
+          if-no-files-found: error
+      - name: Finalize external attestation after all checks pass
+        env:
+          EVIDENCE_URL: ${{ steps.evidence.outputs.artifact-url }}
+        run: node tools/release-verification/verify-release.mjs finalize "$RUNNER_TEMP/release-verification" "$EVIDENCE_URL"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: release-attestation-${{ env.RELEASE_SLUG }}
+          path: ${{ runner.temp }}/release-verification/RELEASE-ATTESTATION.yaml
+          retention-days: 90
+          if-no-files-found: error
