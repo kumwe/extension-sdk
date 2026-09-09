@@ -124,9 +124,9 @@ final class ConformanceRunnerTest extends TestCase
         $this->assertTrue(is_array($composer), 'composer.json must decode.');
         $requirements = $composer['require'] ?? null;
         $this->assertTrue(is_array($requirements), 'Runtime requirements must be an object.');
-        $this->assertSame('0.1.0', $requirements['kumwe/conversion'] ?? null,
+        $this->assertSame('0.1.5', $requirements['kumwe/conversion'] ?? null,
             'Conversion matches the coherent released transitive dependency graph.');
-        $this->assertSame('0.2.1', $requirements['kumwe/producer'] ?? null, 'Producer schemas use the selected stable release.');
+        $this->assertSame('0.2.2', $requirements['kumwe/producer'] ?? null, 'Producer schemas use the selected stable release.');
         $this->assertTrue(
             !isset($requirements['kumwe/' . 'app']),
             'A host application must not be a runtime dependency.',

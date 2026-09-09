@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { coordinate } from './verify-release.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const [selectionPath, source, destination] = process.argv.slice(2);
+const [selectionPath, source, destination, fixturePath] = process.argv.slice(2);
 const selected = JSON.parse(fs.readFileSync(selectionPath, 'utf8')).map(coordinate);
 if (!selected.length || new Set(selected.map(p => p.name)).size !== selected.length) {
   throw new Error('Independent package selection is empty or duplicated.');
@@ -20,7 +20,10 @@ for (const release of selected) {
   const envelope = path.resolve(source, `release-evidence-${slug}-${release.version}`);
   const record = JSON.parse(fs.readFileSync(path.join(envelope, 'verification.json'), 'utf8'));
   if (record.status !== 'passed' || record.input.name !== release.name
-    || record.input.version !== release.version || record.input.source_commit !== release.source_commit) {
+    || record.input.version !== release.version || record.input.source_commit !== release.source_commit
+    || record.complete_git_export_matched !== true || record.canonical_schema_validation?.length !== 3
+    || record.consumer?.status !== 'passed' || record.consumer.installed_dist_identity_verified !== true
+    || record.consumer.consumer_dependency_audit !== 'passed' || !Number.isInteger(record.consumer.canonical_api_exports_verified)) {
     throw new Error(`Independent evidence does not qualify ${release.name}.`);
   }
   const archivePath = path.join(envelope, 'source.zip');
@@ -35,7 +38,12 @@ for (const release of selected) {
     archive_path: archivePath, archive_sha256: digest, package_root: path.join(extracted, roots[0]),
     composer: record.input.composer });
 }
+const fixture = fixturePath ? JSON.parse(fs.readFileSync(fixturePath, 'utf8')) : null;
+if (fixture && (fixture.schema !== 'kumwe-qualified-native-fixture/v1' || fixture.status !== 'passed')) {
+  throw new Error('Native graph assembly requires its qualified actual-build fixture.');
+}
 fs.writeFileSync(path.join(out, 'verified-package-set.json'), JSON.stringify({
-  schema: 'kumwe-verified-php-package-set/v1', graph_mode: 'portable', packages,
+  schema: 'kumwe-verified-php-package-set/v1', graph_mode: fixture ? 'native' : 'portable', packages,
+  ...(fixture ? { native: fixture.native } : {}),
 }, null, 2) + '\n');
 console.log(`Prepared ${packages.length} independently verified original source ZIPs.`);

@@ -10,14 +10,14 @@ Notable changes to `kumwe/extension-sdk` are recorded here in
 - Prove generated projects from the SDK archive, stable published dependencies without native runtime,
   and complete independently verified extraction package sets with a clean offline production replay.
 
-- Require a coherent exact stable PHP dependency selection, update Producer to 0.2.1,
+- Require a coherent exact stable PHP dependency selection, select the published extraction dependency train including Producer 0.2.2,
   and reject drift between Composer, dependency records and either CI workflow with regression coverage.
 - Correct the public scaffolder API reference and replace obsolete PHP development-dependency claims
   with the actual remaining native, scaffold and ordered-release prerequisites.
 - Move portable SDK definitions to their canonical package owners and require explicit canonical encoder injection.
 - Exercise the actual native runtime and exact dependency source graph in both SDK test lanes.
 - Preserve the verified source graph and Composer lock across production reinstallation when branches are merged mid-job.
-- Select the published Business Surface Contract and Reporting 0.1.0 releases by their exact tag commits.
+- Select published Business Surface Contract 0.1.3, Reporting 0.1.3 and their final exact shared dependency commits.
 - Record the canonical API successor as 0.3.0 and generate scaffolds against that exact version;
   publication remains the maintainer-merged release workflow's responsibility.
 

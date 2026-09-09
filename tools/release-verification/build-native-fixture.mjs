@@ -163,7 +163,9 @@ export function buildNativeFixture(input, destination) {
     package: input.package, version: input.version, source_commit: input.source_commit,
     source_archive_sha256: input.source_archive_sha256, module, module_sha256: digest(fs.readFileSync(module)),
     php_binary: phpBinary, environment, expected_runtime_tuple: fullExpectedPath,
-    expected_runtime_tuple_sha256: digest(fs.readFileSync(fullExpectedPath)) };
+    expected_runtime_tuple_sha256: digest(fs.readFileSync(fullExpectedPath)),
+    php_ini_sha256: digest(fs.readFileSync(ini)),
+    expected_compatibility_sha256: digest(fs.readFileSync(expectedPath)) };
   fs.writeFileSync(path.join(destination, 'environment.json'), JSON.stringify(environment, null, 2) + '\n', { flag: 'wx' });
   fs.writeFileSync(path.join(destination, 'fixture.json'), JSON.stringify(result, null, 2) + '\n', { flag: 'wx' });
   return result;

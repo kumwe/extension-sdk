@@ -25,20 +25,22 @@ jobs:
     outputs:
       releases: ${{ steps.matrix.outputs.releases }}
       complete: ${{ steps.complete.outputs.complete }}
+      native_complete: ${{ steps.complete.outputs.native_complete }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - id: matrix
-        run: node -e 'const fs = require("fs"); fs.appendFileSync(process.env.GITHUB_OUTPUT, "releases=" + JSON.stringify(JSON.parse(fs.readFileSync("tools/release-verification/releases.json"))) + "\n");'
+        run: node -e 'const fs=require("fs"); const read=p=>JSON.parse(fs.readFileSync("tools/release-verification/"+p)); const releases=read("releases.json"), native=read("native-php-releases.json"); if(native.length>1 || native.some(p=>p.name!=="kumwe/computation" || p.version!=="0.3.1"))throw Error("Native PHP selection must be the exact Computation successor"); fs.appendFileSync(process.env.GITHUB_OUTPUT,"releases="+JSON.stringify([...releases,...native])+"\n")'
       - id: complete
-        run: node -e 'const fs=require("fs"); const p=JSON.parse(fs.readFileSync("tools/release-verification/releases.json")); fs.appendFileSync(process.env.GITHUB_OUTPUT,"complete="+(p.length===31 && p.some(x=>x.name==="kumwe/extension-sdk"))+"\n")'
+        run: node -e 'const fs=require("fs"); const read=p=>JSON.parse(fs.readFileSync("tools/release-verification/"+p)); const p=read("releases.json"), complete=p.length===31 && p.some(x=>x.name==="kumwe/extension-sdk"); fs.appendFileSync(process.env.GITHUB_OUTPUT,"complete="+complete+"\nnative_complete="+(complete && read("native-php-releases.json").length===1 && read("native-releases.json")!==null)+"\n")'
   release:
     name: Verify ${{ matrix.release.name }} ${{ matrix.release.version }}
     needs: coordinates
     strategy:
       fail-fast: false
-      max-parallel: 4
+      max-parallel: 2
       matrix:
         release: ${{ fromJSON(needs.coordinates.outputs.releases) }}
     runs-on: ubuntu-24.04
@@ -47,6 +49,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
         with:
           php-version: '8.5'
@@ -59,7 +62,11 @@ jobs:
       - name: Test refusal of invalid evidence
         run: |
           node tools/release-verification/test-verifier.mjs
+          node tools/release-verification/test-native-evidence.mjs
           php tools/test-package-set-consumer.php
+      - name: Build the required fixture from independently verified stable native releases
+        if: matrix.release.name == 'kumwe/extension-sdk' || (matrix.release.name == 'kumwe/computation' && matrix.release.version == '0.3.1')
+        run: node tools/release-verification/materialize-native-evidence.mjs tools/release-verification/native-releases.json "$RUNNER_TEMP/qualified-native"
       - name: Verify immutable release and clean offline consumer
         env:
           RELEASE_COORDINATE: ${{ toJSON(matrix.release) }}
@@ -67,7 +74,11 @@ jobs:
           COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ github.token }}"}}'
         run: |
           node -e 'require("fs").writeFileSync(process.env.RUNNER_TEMP + "/release-coordinate.json", process.env.RELEASE_COORDINATE)'
-          node tools/release-verification/verify-release.mjs verify "$RUNNER_TEMP/release-coordinate.json" "$RUNNER_TEMP/release-verification"
+          if [ -f "$RUNNER_TEMP/qualified-native/qualification-fixture.json" ]; then
+            node tools/release-verification/verify-release.mjs verify "$RUNNER_TEMP/release-coordinate.json" "$RUNNER_TEMP/release-verification" "$RUNNER_TEMP/qualified-native/qualification-fixture.json"
+          else
+            node tools/release-verification/verify-release.mjs verify "$RUNNER_TEMP/release-coordinate.json" "$RUNNER_TEMP/release-verification"
+          fi
       - name: Prepare evidence envelope
         if: always()
         run: |
@@ -93,6 +104,50 @@ jobs:
           retention-days: 90
           if-no-files-found: error
 
+  complete-native-package-set:
+    name: All 31 published PHP packages / native consumer
+    needs: [coordinates, release]
+    if: needs.coordinates.outputs.native_complete == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+        with:
+          php-version: '8.5'
+          extensions: dom, intl, json, mbstring, sodium, xml, xmlwriter, zip
+          coverage: none
+          tools: composer:v2
+      - name: Install locked verification parsers
+        working-directory: tools/release-verification
+        run: npm ci --ignore-scripts --no-audit
+      - name: Retrieve this successful run's independent PHP source evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" --pattern 'release-evidence-*' --dir "$RUNNER_TEMP/independent-releases"
+      - name: Build an actual stable binding fixture with its source-derived tuple
+        run: node tools/release-verification/materialize-native-evidence.mjs tools/release-verification/native-releases.json "$RUNNER_TEMP/qualified-native"
+      - name: Select the independently verified native Computation successor
+        run: |
+          node -e 'const fs=require("fs"), base=JSON.parse(fs.readFileSync("tools/release-verification/releases.json")), native=JSON.parse(fs.readFileSync("tools/release-verification/native-php-releases.json")); fs.writeFileSync(process.env.RUNNER_TEMP+"/native-package-selection.json",JSON.stringify([...base.filter(p=>p.name!=="kumwe/computation"),...native]))'
+          node tools/release-verification/assemble-package-set.mjs "$RUNNER_TEMP/native-package-selection.json" "$RUNNER_TEMP/independent-releases" "$RUNNER_TEMP/native-package-set" "$RUNNER_TEMP/qualified-native/qualification-fixture.json"
+      - name: Install all 31 packages and replay the same native graph lock offline
+        env:
+          COMPOSER_AUTH: '{"github-oauth":{"github.com":"${{ github.token }}"}}'
+        run: node tools/release-verification/run-native-package-set.mjs "$RUNNER_TEMP/qualified-native/qualification-fixture.json" "$RUNNER_TEMP/native-package-set/verified-package-set.json" "$RUNNER_TEMP/native-package-set/consumer-verification.json"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: complete-native-package-set-verification
+          path: |
+            ${{ runner.temp }}/native-package-set/verified-package-set.json
+            ${{ runner.temp }}/native-package-set/consumer-verification.json
+            ${{ runner.temp }}/qualified-native/qualification-fixture.json
+          retention-days: 90
+          if-no-files-found: error
+
   complete-package-set:
     name: All 31 published PHP packages / portable consumer
     needs: [coordinates, release]
@@ -103,6 +158,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
         with:
           php-version: '8.5'

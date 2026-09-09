@@ -28,22 +28,13 @@ canonical profile remains Producer-owned and separate from the generic engine pr
 
 ## Dependencies and release order
 
-The source-selection records and both workflows describe the same 21 exact stable PHP package
-coordinates. The dependency-selection gate refuses ranges, development coordinates, duplicate
-evidence and stale workflow commits; installation additionally checks live tag identity and lets
-Composer resolve the complete transitive graph. Producer now uses published `0.2.1`.
+The source-selection records and both workflows now select the same 21 exact published PHP versions and tag commits. Their complete Kumwe runtime constraints agree. They include the final Context, Access, Contribution, Conversion 0.1.5, Producer 0.2.2, Record Values 0.1.4, Record Query/Model/Reporting 0.1.3 and Business Surface Contract 0.1.3 train. The dependency gate rejects ranges, development coordinates, duplicate records and stale checkouts; installation also checks live tag identity.
 
-Some released packages require older exact shared-library versions. Upgrading the SDK alone cannot
-override them. Release updated direct dependents first, then their dependents, and update the SDK
-selection only when the entire graph resolves using published versions. In particular, Conversion,
-Contribution, Context, Localization and Sequence updates must move through their Record, Business
-Definition, Access, Integration and surface consumers before the SDK can select a new combined
-graph. Access Control's GitHub release currently requires the explicit root VCS configuration
-where Packagist does not expose it.
+Three actual Packagist registrations remain outstanding: `kumwe/access-control` 0.1.2, `kumwe/business-policy` 0.1.1 and `kumwe/content-model` 0.1.2. All three endpoints returned HTTP 404 in the 31-package registry audit captured at 2026-09-08 17:13:45 UTC. The unchanged observation is retained on this PR branch at `evidence/registry/selected-tuple-20260908T171345Z.json`; it records published SDK 0.2.5 and portable Computation 0.1.1, not a completed SDK 0.3.0/native graph. Repository evidence is explicitly excluded from both SDK archive formats.
 
-The native source remains a candidate, not a stable release. Engine release verification, exact
-extension coupling and Computation's stable native requirement remain separate prerequisites for
-production native adoption. This SDK release record does not publish or attest to any native artifact.
+Register the three canonical GitHub repositories with Packagist using the authorized maintainer account, then verify that the exact published versions and source/dist commits are indexed. SDK consumers retain the two necessary root VCS declarations for Access Control and Business Policy; Content Model is outside the SDK dependency closure. The independent registry-only Reporting consumer and final package matrix remain blocked until registration. VCS source success does not substitute for that registry qualification.
+
+The portable Computation 0.1.1 release has independent source/archive/consumer evidence. Stable acceleration still needs the remaining semantic owner receipts, independently accepted Engine publication, the extension re-embedded against that actual Engine release, independent native source/signature/offline-build verification, native Computation successor publication, and the SDK's final native development pin. Computation 0.2.1 and the documented native candidate remain the existing source-test fixture only. No future release coordinate is selected as though it already exists.
 
 ## Test ownership and next-task gates
 
@@ -70,9 +61,5 @@ documentation and a prepublication ownership handoff. Existing SDK compatibility
 paths and semantics; the governed projection adds no runtime aliases. The
 SDK-owned classification and resource manifests remain independently enforced by its source gates.
 
-Prefer completing the upstream release train and repinning this branch to its jointly resolvable
-published versions before publishing `0.3.0`. If the current coherent older graph is published
-first, record a new SDK successor for later pin changes; never rewrite the `0.3.0` tag or archive.
-After publication, verify the actual tag, release, archive and generated scaffold installation.
-Complete native qualification before the separate App integration task.
+SDK 0.3.0 remains unmerged and unpublished until the remaining registry and native requirements pass and both complete 31-package graphs are verified. Generated project and normal published-dependency archive checks must pass at the final reviewed SDK head. Existing releases/tags must remain unchanged; the final SDK merge must preserve the immutable evidence commits already referenced by upstream qualification.
 No App runtime cutover or duplicate App test removal is claimed by this package PR.
