@@ -70,7 +70,8 @@ try {
     file_put_contents($consumer . '/composer.json', json_encode([
         'name' => 'kumwe/isolated-consumer', 'license' => 'proprietary',
         'require' => [$packageName => $version] + ($candidate['require'] ?? []),
-        'repositories' => array_merge([['type' => 'package', 'package' => $archivedMetadata]], $candidate['repositories'] ?? []),
+        'repositories' => array_merge([['type' => 'package', 'package' => $archivedMetadata]],
+            $candidate['repositories'] ?? $metadata['repositories'] ?? []),
         'minimum-stability' => $candidate['minimum-stability'] ?? 'stable',
         'prefer-stable' => true,
         'config' => ['allow-plugins' => false],
