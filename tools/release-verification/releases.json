@@ -48,5 +48,10 @@
     "name": "kumwe/business-schema",
     "version": "0.1.2",
     "source_commit": "c201b6b386c4140ca7c181fc57e37339160e0f88"
+  },
+  {
+    "name": "kumwe/conversion",
+    "version": "0.1.4",
+    "source_commit": "61309523a58949e9d842c42e23f7d428a2b5ced2"
   }
 ]
