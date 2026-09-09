@@ -1,0 +1,114 @@
+name: Independent native release verification
+
+on:
+  pull_request:
+    paths:
+      - tools/native-release-verification/**
+      - tools/release-verification/*schema.json
+      - tools/release-verification/package*.json
+      - .github/workflows/verify-native-release.yml
+  push:
+    branches: [main, master]
+    paths:
+      - tools/native-release-verification/**
+      - tools/release-verification/*schema.json
+      - tools/release-verification/package*.json
+      - .github/workflows/verify-native-release.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+  attestations: read
+
+jobs:
+  verifier-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      releases: ${{ steps.coordinates.outputs.releases }}
+      count: ${{ steps.coordinates.outputs.count }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Install exact schema parsers
+        run: npm ci --prefix tools/release-verification --ignore-scripts --no-audit
+      - name: Refuse incomplete evidence and unsafe source archives
+        run: |
+          node tools/native-release-verification/test-verifier.mjs
+          python3 tools/native-release-verification/test-extract-source.py
+          bash -n tools/native-release-verification/offline-build.sh
+      - name: Select only reviewed actual published coordinates
+        id: coordinates
+        run: |
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';
+          import { coordinate } from './tools/native-release-verification/verify-native.mjs';
+          const releases = JSON.parse(fs.readFileSync('tools/native-release-verification/releases.json'));
+          if (!Array.isArray(releases) || releases.length > 2) throw new Error('Native owner matrix is invalid.');
+          releases.forEach(coordinate);
+          if (new Set(releases.map(r => r.name)).size !== releases.length) throw new Error('Duplicate native owner.');
+          fs.appendFileSync(process.env.GITHUB_OUTPUT,
+            'releases=' + JSON.stringify(releases) + '\ncount=' + releases.length + '\n');
+          JS
+  verify-release:
+    name: Verify ${{ matrix.release.name }} ${{ matrix.release.version }}
+    needs: verifier-tests
+    if: needs.verifier-tests.outputs.count != '0'
+    strategy:
+      max-parallel: 1
+      fail-fast: false
+      matrix:
+        release: ${{ fromJSON(needs.verifier-tests.outputs.releases) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240
+        with:
+          php-version: '8.5'
+          coverage: none
+          extensions: ctype, tokenizer, phar, fileinfo, iconv, mbstring, intl, curl, dom, xml, zip
+          tools: pie:1.4.10
+      - name: Install locked verifier parsers
+        run: npm ci --prefix tools/release-verification --ignore-scripts --no-audit
+      - name: Capture the exact installer path and reviewed coordinate
+        env:
+          RELEASE_COORDINATE: ${{ toJSON(matrix.release) }}
+        run: |
+          echo "KUMWE_PIE_PATH=$(command -v pie)" >> "$GITHUB_ENV"
+          node -e 'const fs=require("fs"); fs.writeFileSync(process.env.RUNNER_TEMP+"/native-coordinate.json",process.env.RELEASE_COORDINATE); const r=JSON.parse(process.env.RELEASE_COORDINATE); fs.appendFileSync(process.env.GITHUB_ENV,"NATIVE_SLUG="+r.name.slice(6)+"-"+r.version+"\n");'
+      - name: Verify published source, five OIDC subjects, receipts, and actual offline native consumer
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          node tools/native-release-verification/verify-native.mjs verify
+          "$RUNNER_TEMP/native-coordinate.json" "$RUNNER_TEMP/native-verification"
+      - name: Preserve original assets and observed build evidence
+        if: always()
+        run: >-
+          python3 tools/native-release-verification/collect-evidence.py
+          "$RUNNER_TEMP/native-verification" "$RUNNER_TEMP/native-evidence"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        id: evidence
+        if: always()
+        with:
+          name: native-release-evidence-${{ env.NATIVE_SLUG }}
+          path: ${{ runner.temp }}/native-evidence
+          if-no-files-found: error
+          retention-days: 90
+      - name: Finalize full-schema-valid external release attestation
+        env:
+          EVIDENCE_URL: ${{ steps.evidence.outputs.artifact-url }}
+        run: >-
+          node tools/native-release-verification/verify-native.mjs finalize
+          "$RUNNER_TEMP/native-verification" "$EVIDENCE_URL"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: native-release-attestation-${{ env.NATIVE_SLUG }}
+          path: ${{ runner.temp }}/native-verification/RELEASE-ATTESTATION.yaml
+          if-no-files-found: error
+          retention-days: 90

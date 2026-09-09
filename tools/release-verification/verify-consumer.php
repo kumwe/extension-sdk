@@ -42,6 +42,7 @@ $run = static function (array $args) use ($root): void {
 $install = ['composer', 'install', '--no-interaction', '--prefer-dist', '--no-dev',
     '--no-plugins', '--no-scripts', '--classmap-authoritative', '--no-progress'];
 $run($install);
+$run(['composer', 'audit', '--abandoned=fail', '--format=json']);
 $lockDigest = hash_file('sha256', $root . '/composer.lock');
 $remove = static function (string $directory): void {
     $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($directory,
@@ -86,6 +87,43 @@ foreach ($classmap as $name => $file) {
         $classes[] = $name;
     }
 }
+$publicApi = json_decode(file_get_contents($package . '/' . $input['handoff']['framework_php']['public_api_manifest']),
+    true, 512, JSON_THROW_ON_ERROR);
+$declaredSymbols = $publicApi['symbols'];
+foreach ($declaredSymbols as $name => $symbol) {
+    $relative = $symbol['file'];
+    if (str_starts_with($relative, '/') || str_contains($relative, '\\')
+        || in_array('..', explode('/', $relative), true)) {
+        throw new RuntimeException('Unsafe canonical API file path.');
+    }
+    $installedFile = realpath($package . '/' . $relative);
+    $originalFile = realpath($input['package_root'] . '/' . $relative);
+    if ($installedFile === false || $originalFile === false
+        || !str_starts_with($installedFile, realpath($package) . '/')
+        || !isset($classmap[$name]) || realpath($classmap[$name]) !== $installedFile
+        || hash_file('sha256', $installedFile) !== hash_file('sha256', $originalFile)) {
+        throw new RuntimeException('Canonical API export is missing, shadowed or changed: ' . $name);
+    }
+    if (in_array($name, $optionalBridges, true)) { continue; }
+    if (!in_array($name, $classes, true)) {
+        throw new RuntimeException('Canonical API symbol was not loaded: ' . $name);
+    }
+    $reflection = new ReflectionClass($name);
+    $kind = $reflection->isEnum() ? 'enum' : ($reflection->isInterface() ? 'interface'
+        : ($reflection->isTrait() ? 'trait' : 'class'));
+    if ($kind !== $symbol['kind'] || realpath($reflection->getFileName()) !== $installedFile) {
+        throw new RuntimeException('Canonical API runtime identity differs: ' . $name);
+    }
+}
+$locked = json_decode(file_get_contents($root . '/composer.lock'), true, 512, JSON_THROW_ON_ERROR);
+$selected = array_values(array_filter($locked['packages'], static fn (array $p): bool => $p['name'] === $input['name']));
+if (count($selected) !== 1 || ltrim($selected[0]['version'], 'v') !== $input['version']
+    || isset($selected[0]['source']) || ($selected[0]['dist']['url'] ?? null) !== 'file://' . $input['archive_path']
+    || ($selected[0]['dist']['reference'] ?? null) !== $input['source_commit']
+    || ($selected[0]['dist']['shasum'] ?? null) !== sha1_file($input['archive_path'])
+    || Composer\InstalledVersions::getReference($input['name']) !== $input['source_commit']) {
+    throw new RuntimeException('Consumer lock/installed identity differs from the original verified archive.');
+}
 if ($classes === []) {
     throw new RuntimeException('Package has no resolved runtime exports.');
 }
@@ -104,6 +142,7 @@ file_put_contents($argv[2], json_encode(['schema' => 'kumwe-independent-release-
     'source_commit' => $input['source_commit'], 'archive_sha256' => $input['archive_sha256'],
     'no_dev' => true, 'classmap_authoritative' => true, 'offline_reinstall' => true,
     'composer_lock_sha256' => $lockDigest, 'runtime_types_loaded' => count($classes),
+    'consumer_dependency_audit' => 'passed', 'canonical_api_exports_verified' => count($declaredSymbols), 'installed_dist_identity_verified' => true,
     'runtime_classes' => $classes, 'optional_phpunit_bridges' => $optionalBridges,
     'consumer_host_requirements' => array_diff_key($consumerRequirements, [$input['name'] => true]), 'examples' => $input['examples'], 'php' => PHP_VERSION,
     'php_zts' => PHP_ZTS, 'os' => PHP_OS_FAMILY, 'architecture' => php_uname('m'),

@@ -152,6 +152,22 @@ $cases = [
 ];
 
 $nativeCases = [
+    'floating durable evidence ref' => static function (array &$input): string {
+        $input['native']['engine']['attestation']['uri'] = 'https://raw.githubusercontent.com/kumwe/extension-sdk/main/evidence/native/attestation.zip';
+        return 'immutable attestation location';
+    },
+    'foreign durable evidence owner' => static function (array &$input): string {
+        $input['native']['engine']['attestation']['uri'] = 'https://raw.githubusercontent.com/other/extension-sdk/' . str_repeat('a', 40) . '/evidence/native/attestation.zip';
+        return 'immutable attestation location';
+    },
+    'durable evidence path traversal' => static function (array &$input): string {
+        $input['native']['engine']['attestation']['uri'] = 'https://raw.githubusercontent.com/kumwe/extension-sdk/' . str_repeat('a', 40) . '/evidence/../attestation.zip';
+        return 'immutable attestation location';
+    },
+    'durable evidence query suffix' => static function (array &$input): string {
+        $input['native']['engine']['attestation']['uri'] = 'https://raw.githubusercontent.com/kumwe/extension-sdk/' . str_repeat('a', 40) . '/evidence/native/attestation.zip?ref=main';
+        return 'immutable attestation location';
+    },
     'candidate extension' => static function (array &$input): string {
         $input['native']['extension_version'] = '1.0.0-dev';
         return 'requires stable evidence';
@@ -221,6 +237,14 @@ try {
     }
     if (count(packageSetInput(packageSetNativeFixture($workspace))) !== 31) {
         throw new RuntimeException('Complete native metadata fixture was not accepted.');
+    }
+    $durable = packageSetNativeFixture($workspace);
+    foreach (['engine', 'extension'] as $kind) {
+        $durable['native'][$kind]['attestation']['uri'] = 'https://raw.githubusercontent.com/kumwe/extension-sdk/'
+            . str_repeat('a', 40) . '/evidence/native/' . $kind . '/1.0.0/attestation.zip';
+    }
+    if (count(packageSetInput($durable)) !== 31) {
+        throw new RuntimeException('Exact-commit durable evidence metadata was not accepted.');
     }
     foreach ($nativeCases as $label => $mutate) {
         $input = packageSetNativeFixture($workspace);

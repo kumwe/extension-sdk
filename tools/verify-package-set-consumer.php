@@ -85,7 +85,8 @@ function packageSetNativeInput(array $input): ?array
         }
         $attestation = $entry['attestation'] ?? null;
         if (!is_array($attestation) || !is_string($attestation['uri'] ?? null)
-            || preg_match('~^https://github\.com/kumwe/[a-z0-9-]+/[^\s]+$~D', $attestation['uri']) !== 1
+            || (preg_match('~^https://github\.com/kumwe/[a-z0-9-]+/[^\s]+$~D', $attestation['uri']) !== 1
+                && preg_match('~^https://raw\.githubusercontent\.com/kumwe/extension-sdk/[0-9a-f]{40}/evidence/(?:[A-Za-z0-9_-][A-Za-z0-9._-]*/)+attestation\.zip$~D', $attestation['uri']) !== 1)
             || ($attestation['member'] ?? null) !== 'RELEASE-ATTESTATION.yaml') {
             throw new RuntimeException('Native verification evidence needs its immutable attestation location and member.');
         }
