@@ -3,5 +3,50 @@
     "name": "kumwe/computation",
     "version": "0.1.1",
     "source_commit": "fc9d049f8b675c8e19fd1672d49b5e206c9ad52a"
+  },
+  {
+    "name": "kumwe/canonical-json",
+    "version": "0.1.1",
+    "source_commit": "e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58"
+  },
+  {
+    "name": "kumwe/transaction",
+    "version": "0.1.2",
+    "source_commit": "56c8eb14a70bd3f1ed7eaeae7196a07d6627bf03"
+  },
+  {
+    "name": "kumwe/localization",
+    "version": "0.1.1",
+    "source_commit": "8571ab575b9b9f2dc1b8a25b3c902d9cf44093cb"
+  },
+  {
+    "name": "kumwe/secret-envelope",
+    "version": "0.1.1",
+    "source_commit": "3bf2d66d4090da697bf148c9eb866a9839f1af45"
+  },
+  {
+    "name": "kumwe/sequence",
+    "version": "0.2.1",
+    "source_commit": "142c3e74a7596935ef42c8fa744ca705fd3b4b4f"
+  },
+  {
+    "name": "kumwe/contribution",
+    "version": "0.1.1",
+    "source_commit": "2fc75742aa5a7d78418d2f586fa3043271e70082"
+  },
+  {
+    "name": "kumwe/access-context",
+    "version": "0.1.2",
+    "source_commit": "132c3cd7c229ceda4398e19140d1477512c27ebf"
+  },
+  {
+    "name": "kumwe/business-definition",
+    "version": "0.1.2",
+    "source_commit": "1cb59229f311067e8cfdd773a34e34cfeb501791"
+  },
+  {
+    "name": "kumwe/business-schema",
+    "version": "0.1.2",
+    "source_commit": "c201b6b386c4140ca7c181fc57e37339160e0f88"
   }
 ]
