@@ -296,7 +296,8 @@ export async function verifyNative(raw, destination) {
     'The actually installed module version differs from its release.');
   save(path.join(output, 'verification.json'), { schema: 'kumwe-independent-native-release-verification/v1',
     status: 'passed', input, verified_at: new Date().toISOString(),
-    verifier: { repository: process.env.GITHUB_REPOSITORY || null, source_commit: process.env.GITHUB_SHA || null,
+    verifier: { repository: process.env.GITHUB_REPOSITORY || null,
+      source_commit: readCommand(['git', 'rev-parse', 'HEAD'], path.resolve(here, '../..')),
       run_url: process.env.GITHUB_RUN_ID ? `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}` : null },
     source_tree: source.source.tree, handoff: handoffRecord, manifests_and_corpora: manifests,
     signature_verification: { status: 'passed', repository: input.name, source_commit: input.source_commit,

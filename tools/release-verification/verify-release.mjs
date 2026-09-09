@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import YAML from 'yaml';
 import Ajv from 'ajv/dist/2020.js';
+import { nativeFixtureScope } from './native-fixture-scope.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const sha256 = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
@@ -146,8 +147,10 @@ function spdx(input, archiveFiles, packageRoot, timestamp) {
     relationships: files.map(f => ({ spdxElementId: 'SPDXRef-Package', relationshipType: 'CONTAINS', relatedSpdxElement: f.SPDXID })) };
 }
 
-export async function verifyRelease(raw, output) {
+export async function verifyRelease(raw, output, nativeFixture = null) {
   const input = coordinate(raw);
+  const verifierHead = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: path.resolve(here, '../..'), encoding: 'utf8' });
+  requireFact(verifierHead.status === 0 && /^[a-f0-9]{40}$/.test(verifierHead.stdout.trim()), 'The verifier source commit cannot be established.');
   const api = `https://api.github.com/repos/${input.repository}`;
   fs.mkdirSync(output, { recursive: true });
   const get = suffix => request(api + suffix);
@@ -181,6 +184,17 @@ export async function verifyRelease(raw, output) {
   input.package_root = path.join(extracted, roots[0]);
   input.composer = json(path.join(input.package_root, 'composer.json'));
   requireFact(input.composer.name === input.name, 'Archived Composer package identity differs.');
+  command(['php', '-r', 'if(extension_loaded("kumwe_engine")){fwrite(STDERR,"Base verification PHP must be native-free.\\n");exit(1);}'],
+    output, path.join(output, 'base-php-verification.log'));
+  const nativeRuntime = Object.hasOwn(input.composer.require || {}, 'ext-kumwe_engine');
+  const nativeDevelopment = Object.hasOwn(input.composer['require-dev'] || {}, 'ext-kumwe_engine')
+    || (input.name === 'kumwe/extension-sdk' && Object.hasOwn(input.composer['require-dev'] || {}, 'kumwe/computation'));
+  const nativeRequired = nativeRuntime || nativeDevelopment;
+  requireFact(nativeRequired === Boolean(nativeFixture), 'Actual native source requirements and supplied verified fixture do not agree.');
+  const nativeScope = nativeRequired ? nativeFixtureScope(path.resolve(nativeFixture), path.resolve(output, 'native-php-scope')) : null;
+  if (nativeRuntime) requireFact(input.composer.require['ext-kumwe_engine'] === nativeScope.result.selection.extension.version,
+    'Published native requirement differs from the actual verified stable extension.');
+  if (nativeScope) write(path.join(output, 'native-fixture-verification.json'), nativeScope.result);
   const sourceTree = await get(`/git/trees/${input.source_commit}?recursive=1`);
   requireFact(!sourceTree.truncated, 'Source tree response is incomplete.');
   const blobs = new Map(sourceTree.tree.filter(e => e.type === 'blob').map(e => [e.path, e]));
@@ -205,6 +219,8 @@ export async function verifyRelease(raw, output) {
   const licensePath = ['LICENSE', 'LICENSE.md', 'LICENSE.txt'].find(p => archiveFiles.includes(p));
   requireFact(licensePath && input.composer.license, 'License declaration/inventory is absent.');
   input.examples = handoff.documentation.examples.map(safePath);
+  // tests.corpora is a list of descriptions, not path-schema fields. Corpus bytes are
+  // checked by complete Git export equality, bound manifests and the corpus inventory.
   for (const p of [...['charter', 'readme', 'public_api', 'architecture', 'integration_or_consumer'].map(key => handoff.documentation[key]), ...input.examples]) {
     requireFact(fs.statSync(path.join(input.package_root, safePath(p))).isFile(), `Declared handoff artifact is absent: ${p}`);
   }
@@ -239,11 +255,12 @@ export async function verifyRelease(raw, output) {
         path.join(output, directory.replaceAll('/', '-') + '-npm-install.log'));
     }
   }
-  command(['composer', 'install', '--no-interaction', '--prefer-dist', '--no-progress'], checkout, path.join(output, 'package-install.log'));
-  command(['composer', '--no-plugins', 'check'], checkout, path.join(output, 'package-check.log'));
-  command(['composer', 'audit', '--abandoned=fail', '--format=json'], checkout, path.join(output, 'security-audit.log'));
+  const sourceEnvironment = nativeScope?.environment || {};
+  command(['composer', 'install', '--no-interaction', '--prefer-dist', '--no-progress'], checkout, path.join(output, 'package-install.log'), sourceEnvironment);
+  command(['composer', '--no-plugins', 'check'], checkout, path.join(output, 'package-check.log'), sourceEnvironment);
+  command(['composer', 'audit', '--abandoned=fail', '--format=json'], checkout, path.join(output, 'security-audit.log'), sourceEnvironment);
   command(['php', path.join(here, 'verify-consumer.php'), path.resolve(output, 'prepared-package.json'),
-    path.resolve(output, 'consumer-verification.json')], output, path.join(output, 'consumer-verification.log'));
+    path.resolve(output, 'consumer-verification.json')], output, path.join(output, 'consumer-verification.log'), nativeRuntime ? sourceEnvironment : {});
   command(['git', 'diff', '--exit-code', 'HEAD', '--'], checkout, path.join(output, 'source-unchanged.log'));
   let finalTag = await get(`/git/ref/tags/${input.tag}`);
   while (finalTag.object.type === 'tag') finalTag = await get(`/git/tags/${finalTag.object.sha}`);
@@ -259,9 +276,13 @@ export async function verifyRelease(raw, output) {
     license: { declaration: input.composer.license, path: licensePath, sha256: sha256(fs.readFileSync(path.join(input.package_root, licensePath))) },
     release_workflow: releaseRuns[0].html_url, merged_pull_request: mergePulls[0].html_url,
     platform_immutable_flag: release.immutable === true, observed_at: observed,
-    verifier: { repository: process.env.GITHUB_REPOSITORY || 'local-verifier', commit: process.env.GITHUB_SHA || null,
+    verifier: { repository: process.env.GITHUB_REPOSITORY || 'local-verifier', commit: verifierHead.stdout.trim(),
+      workflow_event_commit: process.env.GITHUB_SHA || null,
       run_url: process.env.GITHUB_RUN_ID ? `https://github.com/${process.env.GITHUB_REPOSITORY}/actions/runs/${process.env.GITHUB_RUN_ID}` : null },
     consumer: json(path.join(output, 'consumer-verification.json')) };
+  evidence.native_fixture = nativeScope ? { source_checks: 'qualified stable native fixture',
+    archive_consumer: nativeRuntime ? 'qualified stable native fixture' : 'original native-free PHP',
+    extension: nativeScope.result.native.extension, engine: nativeScope.result.native.engine } : null;
   write(path.join(output, 'verification-provenance.json'), { _type: 'https://in-toto.io/Statement/v1',
     subject: [{ name: input.archive_url, digest: { sha256: input.archive_sha256 } }],
     predicateType: 'https://kumwe.dev/attestations/independent-release-verification/v1',
@@ -308,11 +329,11 @@ export function finalize(output, evidenceUrl) {
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
-  const [mode, input, output] = process.argv.slice(2);
+  const [mode, input, output, nativeFixture] = process.argv.slice(2);
   try {
-    if (mode === 'verify') await verifyRelease(json(input), path.resolve(output));
+    if (mode === 'verify') await verifyRelease(json(input), path.resolve(output), nativeFixture || null);
     else if (mode === 'finalize') finalize(path.resolve(input), output);
-    else throw new Error('Usage: node verify-release.mjs verify PACKAGE_JSON OUTPUT | finalize OUTPUT UPLOADED_EVIDENCE_URL');
+    else throw new Error('Usage: node verify-release.mjs verify PACKAGE_JSON OUTPUT [QUALIFIED_NATIVE_FIXTURE_JSON] | finalize OUTPUT UPLOADED_EVIDENCE_URL');
   } catch (error) {
     const folder = mode === 'verify' ? output : input;
     if (folder) { fs.mkdirSync(folder, { recursive: true }); write(path.join(folder, 'FAILED-VERIFICATION.json'),

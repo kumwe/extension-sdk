@@ -28,7 +28,7 @@
       }
     ],
     "examined_dependencies": [
-      "All exact source coordinates in resources/source-ci-dependencies.json and Composer runtime declarations.",
+      "All 21 exact published PHP source coordinates and their complete runtime constraints agree in resources/source-ci-dependencies.json; actual registry and native qualification blockers remain recorded in docs/readiness-review.md.",
       "Historical SDK adoption records docs/migration-map.json and docs/canonical-package-migration.json are retained as documentation, not a claim of current App examination.",
       "The source/API classification and generation semantics are preserved; this handoff governs SDK readiness rather than repeating the historical extraction."
     ],
@@ -86,7 +86,7 @@
       },
       {
         "path": "resources/PIN.json",
-        "sha256": "88ff4c13d055ae8b97a87a86f64e015dea0db7a62c4541c088316b8c09a78ccf"
+        "sha256": "4517535ebf15f152798a3dea5d142fb5be4821e181646799d3464de958dc828b"
       }
     ],
     "intentionally_excluded": [

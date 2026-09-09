@@ -35,63 +35,7 @@
     },
     {
       "type": "vcs",
-      "url": "https://github.com/kumwe/administrator-contract.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/automation.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/business-definition.git"
-    },
-    {
-      "type": "vcs",
       "url": "https://github.com/kumwe/business-policy.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/business-surface-contract.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/canonical-json.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/computation.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/idempotency.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/integration.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/portal-contract.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/record-model.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/record-query.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/record-values.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/reporting.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/sequence.git"
     },
     {
       "type": "vcs",
