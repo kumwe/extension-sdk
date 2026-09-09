@@ -37,7 +37,8 @@ identities are observed per build; a tuple from a different host is never reused
 value. No PHP algorithm fallback or package workspace is used as an installed native consumer.
 
 The compressed release `archive_sha256` and the raw embedding TAR digest are separate.
-`verification.json.embedded_engine` records `source_commit` and `raw_tar_sha256`; the exact raw
+`verification.json.embedded_engine` records `source_commit`, `raw_tar_sha256` and the distinct
+`release_archive_sha256`; the latter must match the actual Engine receipt. The exact raw
 `embedded-engine-source.tar` bytes are retained. The full module tuple is in
 `build-evidence/actual-tuple.json` and `verification.json.build.actual_tuple`. The final YAML's
 `abi_and_capabilities` is the deliberately smaller projection required by the authoritative
