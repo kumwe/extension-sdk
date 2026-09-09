@@ -55,3 +55,23 @@ See [`CHARTER.md`](CHARTER.md), [`docs/engineering-standard.md`](docs/engineerin
 ## License
 
 Apache License 2.0. See [`LICENSE`](LICENSE).
+
+## Public API and construction
+
+The canonical Version 2 manifests are [public API](resources/public-api/v1.json),
+[capabilities](resources/capabilities/v1.json) and [service map](resources/service-map/v1.json).
+The [complete API reference](docs/public-api.md) is generated from every declared public type,
+member signature and source PHPDoc. Existing SDK classification, generation fixtures and resource
+digest inventories remain authoritative SDK compatibility records and keep their existing paths.
+
+The SDK uses explicit construction and has no ConfigProvider. An authoring operation receives its
+canonical encoder, inspectors and signing collaborators from its caller; the library cannot select
+host trust, signing authority or a compatible native tuple. See [architecture](docs/architecture.md)
+for lifetimes and I/O, and [direct construction](examples/direct-construction.php) for composition.
+The CLI verifies an explicitly supplied native tuple per invocation. The runtime PHP API and
+generated production extensions depend on the portable encoder contract; native Computation is
+required only by the optional CLI and development/generated test toolchain.
+
+[MIGRATION-HANDOFF.md](MIGRATION-HANDOFF.md) records the prepublication ownership and next-consumer
+contract. An independent external release attestation must identify actual published bytes before
+release verification is claimed. This handoff does not perform App integration.

@@ -1,0 +1,173 @@
+{
+    "schema": "kumwe-package-capabilities/v1",
+    "package": "kumwe/extension-sdk",
+    "release": "0.3.0",
+    "namespace": "Kumwe\\Extension\\",
+    "responsibility": "Canonical extension author contracts, strict manifests, executable binding ports and host-neutral package authoring/evidence tooling.",
+    "non_responsibilities": [
+        "Admission, authorization, trust policy, activation and persistence",
+        "Host containers, request/transaction scopes, key distribution and tenant configuration",
+        "Algorithms and values owned by extracted capability libraries",
+        "Native engine provisioning or a PHP algorithm fallback"
+    ],
+    "capabilities": [
+        {
+            "id": "extension-sdk.identity",
+            "title": "Stable extension identity",
+            "description": "Name-based UUID formatting shared by authoring contracts.",
+            "symbols": [
+                "Kumwe\\Extension\\Contract\\NameBasedUuid"
+            ],
+            "documentation": [
+                "docs/public-api.md",
+                "docs/architecture.md",
+                "docs/host-integration.md"
+            ]
+        },
+        {
+            "id": "extension-sdk.manifest",
+            "title": "Manifest parsing and canonical contribution declarations",
+            "description": "Strict schema 1\u20136 manifests, version constraints and declared contribution graphs.",
+            "symbols": [
+                "Kumwe\\Extension\\Manifest\\ExtensionDependency",
+                "Kumwe\\Extension\\Manifest\\ExtensionIdentifier",
+                "Kumwe\\Extension\\Manifest\\ExtensionManifest",
+                "Kumwe\\Extension\\Manifest\\ExtensionType",
+                "Kumwe\\Extension\\Manifest\\ManifestContributions",
+                "Kumwe\\Extension\\Manifest\\ManifestIdentifierPolicies",
+                "Kumwe\\Extension\\Manifest\\SemanticVersion",
+                "Kumwe\\Extension\\Manifest\\TemplateKisCompatibility",
+                "Kumwe\\Extension\\Manifest\\VersionConstraint"
+            ],
+            "documentation": [
+                "docs/public-api.md",
+                "docs/architecture.md",
+                "docs/host-integration.md"
+            ]
+        },
+        {
+            "id": "extension-sdk.package-evidence",
+            "title": "Neutral package and evidence inspection",
+            "description": "Bounded archives, checksums, signatures, provenance and conformance facts without admission policy.",
+            "symbols": [
+                "Kumwe\\Extension\\Package\\ArchiveContentReader",
+                "Kumwe\\Extension\\Package\\ArchiveEntry",
+                "Kumwe\\Extension\\Package\\ArchiveEntryType",
+                "Kumwe\\Extension\\Package\\ArchivePackage",
+                "Kumwe\\Extension\\Package\\ArchiveReader",
+                "Kumwe\\Extension\\Package\\InspectedPackage",
+                "Kumwe\\Extension\\Package\\InvalidPackage",
+                "Kumwe\\Extension\\Package\\PackageAttestationState",
+                "Kumwe\\Extension\\Package\\PackageBillOfMaterials",
+                "Kumwe\\Extension\\Package\\PackageChecksum",
+                "Kumwe\\Extension\\Package\\PackageCodeConformance",
+                "Kumwe\\Extension\\Package\\PackageEvidenceInspector",
+                "Kumwe\\Extension\\Package\\PackageEvidenceReport",
+                "Kumwe\\Extension\\Package\\PackageEvidenceScope",
+                "Kumwe\\Extension\\Package\\PackageFinding",
+                "Kumwe\\Extension\\Package\\PackageLimits",
+                "Kumwe\\Extension\\Package\\PackagePath",
+                "Kumwe\\Extension\\Package\\PackageProvenance",
+                "Kumwe\\Extension\\Package\\PackageSafetyInspector",
+                "Kumwe\\Extension\\Package\\PackageSignature",
+                "Kumwe\\Extension\\Package\\PackageSignatureMessage",
+                "Kumwe\\Extension\\Package\\PackageSignatureVerifier",
+                "Kumwe\\Extension\\Package\\PublicKeyPackageSignatureVerifier",
+                "Kumwe\\Extension\\Package\\SodiumEd25519Verifier",
+                "Kumwe\\Extension\\Package\\SodiumPublicKeyPackageSignatureVerifier",
+                "Kumwe\\Extension\\Package\\ZipArchiveContentReader",
+                "Kumwe\\Extension\\Package\\ZipArchiveReader"
+            ],
+            "documentation": [
+                "docs/public-api.md",
+                "docs/architecture.md",
+                "docs/host-integration.md"
+            ]
+        },
+        {
+            "id": "extension-sdk.author-spi",
+            "title": "Host-neutral extension binding contracts",
+            "description": "Executable binding ports, request/record contexts, lifecycle, migration and composition declarations; external capability types retain their canonical owners.",
+            "symbols": [
+                "Kumwe\\Extension\\Spi\\Application\\Automation\\JobHandler",
+                "Kumwe\\Extension\\Spi\\Application\\ExecutionContext",
+                "Kumwe\\Extension\\Spi\\Application\\ExtensionServiceProvider",
+                "Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind",
+                "Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingRequirements",
+                "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingProvider",
+                "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingRegistrar",
+                "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteHandlerFactory",
+                "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteRenderer",
+                "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteHandlerFactory",
+                "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteRenderer",
+                "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\DomainEventHandler",
+                "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventHandler",
+                "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventTransport",
+                "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordPage",
+                "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordQueryPurpose",
+                "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReadRequest",
+                "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReader",
+                "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordView",
+                "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionDocument",
+                "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionKind",
+                "Kumwe\\Extension\\Spi\\Contribution\\CompositionBlockDeclaration",
+                "Kumwe\\Extension\\Spi\\Contribution\\CompositionDesignVocabularyDeclaration",
+                "Kumwe\\Extension\\Spi\\Contribution\\CompositionFieldControlDeclaration",
+                "Kumwe\\Extension\\Spi\\Contribution\\CompositionHostBinding",
+                "Kumwe\\Extension\\Spi\\Contribution\\CompositionInspectorDeclaration",
+                "Kumwe\\Extension\\Spi\\Contribution\\CompositionMigrationDeclaration",
+                "Kumwe\\Extension\\Spi\\Contribution\\CompositionPatternDeclaration",
+                "Kumwe\\Extension\\Spi\\Contribution\\CompositionPropertySchema",
+                "Kumwe\\Extension\\Spi\\Contribution\\CompositionPropertyType",
+                "Kumwe\\Extension\\Spi\\Contribution\\TranslationSetItemAssociation",
+                "Kumwe\\Extension\\Spi\\Http\\ExtensionRequest",
+                "Kumwe\\Extension\\Spi\\Migration\\ExtensionMigration",
+                "Kumwe\\Extension\\Spi\\Migration\\ExtensionTableNames",
+                "Kumwe\\Extension\\Spi\\Runtime\\BootableExtension",
+                "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer",
+                "Kumwe\\Extension\\Spi\\Runtime\\ExtensionEvent",
+                "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBindingResult",
+                "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlock",
+                "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockFragment",
+                "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockRenderer"
+            ],
+            "documentation": [
+                "docs/public-api.md",
+                "docs/architecture.md",
+                "docs/host-integration.md"
+            ]
+        },
+        {
+            "id": "extension-sdk.author-toolchain",
+            "title": "Extension authoring toolchain",
+            "description": "Explicitly composed scaffold, deterministic build, protected-key signing and static/lifecycle conformance components; optional PHPUnit bridges remain development-only.",
+            "symbols": [
+                "Kumwe\\Extension\\Toolchain\\ComponentScaffolder",
+                "Kumwe\\Extension\\Toolchain\\ConformanceReport",
+                "Kumwe\\Extension\\Toolchain\\DeterministicPackageBuilder",
+                "Kumwe\\Extension\\Toolchain\\ExtensionConformanceTestCase",
+                "Kumwe\\Extension\\Toolchain\\ExtensionLifecycleTestCase",
+                "Kumwe\\Extension\\Toolchain\\ExtensionPackageConformance",
+                "Kumwe\\Extension\\Toolchain\\LifecycleConformanceAdapter",
+                "Kumwe\\Extension\\Toolchain\\LifecycleConformanceReport",
+                "Kumwe\\Extension\\Toolchain\\LifecycleConformanceRunner",
+                "Kumwe\\Extension\\Toolchain\\PackageBuildResult",
+                "Kumwe\\Extension\\Toolchain\\PackageInspection",
+                "Kumwe\\Extension\\Toolchain\\PackageInspector",
+                "Kumwe\\Extension\\Toolchain\\PackageSigner",
+                "Kumwe\\Extension\\Toolchain\\ProtectedSigningKeyReader",
+                "Kumwe\\Extension\\Toolchain\\ScaffoldRequest",
+                "Kumwe\\Extension\\Toolchain\\ScaffoldResult",
+                "Kumwe\\Extension\\Toolchain\\SignatureDocument",
+                "Kumwe\\Extension\\Toolchain\\StaticConformanceRunner"
+            ],
+            "documentation": [
+                "docs/public-api.md",
+                "docs/architecture.md",
+                "docs/host-integration.md"
+            ]
+        }
+    ],
+    "native_requirements": [],
+    "deprecations": []
+}

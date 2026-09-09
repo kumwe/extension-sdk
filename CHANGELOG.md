@@ -5,6 +5,11 @@ Notable changes to `kumwe/extension-sdk` are recorded here in
 
 ## 0.3.0 — 2026-09-07
 
+- Ship governed Version 2 API, capability and service manifests, full source-derived API documentation,
+  explicit construction examples and the SDK ownership handoff; preserve canonical classification and generation contracts.
+- Prove generated projects from the SDK archive, stable published dependencies without native runtime,
+  and complete independently verified extraction package sets with a clean offline production replay.
+
 - Require a coherent exact stable PHP dependency selection, update Producer to 0.2.1,
   and reject drift between Composer, dependency records and either CI workflow with regression coverage.
 - Correct the public scaffolder API reference and replace obsolete PHP development-dependency claims

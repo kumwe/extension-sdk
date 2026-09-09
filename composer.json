@@ -70,6 +70,8 @@
       "@lint",
       "@docs",
       "@contract",
+      "@api",
+      "@manifests",
       "@test:ownership",
       "@test:source-install",
       "@test",
@@ -82,7 +84,9 @@
     "release-record": "bash tools/test-release-record.sh",
     "release:integrity": "bash tools/test-release-integrity.sh",
     "test:source-install": "bash tools/test-source-candidate.sh",
-    "test:dependency-selection": "bash tools/test-dependency-selection.sh"
+    "test:dependency-selection": "bash tools/test-dependency-selection.sh",
+    "api": "php tools/public-api.php",
+    "manifests": "php tools/verify-v2-metadata.php"
   },
   "config": {
     "sort-packages": true

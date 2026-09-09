@@ -65,8 +65,9 @@ root VCS declarations and stable dependency coordinates, without source-path rep
 native extension. Composer does not inherit a dependency's root repository declarations, so the
 archive consumer explicitly preserves them. This lane proves the optional native dependency is
 not required to load and consume the core SDK contracts; it does not attest to a published SDK ZIP.
-The standard App package reader recognizes this pre-Version-2 SDK format as `legacy-unmanifested`,
-as it does Conversion and Producer; no partial Version 2 manifest claim is introduced here. The
+The SDK now ships the standard Version 2 API, capability and service manifests, source-derived API
+documentation and a prepublication ownership handoff. Existing SDK compatibility records retain their
+paths and semantics; the governed projection adds no runtime aliases. The
 SDK-owned classification and resource manifests remain independently enforced by its source gates.
 
 Prefer completing the upstream release train and repinning this branch to its jointly resolvable
