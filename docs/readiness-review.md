@@ -58,6 +58,9 @@ The standard App package reader recognizes this pre-Version-2 SDK format as `leg
 as it does Conversion and Producer; no partial Version 2 manifest claim is introduced here. The
 SDK-owned classification and resource manifests remain independently enforced by its source gates.
 
-After merge, verify the actual `0.3.0` tag, release, archive and generated scaffold installation.
-Then complete the native and dependency release train before the separate App integration task.
+Prefer completing the upstream release train and repinning this branch to its jointly resolvable
+published versions before publishing `0.3.0`. If the current coherent older graph is published
+first, record a new SDK successor for later pin changes; never rewrite the `0.3.0` tag or archive.
+After publication, verify the actual tag, release, archive and generated scaffold installation.
+Complete native qualification before the separate App integration task.
 No App runtime cutover or duplicate App test removal is claimed by this package PR.
