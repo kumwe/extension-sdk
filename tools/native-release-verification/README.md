@@ -14,7 +14,7 @@ run the same verifier. A successful source build alone cannot populate this list
 `fixtures/engine-handoff.md` is an implementation-stage handoff used solely to exercise the complete
 native handoff schema. Synthetic test coordinates and receipts remain isolated regression inputs.
 
-The verifier observes the exact tag, published five-asset release, merged PR, successful native
+The verifier observes the exact tag, published five-asset release, reviewed source, successful native
 quality and publisher jobs, and default-branch ancestry. Push and manual default-branch runs must
 execute every required native lane successfully. A separately failed downstream binding notification
 is recorded without erasing successful quality/publication evidence; failed or skipped quality lanes
@@ -22,6 +22,20 @@ are never accepted. It verifies GitHub OIDC provenance for each of the four orig
 assets against the exact repository, commit, branch and `ci.yml` publisher workflow; self-hosted signing
 runners are refused. The fifth file is the original signature bundle. Publisher SPDX, source metadata
 and checksums remain original signed payloads; no nonexistent provenance file is fabricated.
+
+Engine source must be the exact result of a merged default-branch PR. Binding source may be
+that same direct proof, or the documented deterministic Engine sync performed on the exact
+result of a merged binding PR. The latter requires a separately merged Engine PR and its
+independently verified exact archive receipt. A successful `engine-sync.yml` run must identify
+that reviewed binding parent, and preserved job logs must prove its actual checkout, the
+exact Engine archive identity and the pushed release commit. Only the five generated binding
+identity files and `vendor/engine/` may change. The verifier replays the reviewed parent's
+sync tool against the original verified Engine archive with networking disabled and requires
+the entire resulting Git tree, including all paths and modes, to equal the released tree.
+The observed workflow, reviews, logs, digests and replay results are preserved in the evidence
+envelope. An unreviewed parent, unrelated direct push, changed workflow or extra source edit
+cannot qualify through this route; all native quality, signature and offline consumer checks
+still run against the exact released source.
 
 The published archive is reproduced from its exact checkout using Engine's release-bundle shell tool
 or the binding's PHP source verifier,
