@@ -5,12 +5,86 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import YAML from 'yaml';
 import { gzipSync, gunzipSync } from 'node:zlib';
-import { durableUri, nativeSelection, validateNativeEnvelope } from './materialize-native-evidence.mjs';
+import { durableUri, nativeSelection, validateNativeEnvelope, evidenceReference, downloadNativeEvidence } from './materialize-native-evidence.mjs';
 import { nativeFixtureScope, nativeSelectionBinding, packageSetNativeBinding } from './native-fixture-scope.mjs';
 
 const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const commit = 'a'.repeat(40);
 const prefix = `https://raw.githubusercontent.com/kumwe/extension-sdk/${commit}/evidence/synthetic/`;
+const downloadRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'native-evidence-download-'));
+try {
+  const original = Buffer.from('SYNTHETIC UNIT TEST ONLY: original ZIP bytes');
+  const artifact = { repository: 'kumwe/extension-sdk', id: 1, run_id: 2,
+    verifier_commit: commit, name: 'native-release-evidence-engine-1.0.0' };
+  const reference = { zip_sha256: hash(original), actions_artifact: artifact };
+  const api = 'https://api.github.com/repos/kumwe/extension-sdk/actions/artifacts/1';
+  const storage = 'https://productionresults-test.blob.core.windows.net/actions-results/synthetic.zip?sig=synthetic';
+  const metadata = { id: 1, name: artifact.name, expired: false, digest: `sha256:${hash(original)}`,
+    workflow_run: { id: 2, head_sha: commit, repository_id: 3, head_repository_id: 3 },
+    size_in_bytes: original.length, archive_download_url: `${api}/zip` };
+  let calls = [];
+  const client = (record = metadata, target = storage, bytes = original, redirectStatus = 302) => async (uri, options) => {
+    calls.push(uri);
+    if (uri === api) {
+      assert.equal(options.redirect, 'error');
+      assert.equal(options.headers.Authorization, 'Bearer synthetic-test-only');
+      return new Response(JSON.stringify(record));
+    }
+    if (uri === `${api}/zip`) {
+      assert.equal(options.redirect, 'manual');
+      return new Response(null, { status: redirectStatus, headers: { location: target } });
+    }
+    assert.equal(uri, storage);
+    assert.equal(options.headers, undefined, 'Repository token must not reach storage.');
+    assert.equal(options.redirect, 'error', 'Storage must not redirect again.');
+    return new Response(bytes);
+  };
+  const output = path.join(downloadRoot, 'original.zip');
+  await downloadNativeEvidence(reference, output, client(), 'synthetic-test-only');
+  assert.deepEqual(fs.readFileSync(output), original);
+  assert.deepEqual(calls, [api, `${api}/zip`, storage]);
+  await assert.rejects(downloadNativeEvidence(reference, output, client(), 'synthetic-test-only'), /EEXIST/);
+  const refuse = async (changed = reference, retrieve = client(), token = 'synthetic-test-only') => {
+    const file = path.join(downloadRoot, 'refused.zip');
+    await assert.rejects(downloadNativeEvidence(changed, file, retrieve, token));
+    assert.equal(fs.existsSync(file), false);
+  };
+  for (const edit of [m => { m.id = 9; }, m => { m.name = 'wrong'; }, m => { m.expired = true; },
+    m => { m.digest = 'sha256:' + '0'.repeat(64); }, m => { m.workflow_run.id = 9; },
+    m => { m.workflow_run.head_sha = '0'.repeat(40); }, m => { m.workflow_run.head_repository_id = 9; },
+    m => { delete m.workflow_run.repository_id; delete m.workflow_run.head_repository_id; },
+    m => { m.size_in_bytes = 0; }, m => { m.size_in_bytes = 150000001; },
+    m => { m.archive_download_url = 'https://example.com/zip'; }]) {
+    const changed = structuredClone(metadata); edit(changed); calls = [];
+    await refuse(reference, client(changed));
+    assert.deepEqual(calls, [api], 'Wrong artifact identity must be refused before archive access.');
+  }
+  for (const uri of ['https://example.com/zip', storage.replace('https:', 'http:'),
+    storage.replace('/actions-results/', '/other/'), storage.replace('https://', 'https://user:pass@'),
+    storage + '#fragment']) {
+    calls = []; await refuse(reference, client(metadata, uri));
+    assert.deepEqual(calls, [api, `${api}/zip`], 'Unsafe storage must never be contacted.');
+  }
+  await refuse(reference, client(metadata, storage, original, 307));
+  await refuse(reference, async () => new Response(null, { status: 302, headers: { location: storage } }));
+  await refuse(reference, async (uri, options) => { if (uri === storage) throw new Error('Refused second redirect');
+    return client()(uri, options); });
+  await refuse(reference, client(metadata, storage, original.subarray(1)));
+  await refuse(reference, client(metadata, storage, Buffer.alloc(original.length)));
+  await refuse(reference, client(), '');
+  for (const edit of [a => { a.repository = 'foreign/repo'; }, a => { a.id = 0; },
+    a => { a.run_id = -1; }, a => { a.verifier_commit = 'main'; }, a => { a.name = '../evidence'; }]) {
+    const changed = structuredClone(reference); edit(changed.actions_artifact);
+    assert.throws(() => evidenceReference(changed));
+  }
+  assert.throws(() => evidenceReference({ ...reference, zip_uri: prefix + 'evidence.zip' }));
+  assert.throws(() => evidenceReference({ zip_sha256: hash(original) }));
+  const single = path.join(downloadRoot, 'git.zip');
+  await downloadNativeEvidence({ zip_uri: prefix + 'evidence.zip', zip_sha256: hash(original) }, single,
+    async (uri, options) => { assert.equal(uri, prefix + 'evidence.zip'); assert.equal(options.headers, undefined);
+      assert.equal(options.redirect, 'error'); return new Response(original); });
+  assert.deepEqual(fs.readFileSync(single), original);
+} finally { fs.rmSync(downloadRoot, { recursive: true, force: true }); }
 assert.equal(durableUri(prefix + 'attestation.zip'), prefix + 'attestation.zip');
 for (const uri of [prefix.replace(commit, 'main') + 'x.zip', prefix + '../x.zip', prefix + 'a//x.zip',
   prefix + '%2e%2e/x.zip', prefix + 'x.zip?query=1', prefix.replace('/kumwe/', '/foreign/') + 'x.zip']) {
@@ -119,6 +193,15 @@ try {
     const directory = path.join(temporary, packageName.split('/')[1]);
     const { entry, record, receipt, receiptBytes, writeRecord, writeFile, engineArchive } = syntheticEnvelope(directory, packageName);
     writeRecord(record); validateNativeEnvelope(entry, directory, receiptBytes);
+    const fromActions = structuredClone(entry);
+    fromActions.evidence = { zip_sha256: entry.evidence.zip_sha256, verification_member: 'verification.json',
+      actions_artifact: { repository: 'kumwe/extension-sdk', id: 1, run_id: 1,
+        verifier_commit: commit, name: `native-release-evidence-${packageName.slice(6)}-1.0.0` } };
+    validateNativeEnvelope(fromActions, directory, receiptBytes);
+    for (const edit of [a => { a.run_id = 2; }, a => { a.verifier_commit = '0'.repeat(40); }]) {
+      const changed = structuredClone(fromActions); edit(changed.evidence.actions_artifact);
+      assert.throws(() => validateNativeEnvelope(changed, directory, receiptBytes), /original Actions artifact run/);
+    }
     const rawSourceHash = hash(gunzipSync(engineArchive));
     assert.notEqual(rawSourceHash, record.embedded_engine.release_archive_sha256);
     for (const edit of [r => { r.status = 'failed'; }, r => { r.signature_verification.status = 'failed'; },

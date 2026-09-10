@@ -38,6 +38,7 @@ jobs:
       - name: Refuse incomplete evidence and unsafe source archives
         run: |
           node tools/native-release-verification/test-verifier.mjs
+          node tools/release-verification/test-native-evidence.mjs
           python3 tools/native-release-verification/test-extract-source.py
           bash -n tools/native-release-verification/offline-build.sh
       - name: Select only reviewed actual published coordinates

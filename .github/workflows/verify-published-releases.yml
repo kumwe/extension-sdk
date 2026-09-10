@@ -68,6 +68,8 @@ jobs:
           php tools/test-package-set-consumer.php
       - name: Build the required fixture from independently verified stable native releases
         if: matrix.release.name == 'kumwe/extension-sdk' || (matrix.release.name == 'kumwe/computation' && matrix.release.version == '0.3.1')
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: node tools/release-verification/materialize-native-evidence.mjs tools/release-verification/native-releases.json "$RUNNER_TEMP/qualified-native"
       - name: Verify immutable release and clean offline consumer
         env:
@@ -131,6 +133,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh run download "$GITHUB_RUN_ID" --repo "$GITHUB_REPOSITORY" --pattern 'release-evidence-*' --dir "$RUNNER_TEMP/independent-releases"
       - name: Build an actual stable binding fixture with its source-derived tuple
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: node tools/release-verification/materialize-native-evidence.mjs tools/release-verification/native-releases.json "$RUNNER_TEMP/qualified-native"
       - name: Select the independently verified native Computation successor
         run: |

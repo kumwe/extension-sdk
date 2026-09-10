@@ -25,6 +25,23 @@ export function durableUri(value) {
   return value;
 }
 
+export function evidenceReference(reference) {
+  need(reference && digest(reference.zip_sha256), 'Missing original native evidence ZIP digest.');
+  need(Object.hasOwn(reference, 'zip_uri') !== Object.hasOwn(reference, 'actions_artifact'),
+    'Select exactly one Git ZIP URI or original Actions artifact.');
+  if (Object.hasOwn(reference, 'zip_uri')) durableUri(reference.zip_uri);
+  else {
+    const artifact = reference.actions_artifact;
+    need(artifact?.repository === 'kumwe/extension-sdk'
+      && Number.isSafeInteger(artifact.id) && artifact.id > 0
+      && Number.isSafeInteger(artifact.run_id) && artifact.run_id > 0
+      && /^[a-f0-9]{40}$/.test(artifact.verifier_commit || '')
+      && /^native-release-evidence-(engine|kumwe-engine)-[0-9]+\.[0-9]+\.[0-9]+$/.test(artifact.name || ''),
+    'Native evidence must identify an exact same-repository Actions artifact.');
+  }
+  return reference;
+}
+
 export function nativeSelection(raw) {
   need(raw?.schema === 'kumwe-verified-native-selection/v1', 'A verified native selection is required.');
   for (const [kind, name] of [['engine', 'kumwe/engine'], ['extension', 'kumwe/kumwe-engine']]) {
@@ -33,9 +50,10 @@ export function nativeSelection(raw) {
       && entry.version !== '0.0.0' && /^[a-f0-9]{40}$/.test(entry.source_commit || '') && digest(entry.archive_sha256),
     'Native selection must contain exact stable owner coordinates.');
     for (const reference of [entry.attestation, entry.evidence]) {
-      need(reference && digest(reference.zip_sha256), 'Missing original native evidence ZIP digest.');
-      durableUri(reference.zip_uri);
+      evidenceReference(reference);
     }
+    if (entry.evidence.actions_artifact) need(entry.evidence.actions_artifact.name
+      === `native-release-evidence-${entry.name.slice(6)}-${entry.version}`, 'Native evidence artifact owner differs.');
     need(entry.attestation.member === 'RELEASE-ATTESTATION.yaml' && digest(entry.attestation.member_sha256)
       && entry.evidence.verification_member === 'verification.json', 'Unexpected native evidence member selection.');
     need(/^https:\/\/raw\.githubusercontent\.com\/kumwe\/extension-sdk\/[a-f0-9]{40}\/evidence\/(?:[A-Za-z0-9_-][A-Za-z0-9._-]*\/)+attestation\.zip$/.test(entry.attestation.zip_uri),
@@ -69,6 +87,12 @@ export function validateNativeEnvelope(entry, envelope, attestationBytes) {
   'Native envelope is not a passing hosted verification of the selected source.');
   need(receipt.verified_by === `Independent verifier ${record.verifier.run_url}; source ${record.verifier.source_commit}`,
     'Native receipt and envelope identify different independent verifier runs.');
+  if (entry.evidence.actions_artifact) {
+    const artifact = entry.evidence.actions_artifact;
+    need(record.verifier.run_url === `https://github.com/kumwe/extension-sdk/actions/runs/${artifact.run_id}`
+      && record.verifier.source_commit === artifact.verifier_commit,
+    'Native evidence envelope differs from its original Actions artifact run.');
+  }
   const signature = record.signature_verification;
   need(signature?.status === 'passed' && signature.repository === entry.name
     && signature.source_commit === entry.source_commit && /^refs\/heads\/[A-Za-z0-9._/-]+$/.test(signature.source_ref || '')
@@ -152,11 +176,40 @@ export function validateNativeEnvelope(entry, envelope, attestationBytes) {
   return record;
 }
 
-async function download(reference, file) {
-  durableUri(reference.zip_uri);
-  const response = await fetch(reference.zip_uri, { signal: AbortSignal.timeout(60000), redirect: 'error' });
-  need(response.ok, `Native durable evidence download failed: HTTP ${response.status}`);
+export async function downloadNativeEvidence(reference, file, request = fetch, token = process.env.GH_TOKEN) {
+  evidenceReference(reference);
+  const options = { signal: AbortSignal.timeout(60000), redirect: 'error' };
+  let response;
+  let expectedSize;
+  if (reference.actions_artifact) {
+    need(typeof token === 'string' && token.length > 0, 'Reading original Actions evidence requires the existing read token.');
+    const artifact = reference.actions_artifact;
+    const api = `https://api.github.com/repos/kumwe/extension-sdk/actions/artifacts/${artifact.id}`;
+    const headers = { Accept: 'application/vnd.github+json', Authorization: `Bearer ${token}` };
+    const metadataResponse = await request(api, { ...options, headers });
+    need(metadataResponse.ok, `Original native artifact metadata read failed: HTTP ${metadataResponse.status}`);
+    const metadata = await metadataResponse.json();
+    need(metadata.id === artifact.id && metadata.name === artifact.name && metadata.expired === false
+      && metadata.digest === `sha256:${reference.zip_sha256}`
+      && metadata.workflow_run?.id === artifact.run_id && metadata.workflow_run.head_sha === artifact.verifier_commit
+      && Number.isSafeInteger(metadata.workflow_run.repository_id) && metadata.workflow_run.repository_id > 0
+      && metadata.workflow_run.repository_id === metadata.workflow_run.head_repository_id
+      && Number.isSafeInteger(metadata.size_in_bytes) && metadata.size_in_bytes > 0 && metadata.size_in_bytes <= 150000000
+      && metadata.archive_download_url === `${api}/zip`,
+    'Original native Actions artifact identity, run, expiry or digest differs.');
+    expectedSize = metadata.size_in_bytes;
+    const redirect = await request(`${api}/zip`, { ...options, headers, redirect: 'manual' });
+    need(redirect.status === 302, 'Original native artifact download must use the GitHub storage redirect.');
+    const target = new URL(redirect.headers.get('location') || '');
+    need(target.protocol === 'https:' && /^[a-z0-9-]+\.blob\.core\.windows\.net$/.test(target.hostname)
+      && target.pathname.startsWith('/actions-results/') && !target.username && !target.password && !target.hash,
+    'Original native artifact redirected outside GitHub Actions storage.');
+    // The repository token is sent only to api.github.com, never to the storage redirect.
+    response = await request(target.href, options);
+  } else response = await request(reference.zip_uri, options);
+  need(response.ok, `Native evidence download failed: HTTP ${response.status}`);
   const bytes = Buffer.from(await response.arrayBuffer());
+  need(expectedSize === undefined || bytes.length === expectedSize, 'Original native artifact ZIP size differs.');
   need(bytes.length <= 150000000 && hash(bytes) === reference.zip_sha256, 'Original native evidence ZIP digest differs.');
   fs.writeFileSync(file, bytes, { flag: 'wx' });
 }
@@ -178,7 +231,7 @@ export async function materializeNativeEvidence(raw, destination) {
     fs.mkdirSync(directory);
     for (const category of ['attestation', 'evidence']) {
       const zip = path.join(directory, `${category}.zip`);
-      await download(entry[category], zip);
+      await downloadNativeEvidence(entry[category], zip);
       command(['php', path.join(here, 'extract-archive.php'), zip, path.join(directory, category)]);
     }
     const member = path.join(directory, 'attestation', 'RELEASE-ATTESTATION.yaml');
