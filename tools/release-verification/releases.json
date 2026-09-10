@@ -1,12 +1,7 @@
 [
   {
-    "name": "kumwe/access-control",
-    "version": "0.1.2",
-    "source_commit": "c2420d1ed03bc39eaf5d8b9f5540580c297e3b57"
-  },
-  {
-    "name": "kumwe/reporting",
-    "version": "0.1.3",
-    "source_commit": "b521b3113bd97afc2de6ab74fcb71a36fe7d0890"
+    "name": "kumwe/content-model",
+    "version": "0.2.0",
+    "source_commit": "011bb7afef3194f6594d9daee3f01f96a6401556"
   }
 ]
