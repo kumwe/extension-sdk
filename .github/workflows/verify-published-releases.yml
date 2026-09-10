@@ -32,7 +32,7 @@ jobs:
           persist-credentials: false
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - id: matrix
-        run: node -e 'const fs=require("fs"); const read=p=>JSON.parse(fs.readFileSync("tools/release-verification/"+p)); const releases=read("releases.json"), native=read("native-php-releases.json"); if(native.length>1 || native.some(p=>p.name!=="kumwe/computation" || p.version!=="0.3.1"))throw Error("Native PHP selection must be the exact Computation successor"); fs.appendFileSync(process.env.GITHUB_OUTPUT,"releases="+JSON.stringify([...releases,...native])+"\n")'
+        run: node -e 'const fs=require("fs"); const read=p=>JSON.parse(fs.readFileSync("tools/release-verification/"+p)); const releases=read("releases.json"), native=read("native-php-releases.json"); if(native.length>1 || native.some(p=>p.name!=="kumwe/computation" || p.version!=="0.3.3"))throw Error("Native PHP selection must be the exact Computation successor"); fs.appendFileSync(process.env.GITHUB_OUTPUT,"releases="+JSON.stringify([...releases,...native])+"\n")'
       - id: complete
         run: node -e 'const fs=require("fs"); const read=p=>JSON.parse(fs.readFileSync("tools/release-verification/"+p)); const p=read("releases.json"), complete=p.length===31 && p.some(x=>x.name==="kumwe/extension-sdk"); fs.appendFileSync(process.env.GITHUB_OUTPUT,"complete="+complete+"\nnative_complete="+(complete && read("native-php-releases.json").length===1 && read("native-releases.json")!==null)+"\n")'
   release:
@@ -67,7 +67,7 @@ jobs:
           php tools/release-verification/test-example-command.php
           php tools/test-package-set-consumer.php
       - name: Build the required fixture from independently verified stable native releases
-        if: matrix.release.name == 'kumwe/extension-sdk' || (matrix.release.name == 'kumwe/computation' && matrix.release.version == '0.3.1')
+        if: matrix.release.name == 'kumwe/extension-sdk' || (matrix.release.name == 'kumwe/computation' && matrix.release.version == '0.3.3')
         env:
           GH_TOKEN: ${{ github.token }}
         run: node tools/release-verification/materialize-native-evidence.mjs tools/release-verification/native-releases.json "$RUNNER_TEMP/qualified-native"
