@@ -1,0 +1,51 @@
+schema: kumwe-release-attestation/v2
+artifact_kind: framework_php
+migration_id: KUMWE-MIG-2026-030
+change_set: KUMWE-CS-2026-030
+repository: https://github.com/kumwe/business-schema
+merge_commit: 5c442a147e98c702a50cf5dc2b7d8faf6499d8ef
+version: 0.1.3
+tag: v0.1.3
+source_archive:
+  url: https://api.github.com/repos/kumwe/business-schema/zipball/5c442a147e98c702a50cf5dc2b7d8faf6499d8ef
+  sha256: 4c38e65a867645a93150d3300cd25cfbc08927d61844ebc9c02e9f78843e96b1
+artifacts:
+  - identity: kumwe/business-schema:0.1.3
+    url: https://api.github.com/repos/kumwe/business-schema/zipball/5c442a147e98c702a50cf5dc2b7d8faf6499d8ef
+    sha256: 4c38e65a867645a93150d3300cd25cfbc08927d61844ebc9c02e9f78843e96b1
+manifests_and_corpora:
+  - path: resources/public-api/v1.json
+    sha256: d3dd01caf6d4b6162c54f87797aadc38457754866f1abeb5bfb31d16c6b54178
+  - path: resources/capabilities/v1.json
+    sha256: 9df001a9b1b911e9fa012d2a6de75ae34f9ab8e1c647a59ddb9af529f4b60bd7
+  - path: resources/service-map/v1.json
+    sha256: d7a0f0d59aa94f0f251c598c75a4b97072cbd213e1957e93d321200f268c607b
+  - path: resources/test-ownership/v1.json
+    sha256: 98d475d96b24535ee998005ef5fb256cdcd74105b1b2fa5a0b21dd15bedcfffe
+abi_and_capabilities: null
+sbom:
+  url: https://github.com/kumwe/extension-sdk/actions/runs/34517043293/artifacts/10168125923#source.spdx.json
+  sha256: 0cf9351c2b3cc5645faf9ba5161b2517995fb2b077ac996de875d0747fc97e4c
+provenance: "Independent verification, not publisher build provenance:
+  https://github.com/kumwe/extension-sdk/actions/runs/34517043293/artifacts/101\
+  68125923#verification-provenance.json;
+  sha256=6f12f5133b179035e38ef73bfe953181e146cd568bf3b4b7009b85512d794867"
+release_workflow: https://github.com/kumwe/business-schema/actions/runs/34516325845;
+  success at source 5c442a147e98c702a50cf5dc2b7d8faf6499d8ef
+registry_or_pie_verification:
+  - https://repo.packagist.org/p2/kumwe/business-schema.json;
+    source/dist=5c442a147e98c702a50cf5dc2b7d8faf6499d8ef;
+    evidence=https://github.com/kumwe/extension-sdk/actions/runs/34517043293/artifacts/10168125923#github-evidence.json
+clean_consumer_or_build_verification:
+  - https://github.com/kumwe/extension-sdk/actions/runs/34517043293/artifacts/10168125923#consumer-verification.json;
+    sha256=2813e45e8e51aad9a275c3c0666c8b3569c02c59fee08ebeddfce28b9951ea8d;
+    no-dev=true; classmap-authoritative=true; fresh-offline-reinstall=true;
+    runtime-types=28
+  - https://github.com/kumwe/extension-sdk/actions/runs/34517043293/artifacts/10168125923#canonical-schema-verification.json;
+    all three canonical manifests and complete handoff schema passed
+  - https://github.com/kumwe/extension-sdk/actions/runs/34517043293/artifacts/10168125923#archive-inventory-verification.json;
+    complete git export path/byte inventory matched; canonical API exports=27
+verified_at: 2026-09-10T18:54:08Z
+verified_by: kumwe/extension-sdk@0fc9e6bca74b41dfbfa745b2fc5fd4367b881ff0;
+  https://github.com/kumwe/extension-sdk/actions/runs/34517043293
+status: verified
