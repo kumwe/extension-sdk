@@ -38,6 +38,7 @@ jobs:
   release:
     name: Verify ${{ matrix.release.name }} ${{ matrix.release.version }}
     needs: coordinates
+    if: needs.coordinates.outputs.releases != '[]'
     strategy:
       fail-fast: false
       max-parallel: 2
