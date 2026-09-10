@@ -1,0 +1,1222 @@
+{
+  "schema": "kumwe-independent-native-release-verification/v1",
+  "status": "passed",
+  "input": {
+    "name": "kumwe/engine",
+    "version": "1.0.2",
+    "source_commit": "7fc87745e19908047973d2ca86332467f293019e",
+    "upstream_receipts": {},
+    "archive_sha256": "05711668310ae9a258d0a26efd81a092cc04db1da7d81f150ad1a9852afa7cb4",
+    "tag": "v1.0.2",
+    "kind": "native_cpp",
+    "archive_name": "kumwe-engine-source.tar.gz"
+  },
+  "verified_at": "2026-09-10T19:13:54.580Z",
+  "verifier": {
+    "repository": "kumwe/extension-sdk",
+    "source_commit": "5b7f6ad7220f9f9d47ee6db60272d7dc64c1223f",
+    "run_url": "https://github.com/kumwe/extension-sdk/actions/runs/34518885975"
+  },
+  "source_tree": "ebfcf01aba73557e5391f8a6b9516a44dd9653ea",
+  "handoff": {
+    "schema": "kumwe-migration-handoff/v2",
+    "artifact_kind": "native_cpp",
+    "migration_id": "KUMWE-MIG-2026-011",
+    "change_set": "KUMWE-CS-2026-011",
+    "state": "draft_pr_open",
+    "source": {
+      "app": {
+        "repository": "https://github.com/kumwe/app",
+        "baseline_commit": null,
+        "examined_paths": [],
+        "old_namespace_roots": [],
+        "capability_index_sha256": null
+      },
+      "semantic_inputs": [
+        {
+          "owner": "kumwe/conversion",
+          "version_or_commit": "v0.1.5 at b291f3a31314644fd88150dc9a9e911fe0617fe7",
+          "manifest_or_corpus": "resources/conformance/decimal-v1.tsv (published source; schema-valid durable independent release attestation recorded in resources/contracts.json)",
+          "sha256": "635db251898707828e24f12b1abb672273552f5f633186a725cc9f50ac08140c"
+        },
+        {
+          "owner": "kumwe/business-definition",
+          "version_or_commit": "v0.1.2 at 1cb59229f311067e8cfdd773a34e34cfeb501791",
+          "manifest_or_corpus": "resources/corpus/formula-v1.json (published source; schema-valid durable independent release attestation recorded in resources/contracts.json)",
+          "sha256": "11033679b018fdc9a192e954ef11089444a00a1d89c6279d3c192be9252cf42f"
+        },
+        {
+          "owner": "kumwe/record-model",
+          "version_or_commit": "v0.1.3 at 8d20cf75ee6ab915102bbf6a17567087971e9dfe",
+          "manifest_or_corpus": "resources/conformance/document-profile-v1.json (published source; schema-valid durable independent release attestation recorded in resources/contracts.json)",
+          "sha256": "84b6c2e55ae591c921536aa755cbb5a9a40a7a19847fe47415e55dce2614c177"
+        },
+        {
+          "owner": "kumwe/reporting",
+          "version_or_commit": "v0.1.3 at b521b3113bd97afc2de6ab74fcb71a36fe7d0890",
+          "manifest_or_corpus": "resources/conformance/report-materialization-v1.json (published source; schema-valid durable independent release attestation recorded in resources/contracts.json)",
+          "sha256": "975116dc897a0bfdee4a08f9065eb10ccfec06a32f4eb93a48015b08af408c01"
+        },
+        {
+          "owner": "kumwe/canonical-json",
+          "version_or_commit": "v0.1.1 at e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58",
+          "manifest_or_corpus": "resources/corpus/v1.json (published source; schema-valid durable independent release attestation recorded in resources/contracts.json)",
+          "sha256": "84d21b12e7a2bfd752356d9a6e664bcb332e209d19017e7634e7485a4fa4e250"
+        }
+      ],
+      "examined_dependencies": [
+        "Conversion v0.1.5 ExactDecimal, ExactDecimalArithmetic and six Money/Quantity rounding modes; unchanged corpus, no PHP source copied.",
+        "Computation portable-only Phase 1A version 0.1.1 at fc9d049f8b675c8e19fd1672d49b5e206c9ad52a is independently verified. Its exact archive, canonical manifests, portable corpus and schema-valid durable release attestation are recorded in resources/contracts.json."
+      ],
+      "active_related_pull_requests": [
+        "https://github.com/kumwe/kumwe-engine/pull/4"
+      ]
+    },
+    "target": {
+      "repository": "https://github.com/kumwe/engine",
+      "artifact_identity": "CMake Kumwe::Engine",
+      "canonical_namespace_or_abi": "kumwe::engine / kumwe_engine_v1_",
+      "branch": "codex/stable-native-readiness-20260908",
+      "pull_request": "https://github.com/kumwe/engine/pull/8"
+    },
+    "ownership": {
+      "responsibility": "Standalone exact decimal, compiled formula/document/report execution and generic canonical encoding/digests through one owned C ABI.",
+      "non_responsibilities": [
+        "PHP/Zend/PIE, Composer, App services and runtime fallback.",
+        "Database, network, authorization, transactions, trust, rendering and delivery."
+      ],
+      "allowed_dependency_ceiling": [
+        "C++20 standard library and exact language-neutral semantic corpus data.",
+        "Statically embedded maintained PCRE2 10.42 source closure and licensed Unicode 17 casing / 15.1 NFC data; exact hashes, no build downloads or system selection."
+      ],
+      "implementation_owner": "kumwe/engine",
+      "next_consumer": "kumwe/kumwe-engine",
+      "public_manifests": [
+        {
+          "path": "resources/abi-manifest.json",
+          "sha256": "40e27d2a8e7b8f619274e1bce2525a220d704f5e86a4e46f68d53fc6dafd4fb9"
+        },
+        {
+          "path": "resources/abi-symbols.txt",
+          "sha256": "62cf59b8d6feb369f0d801b59b69796ea569570177e02b903c0bec6b01e04d21"
+        },
+        {
+          "path": "resources/capabilities.json",
+          "sha256": "d6e0a75af2fec3f9ef05e81f94abe43a05b827d2c19ffab05450e38adcd5b5a0"
+        },
+        {
+          "path": "resources/contracts.json",
+          "sha256": "089f7e9a40f6da991654ca33937a864d6e28a5325b57b8da457c9d4492b818f0"
+        },
+        {
+          "path": "tests/ownership.json",
+          "sha256": "2a8b54da277777706b6c65430cbf08d4e24b28b313a57e2f4f29212929aae4e3"
+        },
+        {
+          "path": "include/kumwe/engine/engine.h",
+          "sha256": "d7ebdaa0c03bca629a5370ebbcdd6297ea6e99afa0229c9c13c2907676a94b2f"
+        }
+      ],
+      "intentionally_excluded": [
+        "No App classes, dependency adoption or test removal.",
+        "No PHP binding implementation is owned here; the separate kumwe/kumwe-engine candidate consumes this exact source."
+      ]
+    },
+    "framework_php": null,
+    "native_cpp": {
+      "cpp_namespace": "kumwe::engine",
+      "cmake_targets": [
+        "Kumwe::Engine"
+      ],
+      "public_headers": [
+        "include/kumwe/engine/engine.h"
+      ],
+      "cpp_api": {
+        "classes": [],
+        "functions": []
+      },
+      "c_abi": {
+        "major": 1,
+        "symbol_prefix": "kumwe_engine_v1_",
+        "headers": [
+          "include/kumwe/engine/engine.h"
+        ],
+        "functions": [
+          "kumwe_engine_v1_buffer_release",
+          "kumwe_engine_v1_buffer_view",
+          "kumwe_engine_v1_capabilities",
+          "kumwe_engine_v1_decimal_batch",
+          "kumwe_engine_v1_canonical",
+          "kumwe_engine_v1_compile",
+          "kumwe_engine_v1_execute",
+          "kumwe_engine_v1_plan_describe",
+          "kumwe_engine_v1_plan_release",
+          "kumwe_engine_v1_cancellation_create",
+          "kumwe_engine_v1_cancellation_request",
+          "kumwe_engine_v1_cancellation_release"
+        ],
+        "structs": [
+          "kumwe_engine_v1_view: naturally aligned 24 bytes on supported 64-bit targets; struct_size 24..4096 and ABI 1."
+        ],
+        "enums_and_codes": [
+          "0 success; 1 invalid_input; 2 unsupported_version; 3 incompatible_capability; 4 incompatible_corpus; 5 invalid_program; 6 exhausted_limit; 7 cancelled; 8 internal_failure.",
+          "ABI 1 layout/status/lifetimes are frozen; initial fixed-header dynamic client passes all 295 assertions."
+        ],
+        "opaque_handles": [
+          {
+            "name": "kumwe_engine_v1_buffer",
+            "create_functions": [
+              "kumwe_engine_v1_capabilities",
+              "kumwe_engine_v1_decimal_batch"
+            ],
+            "use_functions": [
+              "kumwe_engine_v1_buffer_view"
+            ],
+            "release_function": "kumwe_engine_v1_buffer_release",
+            "ownership": "Unique Engine-allocated immutable result; release consumes/nulls owner slot. Caller owns input and initializes output null. Foreign/copied/dangling handles are forbidden.",
+            "thread_safety": "Independent calls and live immutable reads are reentrant; release/access must not race."
+          },
+          {
+            "name": "kumwe_engine_v1_plan",
+            "create_functions": [
+              "kumwe_engine_v1_compile"
+            ],
+            "use_functions": [
+              "kumwe_engine_v1_execute",
+              "kumwe_engine_v1_plan_describe"
+            ],
+            "release_function": "kumwe_engine_v1_plan_release",
+            "ownership": "Unique immutable plan; owns normalized source independently from compile input.",
+            "thread_safety": "Concurrent execution allowed; no release/use race."
+          },
+          {
+            "name": "kumwe_engine_v1_cancellation",
+            "create_functions": [
+              "kumwe_engine_v1_cancellation_create"
+            ],
+            "use_functions": [
+              "kumwe_engine_v1_cancellation_request",
+              "kumwe_engine_v1_execute"
+            ],
+            "release_function": "kumwe_engine_v1_cancellation_release",
+            "ownership": "Unique sticky cancellation token, alive until every borrowing execution returns.",
+            "thread_safety": "Request may race execution; release may not race use."
+          }
+        ]
+      },
+      "capabilities": [
+        "decimal-batch-draft/1",
+        "formula-draft/1",
+        "normalized-document-draft/1",
+        "normalized-preparation-draft/1",
+        "report-materialization-draft/1",
+        "kumwe-canonical-json/generic-v1"
+      ],
+      "corpora": [
+        {
+          "owner": "kumwe/conversion",
+          "version": "0.1.5 at b291f3a31314644fd88150dc9a9e911fe0617fe7; independently release-verified",
+          "profile": "decimal-batch-draft/1",
+          "sha256": "635db251898707828e24f12b1abb672273552f5f633186a725cc9f50ac08140c"
+        },
+        {
+          "owner": "kumwe/business-definition",
+          "version": "0.1.2 at 1cb59229f311067e8cfdd773a34e34cfeb501791; independently release-verified",
+          "profile": "formula-draft/1",
+          "sha256": "11033679b018fdc9a192e954ef11089444a00a1d89c6279d3c192be9252cf42f"
+        },
+        {
+          "owner": "kumwe/record-model",
+          "version": "0.1.3 at 8d20cf75ee6ab915102bbf6a17567087971e9dfe; independently release-verified",
+          "profile": "normalized-document-draft/1",
+          "sha256": "84b6c2e55ae591c921536aa755cbb5a9a40a7a19847fe47415e55dce2614c177"
+        },
+        {
+          "owner": "kumwe/reporting",
+          "version": "0.1.3 at b521b3113bd97afc2de6ab74fcb71a36fe7d0890; independently release-verified",
+          "profile": "report-materialization-draft/1",
+          "sha256": "975116dc897a0bfdee4a08f9065eb10ccfec06a32f4eb93a48015b08af408c01"
+        },
+        {
+          "owner": "kumwe/canonical-json",
+          "version": "0.1.1 at e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58; independently release-verified",
+          "profile": "kumwe-canonical-json/generic-v1",
+          "sha256": "84d21b12e7a2bfd752356d9a6e664bcb332e209d19017e7634e7485a4fa4e250"
+        },
+        {
+          "owner": "kumwe/record-model",
+          "version": "0.1.3 at 8d20cf75ee6ab915102bbf6a17567087971e9dfe; independently release-verified",
+          "profile": "normalized-preparation-draft/1",
+          "sha256": "4eb1543929fcf5470eb8cae882127556cd57c02518109545483d8780266b561a"
+        }
+      ],
+      "limits_and_errors": [
+        "Precision 1..65, scale 0..precision, literal at most 68 bytes.",
+        "Input/output at most 1 MiB; count 1..4096; deterministic work 1..1000000000 logical units.",
+        "Each row costs 512, plus 4356 for multiplication before arithmetic; atomic refusal produces no partial batch."
+      ],
+      "candidate_cross_build_expectations": {
+        "source_archive_recipe": "Commit reviewed source; bash tools/source-archive.sh; exact commit/tree/archive identity must be recorded externally.",
+        "network_free_build": true,
+        "required_extension_smoke_surface": [
+          "Thin Zend capability/ABI/corpus handshake, all supported coarse calls, bounds, ownership and exception cleanup."
+        ],
+        "required_platform_and_php_matrix": [
+          "Engine standalone CMake: Linux x86_64 GCC/Clang and macOS ARM64 Clang. Binding: PHP 8.5 NTS and ZTS, Linux x86_64, with exact patch/build tuple recorded."
+        ],
+        "required_abi_capability_corpus_checks": [
+          "All five completed modules, exact recorded semantic inputs, frozen ABI/header/exports, cross-layer corpus and lifecycle evidence."
+        ],
+        "attestation_schema": "kumwe-engine-candidate-attestation/v1",
+        "attestation_storage": "GitHub OIDC build provenance attached to every published Engine release; no external candidate record gates publication.",
+        "publishing_permitted": true
+      }
+    },
+    "php_extension": null,
+    "tests": {
+      "moved_or_added": [
+        "Engine-owned behavior/boundary, shared semantic corpus replay, C ABI, 10000 lifecycle cycles, concurrent reads, plain C, archive/install consumers, architecture/export checks, fault seeds and sanitizer/fuzz CI."
+      ],
+      "remain_in_app_or_consumer": [
+        "App retains current execution tests until verified Computation cutover, then composition/security/storage/provisioning/recovery/acceptance and measured end-to-end performance.",
+        "Binding owns PHP/Zend lifecycle and cross-layer marshalling/corpus tests."
+      ],
+      "split_tests": [],
+      "prohibited_duplicates": [
+        "No PHP oracle or App implementation is copied into Engine."
+      ],
+      "corpora": [
+        "corpus/decimal/decimal-v1.tsv",
+        "corpus/canonical/generic-v1.json",
+        "corpus/definition/formula-v1.json",
+        "corpus/document/computed-normalization-v1.json",
+        "corpus/document/document-profile-v1.json",
+        "corpus/document/normalized-values-v1.json",
+        "corpus/document/preparation-v1.json",
+        "corpus/document/unicode-normalization-oracle-v1.json",
+        "corpus/document/validation-v1.json",
+        "corpus/document/validator-edges-v1.json",
+        "corpus/document/validator-extension-v1.json",
+        "corpus/reporting/materialization-v1.json"
+      ]
+    },
+    "documentation": {
+      "charter": "CHARTER.md",
+      "readme": "README.md",
+      "public_api": "docs/abi.md",
+      "architecture": "docs/architecture.md",
+      "integration_or_consumer": "docs/consumer.md",
+      "examples": [
+        "tests/consumer/main.c",
+        "tests/support.hpp"
+      ],
+      "changelog_record": "CHANGELOG.md / Unreleased"
+    },
+    "release_expectations": {
+      "version_policy": "Every default-branch commit that passes the complete Native quality workflow is tagged and published as vMAJOR.MINOR.PATCH from the version declared in resources/capabilities.json; every change to released source declares its version, and the workflow completes any release an earlier run left unfinished. The binding is published under the same version (docs/releasing.md).",
+      "expected_artifact_types": [
+        "CMake source archive",
+        "Checksums",
+        "SPDX SBOM",
+        "Signed provenance"
+      ],
+      "required_checks": [
+        "E1 formula/document and E2 report/canonical are implemented; verify E3 hardening/freeze on the final source.",
+        "Exact published semantic-owner sources and corpora recorded in resources/contracts.json, with any independent verification receipts retained as metadata.",
+        "Native behavior/boundary/conformance/fuzz/sanitizer/lifecycle/ABI/consumer/benchmark/supply-chain gates."
+      ],
+      "required_registry_or_installer": null,
+      "required_external_attestation": false
+    },
+    "next_task": {
+      "phase_name": "Publish the first Engine release from the default branch and let the binding embed it.",
+      "permitted_only_when": [
+        "Draft implementation uses reviewed owner semantics and exact corpus/source identity.",
+        "Every Native quality lane passes on the default-branch commit (the workflow then tags and publishes it)."
+      ],
+      "consumer_repository": "https://github.com/kumwe/engine",
+      "dependency_or_native_change": "Merge to the default branch; the workflow publishes Engine 1.0.0 with GitHub OIDC provenance and dispatches the binding sync, which embeds that exact release. App integration remains a later task.",
+      "namespace_or_api_replacements": [],
+      "files_to_update": [
+        "src",
+        "tests",
+        "resources/contracts.json",
+        "resources/capabilities.json",
+        "MIGRATION-HANDOFF.md"
+      ],
+      "files_to_remove": [],
+      "tests_to_remove": [],
+      "tests_to_retain_or_add": [
+        "Retain all five kernel corpora and ABI/ownership/bounds tests in Engine; downstream binding tests cover PHP-specific behavior."
+      ],
+      "di_or_provisioning_changes": [],
+      "capability_index_changes": [],
+      "changelog_and_evidence_changes": [
+        "CHANGELOG.md; NRM-2026-013 remains enabling evidence with completion_claim false."
+      ],
+      "verification_commands": [
+        "cmake -S . -B build -DCMAKE_BUILD_TYPE=Release",
+        "cmake --build build --parallel 4",
+        "ctest --test-dir build --output-on-failure",
+        "node tools/check-manifests.mjs build",
+        "bash tools/check-archive.sh",
+        "bash tools/check-fault-seeds.sh"
+      ]
+    },
+    "concurrency": {
+      "likely_conflict_files": [
+        "resources/contracts.json",
+        "resources/capabilities.json",
+        "include/kumwe/engine/engine.h",
+        "MIGRATION-HANDOFF.md"
+      ],
+      "related_migrations": [
+        "KUMWE-MIG-2026-008",
+        "KUMWE-MIG-2026-010"
+      ],
+      "ownership_conflicts": [],
+      "integration_train": null,
+      "resolution_rule": "semantic-preservation"
+    },
+    "governance": {
+      "roadmap_source_sha256": "a202155ef1a65f5ab293d4f8397ebf4ac430db7f1e877c776bbe7851e6fe18d8",
+      "roadmap_refs": [],
+      "non_roadmap_refs": [
+        "NRM-2026-013",
+        "NRM-2026-042",
+        "NRM-2026-044"
+      ],
+      "completion_claim": false
+    },
+    "decisions": [
+      "All five kernels have implementation and corpus coverage. ABI 1 header, layout, status and lifetime behavior are frozen; the fixed historical C11 client runs against the current shared library.",
+      "Preserve exact semantic owners and report all whole-boundary performance results honestly, including slower native workloads. Production App workload acceptance is a later independent step.",
+      "The release job publishes every default-branch commit that passes all quality lanes, with GitHub OIDC build provenance and no external attestation gate; it never moves a tag or replaces an asset."
+    ],
+    "blockers": [
+      "Independent downstream verification of published Engine and binding releases remains a separate activity. No App integration is performed here."
+    ]
+  },
+  "manifests_and_corpora": [
+    {
+      "path": "resources/abi-manifest.json",
+      "sha256": "40e27d2a8e7b8f619274e1bce2525a220d704f5e86a4e46f68d53fc6dafd4fb9"
+    },
+    {
+      "path": "resources/abi-symbols.txt",
+      "sha256": "62cf59b8d6feb369f0d801b59b69796ea569570177e02b903c0bec6b01e04d21"
+    },
+    {
+      "path": "resources/capabilities.json",
+      "sha256": "d6e0a75af2fec3f9ef05e81f94abe43a05b827d2c19ffab05450e38adcd5b5a0"
+    },
+    {
+      "path": "resources/contracts.json",
+      "sha256": "089f7e9a40f6da991654ca33937a864d6e28a5325b57b8da457c9d4492b818f0"
+    },
+    {
+      "path": "tests/ownership.json",
+      "sha256": "2a8b54da277777706b6c65430cbf08d4e24b28b313a57e2f4f29212929aae4e3"
+    },
+    {
+      "path": "include/kumwe/engine/engine.h",
+      "sha256": "d7ebdaa0c03bca629a5370ebbcdd6297ea6e99afa0229c9c13c2907676a94b2f"
+    },
+    {
+      "path": "MIGRATION-HANDOFF.md",
+      "sha256": "4ed421fb4ee002e379a2341f961e402587dfa7116094709f88a762e3df08c9a4"
+    },
+    {
+      "path": "corpus/decimal/decimal-v1.tsv",
+      "sha256": "635db251898707828e24f12b1abb672273552f5f633186a725cc9f50ac08140c"
+    },
+    {
+      "path": "corpus/canonical/generic-v1.json",
+      "sha256": "84d21b12e7a2bfd752356d9a6e664bcb332e209d19017e7634e7485a4fa4e250"
+    },
+    {
+      "path": "corpus/definition/formula-v1.json",
+      "sha256": "11033679b018fdc9a192e954ef11089444a00a1d89c6279d3c192be9252cf42f"
+    },
+    {
+      "path": "corpus/document/computed-normalization-v1.json",
+      "sha256": "6949c2763e05a1b76ea4f6c29cc7c2df57eb25d80ee625078a1d16545a8b41f4"
+    },
+    {
+      "path": "corpus/document/document-profile-v1.json",
+      "sha256": "84b6c2e55ae591c921536aa755cbb5a9a40a7a19847fe47415e55dce2614c177"
+    },
+    {
+      "path": "corpus/document/normalized-values-v1.json",
+      "sha256": "752f41632d2ad38d74c5c61db5ff5f373b9427596d7766449b84398ddb15bce2"
+    },
+    {
+      "path": "corpus/document/preparation-v1.json",
+      "sha256": "4eb1543929fcf5470eb8cae882127556cd57c02518109545483d8780266b561a"
+    },
+    {
+      "path": "corpus/document/unicode-normalization-oracle-v1.json",
+      "sha256": "8a1c1dce8686d09ca5e53d7b1971620e887237c6019a1189549bd873ec6a87da"
+    },
+    {
+      "path": "corpus/document/validation-v1.json",
+      "sha256": "fce91bfe3c9614ec3862b50c0defc10a9b69ed021671f8382d774d8cb0a20668"
+    },
+    {
+      "path": "corpus/document/validator-edges-v1.json",
+      "sha256": "65cde051396085a01e9723a120460c8e00519eb63acff80d7425533983f011b0"
+    },
+    {
+      "path": "corpus/document/validator-extension-v1.json",
+      "sha256": "dbc005bd77fdd764c873bdde57261bc6cb79a8463164fb83e0da8cbe7603161c"
+    },
+    {
+      "path": "corpus/reporting/materialization-v1.json",
+      "sha256": "975116dc897a0bfdee4a08f9065eb10ccfec06a32f4eb93a48015b08af408c01"
+    }
+  ],
+  "signature_verification": {
+    "status": "passed",
+    "repository": "kumwe/engine",
+    "source_commit": "7fc87745e19908047973d2ca86332467f293019e",
+    "source_ref": "refs/heads/main",
+    "certificate_identity": "https://github.com/kumwe/engine/.github/workflows/ci.yml@refs/heads/main",
+    "deny_self_hosted_runners": true,
+    "bundle_sha256": "4c6d28100551690f79d7f985945a150b317ba46b07c408ff16db1ec4771a0606",
+    "subjects": [
+      {
+        "name": "kumwe-engine-source.tar.gz",
+        "sha256": "05711668310ae9a258d0a26efd81a092cc04db1da7d81f150ad1a9852afa7cb4"
+      },
+      {
+        "name": "source.json",
+        "sha256": "c3cdb2980e0d405f0d300a56053a0210dd67692698189d9011085527f1771c58"
+      },
+      {
+        "name": "source.spdx.json",
+        "sha256": "81d758c5350a88a60b432004defcaa183f90cdd05f72ea4a6505847a664c7a0d"
+      },
+      {
+        "name": "SHA256SUMS",
+        "sha256": "ebfd057bbc9fa7808f5fa3fd4eefdec408aa01f1e9ed08ba061bfaa06696e0cc"
+      }
+    ]
+  },
+  "source_verification": {
+    "status": "passed",
+    "reproduced_source_bundle": true,
+    "archive_sha256": "05711668310ae9a258d0a26efd81a092cc04db1da7d81f150ad1a9852afa7cb4",
+    "source_commit": "7fc87745e19908047973d2ca86332467f293019e",
+    "source_tree": "ebfcf01aba73557e5391f8a6b9516a44dd9653ea",
+    "full_handoff_schema": "passed",
+    "upstream_attestation_schemas": "passed",
+    "quality_checkouts": [
+      {
+        "job": "sanitizers-fuzz",
+        "job_id": 103009493814,
+        "source_commit": "7fc87745e19908047973d2ca86332467f293019e",
+        "path": "quality-checkout-34518377405-103009493814.log",
+        "sha256": "154139b202214af4fb49f41def083f8cec7fe035f0025e8dddfdfe1ec43d5175"
+      },
+      {
+        "job": "archive-and-faults",
+        "job_id": 103009493842,
+        "source_commit": "7fc87745e19908047973d2ca86332467f293019e",
+        "path": "quality-checkout-34518377405-103009493842.log",
+        "sha256": "613078def40b85e10ef97c67a3b22d6680cb83f69c8007a10d47dd97ab60b814"
+      },
+      {
+        "job": "thread-sanitizer",
+        "job_id": 103009493850,
+        "source_commit": "7fc87745e19908047973d2ca86332467f293019e",
+        "path": "quality-checkout-34518377405-103009493850.log",
+        "sha256": "49aeb369f631b7db18dbfa4d25f3e3c04f2571846a664369908376647e628e4c"
+      },
+      {
+        "job": "native (macos-14, clang, clang++)",
+        "job_id": 103009493932,
+        "source_commit": "7fc87745e19908047973d2ca86332467f293019e",
+        "path": "quality-checkout-34518377405-103009493932.log",
+        "sha256": "bf70a514664a62656f9f4d384e69985fa034b335ca0c01ab71a231c03fdcd35f"
+      },
+      {
+        "job": "native (ubuntu-24.04, gcc, g++)",
+        "job_id": 103009494010,
+        "source_commit": "7fc87745e19908047973d2ca86332467f293019e",
+        "path": "quality-checkout-34518377405-103009494010.log",
+        "sha256": "0d916a8443ee91d27d1ba8426f2635b4f2abe9a1e5621002e6f540fcf9cdec96"
+      },
+      {
+        "job": "native (ubuntu-24.04, clang, clang++)",
+        "job_id": 103009494013,
+        "source_commit": "7fc87745e19908047973d2ca86332467f293019e",
+        "path": "quality-checkout-34518377405-103009494013.log",
+        "sha256": "e4dfdeca02057a9737c703b3abb2c4182bfe0d9808ccd8938ab60272dff35d30"
+      }
+    ],
+    "review_authority": {
+      "kind": "merged-pull-request",
+      "pull_request": {
+        "url": "https://api.github.com/repos/kumwe/engine/pulls/13",
+        "id": 4498977203,
+        "node_id": "PR_kwDOUIskOc8AAAABDCjxsw",
+        "html_url": "https://github.com/kumwe/engine/pull/13",
+        "diff_url": "https://github.com/kumwe/engine/pull/13.diff",
+        "patch_url": "https://github.com/kumwe/engine/pull/13.patch",
+        "issue_url": "https://api.github.com/repos/kumwe/engine/issues/13",
+        "number": 13,
+        "state": "closed",
+        "locked": false,
+        "title": "Correct native handoff and qualify Reporting for Engine 1.0.2",
+        "user": {
+          "login": "Llewellynvdm",
+          "id": 5607939,
+          "node_id": "MDQ6VXNlcjU2MDc5Mzk=",
+          "avatar_url": "https://avatars.githubusercontent.com/u/5607939?v=4",
+          "gravatar_id": "",
+          "url": "https://api.github.com/users/Llewellynvdm",
+          "html_url": "https://github.com/Llewellynvdm",
+          "followers_url": "https://api.github.com/users/Llewellynvdm/followers",
+          "following_url": "https://api.github.com/users/Llewellynvdm/following{/other_user}",
+          "gists_url": "https://api.github.com/users/Llewellynvdm/gists{/gist_id}",
+          "starred_url": "https://api.github.com/users/Llewellynvdm/starred{/owner}{/repo}",
+          "subscriptions_url": "https://api.github.com/users/Llewellynvdm/subscriptions",
+          "organizations_url": "https://api.github.com/users/Llewellynvdm/orgs",
+          "repos_url": "https://api.github.com/users/Llewellynvdm/repos",
+          "events_url": "https://api.github.com/users/Llewellynvdm/events{/privacy}",
+          "received_events_url": "https://api.github.com/users/Llewellynvdm/received_events",
+          "type": "User",
+          "user_view_type": "public",
+          "site_admin": false
+        },
+        "body": "Independent native adoption verification found that the published handoff substituted release prose for its required candidate attestation schema identifier. This restores that exact schema field and records the genuinely passing Reporting 0.1.3 receipt from SDK run 34515947985. The receipt matches every previously frozen source, archive, public API, service map and corpus digest. All five semantic owners are now independently verified.\n\nReleased source changes declare Engine 1.0.2 through the existing version helper, including updated handoff manifest hashes. The full handoff schema and exact Reporting receipt validation pass locally; the unchanged native quality matrix runs on this PR and again after rebase merge. Native algorithms, ABI, and original published releases are unchanged.\n\nMerge only after the binding handoff correction has landed, so the automatic Engine sync starts from a reviewed, schema-valid binding parent.",
+        "created_at": "2026-09-10T18:49:24Z",
+        "updated_at": "2026-09-10T19:06:08Z",
+        "closed_at": "2026-09-10T19:06:08Z",
+        "merged_at": "2026-09-10T19:06:08Z",
+        "merge_commit_sha": "7fc87745e19908047973d2ca86332467f293019e",
+        "assignees": [],
+        "requested_reviewers": [],
+        "requested_teams": [],
+        "labels": [],
+        "milestone": null,
+        "draft": false,
+        "commits_url": "https://api.github.com/repos/kumwe/engine/pulls/13/commits",
+        "review_comments_url": "https://api.github.com/repos/kumwe/engine/pulls/13/comments",
+        "review_comment_url": "https://api.github.com/repos/kumwe/engine/pulls/comments{/number}",
+        "comments_url": "https://api.github.com/repos/kumwe/engine/issues/13/comments",
+        "statuses_url": "https://api.github.com/repos/kumwe/engine/statuses/4105744c2446470e7c9e7427602c448fd803552e",
+        "head": {
+          "label": "kumwe:agent/qualify-native-handoff",
+          "ref": "agent/qualify-native-handoff",
+          "sha": "4105744c2446470e7c9e7427602c448fd803552e",
+          "user": {
+            "login": "kumwe",
+            "id": 104413342,
+            "node_id": "O_kgDOBjk4ng",
+            "avatar_url": "https://avatars.githubusercontent.com/u/104413342?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/kumwe",
+            "html_url": "https://github.com/kumwe",
+            "followers_url": "https://api.github.com/users/kumwe/followers",
+            "following_url": "https://api.github.com/users/kumwe/following{/other_user}",
+            "gists_url": "https://api.github.com/users/kumwe/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/kumwe/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/kumwe/subscriptions",
+            "organizations_url": "https://api.github.com/users/kumwe/orgs",
+            "repos_url": "https://api.github.com/users/kumwe/repos",
+            "events_url": "https://api.github.com/users/kumwe/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/kumwe/received_events",
+            "type": "Organization",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "repo": {
+            "id": 1351296057,
+            "node_id": "R_kgDOUIskOQ",
+            "name": "engine",
+            "full_name": "kumwe/engine",
+            "private": false,
+            "owner": {
+              "login": "kumwe",
+              "id": 104413342,
+              "node_id": "O_kgDOBjk4ng",
+              "avatar_url": "https://avatars.githubusercontent.com/u/104413342?v=4",
+              "gravatar_id": "",
+              "url": "https://api.github.com/users/kumwe",
+              "html_url": "https://github.com/kumwe",
+              "followers_url": "https://api.github.com/users/kumwe/followers",
+              "following_url": "https://api.github.com/users/kumwe/following{/other_user}",
+              "gists_url": "https://api.github.com/users/kumwe/gists{/gist_id}",
+              "starred_url": "https://api.github.com/users/kumwe/starred{/owner}{/repo}",
+              "subscriptions_url": "https://api.github.com/users/kumwe/subscriptions",
+              "organizations_url": "https://api.github.com/users/kumwe/orgs",
+              "repos_url": "https://api.github.com/users/kumwe/repos",
+              "events_url": "https://api.github.com/users/kumwe/events{/privacy}",
+              "received_events_url": "https://api.github.com/users/kumwe/received_events",
+              "type": "Organization",
+              "user_view_type": "public",
+              "site_admin": false
+            },
+            "html_url": "https://github.com/kumwe/engine",
+            "description": "Five deterministic compute kernels, ABI, native corpus replay, fuzzing, sanitizers, benchmarks",
+            "fork": false,
+            "url": "https://api.github.com/repos/kumwe/engine",
+            "forks_url": "https://api.github.com/repos/kumwe/engine/forks",
+            "keys_url": "https://api.github.com/repos/kumwe/engine/keys{/key_id}",
+            "collaborators_url": "https://api.github.com/repos/kumwe/engine/collaborators{/collaborator}",
+            "teams_url": "https://api.github.com/repos/kumwe/engine/teams",
+            "hooks_url": "https://api.github.com/repos/kumwe/engine/hooks",
+            "issue_events_url": "https://api.github.com/repos/kumwe/engine/issues/events{/number}",
+            "events_url": "https://api.github.com/repos/kumwe/engine/events",
+            "assignees_url": "https://api.github.com/repos/kumwe/engine/assignees{/user}",
+            "branches_url": "https://api.github.com/repos/kumwe/engine/branches{/branch}",
+            "tags_url": "https://api.github.com/repos/kumwe/engine/tags",
+            "blobs_url": "https://api.github.com/repos/kumwe/engine/git/blobs{/sha}",
+            "git_tags_url": "https://api.github.com/repos/kumwe/engine/git/tags{/sha}",
+            "git_refs_url": "https://api.github.com/repos/kumwe/engine/git/refs{/sha}",
+            "trees_url": "https://api.github.com/repos/kumwe/engine/git/trees{/sha}",
+            "statuses_url": "https://api.github.com/repos/kumwe/engine/statuses/{sha}",
+            "languages_url": "https://api.github.com/repos/kumwe/engine/languages",
+            "stargazers_url": "https://api.github.com/repos/kumwe/engine/stargazers",
+            "contributors_url": "https://api.github.com/repos/kumwe/engine/contributors",
+            "subscribers_url": "https://api.github.com/repos/kumwe/engine/subscribers",
+            "subscription_url": "https://api.github.com/repos/kumwe/engine/subscription",
+            "commits_url": "https://api.github.com/repos/kumwe/engine/commits{/sha}",
+            "git_commits_url": "https://api.github.com/repos/kumwe/engine/git/commits{/sha}",
+            "comments_url": "https://api.github.com/repos/kumwe/engine/comments{/number}",
+            "issue_comment_url": "https://api.github.com/repos/kumwe/engine/issues/comments{/number}",
+            "contents_url": "https://api.github.com/repos/kumwe/engine/contents/{+path}",
+            "compare_url": "https://api.github.com/repos/kumwe/engine/compare/{base}...{head}",
+            "merges_url": "https://api.github.com/repos/kumwe/engine/merges",
+            "archive_url": "https://api.github.com/repos/kumwe/engine/{archive_format}{/ref}",
+            "downloads_url": "https://api.github.com/repos/kumwe/engine/downloads",
+            "issues_url": "https://api.github.com/repos/kumwe/engine/issues{/number}",
+            "pulls_url": "https://api.github.com/repos/kumwe/engine/pulls{/number}",
+            "milestones_url": "https://api.github.com/repos/kumwe/engine/milestones{/number}",
+            "notifications_url": "https://api.github.com/repos/kumwe/engine/notifications{?since,all,participating}",
+            "labels_url": "https://api.github.com/repos/kumwe/engine/labels{/name}",
+            "releases_url": "https://api.github.com/repos/kumwe/engine/releases{/id}",
+            "deployments_url": "https://api.github.com/repos/kumwe/engine/deployments",
+            "created_at": "2026-08-30T10:18:20Z",
+            "updated_at": "2026-09-10T19:06:13Z",
+            "pushed_at": "2026-09-10T19:08:53Z",
+            "git_url": "git://github.com/kumwe/engine.git",
+            "ssh_url": "git@github.com:kumwe/engine.git",
+            "clone_url": "https://github.com/kumwe/engine.git",
+            "svn_url": "https://github.com/kumwe/engine",
+            "homepage": null,
+            "size": 5895,
+            "stargazers_count": 0,
+            "watchers_count": 0,
+            "language": "C++",
+            "has_issues": true,
+            "has_projects": false,
+            "has_downloads": false,
+            "has_wiki": false,
+            "has_pages": false,
+            "has_discussions": false,
+            "forks_count": 0,
+            "mirror_url": null,
+            "archived": false,
+            "disabled": false,
+            "open_issues_count": 0,
+            "license": {
+              "key": "apache-2.0",
+              "name": "Apache License 2.0",
+              "spdx_id": "Apache-2.0",
+              "url": "https://api.github.com/licenses/apache-2.0",
+              "node_id": "MDc6TGljZW5zZTI="
+            },
+            "allow_forking": true,
+            "is_template": false,
+            "web_commit_signoff_required": false,
+            "has_pull_requests": true,
+            "pull_request_creation_policy": "collaborators_only",
+            "topics": [],
+            "visibility": "public",
+            "forks": 0,
+            "open_issues": 0,
+            "watchers": 0,
+            "default_branch": "main"
+          }
+        },
+        "base": {
+          "label": "kumwe:main",
+          "ref": "main",
+          "sha": "598b05a4f3b164596a5bcbc3402d050e2e79dfd6",
+          "user": {
+            "login": "kumwe",
+            "id": 104413342,
+            "node_id": "O_kgDOBjk4ng",
+            "avatar_url": "https://avatars.githubusercontent.com/u/104413342?v=4",
+            "gravatar_id": "",
+            "url": "https://api.github.com/users/kumwe",
+            "html_url": "https://github.com/kumwe",
+            "followers_url": "https://api.github.com/users/kumwe/followers",
+            "following_url": "https://api.github.com/users/kumwe/following{/other_user}",
+            "gists_url": "https://api.github.com/users/kumwe/gists{/gist_id}",
+            "starred_url": "https://api.github.com/users/kumwe/starred{/owner}{/repo}",
+            "subscriptions_url": "https://api.github.com/users/kumwe/subscriptions",
+            "organizations_url": "https://api.github.com/users/kumwe/orgs",
+            "repos_url": "https://api.github.com/users/kumwe/repos",
+            "events_url": "https://api.github.com/users/kumwe/events{/privacy}",
+            "received_events_url": "https://api.github.com/users/kumwe/received_events",
+            "type": "Organization",
+            "user_view_type": "public",
+            "site_admin": false
+          },
+          "repo": {
+            "id": 1351296057,
+            "node_id": "R_kgDOUIskOQ",
+            "name": "engine",
+            "full_name": "kumwe/engine",
+            "private": false,
+            "owner": {
+              "login": "kumwe",
+              "id": 104413342,
+              "node_id": "O_kgDOBjk4ng",
+              "avatar_url": "https://avatars.githubusercontent.com/u/104413342?v=4",
+              "gravatar_id": "",
+              "url": "https://api.github.com/users/kumwe",
+              "html_url": "https://github.com/kumwe",
+              "followers_url": "https://api.github.com/users/kumwe/followers",
+              "following_url": "https://api.github.com/users/kumwe/following{/other_user}",
+              "gists_url": "https://api.github.com/users/kumwe/gists{/gist_id}",
+              "starred_url": "https://api.github.com/users/kumwe/starred{/owner}{/repo}",
+              "subscriptions_url": "https://api.github.com/users/kumwe/subscriptions",
+              "organizations_url": "https://api.github.com/users/kumwe/orgs",
+              "repos_url": "https://api.github.com/users/kumwe/repos",
+              "events_url": "https://api.github.com/users/kumwe/events{/privacy}",
+              "received_events_url": "https://api.github.com/users/kumwe/received_events",
+              "type": "Organization",
+              "user_view_type": "public",
+              "site_admin": false
+            },
+            "html_url": "https://github.com/kumwe/engine",
+            "description": "Five deterministic compute kernels, ABI, native corpus replay, fuzzing, sanitizers, benchmarks",
+            "fork": false,
+            "url": "https://api.github.com/repos/kumwe/engine",
+            "forks_url": "https://api.github.com/repos/kumwe/engine/forks",
+            "keys_url": "https://api.github.com/repos/kumwe/engine/keys{/key_id}",
+            "collaborators_url": "https://api.github.com/repos/kumwe/engine/collaborators{/collaborator}",
+            "teams_url": "https://api.github.com/repos/kumwe/engine/teams",
+            "hooks_url": "https://api.github.com/repos/kumwe/engine/hooks",
+            "issue_events_url": "https://api.github.com/repos/kumwe/engine/issues/events{/number}",
+            "events_url": "https://api.github.com/repos/kumwe/engine/events",
+            "assignees_url": "https://api.github.com/repos/kumwe/engine/assignees{/user}",
+            "branches_url": "https://api.github.com/repos/kumwe/engine/branches{/branch}",
+            "tags_url": "https://api.github.com/repos/kumwe/engine/tags",
+            "blobs_url": "https://api.github.com/repos/kumwe/engine/git/blobs{/sha}",
+            "git_tags_url": "https://api.github.com/repos/kumwe/engine/git/tags{/sha}",
+            "git_refs_url": "https://api.github.com/repos/kumwe/engine/git/refs{/sha}",
+            "trees_url": "https://api.github.com/repos/kumwe/engine/git/trees{/sha}",
+            "statuses_url": "https://api.github.com/repos/kumwe/engine/statuses/{sha}",
+            "languages_url": "https://api.github.com/repos/kumwe/engine/languages",
+            "stargazers_url": "https://api.github.com/repos/kumwe/engine/stargazers",
+            "contributors_url": "https://api.github.com/repos/kumwe/engine/contributors",
+            "subscribers_url": "https://api.github.com/repos/kumwe/engine/subscribers",
+            "subscription_url": "https://api.github.com/repos/kumwe/engine/subscription",
+            "commits_url": "https://api.github.com/repos/kumwe/engine/commits{/sha}",
+            "git_commits_url": "https://api.github.com/repos/kumwe/engine/git/commits{/sha}",
+            "comments_url": "https://api.github.com/repos/kumwe/engine/comments{/number}",
+            "issue_comment_url": "https://api.github.com/repos/kumwe/engine/issues/comments{/number}",
+            "contents_url": "https://api.github.com/repos/kumwe/engine/contents/{+path}",
+            "compare_url": "https://api.github.com/repos/kumwe/engine/compare/{base}...{head}",
+            "merges_url": "https://api.github.com/repos/kumwe/engine/merges",
+            "archive_url": "https://api.github.com/repos/kumwe/engine/{archive_format}{/ref}",
+            "downloads_url": "https://api.github.com/repos/kumwe/engine/downloads",
+            "issues_url": "https://api.github.com/repos/kumwe/engine/issues{/number}",
+            "pulls_url": "https://api.github.com/repos/kumwe/engine/pulls{/number}",
+            "milestones_url": "https://api.github.com/repos/kumwe/engine/milestones{/number}",
+            "notifications_url": "https://api.github.com/repos/kumwe/engine/notifications{?since,all,participating}",
+            "labels_url": "https://api.github.com/repos/kumwe/engine/labels{/name}",
+            "releases_url": "https://api.github.com/repos/kumwe/engine/releases{/id}",
+            "deployments_url": "https://api.github.com/repos/kumwe/engine/deployments",
+            "created_at": "2026-08-30T10:18:20Z",
+            "updated_at": "2026-09-10T19:06:13Z",
+            "pushed_at": "2026-09-10T19:08:53Z",
+            "git_url": "git://github.com/kumwe/engine.git",
+            "ssh_url": "git@github.com:kumwe/engine.git",
+            "clone_url": "https://github.com/kumwe/engine.git",
+            "svn_url": "https://github.com/kumwe/engine",
+            "homepage": null,
+            "size": 5895,
+            "stargazers_count": 0,
+            "watchers_count": 0,
+            "language": "C++",
+            "has_issues": true,
+            "has_projects": false,
+            "has_downloads": false,
+            "has_wiki": false,
+            "has_pages": false,
+            "has_discussions": false,
+            "forks_count": 0,
+            "mirror_url": null,
+            "archived": false,
+            "disabled": false,
+            "open_issues_count": 0,
+            "license": {
+              "key": "apache-2.0",
+              "name": "Apache License 2.0",
+              "spdx_id": "Apache-2.0",
+              "url": "https://api.github.com/licenses/apache-2.0",
+              "node_id": "MDc6TGljZW5zZTI="
+            },
+            "allow_forking": true,
+            "is_template": false,
+            "web_commit_signoff_required": false,
+            "has_pull_requests": true,
+            "pull_request_creation_policy": "collaborators_only",
+            "topics": [],
+            "visibility": "public",
+            "forks": 0,
+            "open_issues": 0,
+            "watchers": 0,
+            "default_branch": "main"
+          }
+        },
+        "_links": {
+          "self": {
+            "href": "https://api.github.com/repos/kumwe/engine/pulls/13"
+          },
+          "html": {
+            "href": "https://github.com/kumwe/engine/pull/13"
+          },
+          "issue": {
+            "href": "https://api.github.com/repos/kumwe/engine/issues/13"
+          },
+          "comments": {
+            "href": "https://api.github.com/repos/kumwe/engine/issues/13/comments"
+          },
+          "review_comments": {
+            "href": "https://api.github.com/repos/kumwe/engine/pulls/13/comments"
+          },
+          "review_comment": {
+            "href": "https://api.github.com/repos/kumwe/engine/pulls/comments{/number}"
+          },
+          "commits": {
+            "href": "https://api.github.com/repos/kumwe/engine/pulls/13/commits"
+          },
+          "statuses": {
+            "href": "https://api.github.com/repos/kumwe/engine/statuses/4105744c2446470e7c9e7427602c448fd803552e"
+          }
+        },
+        "author_association": "CONTRIBUTOR",
+        "auto_merge": null,
+        "assignee": null,
+        "active_lock_reason": null
+      }
+    }
+  },
+  "publisher": {
+    "url": "https://github.com/kumwe/engine/actions/runs/34518377405/job/103010293689",
+    "conclusion": "success",
+    "workflow_url": "https://github.com/kumwe/engine/actions/runs/34518377405",
+    "workflow_conclusion": "success"
+  },
+  "release": {
+    "url": "https://github.com/kumwe/engine/releases/tag/v1.0.2",
+    "id": 386551477,
+    "published_at": "2026-09-10T19:08:55Z",
+    "platform_immutable": false
+  },
+  "assets": [
+    {
+      "identity": "build-provenance.sigstore.json",
+      "url": "https://github.com/kumwe/engine/releases/download/v1.0.2/build-provenance.sigstore.json",
+      "sha256": "4c6d28100551690f79d7f985945a150b317ba46b07c408ff16db1ec4771a0606"
+    },
+    {
+      "identity": "kumwe-engine-source.tar.gz",
+      "url": "https://github.com/kumwe/engine/releases/download/v1.0.2/kumwe-engine-source.tar.gz",
+      "sha256": "05711668310ae9a258d0a26efd81a092cc04db1da7d81f150ad1a9852afa7cb4"
+    },
+    {
+      "identity": "SHA256SUMS",
+      "url": "https://github.com/kumwe/engine/releases/download/v1.0.2/SHA256SUMS",
+      "sha256": "ebfd057bbc9fa7808f5fa3fd4eefdec408aa01f1e9ed08ba061bfaa06696e0cc"
+    },
+    {
+      "identity": "source.json",
+      "url": "https://github.com/kumwe/engine/releases/download/v1.0.2/source.json",
+      "sha256": "c3cdb2980e0d405f0d300a56053a0210dd67692698189d9011085527f1771c58"
+    },
+    {
+      "identity": "source.spdx.json",
+      "url": "https://github.com/kumwe/engine/releases/download/v1.0.2/source.spdx.json",
+      "sha256": "81d758c5350a88a60b432004defcaa183f90cdd05f72ea4a6505847a664c7a0d"
+    }
+  ],
+  "abi_and_capabilities": {
+    "abi_major": 1,
+    "capabilities": [
+      "decimal-batch-draft/1",
+      "formula-draft/1",
+      "normalized-document-draft/1",
+      "normalized-preparation-draft/1",
+      "report-materialization-draft/1",
+      "kumwe-canonical-json/generic-v1"
+    ],
+    "corpus_digests": [
+      "635db251898707828e24f12b1abb672273552f5f633186a725cc9f50ac08140c",
+      "84d21b12e7a2bfd752356d9a6e664bcb332e209d19017e7634e7485a4fa4e250",
+      "11033679b018fdc9a192e954ef11089444a00a1d89c6279d3c192be9252cf42f",
+      "6949c2763e05a1b76ea4f6c29cc7c2df57eb25d80ee625078a1d16545a8b41f4",
+      "84b6c2e55ae591c921536aa755cbb5a9a40a7a19847fe47415e55dce2614c177",
+      "752f41632d2ad38d74c5c61db5ff5f373b9427596d7766449b84398ddb15bce2",
+      "4eb1543929fcf5470eb8cae882127556cd57c02518109545483d8780266b561a",
+      "8a1c1dce8686d09ca5e53d7b1971620e887237c6019a1189549bd873ec6a87da",
+      "fce91bfe3c9614ec3862b50c0defc10a9b69ed021671f8382d774d8cb0a20668",
+      "65cde051396085a01e9723a120460c8e00519eb63acff80d7425533983f011b0",
+      "dbc005bd77fdd764c873bdde57261bc6cb79a8463164fb83e0da8cbe7603161c",
+      "975116dc897a0bfdee4a08f9065eb10ccfec06a32f4eb93a48015b08af408c01"
+    ]
+  },
+  "upstreams": [
+    {
+      "uri": "https://raw.githubusercontent.com/kumwe/extension-sdk/42d3c9e353aa6fb3e4b6931bb78b260b2682dc15/evidence/releases/framework-php/computation/0.1.1/34255198879/RELEASE-ATTESTATION.yaml",
+      "sha256": "cec2e39c5b402870c56d9a4de3c06f310f25c63b1030864e975a1b2417347020",
+      "repository": "https://github.com/kumwe/computation",
+      "version": "0.1.1",
+      "source_commit": "fc9d049f8b675c8e19fd1672d49b5e206c9ad52a"
+    },
+    {
+      "uri": "https://raw.githubusercontent.com/kumwe/extension-sdk/42d3c9e353aa6fb3e4b6931bb78b260b2682dc15/evidence/releases/framework-php/conversion/0.1.5/34255198879/RELEASE-ATTESTATION.yaml",
+      "sha256": "e550d7dad380dee77640bd8ff153b8b102d87dc80c5c884d2d55421e835699d8",
+      "repository": "https://github.com/kumwe/conversion",
+      "version": "0.1.5",
+      "source_commit": "b291f3a31314644fd88150dc9a9e911fe0617fe7"
+    },
+    {
+      "uri": "https://raw.githubusercontent.com/kumwe/extension-sdk/42d3c9e353aa6fb3e4b6931bb78b260b2682dc15/evidence/releases/framework-php/business-definition/0.1.2/34255198879/RELEASE-ATTESTATION.yaml",
+      "sha256": "7595ffeb2b2651094c4fb9badc2ccf3230d5bd2f3d67a0b674b56ca7b982ca1e",
+      "repository": "https://github.com/kumwe/business-definition",
+      "version": "0.1.2",
+      "source_commit": "1cb59229f311067e8cfdd773a34e34cfeb501791"
+    },
+    {
+      "uri": "https://raw.githubusercontent.com/kumwe/extension-sdk/42d3c9e353aa6fb3e4b6931bb78b260b2682dc15/evidence/releases/framework-php/record-model/0.1.3/34255198879/RELEASE-ATTESTATION.yaml",
+      "sha256": "38174c5651658489465ce1554303bcca81d26e7550e1e4b0e7c860966534041b",
+      "repository": "https://github.com/kumwe/record-model",
+      "version": "0.1.3",
+      "source_commit": "8d20cf75ee6ab915102bbf6a17567087971e9dfe"
+    },
+    {
+      "uri": "https://raw.githubusercontent.com/kumwe/extension-sdk/d21879b98737883b38ee8c97d3c5a2e50186f867/evidence/releases/framework-php/reporting/0.1.3/34515947985/RELEASE-ATTESTATION.yaml",
+      "sha256": "58c9cf8462709304de7eb649e30f77c1da4344c12fc5aa56801ee96ef70b1acb",
+      "repository": "https://github.com/kumwe/reporting",
+      "version": "0.1.3",
+      "source_commit": "b521b3113bd97afc2de6ab74fcb71a36fe7d0890"
+    },
+    {
+      "uri": "https://raw.githubusercontent.com/kumwe/extension-sdk/4dc365e35460eb598d8616aa71e6ae396c75627e/evidence/releases/framework-php/canonical-json/0.1.1/34255667176/RELEASE-ATTESTATION.yaml",
+      "sha256": "4180a78d2480dee8734acae414379eda3a3b1e25ef668e84fccf97df7ff6e1b4",
+      "repository": "https://github.com/kumwe/canonical-json",
+      "version": "0.1.1",
+      "source_commit": "e7006a2580a49a1c8ab507b0d7b9c3403b4f9f58"
+    }
+  ],
+  "embedded_engine": {
+    "source_commit": "7fc87745e19908047973d2ca86332467f293019e",
+    "release_archive_sha256": "05711668310ae9a258d0a26efd81a092cc04db1da7d81f150ad1a9852afa7cb4"
+  },
+  "build": {
+    "status": "passed",
+    "network_disabled": true,
+    "kind": "native_cpp",
+    "actual_capabilities": {
+      "engine": "kumwe/engine",
+      "version": "1.0.2",
+      "abi_major": 1,
+      "abi_status": "frozen",
+      "capabilities": [
+        "decimal-batch-draft/1",
+        "formula-draft/1",
+        "normalized-document-draft/1",
+        "normalized-preparation-draft/1",
+        "report-materialization-draft/1",
+        "kumwe-canonical-json/generic-v1"
+      ],
+      "semantic_owner": "kumwe/conversion",
+      "semantic_source": "b291f3a31314644fd88150dc9a9e911fe0617fe7",
+      "semantic_release_verified": true,
+      "completion_claim": false,
+      "corpus_sha256": "635db251898707828e24f12b1abb672273552f5f633186a725cc9f50ac08140c",
+      "computation": {
+        "wire_version": 1,
+        "engine_version": "1.0.2",
+        "abi_major": 1,
+        "api_version": "1.0.0",
+        "build_digest": "4a0225a7605c516a42891c96cfb0ca00313eb02a1646ce0a42710767494e9d8b",
+        "features": [
+          {
+            "name": "canonical",
+            "version": 1
+          },
+          {
+            "name": "compile",
+            "version": 1
+          },
+          {
+            "name": "document.batch",
+            "version": 1
+          },
+          {
+            "name": "formula",
+            "version": 1
+          },
+          {
+            "name": "report.materialization",
+            "version": 1
+          }
+        ],
+        "contracts": [
+          {
+            "wire_version": 1,
+            "owner": "kumwe/business-definition",
+            "profile": "formula-draft/1",
+            "version": "0.0.0",
+            "corpus_digest": "11033679b018fdc9a192e954ef11089444a00a1d89c6279d3c192be9252cf42f"
+          },
+          {
+            "wire_version": 1,
+            "owner": "kumwe/record-model",
+            "profile": "normalized-document-draft/1",
+            "version": "0.0.0",
+            "corpus_digest": "84b6c2e55ae591c921536aa755cbb5a9a40a7a19847fe47415e55dce2614c177"
+          },
+          {
+            "wire_version": 1,
+            "owner": "kumwe/record-model",
+            "profile": "normalized-preparation-draft/1",
+            "version": "0.0.0",
+            "corpus_digest": "4eb1543929fcf5470eb8cae882127556cd57c02518109545483d8780266b561a"
+          },
+          {
+            "wire_version": 1,
+            "owner": "kumwe/reporting",
+            "profile": "report-materialization-draft/1",
+            "version": "0.0.0",
+            "corpus_digest": "975116dc897a0bfdee4a08f9065eb10ccfec06a32f4eb93a48015b08af408c01"
+          },
+          {
+            "wire_version": 1,
+            "owner": "kumwe/canonical-json",
+            "profile": "kumwe-canonical-json/generic-v1",
+            "version": "0.0.0",
+            "corpus_digest": "84d21b12e7a2bfd752356d9a6e664bcb332e209d19017e7634e7485a4fa4e250"
+          }
+        ]
+      },
+      "corpora": [
+        {
+          "path": "corpus/decimal/decimal-v1.tsv",
+          "sha256": "635db251898707828e24f12b1abb672273552f5f633186a725cc9f50ac08140c"
+        },
+        {
+          "path": "corpus/canonical/generic-v1.json",
+          "sha256": "84d21b12e7a2bfd752356d9a6e664bcb332e209d19017e7634e7485a4fa4e250"
+        },
+        {
+          "path": "corpus/definition/formula-v1.json",
+          "sha256": "11033679b018fdc9a192e954ef11089444a00a1d89c6279d3c192be9252cf42f"
+        },
+        {
+          "path": "corpus/document/computed-normalization-v1.json",
+          "sha256": "6949c2763e05a1b76ea4f6c29cc7c2df57eb25d80ee625078a1d16545a8b41f4"
+        },
+        {
+          "path": "corpus/document/document-profile-v1.json",
+          "sha256": "84b6c2e55ae591c921536aa755cbb5a9a40a7a19847fe47415e55dce2614c177"
+        },
+        {
+          "path": "corpus/document/normalized-values-v1.json",
+          "sha256": "752f41632d2ad38d74c5c61db5ff5f373b9427596d7766449b84398ddb15bce2"
+        },
+        {
+          "path": "corpus/document/preparation-v1.json",
+          "sha256": "4eb1543929fcf5470eb8cae882127556cd57c02518109545483d8780266b561a"
+        },
+        {
+          "path": "corpus/document/unicode-normalization-oracle-v1.json",
+          "sha256": "8a1c1dce8686d09ca5e53d7b1971620e887237c6019a1189549bd873ec6a87da"
+        },
+        {
+          "path": "corpus/document/validation-v1.json",
+          "sha256": "fce91bfe3c9614ec3862b50c0defc10a9b69ed021671f8382d774d8cb0a20668"
+        },
+        {
+          "path": "corpus/document/validator-edges-v1.json",
+          "sha256": "65cde051396085a01e9723a120460c8e00519eb63acff80d7425533983f011b0"
+        },
+        {
+          "path": "corpus/document/validator-extension-v1.json",
+          "sha256": "dbc005bd77fdd764c873bdde57261bc6cb79a8463164fb83e0da8cbe7603161c"
+        },
+        {
+          "path": "corpus/reporting/materialization-v1.json",
+          "sha256": "975116dc897a0bfdee4a08f9065eb10ccfec06a32f4eb93a48015b08af408c01"
+        }
+      ],
+      "abi_minor": 0,
+      "abi_manifest_sha256": "40e27d2a8e7b8f619274e1bce2525a220d704f5e86a4e46f68d53fc6dafd4fb9"
+    },
+    "ctest": "passed",
+    "installed_c11_consumer": "passed",
+    "ctest_count": 23,
+    "corpus": {
+      "corpora": [
+        {
+          "path": "decimal/decimal-v1.tsv",
+          "sha256": "635db251898707828e24f12b1abb672273552f5f633186a725cc9f50ac08140c"
+        },
+        {
+          "path": "canonical/generic-v1.json",
+          "sha256": "84d21b12e7a2bfd752356d9a6e664bcb332e209d19017e7634e7485a4fa4e250"
+        },
+        {
+          "path": "definition/formula-v1.json",
+          "sha256": "11033679b018fdc9a192e954ef11089444a00a1d89c6279d3c192be9252cf42f"
+        },
+        {
+          "path": "document/computed-normalization-v1.json",
+          "sha256": "6949c2763e05a1b76ea4f6c29cc7c2df57eb25d80ee625078a1d16545a8b41f4"
+        },
+        {
+          "path": "document/document-profile-v1.json",
+          "sha256": "84b6c2e55ae591c921536aa755cbb5a9a40a7a19847fe47415e55dce2614c177"
+        },
+        {
+          "path": "document/normalized-values-v1.json",
+          "sha256": "752f41632d2ad38d74c5c61db5ff5f373b9427596d7766449b84398ddb15bce2"
+        },
+        {
+          "path": "document/preparation-v1.json",
+          "sha256": "4eb1543929fcf5470eb8cae882127556cd57c02518109545483d8780266b561a"
+        },
+        {
+          "path": "document/unicode-normalization-oracle-v1.json",
+          "sha256": "8a1c1dce8686d09ca5e53d7b1971620e887237c6019a1189549bd873ec6a87da"
+        },
+        {
+          "path": "document/validation-v1.json",
+          "sha256": "fce91bfe3c9614ec3862b50c0defc10a9b69ed021671f8382d774d8cb0a20668"
+        },
+        {
+          "path": "document/validator-edges-v1.json",
+          "sha256": "65cde051396085a01e9723a120460c8e00519eb63acff80d7425533983f011b0"
+        },
+        {
+          "path": "document/validator-extension-v1.json",
+          "sha256": "dbc005bd77fdd764c873bdde57261bc6cb79a8463164fb83e0da8cbe7603161c"
+        },
+        {
+          "path": "reporting/materialization-v1.json",
+          "sha256": "975116dc897a0bfdee4a08f9065eb10ccfec06a32f4eb93a48015b08af408c01"
+        }
+      ],
+      "status": 0
+    }
+  }
+}
