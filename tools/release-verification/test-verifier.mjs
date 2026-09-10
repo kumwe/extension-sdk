@@ -2,7 +2,26 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
-import { coordinate, safePath, handoffRecord, canonicalDocument, canonicalManifests, finalize } from './verify-release.mjs';
+import YAML from 'yaml';
+import { coordinate, safePath, handoffRecord, canonicalDocument, canonicalManifests, finalize, serializeAttestation } from './verify-release.mjs';
+const syntheticReceipt = { schema: 'kumwe-release-attestation/v2', artifact_kind: 'framework_php',
+  migration_id: 'KUMWE-MIG-2026-999', change_set: 'KUMWE-CS-2026-999', repository: 'https://github.com/kumwe/synthetic-only',
+  merge_commit: 'a'.repeat(40), version: '0.0.1', tag: 'v0.0.1',
+  source_archive: { url: 'https://example.invalid/synthetic.zip', sha256: 'b'.repeat(64) },
+  artifacts: [{ identity: 'SYNTHETIC UNIT TEST ONLY', url: 'https://example.invalid/synthetic.zip', sha256: 'b'.repeat(64) }],
+  manifests_and_corpora: [{ path: 'MIGRATION-HANDOFF.md', sha256: 'c'.repeat(64) }], abi_and_capabilities: null,
+  sbom: { url: 'https://example.invalid/synthetic.spdx.json', sha256: 'd'.repeat(64) },
+  provenance: 'SYNTHETIC UNIT TEST ONLY: ' + 'long quoted provenance: "value"; '.repeat(20),
+  release_workflow: 'SYNTHETIC UNIT TEST ONLY: ' + 'long workflow reference; '.repeat(20),
+  registry_or_pie_verification: ['SYNTHETIC UNIT TEST ONLY: ' + 'long registry reference; '.repeat(20)],
+  clean_consumer_or_build_verification: ['SYNTHETIC UNIT TEST ONLY: ' + 'long consumer reference; '.repeat(20)],
+  verified_at: 'synthetic-unit-test', verified_by: 'SYNTHETIC UNIT TEST ONLY', status: 'verified' };
+const serializedReceipt = serializeAttestation(syntheticReceipt);
+assert.deepEqual(YAML.parse(serializedReceipt), syntheticReceipt);
+assert.equal(serializedReceipt.includes('\\\n'), false, 'Quoted scalars must not wrap across lines.');
+assert.ok(serializedReceipt.split('\n').find(line => line.startsWith('provenance: ')).length > 500);
+assert.ok(serializedReceipt.split('\n').find(line => line.startsWith('release_workflow: ')).length > 400);
+assert.throws(() => serializeAttestation({ ...syntheticReceipt, status: 'invented' }));
 const capabilities=JSON.parse(fs.readFileSync(new URL('./fixtures/capabilities.json',import.meta.url),'utf8'));
 canonicalDocument('capability_manifest',capabilities);
 assert.throws(()=>canonicalDocument('capability_manifest',{...capabilities,native_requirements:[]}));

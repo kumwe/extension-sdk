@@ -20,6 +20,14 @@ const canonicalSchemas = { public_api_manifest: 'package-public-api.v1.schema.js
 const canonicalValidators = Object.fromEntries(Object.entries(canonicalSchemas).map(([key, file]) =>
   [key, ajv.compile(json(path.join(here, file)))]));
 
+export function serializeAttestation(record) {
+  requireFact(validateAttestation(record), `Attestation schema failed: ${JSON.stringify(validateAttestation.errors)}`);
+  const text = YAML.stringify(record, { lineWidth: 0, blockQuote: false });
+  requireFact(JSON.stringify(YAML.parse(text, { uniqueKeys: true })) === JSON.stringify(record),
+    'Attestation serialization changed its validated values.');
+  return text;
+}
+
 export function canonicalDocument(key, document) {
   const validate = canonicalValidators[key];
   requireFact(validate && validate(document), `Canonical ${key} schema failed: ${JSON.stringify(validate?.errors)}`);
@@ -212,6 +220,9 @@ export async function verifyRelease(raw, output, nativeFixture = null) {
     requireFact(actual === m.sha256, `Released handoff digest drift: ${p}`);
     return { path: p, sha256: actual };
   });
+  const handoffSha256 = sha256(fs.readFileSync(path.join(input.package_root, 'MIGRATION-HANDOFF.md')));
+  requireFact(!manifests.some(m => m.path === 'MIGRATION-HANDOFF.md'), 'A handoff cannot self-declare its own digest.');
+  manifests.push({ path: 'MIGRATION-HANDOFF.md', sha256: handoffSha256 });
   for (const key of ['public_api_manifest', 'capability_manifest', 'service_map']) {
     const p = handoff.framework_php[key];
     requireFact(manifests.some(m => m.path === p), `Handoff does not bind ${key}.`);
@@ -272,7 +283,7 @@ export async function verifyRelease(raw, output, nativeFixture = null) {
     canonical_schema_validation: canonicalValidation,
     manifests_and_corpora: [...manifests, ...corpusFiles.filter(p => !manifests.some(m => m.path === p))
       .map(p => ({ path: p, sha256: sha256(fs.readFileSync(path.join(input.package_root, p))) }))],
-    archived_files: archiveFiles.length, complete_git_export_matched: true, handoff_sha256: sha256(fs.readFileSync(path.join(input.package_root, 'MIGRATION-HANDOFF.md'))),
+    archived_files: archiveFiles.length, complete_git_export_matched: true, handoff_sha256: handoffSha256,
     license: { declaration: input.composer.license, path: licensePath, sha256: sha256(fs.readFileSync(path.join(input.package_root, licensePath))) },
     release_workflow: releaseRuns[0].html_url, merged_pull_request: mergePulls[0].html_url,
     platform_immutable_flag: release.immutable === true, observed_at: observed,
@@ -309,6 +320,10 @@ export function finalize(output, evidenceUrl) {
     && evidence.canonical_schema_validation?.length === 3, 'All canonical manifest schemas must pass before attesting.');
   canonicalManifests(input.package_root, input.handoff, input.version);
   requireFact(sha256(fs.readFileSync(input.archive_path)) === input.archive_sha256, 'Source archive changed before attestation.');
+  const handoffManifests = evidence.manifests_and_corpora.filter(m => m.path === 'MIGRATION-HANDOFF.md');
+  requireFact(handoffManifests.length === 1 && handoffManifests[0].sha256 === evidence.handoff_sha256
+    && sha256(fs.readFileSync(path.join(input.package_root, 'MIGRATION-HANDOFF.md'))) === evidence.handoff_sha256,
+  'Attestation must retain the unchanged independently verified handoff digest.');
   const artifact = p => `${evidenceUrl}#${p}`;
   const record = { schema: 'kumwe-release-attestation/v2', artifact_kind: 'framework_php',
     migration_id: input.handoff.migration_id, change_set: input.handoff.change_set,
@@ -324,8 +339,7 @@ export function finalize(output, evidenceUrl) {
       `${artifact('canonical-schema-verification.json')}; all three canonical manifests and complete handoff schema passed`,
       `${artifact('archive-inventory-verification.json')}; complete git export path/byte inventory matched; canonical API exports=${evidence.consumer.canonical_api_exports_verified}`],
     verified_at: evidence.observed_at, verified_by: `${evidence.verifier.repository}@${evidence.verifier.commit}; ${evidence.verifier.run_url}`, status: 'verified' };
-  requireFact(validateAttestation(record), `Attestation schema failed: ${JSON.stringify(validateAttestation.errors)}`);
-  fs.writeFileSync(path.join(output, 'RELEASE-ATTESTATION.yaml'), YAML.stringify(record));
+  fs.writeFileSync(path.join(output, 'RELEASE-ATTESTATION.yaml'), serializeAttestation(record));
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
