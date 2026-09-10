@@ -6,7 +6,7 @@
   "require": {
     "php": "^8.5",
     "doctrine/dbal": "^4.3",
-    "kumwe/extension-sdk": "0.3.1",
+    "kumwe/extension-sdk": "0.3.2",
     "laminas/laminas-diactoros": "^3.6",
     "psr/http-message": "^2.0",
     "psr/http-server-handler": "^1.0"
@@ -28,20 +28,6 @@
   "scripts": {
     "test": "phpunit"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/access-control.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/business-policy.git"
-    },
-    {
-      "type": "vcs",
-      "url": "https://github.com/kumwe/extension-sdk.git"
-    }
-  ],
   "minimum-stability": "stable",
   "prefer-stable": true
 }

@@ -3,7 +3,13 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
-## Unreleased
+## 0.3.2 — 2026-09-10
+
+- Select published Automation 0.2.2 and Integration 0.2.3 together. Their installed examples now use
+  the consumer Composer autoloader, while their runtime source and public signatures remain unchanged.
+  Keep both source CI lanes and dependency evidence at those exact released commits.
+- Resolve production dependencies through Packagist without the former access-control and business-policy
+  VCS repository overrides; generated scaffolds select this exact SDK successor.
 
 - Align independent native verification with the published Engine and binding 1.0.1 source bundles,
   signed `ci.yml` subjects, complete quality inventories and compressed embedded archive identities.

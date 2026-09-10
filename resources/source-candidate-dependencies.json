@@ -22,10 +22,10 @@
   },
   {
     "package": "kumwe/automation",
-    "version": "0.2.1",
+    "version": "0.2.2",
     "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/automation.git",
-    "requested_ref": "6f09acc6696d11a7ab290e7507d0731bce475549"
+    "requested_ref": "cef19174a9c8a7a6008fe284481a235d13eec195"
   },
   {
     "package": "kumwe/business-definition",
@@ -85,10 +85,10 @@
   },
   {
     "package": "kumwe/integration",
-    "version": "0.2.2",
+    "version": "0.2.3",
     "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/integration.git",
-    "requested_ref": "ff42d4d52753a3fec338b930f665c4283a9f5805"
+    "requested_ref": "219278ccf3a7eed6bbf165c7d26431a87602951d"
   },
   {
     "package": "kumwe/localization",

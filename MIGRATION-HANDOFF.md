@@ -40,7 +40,7 @@
     "repository": "https://github.com/kumwe/extension-sdk",
     "artifact_identity": "kumwe/extension-sdk",
     "canonical_namespace_or_abi": "Kumwe\\Extension\\",
-    "branch": "claude/page-builder-integration-vijc3m",
+    "branch": "agent/sdk-runtime-successor",
     "pull_request": "https://github.com/kumwe/extension-sdk/pull/16"
   },
   "ownership": {
@@ -62,19 +62,19 @@
     "public_manifests": [
       {
         "path": "resources/public-api/v1.json",
-        "sha256": "b1ae30797ef5f6094c4fb665820d0375ffe7bfd7d68866a651ac5c31710f7163"
+        "sha256": "9bcc011d36a21a1ea328f2c450087b31f808e890e5d4f157acd725f110a22987"
       },
       {
         "path": "resources/public-api/signature-details-v1.json",
-        "sha256": "c52d2bf04ff0b08330032d261201b293ba2662f646eafec1b54a35a0c5b4c334"
+        "sha256": "85cf3a36c11a6ad1e123240bd2d8173f701d3c8449d190cccde61a9ecece5850"
       },
       {
         "path": "resources/capabilities/v1.json",
-        "sha256": "e7eef7cf63226850ec5f3539341eb5ae2cdab38ebe5e2a0cfc67d93ed5992f44"
+        "sha256": "c8cb869bebbc725c6ba769d2a82bb74a47a150b4a12a124bc8cb35f0c0c77143"
       },
       {
         "path": "resources/service-map/v1.json",
-        "sha256": "dd59a29e3fabf1b15496e4e69a2b34bb7a0e82b16f2137dd58d7583765ce9257"
+        "sha256": "d782df039a31280c7fe6b4ef43516f18de305b561a2fbb910d23f89c3d50c5d9"
       },
       {
         "path": "resources/contract/classification.json",
@@ -86,7 +86,7 @@
       },
       {
         "path": "resources/PIN.json",
-        "sha256": "e0d50cfccd4a88f439e1782ff8c741cdc3eea01a960fc41c5e73148099d8dfff"
+        "sha256": "f91b172cad9db7360b263f9ad72a1997ab9b14085337a78ed5aa5e5c0bc36a5e"
       }
     ],
     "intentionally_excluded": [
@@ -2303,7 +2303,7 @@
     "examples": [
       "examples/direct-construction.php"
     ],
-    "changelog_record": "CHANGELOG.md 0.3.1"
+    "changelog_record": "CHANGELOG.md 0.3.2"
   },
   "release_expectations": {
     "version_policy": "Exact pre-1.0 canonical dependency pins; SDK 0.3 preserves the existing 96 owned public exports while removing duplicate declarations now owned by extracted packages.",

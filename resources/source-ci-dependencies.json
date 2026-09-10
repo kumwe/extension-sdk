@@ -12,8 +12,8 @@
     "version": "0.2.1"
   },
   "kumwe/automation": {
-    "ref": "6f09acc6696d11a7ab290e7507d0731bce475549",
-    "version": "0.2.1"
+    "version": "0.2.2",
+    "ref": "cef19174a9c8a7a6008fe284481a235d13eec195"
   },
   "kumwe/business-definition": {
     "ref": "1cb59229f311067e8cfdd773a34e34cfeb501791",
@@ -48,8 +48,8 @@
     "version": "0.1.2"
   },
   "kumwe/integration": {
-    "ref": "ff42d4d52753a3fec338b930f665c4283a9f5805",
-    "version": "0.2.2"
+    "version": "0.2.3",
+    "ref": "219278ccf3a7eed6bbf165c7d26431a87602951d"
   },
   "kumwe/localization": {
     "ref": "8571ab575b9b9f2dc1b8a25b3c902d9cf44093cb",
