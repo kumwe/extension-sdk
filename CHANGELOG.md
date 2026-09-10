@@ -3,6 +3,16 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## 0.3.1 — 2026-09-10
+
+- Select the published, independently verified `kumwe/producer` 0.3.0 (tag `v0.3.0`, commit
+  `65d0a10ce39954738f091ec4b5e2626768053c8d`) as the Studio document-schema authority in the exact runtime
+  requirement, the stable source selection, the candidate dependency evidence and both CI checkouts, so a
+  consumer that already pins Producer 0.3.0 resolves this SDK without an alias. The SDK reads the same
+  `StudioDocumentSchemaRegistry`, `CanonicalJson` and `CanonicalEncodingException` exports it read from 0.2.2;
+  Producer 0.3.0 adds its Deployment layer without changing them.
+- Generate scaffolds against this exact successor version.
+
 ## 0.3.0 — 2026-09-07
 
 - Ship governed Version 2 API, capability and service manifests, full source-derived API documentation,

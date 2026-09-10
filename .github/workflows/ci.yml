@@ -167,7 +167,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/producer
-          ref: 6b892c3382db02999dac92be1f9afde94ec284f9
+          ref: 65d0a10ce39954738f091ec4b5e2626768053c8d
           path: dependencies/producer
           persist-credentials: false
       - name: Check out computation source

@@ -28,7 +28,7 @@ composer require kumwe/extension-sdk
 ```
 
 Composer installs the canonical library contracts used by the SDK, including conversion value types.
-The Studio document-schema authority is supplied by `kumwe/producer` in the released 0.2 line.
+The Studio document-schema authority is supplied by `kumwe/producer` at the released 0.3.0.
 
 The author toolchain is a PHP API. Start with `Kumwe\Extension\Toolchain\ComponentScaffolder`,
 `DeterministicPackageBuilder`, `PackageSigner`, `PackageInspector` or
