@@ -6,6 +6,7 @@ import { spawnSync } from 'node:child_process';
 import YAML from 'yaml';
 import Ajv from 'ajv/dist/2020.js';
 import { buildNativeFixture } from './build-native-fixture.mjs';
+import { inventories, qualityCheckout, safePath } from '../native-release-verification/verify-native.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const json = file => JSON.parse(fs.readFileSync(file, 'utf8'));
@@ -71,9 +72,9 @@ export function validateNativeEnvelope(entry, envelope, attestationBytes) {
   const signature = record.signature_verification;
   need(signature?.status === 'passed' && signature.repository === entry.name
     && signature.source_commit === entry.source_commit && /^refs\/heads\/[A-Za-z0-9._/-]+$/.test(signature.source_ref || '')
-    && signature.certificate_identity === `https://github.com/${entry.name}/.github/workflows/release.yml@${signature.source_ref}`
+    && signature.certificate_identity === `https://github.com/${entry.name}/.github/workflows/ci.yml@${signature.source_ref}`
     && signature.deny_self_hosted_runners === true && Array.isArray(signature.subjects)
-    && signature.subjects.length === 5 && new Set(signature.subjects.map(s => s.name)).size === 5,
+    && signature.subjects.length === 4 && new Set(signature.subjects.map(s => s.name)).size === 4,
   'Mandatory upstream publisher signature verification is absent or differs.');
   matchingFile(path.join(envelope, 'build-provenance.sigstore.json'), signature.bundle_sha256);
   const source = record.source_verification;
@@ -84,9 +85,9 @@ export function validateNativeEnvelope(entry, envelope, attestationBytes) {
     && record.build?.status === 'passed' && record.build.network_disabled === true
     && record.publisher?.conclusion === 'success', 'Native source/schema/build verification is incomplete.');
   const archiveName = kind === 'native_cpp' ? 'kumwe-engine-source.tar.gz' : 'kumwe-engine-php-source.tar.gz';
-  const names = [archiveName, 'source.json', 'source.spdx.json', 'source.provenance.json', 'SHA256SUMS'];
-  need(record.input.archive_name === archiveName && record.assets?.length === 6
-    && new Set(record.assets.map(asset => asset.identity)).size === 6, 'Native source asset inventory differs.');
+  const names = [archiveName, 'source.json', 'source.spdx.json', 'SHA256SUMS'];
+  need(record.input.archive_name === archiveName && record.assets?.length === 5
+    && new Set(record.assets.map(asset => asset.identity)).size === 5, 'Native source asset inventory differs.');
   for (const name of names) {
     const subject = signature.subjects.find(s => s.name === name);
     const asset = record.assets.find(a => a.identity === name);
@@ -120,11 +121,33 @@ export function validateNativeEnvelope(entry, envelope, attestationBytes) {
       && !relative.split('/').some(part => ['', '.', '..'].includes(part)), 'Unsafe native envelope inventory path.');
     matchingFile(path.join(envelope, relative), expected);
   }
-  need(record.embedded_engine && /^[a-f0-9]{40}$/.test(record.embedded_engine.source_commit || ''), 'Native raw Engine source identity is absent.');
-  matchingFile(path.join(envelope, 'embedded-engine-source.tar'), record.embedded_engine.raw_tar_sha256);
-  if (kind === 'native_cpp') need(record.embedded_engine.source_commit === entry.source_commit, 'Engine raw source belongs to another commit.');
+  const checkouts = source.quality_checkouts;
+  const requiredJobs = inventories[entry.name];
+  need(Array.isArray(checkouts) && checkouts.length === requiredJobs.length
+    && checkouts.every(checkout => checkout && typeof checkout === 'object'
+      && requiredJobs.includes(checkout.job) && Number.isSafeInteger(checkout.job_id) && checkout.job_id > 0
+      && checkout.source_commit === entry.source_commit)
+    && new Set(checkouts.map(checkout => checkout.job)).size === requiredJobs.length
+    && new Set(checkouts.map(checkout => checkout.job_id)).size === requiredJobs.length
+    && new Set(checkouts.map(checkout => checkout.path)).size === requiredJobs.length,
+  'Native evidence must preserve every required quality job checkout exactly once.');
+  for (const checkout of checkouts) {
+    const relative = safePath(checkout.path);
+    need(new RegExp(`^quality-checkout-[1-9][0-9]*-${checkout.job_id}\\.log$`).test(relative)
+      && Object.hasOwn(inventory, relative) && inventory[relative] === checkout.sha256,
+      'Native quality checkout log is not bound by the evidence inventory.');
+    const file = path.join(envelope, relative);
+    matchingFile(file, checkout.sha256);
+    qualityCheckout(fs.readFileSync(file, 'utf8'), entry.source_commit);
+  }
+  need(record.embedded_engine && /^[a-f0-9]{40}$/.test(record.embedded_engine.source_commit || '')
+    && digest(record.embedded_engine.release_archive_sha256), 'Native published Engine source identity is absent.');
+  matchingFile(path.join(envelope, 'embedded-engine-source.tar.gz'), record.embedded_engine.release_archive_sha256);
+  if (kind === 'native_cpp') need(record.embedded_engine.source_commit === entry.source_commit
+    && record.embedded_engine.release_archive_sha256 === entry.archive_sha256,
+  'Engine embedding archive differs from the selected published source.');
   else need(record.build.extension_version === entry.version && record.build.actual_tuple?.embedded_engine_commit === record.embedded_engine.source_commit
-    && record.build.actual_tuple.embedded_source_sha256 === record.embedded_engine.raw_tar_sha256,
+    && record.build.actual_tuple.embedded_source_sha256 === record.embedded_engine.release_archive_sha256,
   'Upstream actual binding build does not match its recorded Engine source.');
   return record;
 }
@@ -164,10 +187,9 @@ export async function materializeNativeEvidence(raw, destination) {
     owners[kind] = { entry, directory, record, member };
   }
   need(owners.extension.record.embedded_engine.source_commit === selection.engine.source_commit
-    && owners.extension.record.embedded_engine.raw_tar_sha256 === owners.engine.record.embedded_engine.raw_tar_sha256
     && owners.extension.record.embedded_engine.release_archive_sha256 === selection.engine.archive_sha256
     && owners.engine.record.embedded_engine.release_archive_sha256 === selection.engine.archive_sha256,
-  'Engine and binding evidence do not identify the same source, raw embedding TAR and published compressed archive.');
+  'Engine and binding evidence do not identify the same source and published compressed archive.');
   const binding = owners.extension;
   const assets = path.join(binding.directory, 'evidence', 'publisher-assets');
   const extracted = path.join(output, 'binding-source');
@@ -175,7 +197,9 @@ export async function materializeNativeEvidence(raw, destination) {
     path.join(assets, binding.record.input.archive_name), extracted, 'kumwe-engine-php']);
   const fixtureInput = { schema: 'kumwe-verified-native-fixture-input/v1', package: selection.extension.name,
     version: selection.extension.version, source_commit: selection.extension.source_commit,
-    source_directory: path.join(extracted, 'kumwe-engine-php') };
+    source_directory: path.join(extracted, 'kumwe-engine-php'),
+    release_attestation_path: binding.member,
+    release_attestation_sha256: selection.extension.attestation.member_sha256 };
   for (const [key, name] of [['source_record', 'source.json'], ['source_archive', binding.record.input.archive_name], ['source_sbom', 'source.spdx.json']]) {
     fixtureInput[`${key}_path`] = path.join(assets, name);
     fixtureInput[`${key}_sha256`] = binding.record.assets.find(a => a.identity === name).sha256;
@@ -191,8 +215,8 @@ export async function materializeNativeEvidence(raw, destination) {
         member: owner.entry.attestation.member, member_sha256: owner.entry.attestation.member_sha256,
         archive_path: path.join(owner.directory, 'attestation.zip'), member_path: owner.member } };
   }
-  native.engine.embedding_archive_path = path.join(binding.directory, 'evidence', 'embedded-engine-source.tar');
-  native.engine.embedding_archive_sha256 = binding.record.embedded_engine.raw_tar_sha256;
+  native.engine.embedding_archive_path = path.join(binding.directory, 'evidence', 'embedded-engine-source.tar.gz');
+  native.engine.embedding_archive_sha256 = binding.record.embedded_engine.release_archive_sha256;
   const result = { schema: 'kumwe-qualified-native-fixture/v1', status: 'passed', selection, fixture, native,
     verification_scope: 'Preserved upstream release/signature/source/offline-build evidence validated; this fresh fixture uses a source/build-derived expected tuple.' };
   save(path.join(output, 'qualification-fixture.json'), result);

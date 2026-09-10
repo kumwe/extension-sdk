@@ -3,6 +3,8 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import YAML from 'yaml';
+import { validateUpstreamReceipt } from '../native-release-verification/verify-native.mjs';
 
 // A build fixture over an already independently verified stable source bundle. This helper does
 // not download releases, verify publisher signatures, issue attestations, or mutate GITHUB_ENV.
@@ -56,16 +58,23 @@ export function validateNativeFixture(input) {
   const root = input.source_directory;
   requireFact(typeof root === 'string' && path.isAbsolute(root) && fs.realpathSync(root) === root
     && fs.statSync(root).isDirectory() && !fs.lstatSync(root).isSymbolicLink(), 'Native fixture source directory is not canonical.');
-  for (const key of ['source_record', 'source_archive', 'source_sbom']) {
+  for (const key of ['source_record', 'source_archive', 'source_sbom', 'release_attestation']) {
     canonicalFile(input[`${key}_path`], input[`${key}_sha256`]);
   }
   const record = json(input.source_record_path);
-  requireFact(record.schema === 'kumwe-native-source-bundle/v1' && record.package === input.package
+  requireFact(record.schema === 'kumwe-engine-php-source-release/v1' && record.package === input.package
     && record.source?.repository === 'https://github.com/kumwe/kumwe-engine'
-    && record.source?.commit === input.source_commit && record.identity?.version === input.version
+    && record.source?.commit === input.source_commit && record.version === input.version && record.tag === `v${input.version}`
     && record.archive?.sha256 === input.source_archive_sha256 && record.sbom?.sha256 === input.source_sbom_sha256
-    && Array.isArray(record.stable_source_blockers) && record.stable_source_blockers.length === 0,
+    && (!Object.hasOwn(record, 'stable_source_blockers') || (Array.isArray(record.stable_source_blockers)
+      && record.stable_source_blockers.length === 0)),
   'Native fixture source record differs from the selected verified stable bundle.');
+  const receipt = validateUpstreamReceipt(YAML.parse(fs.readFileSync(input.release_attestation_path, 'utf8'),
+    { uniqueKeys: true, maxAliasCount: 20 }), { name: input.package, version: input.version,
+    commit: input.source_commit, archive_sha256: input.source_archive_sha256 });
+  requireFact(receipt.artifact_kind === 'php_extension' && receipt.sbom.sha256 === input.source_sbom_sha256
+    && receipt.artifacts.some(asset => asset.identity === 'source.json' && asset.sha256 === input.source_record_sha256),
+  'Native fixture receipt does not bind its original source metadata and SPDX inventory.');
   const sbom = json(input.source_sbom_path);
   const inventory = {};
   requireFact(sbom.spdxVersion === 'SPDX-2.3' && Array.isArray(sbom.files) && sbom.files.length > 0,
@@ -87,9 +96,14 @@ export function validateNativeFixture(input) {
   const header = fs.readFileSync(path.join(root, 'php_kumwe_engine.h'), 'utf8');
   requireFact(header.match(/^#define PHP_KUMWE_ENGINE_VERSION "([^"]+)"$/m)?.[1] === input.version
     && composer.name === input.package && composer.type === 'php-ext'
-    && compatibility.version === input.version && compatibility.state !== 'candidate'
-    && compatibility.publication_allowed === true && lock.state !== 'candidate'
-    && lock.release_verified === true && lock.release && lock.external_attestation,
+    && compatibility.schema === 'kumwe-zend-compatibility/v1' && compatibility.version === input.version
+    && Array.isArray(compatibility.thread_models) && compatibility.thread_models.includes('NTS')
+    && compatibility.thread_models.includes('ZTS') && compatibility.fallback === false
+    && lock.schema === 'kumwe-embedded-engine/v2' && lock.repository === 'https://github.com/kumwe/engine'
+    && lock.version === input.version && lock.release === `v${input.version}`
+    && /^[a-f0-9]{40}$/.test(lock.commit || '') && /^[a-f0-9]{64}$/.test(lock.archive_sha256 || '')
+    && record.engine?.commit === lock.commit && record.engine.archive_sha256 === lock.archive_sha256
+    && record.engine.version === lock.version,
   'Native fixture source is not the exact stable, verified-Engine binding selection.');
   return { input, record, inventory };
 }
@@ -157,7 +171,9 @@ export function buildNativeFixture(input, destination) {
   const observed = JSON.parse(command(phpBinary, ['-r', nativeFixtureRuntimeProbe], build, scoped, true));
   requireFact(equal(observed, fullExpected), 'Native fixture actual module tuple differs from its source/build expectation.');
   requireFact(equal(sourceInventory(input.source_directory), verified.inventory), 'Verified original source changed during fixture build.');
-  for (const key of ['source_record', 'source_archive', 'source_sbom']) canonicalFile(input[`${key}_path`], input[`${key}_sha256`]);
+  for (const key of ['source_record', 'source_archive', 'source_sbom', 'release_attestation']) {
+    canonicalFile(input[`${key}_path`], input[`${key}_sha256`]);
+  }
   const result = { schema: 'kumwe-native-build-fixture/v1', status: 'passed', release_attestation: false,
     source_verification: 'independent upstream verifier; this helper checks source bytes and builds the test fixture',
     package: input.package, version: input.version, source_commit: input.source_commit,

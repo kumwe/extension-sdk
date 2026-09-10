@@ -15,11 +15,11 @@ export const requireFact = (fact, message) => { if (!fact) throw new Error(messa
 const ajv = new Ajv({ strict: false, allErrors: true });
 const handoffSchema = ajv.compile(json(path.join(parsers, 'migration-handoff.schema.json')));
 const attestationSchema = ajv.compile(json(path.join(parsers, 'release-attestation.v2.schema.json')));
-const inventories = {
+export const inventories = {
   'kumwe/engine': ['native (ubuntu-24.04, gcc, g++)', 'native (ubuntu-24.04, clang, clang++)',
     'native (macos-14, clang, clang++)', 'sanitizers-fuzz', 'thread-sanitizer', 'archive-and-faults'],
   'kumwe/kumwe-engine': ['source-release-preparation', 'binding', 'address-undefined-sanitizers',
-    'clean-pie', 'whole-boundary-benchmarks'],
+    'binding-zts', 'clean-pie', 'whole-boundary-benchmarks'],
 };
 
 export function coordinate(raw) {
@@ -28,7 +28,13 @@ export function coordinate(raw) {
     && raw.version !== '0.0.0', 'An exact stable native version is required.');
   requireFact(/^[a-f0-9]{40}$/.test(raw.source_commit || ''), 'An exact native source commit is required.');
   requireFact(/^[a-f0-9]{64}$/.test(raw.archive_sha256 || ''), 'An independently supplied archive digest is required.');
-  return { name: raw.name, version: raw.version, source_commit: raw.source_commit,
+  const receipts = raw.upstream_receipts ?? {};
+  requireFact(receipts && typeof receipts === 'object' && !Array.isArray(receipts), 'Invalid external prerequisite receipts.');
+  for (const [name, reference] of Object.entries(receipts)) {
+    requireFact(/^kumwe\/[a-z][a-z0-9-]*$/.test(name), 'Invalid prerequisite owner.');
+    receiptReference(reference);
+  }
+  return { name: raw.name, version: raw.version, source_commit: raw.source_commit, upstream_receipts: receipts,
     archive_sha256: raw.archive_sha256, tag: `v${raw.version}`,
     kind: raw.name === 'kumwe/engine' ? 'native_cpp' : 'php_extension',
     archive_name: raw.name === 'kumwe/engine' ? 'kumwe-engine-source.tar.gz' : 'kumwe-engine-php-source.tar.gz' };
@@ -68,25 +74,42 @@ export function validateAttestation(record) {
 }
 
 export function qualityRun(run, jobs, input, branch) {
-  requireFact(run.head_sha === input.source_commit && run.head_branch === branch && run.event === 'push'
-    && run.path === '.github/workflows/ci.yml' && run.status === 'completed' && run.conclusion === 'success'
+  requireFact(run.head_sha === input.source_commit && run.head_branch === branch && ['push', 'workflow_dispatch'].includes(run.event)
+    && run.path === '.github/workflows/ci.yml' && run.status === 'completed'
     && run.repository?.full_name === input.name && run.head_repository?.full_name === input.name,
   'Native quality run does not identify the exact successful default-branch source.');
   const expected = inventories[input.name];
   const names = jobs.map(job => job.name);
-  requireFact(names.length === expected.length && new Set(names).size === names.length
-    && expected.every(name => names.includes(name)) && jobs.every(job => job.status === 'completed'
-      && job.conclusion === 'success'), 'Missing, skipped, duplicated or failed required native quality job.');
+  const administrative = input.kind === 'native_cpp'
+    ? ['Resolve tested commit and version', 'Publish source release', 'Trigger the PHP binding sync']
+    : ['Publish source release'];
+  requireFact(new Set(names).size === names.length && names.every(name => expected.includes(name) || administrative.includes(name))
+    && expected.every(name => jobs.some(job => job.name === name && job.status === 'completed'
+      && job.conclusion === 'success')), 'Missing, skipped, duplicated or failed required native quality job.');
+  // Publication and downstream notification are separate jobs. A notification failure cannot
+  // erase successful native test evidence; every required quality lane above must actually pass.
+  requireFact(jobs.every(job => job.status === 'completed'), 'Native workflow has unfinished jobs.');
+  requireFact(run.conclusion === 'success' || (run.conclusion === 'failure'
+    && jobs.some(job => job.name === 'Trigger the PHP binding sync' && job.conclusion === 'failure')
+    && jobs.every(job => job.conclusion === 'success' || job.name === 'Trigger the PHP binding sync')),
+  'Native workflow failure is not confined to the downstream binding notification.');
+}
+
+export function qualityCheckout(log, commit) {
+  requireFact(typeof log === 'string' && /^[a-f0-9]{40}$/.test(commit)
+    && new RegExp(`git checkout --progress --force ${commit}(?:\\r?\\n|\\s)`).test(log)
+    && new RegExp(`git log -1 --format=%H\\r?\\n[^\\n]*\\b${commit}(?:\\r?\\n|$)`).test(log),
+  'A required native quality lane did not prove checkout of the exact released source.');
 }
 
 export function releaseAssets(release, input) {
   requireFact(release.tag_name === input.tag && release.published_at && !release.draft && !release.prerelease,
     'A published stable native release is required.');
-  const names = [input.archive_name, 'source.json', 'source.spdx.json', 'source.provenance.json',
+  const names = [input.archive_name, 'source.json', 'source.spdx.json',
     'SHA256SUMS', 'build-provenance.sigstore.json'];
   requireFact(release.assets?.length === names.length && new Set(release.assets.map(a => a.name)).size === names.length
     && names.every(name => release.assets.some(a => a.name === name && a.state === 'uploaded' && a.size > 0)),
-  'Published native release must contain the six complete original assets.');
+  'Published native release must contain the five complete original assets.');
   return names;
 }
 
@@ -122,10 +145,22 @@ function readCommand(args, cwd) {
   return result.stdout.trim();
 }
 
-async function upstreamReceipt(reference, expected, output, index) {
+export function receiptReference(reference) {
   requireFact(reference && /^[a-f0-9]{64}$/.test(reference.sha256 || '')
-    && /^https:\/\/raw\.githubusercontent\.com\/kumwe\/extension-sdk\/[a-f0-9]{40}\/.+/.test(reference.uri || ''),
+    && /^https:\/\/raw\.githubusercontent\.com\/kumwe\/extension-sdk\/[a-f0-9]{40}\/evidence\/[A-Za-z0-9._/-]+$/.test(reference.uri || '')
+    && !reference.uri.split('/').some(part => part === '.' || part === '..'),
   'Upstream receipt must identify an immutable external Git YAML and its own digest.');
+  return reference;
+}
+
+export function selectReceipt(input, expected, sourceReference) {
+  // Immutable source records retain their source-time observations. A later external receipt
+  // may establish verification, but cannot change any semantic/source/archive commitment.
+  return receiptReference(input.upstream_receipts[expected.name] ?? sourceReference);
+}
+
+async function upstreamReceipt(reference, expected, output, index) {
+  receiptReference(reference);
   const bytes = await request(reference.uri, true);
   requireFact(hash(bytes) === reference.sha256, 'Upstream attestation digest differs.');
   const record = validateUpstreamReceipt(YAML.parse(bytes.toString('utf8'), { uniqueKeys: true, maxAliasCount: 20 }), expected);
@@ -136,13 +171,42 @@ async function upstreamReceipt(reference, expected, output, index) {
 
 export function validateUpstreamReceipt(raw, expected) {
   const record = validateAttestation(raw);
+  const kind = expected.name === 'kumwe/engine' ? 'native_cpp'
+    : expected.name === 'kumwe/kumwe-engine' ? 'php_extension' : 'framework_php';
   requireFact(record.repository === `https://github.com/${expected.name}` && record.version === expected.version
-    && record.merge_commit === expected.commit && record.tag === `v${expected.version}`, 'Upstream receipt coordinate differs.');
+    && record.merge_commit === expected.commit && record.tag === `v${expected.version}` && record.artifact_kind === kind,
+  'Upstream receipt coordinate or artifact kind differs.');
   if (expected.archive_sha256) requireFact(record.source_archive.sha256 === expected.archive_sha256,
     'Upstream receipt archive digest differs.');
   for (const [p, digest] of Object.entries(expected.corpora || {})) requireFact(record.manifests_and_corpora.some(
     entry => entry.path === p && entry.sha256 === digest), `Upstream receipt lacks the exact corpus: ${p}`);
   return record;
+}
+
+export function sourceInventory(root) {
+  const files = {};
+  const visit = relative => {
+    for (const name of fs.readdirSync(path.join(root, relative)).sort()) {
+      const child = relative ? `${relative}/${name}` : name;
+      safePath(child);
+      const file = path.join(root, child), stat = fs.lstatSync(file);
+      requireFact(!stat.isSymbolicLink(), 'Embedded source contains a link.');
+      if (stat.isDirectory()) visit(child);
+      else {
+        requireFact(stat.isFile(), 'Embedded source contains a special file.');
+        files[child] = hash(fs.readFileSync(file));
+      }
+    }
+  };
+  visit('');
+  return files;
+}
+
+export function identicalInventory(actual, expected) {
+  requireFact(actual && expected && typeof expected === 'object' && !Array.isArray(expected)
+    && Object.keys(actual).length > 0 && Object.keys(actual).length === Object.keys(expected).length
+    && Object.entries(actual).every(([name, digest]) => expected[name] === digest),
+  'Embedded Engine files differ from the exact published source archive.');
 }
 
 async function verifyUpstreams(root, input, output) {
@@ -157,29 +221,33 @@ async function verifyUpstreams(root, input, output) {
   if (Object.hasOwn(baseline, 'service_map_digest')) {
     baselineManifests['resources/service-map/v1.json'] = baseline.service_map_digest;
   }
-  result.push(await upstreamReceipt(baseline.attestation, { name: 'kumwe/computation', version: baseline.version,
+  const baselineExpected = { name: 'kumwe/computation', version: baseline.version,
     commit: baseline.commit, archive_sha256: baseline.archive_sha256, corpora: baselineManifests },
-  output, result.length));
+    baselineReference = selectReceipt(input, baselineExpected, baseline.attestation);
+  result.push(await upstreamReceipt(baselineReference, baselineExpected, output, result.length));
   for (const module of contracts.modules) {
     const release = module.semantic_release;
-    requireFact(module.release_verified === true && release?.external_attestation, 'Unverified semantic owner.');
+    requireFact(release && release.publication === 'published', 'Unpublished semantic owner.');
     const corpora = { ...release.corpus_digests, [safePath(release.corpus_path)]: release.corpus_sha256 };
     for (const [field, file] of [['api_digest', 'resources/public-api/v1.json'],
       ['capability_digest', 'resources/capabilities/v1.json'], ['service_map_digest', 'resources/service-map/v1.json']]) {
       if (Object.hasOwn(release, field)) corpora[file] = release[field];
     }
-    result.push(await upstreamReceipt(release.external_attestation, { name: release.repository,
+    const expected = { name: release.repository,
       version: release.version, commit: release.commit, archive_sha256: release.archive_sha256,
-      corpora }, output, result.length));
+      corpora };
+    result.push(await upstreamReceipt(selectReceipt(input, expected, release.external_attestation), expected, output, result.length));
   }
   if (input.kind === 'php_extension') {
     const lock = json(path.join(root, 'resources/engine-lock.json'));
-    requireFact(lock.release_verified === true, 'Embedded Engine has no independent verified release.');
-    requireFact(lock.release === `v${lock.version}` && /^[a-f0-9]{64}$/.test(lock.release_archive_sha256 || ''),
-      'Embedded Engine must distinguish its stable release and compressed release archive from the raw embedding TAR.');
-    result.push(await upstreamReceipt(lock.external_attestation, { name: 'kumwe/engine',
-      version: lock.version, commit: lock.commit, archive_sha256: lock.release_archive_sha256 }, output, result.length));
+    requireFact(lock.schema === 'kumwe-embedded-engine/v2' && lock.repository === 'https://github.com/kumwe/engine'
+      && lock.release === `v${lock.version}` && /^[a-f0-9]{64}$/.test(lock.archive_sha256 || ''),
+    'Embedded Engine must identify its stable compressed release archive.');
+    const expected = { name: 'kumwe/engine', version: lock.version, commit: lock.commit, archive_sha256: lock.archive_sha256 };
+    result.push(await upstreamReceipt(selectReceipt(input, expected, null), expected, output, result.length));
   }
+  requireFact(Object.keys(input.upstream_receipts).every(name => result.some(receipt => receipt.repository === `https://github.com/${name}`)),
+    'External receipt was supplied for an unrelated prerequisite.');
   return result;
 }
 
@@ -204,25 +272,41 @@ export async function verifyNative(raw, destination) {
   const runResponse = await get(`/actions/runs?head_sha=${input.source_commit}&per_page=100`);
   requireFact(runResponse.total_count <= runResponse.workflow_runs.length, 'Incomplete source workflow inventory.');
   const runs = runResponse.workflow_runs;
-  const sourceQuality = runs.find(run => run.path === '.github/workflows/ci.yml' && run.event === 'push'
-    && run.head_sha === input.source_commit && run.head_branch === branch && run.conclusion === 'success');
-  requireFact(sourceQuality, 'No successful actual default-branch native source gate.');
-  const quality = await get(`/actions/runs/${sourceQuality.id}`);
-  const jobs = await get(`/actions/runs/${sourceQuality.id}/jobs?per_page=100`);
-  requireFact(jobs.total_count === jobs.jobs.length, 'Incomplete native quality job inventory.');
-  qualityRun(quality, jobs.jobs, input, branch);
-  const publisher = runs.find(run => run.path === '.github/workflows/release.yml' && run.head_sha === input.source_commit
-    && run.head_branch === branch && ['workflow_run', 'workflow_dispatch'].includes(run.event)
-    && run.status === 'completed' && run.conclusion === 'success');
-  requireFact(publisher, 'No successful exact-source native publication workflow.');
-  const publisherJobs = await get(`/actions/runs/${publisher.id}/jobs?per_page=100`);
-  requireFact(publisherJobs.total_count === publisherJobs.jobs.length
-    && ['publisher-tests', 'publish'].every(name => publisherJobs.jobs.some(job => job.name === name
-      && job.status === 'completed' && job.conclusion === 'success')), 'Native publisher did not complete both required jobs.');
+  let quality, jobs, qualityCheckouts;
+  const rejectedQuality = [];
+  for (const candidate of runs.filter(run => run.path === '.github/workflows/ci.yml'
+    && ['push', 'workflow_dispatch'].includes(run.event) && run.head_sha === input.source_commit
+    && run.head_branch === branch && run.status === 'completed')) {
+    const observed = await get(`/actions/runs/${candidate.id}`);
+    const inventory = await get(`/actions/runs/${candidate.id}/jobs?per_page=100`);
+    requireFact(inventory.total_count === inventory.jobs.length, 'Incomplete native quality job inventory.');
+    const checkouts = [];
+    try {
+      qualityRun(observed, inventory.jobs, input, branch);
+      for (const job of inventory.jobs.filter(job => inventories[input.name].includes(job.name))) {
+        const file = `quality-checkout-${observed.id}-${job.id}.log`;
+        command(['gh', 'run', 'view', String(observed.id), '--repo', input.name, '--job', String(job.id), '--log'],
+          output, path.join(output, file));
+        const bytes = fs.readFileSync(path.join(output, file));
+        qualityCheckout(bytes.toString('utf8'), input.source_commit);
+        checkouts.push({ job: job.name, job_id: job.id, source_commit: input.source_commit, path: file, sha256: hash(bytes) });
+      }
+    }
+    catch (error) { rejectedQuality.push({ run: observed, jobs: inventory, reason: error.message }); continue; }
+    quality = observed; jobs = inventory; qualityCheckouts = checkouts; break;
+  }
+  requireFact(quality && jobs, 'No complete successful native quality inventory for the exact default-branch source.');
+  const publication = jobs.jobs.find(job => job.name === 'Publish source release');
+  requireFact(publication?.status === 'completed' && publication.conclusion === 'success',
+    'The exact-source native workflow did not complete its publication job.');
+  const publisher = { ...quality, conclusion: publication.conclusion, job_url: publication.html_url,
+    workflow_conclusion: quality.conclusion };
+  const publisherJobs = jobs;
   const merged = await get(`/commits/${input.source_commit}/pulls`);
   requireFact(merged.some(pr => pr.merged_at && pr.merge_commit_sha === input.source_commit),
     'Native source does not identify an observed merged pull request.');
-  save(path.join(output, 'github-observations.json'), { repository, tag, release, quality, jobs, publisher, publisherJobs, merged });
+  save(path.join(output, 'github-observations.json'), { repository, tag, release, quality, jobs, rejectedQuality,
+    publisher, publisherJobs, merged });
   const bundle = path.join(output, 'publisher-assets');
   fs.mkdirSync(bundle);
   for (const name of assets) {
@@ -244,17 +328,27 @@ export async function verifyNative(raw, destination) {
   const source = json(path.join(bundle, 'source.json'));
   requireFact(source.package === input.name && source.source.repository === `https://github.com/${input.name}`
     && source.source.commit === input.source_commit && source.source.tree === readCommand(['git', 'rev-parse', 'HEAD^{tree}'], checkout)
-    && source.identity.version === input.version && source.archive.sha256 === input.archive_sha256,
+    && source.schema === (input.kind === 'native_cpp' ? 'kumwe-engine-source-release/v1' : 'kumwe-engine-php-source-release/v1')
+    && source.version === input.version && source.tag === input.tag && source.archive.sha256 === input.archive_sha256,
   'Published native source metadata differs from the exact observed Git source.');
   const signature = path.join(output, 'build-provenance.sigstore.json');
   for (const name of assets.filter(name => name !== 'build-provenance.sigstore.json')) {
     command(['gh', 'attestation', 'verify', path.join(bundle, name), '--bundle', signature, '--repo', input.name,
       '--source-digest', input.source_commit, '--source-ref', `refs/heads/${branch}`,
-      '--cert-identity', `https://github.com/${input.name}/.github/workflows/release.yml@refs/heads/${branch}`,
+      '--cert-identity', `https://github.com/${input.name}/.github/workflows/ci.yml@refs/heads/${branch}`,
       '--deny-self-hosted-runners', '--format', 'json'], output, path.join(output, `provenance-${name}.json`));
   }
-  command(['python3', 'tools/release-source.py', 'verify', bundle, '--expected-commit', input.source_commit,
-    '--expected-sha256', input.archive_sha256, '--require-stable'], checkout, path.join(output, 'source-bundle-verification.log'));
+  if (input.kind === 'php_extension') {
+    command(['php', 'tools/release-source.php', 'verify', bundle, '--expected-commit', input.source_commit,
+      '--expected-sha256', input.archive_sha256], checkout, path.join(output, 'source-bundle-verification.log'));
+  } else {
+    const reproduced = path.join(output, 'reproduced-source');
+    command(['bash', 'tools/release-bundle.sh', reproduced], checkout, path.join(output, 'source-bundle-verification.log'));
+    for (const name of assets.filter(name => name !== 'build-provenance.sigstore.json')) {
+      requireFact(fs.readFileSync(path.join(reproduced, name)).equals(fs.readFileSync(path.join(bundle, name))),
+        `Published source bundle reproduction differs: ${name}`);
+    }
+  }
   const archive = path.join(output, 'archive');
   command(['python3', path.join(here, 'extract-source.py'), path.join(bundle, input.archive_name), archive,
     input.kind === 'native_cpp' ? 'kumwe-engine' : 'kumwe-engine-php'], output, path.join(output, 'archive-extraction.log'));
@@ -276,22 +370,33 @@ export async function verifyNative(raw, destination) {
   }
   const upstreams = await verifyUpstreams(root, input, output);
   const engineCommit = input.kind === 'native_cpp' ? input.source_commit : json(path.join(root, 'resources/engine-lock.json')).commit;
-  let engineCheckout = checkout;
+  const embeddedArchive = path.join(output, 'embedded-engine-source.tar.gz');
+  let engineArchiveDigest = input.archive_sha256;
   if (input.kind === 'php_extension') {
-    engineCheckout = path.join(output, 'engine-identity-checkout');
-    command(['git', 'clone', '--no-checkout', 'https://github.com/kumwe/engine.git', engineCheckout], output,
-      path.join(output, 'engine-checkout.log'));
-    command(['git', 'checkout', '--detach', engineCommit], engineCheckout, path.join(output, 'engine-selection.log'));
+    const lock = json(path.join(root, 'resources/engine-lock.json'));
+    engineArchiveDigest = lock.archive_sha256;
+    const engineInput = coordinate({ name: 'kumwe/engine', version: lock.version, source_commit: lock.commit,
+      archive_sha256: lock.archive_sha256 });
+    const engineRelease = await request(`https://api.github.com/repos/kumwe/engine/releases/tags/${engineInput.tag}`);
+    releaseAssets(engineRelease, engineInput);
+    const asset = engineRelease.assets.find(item => item.name === engineInput.archive_name);
+    const bytes = await request(`https://api.github.com/repos/kumwe/engine/releases/assets/${asset.id}`, true);
+    requireFact(bytes.length === asset.size && hash(bytes) === engineArchiveDigest,
+      'Embedded Engine original compressed archive differs from the independently verified release.');
+    fs.writeFileSync(embeddedArchive, bytes);
+    const extractedEngine = path.join(output, 'embedded-engine-archive');
+    command(['python3', path.join(here, 'extract-source.py'), embeddedArchive, extractedEngine, 'kumwe-engine'], output,
+      path.join(output, 'embedded-engine-extraction.log'));
+    const publishedInventory = sourceInventory(path.join(extractedEngine, 'kumwe-engine'));
+    identicalInventory(publishedInventory, lock.files);
+    identicalInventory(sourceInventory(path.join(root, 'vendor/engine')), publishedInventory);
+  } else {
+    fs.copyFileSync(path.join(bundle, input.archive_name), embeddedArchive);
   }
-  const rawTar = path.join(output, 'embedded-engine-source.tar');
-  command(['git', 'archive', '--format=tar', '--output', rawTar, engineCommit], engineCheckout,
-    path.join(output, 'engine-raw-archive.log'));
-  const rawDigest = hash(fs.readFileSync(rawTar));
-  if (input.kind === 'php_extension') requireFact(rawDigest === json(path.join(root, 'resources/engine-lock.json')).archive_sha256,
-    'Raw embedded Engine TAR differs from the exact published Engine commit.');
   const build = path.join(output, 'build-evidence'); fs.mkdirSync(build);
   command(['sudo', 'unshare', '--net', '--', 'env', '-u', 'GH_TOKEN', '-u', 'GITHUB_TOKEN', '-u', 'COMPOSER_AUTH',
     `PATH=${process.env.PATH}`, 'COMPOSER_DISABLE_NETWORK=1', `KUMWE_PIE_PATH=${process.env.KUMWE_PIE_PATH || ''}`,
+    `CC=${process.env.CC || 'gcc-13'}`, `CXX=${process.env.CXX || 'g++-13'}`,
     `KUMWE_PARENT_NET_NS=${fs.readlinkSync('/proc/self/ns/net')}`,
     'bash', path.join(here, 'offline-build.sh'), input.kind, root, build], output, path.join(output, 'offline-build.log'));
   const buildResult = json(path.join(build, 'verification.json'));
@@ -306,22 +411,21 @@ export async function verifyNative(raw, destination) {
     source_tree: source.source.tree, handoff: handoffRecord, manifests_and_corpora: manifests,
     signature_verification: { status: 'passed', repository: input.name, source_commit: input.source_commit,
       source_ref: `refs/heads/${branch}`,
-      certificate_identity: `https://github.com/${input.name}/.github/workflows/release.yml@refs/heads/${branch}`,
+      certificate_identity: `https://github.com/${input.name}/.github/workflows/ci.yml@refs/heads/${branch}`,
       deny_self_hosted_runners: true, bundle_sha256: hash(fs.readFileSync(signature)),
       subjects: assets.filter(name => name !== 'build-provenance.sigstore.json').map(name => ({ name,
         sha256: hash(fs.readFileSync(path.join(bundle, name))) })) },
     source_verification: { status: 'passed', reproduced_source_bundle: true,
       archive_sha256: input.archive_sha256, source_commit: input.source_commit, source_tree: source.source.tree,
-      full_handoff_schema: 'passed', upstream_attestation_schemas: 'passed' },
-    publisher: { url: publisher.html_url, conclusion: publisher.conclusion },
+      full_handoff_schema: 'passed', upstream_attestation_schemas: 'passed', quality_checkouts: qualityCheckouts },
+    publisher: { url: publisher.job_url, conclusion: publisher.conclusion,
+      workflow_url: publisher.html_url, workflow_conclusion: publisher.workflow_conclusion },
     release: { url: release.html_url, id: release.id, published_at: release.published_at, platform_immutable: release.immutable === true },
     assets: release.assets.map(asset => ({ identity: asset.name, url: asset.browser_download_url,
       sha256: hash(fs.readFileSync(path.join(asset.name === 'build-provenance.sigstore.json' ? output : bundle, asset.name))) })),
     abi_and_capabilities: { abi_major: caps.abi_major, capabilities: caps.capabilities,
       corpus_digests: caps.corpora.map(c => c.sha256) }, upstreams,
-    embedded_engine: { source_commit: engineCommit, raw_tar_sha256: rawDigest,
-      release_archive_sha256: input.kind === 'native_cpp' ? input.archive_sha256
-        : json(path.join(root, 'resources/engine-lock.json')).release_archive_sha256 }, build: buildResult });
+    embedded_engine: { source_commit: engineCommit, release_archive_sha256: engineArchiveDigest }, build: buildResult });
   console.log(`Independently verified actual ${input.name} ${input.version}; external attestation is finalized separately.`);
 }
 
@@ -338,13 +442,13 @@ export function finalize(output, evidenceUrl) {
     version: v.input.version, tag: v.input.tag, source_archive: { url: source.url, sha256: source.sha256 },
     artifacts: v.assets, manifests_and_corpora: v.manifests_and_corpora, abi_and_capabilities: v.abi_and_capabilities,
     sbom: { url: sbom.url, sha256: sbom.sha256 },
-    provenance: `Five original publisher assets verified using GitHub OIDC: ${provenance.url}; sha256=${provenance.sha256}; ${evidenceUrl}`,
+    provenance: `Four original publisher assets verified using GitHub OIDC: ${provenance.url}; sha256=${provenance.sha256}; ${evidenceUrl}`,
     release_workflow: `${v.publisher.url} completed successfully for ${v.input.source_commit}`,
     registry_or_pie_verification: [v.input.kind === 'native_cpp'
       ? `Published native source/CMake distribution and installed standalone C11 consumer: ${evidenceUrl}`
       : `Original published source installed by pinned PIE 1.4.10 with networking disabled: ${evidenceUrl}`],
     clean_consumer_or_build_verification: [`Fresh original-archive build in a network namespace: ${evidenceUrl}`,
-      `Exact source tree ${v.source_tree}; embedded Engine raw TAR SHA256 ${v.embedded_engine.raw_tar_sha256}`,
+      `Exact source tree ${v.source_tree}; embedded Engine published compressed archive SHA256 ${v.embedded_engine.release_archive_sha256}`,
       `Full ABI/capability/corpus and installed consumer verification: ${evidenceUrl}`],
     verified_at: v.verified_at, verified_by: `Independent verifier ${v.verifier.run_url}; source ${v.verifier.source_commit}`,
     status: 'verified' });
