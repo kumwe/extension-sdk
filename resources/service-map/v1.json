@@ -1,7 +1,7 @@
 {
     "schema": "kumwe-package-service-map/v1",
     "package": "kumwe/extension-sdk",
-    "release": "0.3.0",
+    "release": "0.3.1",
     "config_provider": null,
     "provider_absence_reason": "The SDK owns authoring contracts and per-operation tools, not an application service container. Callers explicitly supply the canonical encoder, bounded inspector, signing-key reader and lifecycle collaborators. No safe default can choose a compatible native tuple, protected signing key, host trust policy or execution scope. The CLI is an explicit per-invocation composition root. Hosts may wrap these constructors in their own factories; this package registers no ambient services or empty provider.",
     "factories": [],
