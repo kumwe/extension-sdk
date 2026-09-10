@@ -1,7 +1,7 @@
 {
     "schema": "kumwe-package-capabilities/v1",
     "package": "kumwe/extension-sdk",
-    "release": "0.3.1",
+    "release": "0.3.2",
     "namespace": "Kumwe\\Extension\\",
     "responsibility": "Canonical extension author contracts, strict manifests, executable binding ports and host-neutral package authoring/evidence tooling.",
     "non_responsibilities": [

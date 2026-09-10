@@ -84,7 +84,7 @@ final class GeneratedSourceAutoloadTest extends TestCase
         $map = $this->manifestMap($source, $package->manifest);
         $composer = json_decode((string) file_get_contents($source . '/composer.json'), true);
         $this->assertTrue(is_array($composer), 'The generated composer.json decodes.');
-        $this->assertSame('0.3.1', $composer['require']['kumwe/extension-sdk'] ?? null,
+        $this->assertSame('0.3.2', $composer['require']['kumwe/extension-sdk'] ?? null,
             'Generated code targets this canonical SDK release, not a deleted development branch.');
         $this->assertSame('stable', $composer['minimum-stability'] ?? null,
             'Generated components resolve stable PHP packages.');
