@@ -1,1 +1,49 @@
-null
+{
+  "engine": {
+    "archive_sha256": "bb447ae8bae41e26d927627cef244c4837e7bc4a4d28ac30e8b06d2150c31a4d",
+    "attestation": {
+      "member": "RELEASE-ATTESTATION.yaml",
+      "member_sha256": "7aa59c5d2a7cc34ae2ef1f5ee7dd224f07aa3fe73d026089c9607a62b58985d0",
+      "zip_sha256": "588ead6fb58208cdb6bffa29b96723c4e16371f3c3b7e333bedb66fba65f61db",
+      "zip_uri": "https://raw.githubusercontent.com/kumwe/extension-sdk/497ab97cfcc4693ff9708736ce3ccf41bf4e4f56/evidence/releases/native/engine/1.0.3/34524489571/attestation.zip"
+    },
+    "evidence": {
+      "actions_artifact": {
+        "id": 10171071655,
+        "name": "native-release-evidence-engine-1.0.3",
+        "repository": "kumwe/extension-sdk",
+        "run_id": 34524489571,
+        "verifier_commit": "7a2d7e5e8161dd0b81f91c870b1f42337b0ac40d"
+      },
+      "verification_member": "verification.json",
+      "zip_sha256": "1c8c9da8542d171eacaf5bb85e056158d1676b82c4c90f48a368e1a6dd32dc8f"
+    },
+    "name": "kumwe/engine",
+    "source_commit": "814edeb8376c24a4226668e936b0c64141ee88fe",
+    "version": "1.0.3"
+  },
+  "extension": {
+    "archive_sha256": "406a2b9aeadcc5773863fda4c8ba20803ac1f0c389460a99ef0884e303ca9332",
+    "attestation": {
+      "member": "RELEASE-ATTESTATION.yaml",
+      "member_sha256": "6353c6e2360df4d4aca70bc9a31d3691d5446e79834b382d650a23596c231105",
+      "zip_sha256": "b56c1f1f9a875f9b0dbd63907bc2f8a9c63429be8cf7c30a927c5ff47d678301",
+      "zip_uri": "https://raw.githubusercontent.com/kumwe/extension-sdk/1c3537d6102fc0a455119849c890950cb8237a2d/evidence/releases/native/kumwe-engine/1.0.3/34526160790/attestation.zip"
+    },
+    "evidence": {
+      "actions_artifact": {
+        "id": 10171695487,
+        "name": "native-release-evidence-kumwe-engine-1.0.3",
+        "repository": "kumwe/extension-sdk",
+        "run_id": 34526160790,
+        "verifier_commit": "baba11a2a7b5dd65827885b561e543d8e7c634b1"
+      },
+      "verification_member": "verification.json",
+      "zip_sha256": "273798a8d201d4f8a7345a504584f8ef966817855cccb78b98bfcf6babfae519"
+    },
+    "name": "kumwe/kumwe-engine",
+    "source_commit": "f7094b2ff313f3861962c726844a1107f27b5873",
+    "version": "1.0.3"
+  },
+  "schema": "kumwe-verified-native-selection/v1"
+}

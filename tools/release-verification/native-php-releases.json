@@ -1,1 +1,7 @@
-[]
+[
+  {
+    "name": "kumwe/computation",
+    "version": "0.3.3",
+    "source_commit": "76ad7a507dbf36fdc8613e9b96a1be6ba9700c18"
+  }
+]

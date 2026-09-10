@@ -89,7 +89,7 @@ source and production consumer use the verified stable fixture.
 
 `releases.json` selects the 31-package portable graph with Computation 0.1.1.
 `native-php-releases.json` stays empty until the independently published native
-Computation 0.3.1 can be selected. Once populated, the workflow verifies that additional
+Computation 0.3.3 can be selected. Once populated, the workflow verifies that additional
 archive and builds a separate 31-package native graph by replacing only Computation.
 Both modes perform a fresh no-dev authoritative install and a second installation
 from the unchanged lock with network disabled. The native mode also checks the actual
