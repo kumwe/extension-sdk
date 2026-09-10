@@ -3,6 +3,13 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## Unreleased
+
+- Align independent native verification with the published Engine and binding 1.0.1 source bundles,
+  signed `ci.yml` subjects, complete quality inventories and compressed embedded archive identities.
+  Admit later prerequisite receipts only against every immutable source/corpus commitment; require the
+  genuine binding receipt when building a scoped fixture. Release qualification remains a separate observed check.
+
 ## 0.3.1 — 2026-09-10
 
 - Select the published, independently verified `kumwe/producer` 0.3.0 (tag `v0.3.0`, commit

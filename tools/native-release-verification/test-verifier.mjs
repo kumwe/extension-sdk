@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { fileURLToPath } from 'node:url';
 import YAML from '../release-verification/node_modules/yaml/dist/index.js';
 import { coordinate, safePath, handoff, validateAttestation, validateUpstreamReceipt,
-  qualityRun, releaseAssets, finalize } from './verify-native.mjs';
+  qualityRun, qualityCheckout, releaseAssets, finalize, receiptReference, selectReceipt, identicalInventory } from './verify-native.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 let checks = 0;
@@ -52,7 +52,25 @@ for (const changes of [{ head_sha: '3'.repeat(40) }, { head_branch: 'feature' },
 refuse(() => qualityRun(run, jobs.slice(1), input, 'main'));
 refuse(() => qualityRun(run, [...jobs, jobs[0]], input, 'main'));
 refuse(() => qualityRun(run, [{ ...jobs[0], conclusion: 'skipped' }, ...jobs.slice(1)], input, 'main'));
-const assetNames = [input.archive_name, 'source.json', 'source.spdx.json', 'source.provenance.json',
+const notification = { name: 'Trigger the PHP binding sync', status: 'completed', conclusion: 'failure' };
+pass(() => qualityRun({ ...run, event: 'workflow_dispatch', conclusion: 'failure' }, [...jobs, notification], input, 'main'));
+refuse(() => qualityRun({ ...run, event: 'workflow_dispatch', conclusion: 'failure' },
+  [{ ...jobs[0], conclusion: 'failure' }, ...jobs.slice(1), notification], input, 'main'));
+refuse(() => qualityRun({ ...run, conclusion: 'failure' }, [...jobs, { ...notification, name: 'Unknown quality gate' }], input, 'main'));
+const bindingInput = coordinate({ ...input, name: 'kumwe/kumwe-engine' });
+const bindingJobs = ['source-release-preparation', 'binding', 'binding-zts', 'address-undefined-sanitizers',
+  'clean-pie', 'whole-boundary-benchmarks', 'Publish source release'].map(name => ({ name, status: 'completed', conclusion: 'success' }));
+const bindingRun = { ...run, event: 'workflow_dispatch', repository: { full_name: bindingInput.name },
+  head_repository: { full_name: bindingInput.name } };
+pass(() => qualityRun(bindingRun, bindingJobs, bindingInput, 'main'));
+refuse(() => qualityRun(bindingRun, bindingJobs.filter(job => job.name !== 'binding-zts'), bindingInput, 'main'));
+const checkoutLog = `[command]/usr/bin/git checkout --progress --force ${input.source_commit}\n`
+  + `[command]/usr/bin/git log -1 --format=%H\n2026-01-01T00:00:00Z ${input.source_commit}\n`;
+pass(() => qualityCheckout(checkoutLog, input.source_commit));
+refuse(() => qualityCheckout(checkoutLog.replaceAll(input.source_commit, '0'.repeat(40)), input.source_commit));
+refuse(() => qualityCheckout(checkoutLog.replace('git log -1 --format=%H', 'echo unverified-source'), input.source_commit));
+refuse(() => qualityCheckout(`Observed run head ${input.source_commit}`, input.source_commit));
+const assetNames = [input.archive_name, 'source.json', 'source.spdx.json',
   'SHA256SUMS', 'build-provenance.sigstore.json'];
 const release = { tag_name: input.tag, published_at: '2026-01-01T00:00:00Z', draft: false, prerelease: false,
   assets: assetNames.map(name => ({ name, state: 'uploaded', size: 1 })) };
@@ -80,18 +98,32 @@ for (const changes of [{ status: 'failed' }, { known_gaps: ['incomplete'] }, { p
 const upstream = { name: input.name, version: input.version, commit: input.source_commit,
   archive_sha256: input.archive_sha256, corpora: { 'corpus/example.json': '3'.repeat(64) } };
 pass(() => validateUpstreamReceipt(receipt, upstream));
+refuse(() => validateUpstreamReceipt({ ...receipt, artifact_kind: 'framework_php' }, upstream));
 for (const changes of [{ name: 'kumwe/kumwe-engine' }, { version: '1.0.1' }, { commit: '5'.repeat(40) },
   { archive_sha256: '6'.repeat(64) }, { corpora: { 'corpus/example.json': '7'.repeat(64) } },
   { corpora: { 'resources/public-api/v1.json': '3'.repeat(64) } }]) {
   refuse(() => validateUpstreamReceipt(receipt, { ...upstream, ...changes }));
 }
+const external = { uri: `https://raw.githubusercontent.com/kumwe/extension-sdk/${'8'.repeat(40)}/evidence/native/RELEASE-ATTESTATION.yaml`,
+  sha256: '9'.repeat(64) };
+pass(() => assert.deepEqual(receiptReference(external), external));
+for (const reference of [{ ...external, sha256: 'wrong' }, { ...external, uri: external.uri.replace('8'.repeat(40), 'main') },
+  { ...external, uri: external.uri.replace('/evidence/native/', '/evidence/../native/') }, null]) refuse(() => receiptReference(reference));
+refuse(() => selectReceipt(input, upstream, null));
+const laterReceipt = coordinate({ ...input, upstream_receipts: { [upstream.name]: external } });
+pass(() => assert.deepEqual(selectReceipt(laterReceipt, upstream, null), external));
+// Selection never rewrites the exact source/corpus expectations used by validation.
+refuse(() => validateUpstreamReceipt(receipt, { ...upstream, commit: '0'.repeat(40) }));
+pass(() => identicalInventory({ 'src/engine.cpp': '1'.repeat(64) }, { 'src/engine.cpp': '1'.repeat(64) }));
+refuse(() => identicalInventory({ 'src/engine.cpp': '1'.repeat(64) }, { 'src/engine.cpp': '2'.repeat(64) }));
+refuse(() => identicalInventory({ 'src/engine.cpp': '1'.repeat(64) }, { 'src/engine.cpp': '1'.repeat(64), extra: '2'.repeat(64) }));
 
 const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'kumwe-native-verifier-test-'));
 try {
   const verification = { status: 'passed', input, handoff: record, assets: assetNames.map(identity => ({ identity,
     url: `https://example.invalid/${identity}`, sha256: '3'.repeat(64) })), manifests_and_corpora: receipt.manifests_and_corpora,
     abi_and_capabilities: receipt.abi_and_capabilities, publisher: { url: 'https://example.invalid/run' },
-    source_tree: '4'.repeat(40), embedded_engine: { raw_tar_sha256: '5'.repeat(64) },
+    source_tree: '4'.repeat(40), embedded_engine: { release_archive_sha256: '5'.repeat(64) },
     verifier: { run_url: 'https://example.invalid/verifier', source_commit: '6'.repeat(40) }, verified_at: receipt.verified_at };
   fs.writeFileSync(path.join(temporary, 'verification.json'), JSON.stringify(verification));
   pass(() => finalize(temporary, 'https://github.com/kumwe/extension-sdk/actions/runs/1/artifacts/2'));

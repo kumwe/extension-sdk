@@ -77,15 +77,21 @@ jobs:
           tools: pie:1.4.10
       - name: Install locked verifier parsers
         run: npm ci --prefix tools/release-verification --ignore-scripts --no-audit
+      - name: Install the native release build toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes autoconf cmake gcc-13 g++-13 make pkg-config
       - name: Capture the exact installer path and reviewed coordinate
         env:
           RELEASE_COORDINATE: ${{ toJSON(matrix.release) }}
         run: |
           echo "KUMWE_PIE_PATH=$(command -v pie)" >> "$GITHUB_ENV"
           node -e 'const fs=require("fs"); fs.writeFileSync(process.env.RUNNER_TEMP+"/native-coordinate.json",process.env.RELEASE_COORDINATE); const r=JSON.parse(process.env.RELEASE_COORDINATE); fs.appendFileSync(process.env.GITHUB_ENV,"NATIVE_SLUG="+r.name.slice(6)+"-"+r.version+"\n");'
-      - name: Verify published source, five OIDC subjects, receipts, and actual offline native consumer
+      - name: Verify published source, four OIDC subjects, receipts, and actual offline native consumer
         env:
           GH_TOKEN: ${{ github.token }}
+          CC: gcc-13
+          CXX: g++-13
         run: >-
           node tools/native-release-verification/verify-native.mjs verify
           "$RUNNER_TEMP/native-coordinate.json" "$RUNNER_TEMP/native-verification"

@@ -4,21 +4,27 @@ This verifier checks actual published Engine and PHP binding source releases. It
 change tags, insert an artifact's own final identity into source, or qualify App integration.
 
 `releases.json` contains only reviewed, already published coordinates: `name`, exact stable `version`,
-full `source_commit`, and independently observed `archive_sha256`. Its initial empty list runs the
+full `source_commit`, independently observed `archive_sha256`, and optional `upstream_receipts` keyed
+by prerequisite repository. Each external receipt identifies an immutable SDK evidence URI and its
+own SHA256. These later receipts establish verification of the exact source-time commitments without
+rewriting immutable source-time observation flags. Its initial empty list runs the
 refusal tests without inventing a release. Add Engine only after publication, then the binding only
 after its Engine dependency has an independent durable receipt. PR and default-branch workflows
 run the same verifier. A successful source build alone cannot populate this list.
 `fixtures/engine-handoff.md` is an implementation-stage handoff used solely to exercise the complete
 native handoff schema. Synthetic test coordinates and receipts remain isolated regression inputs.
 
-The verifier observes the exact tag, published six-asset release, merged PR, successful native
-quality and publisher jobs, and default-branch ancestry. It verifies GitHub OIDC provenance for
-each of the five original source-bundle assets against the exact repository, commit, branch and
-publisher workflow; self-hosted signing runners are refused. The sixth file is the original
-signature bundle. Publisher SPDX, checksums and unsigned source-assembly metadata are preserved
-with their correct identities; the unsigned statement is never described as signed provenance.
+The verifier observes the exact tag, published five-asset release, merged PR, successful native
+quality and publisher jobs, and default-branch ancestry. Push and manual default-branch runs must
+execute every required native lane successfully. A separately failed downstream binding notification
+is recorded without erasing successful quality/publication evidence; failed or skipped quality lanes
+are never accepted. It verifies GitHub OIDC provenance for each of the four original source-bundle
+assets against the exact repository, commit, branch and `ci.yml` publisher workflow; self-hosted signing
+runners are refused. The fifth file is the original signature bundle. Publisher SPDX, source metadata
+and checksums remain original signed payloads; no nonexistent provenance file is fabricated.
 
-The published archive is reproduced from its exact checkout using the published source verifier,
+The published archive is reproduced from its exact checkout using Engine's release-bundle shell tool
+or the binding's PHP source verifier,
 then extracted into a fresh build directory. Every handoff digest and complete native handoff
 schema is checked. Native ABI/API/capability and corpus inventories are checked by their owning
 source validators and the standalone/installed native consumers. PHP package manifest schemas
@@ -36,10 +42,11 @@ tuple comparison, standalone Engine CLI parity, PHPT and lifecycle checks. Host 
 identities are observed per build; a tuple from a different host is never reused as its expected
 value. No PHP algorithm fallback or package workspace is used as an installed native consumer.
 
-The compressed release `archive_sha256` and the raw embedding TAR digest are separate.
-`verification.json.embedded_engine` records `source_commit`, `raw_tar_sha256` and the distinct
-`release_archive_sha256`; the latter must match the actual Engine receipt. The exact raw
-`embedded-engine-source.tar` bytes are retained. The full module tuple is in
+The binding's `kumwe-embedded-engine/v2` lock names the original compressed release archive.
+`verification.json.embedded_engine` records `source_commit` and `release_archive_sha256`, which
+must match the actual Engine receipt. The exact original `embedded-engine-source.tar.gz` bytes
+are retained; every extracted file must match both the lock and the embedded source tree. A raw
+Git TAR digest is never substituted for the compressed published archive identity. The full module tuple is in
 `build-evidence/actual-tuple.json` and `verification.json.build.actual_tuple`. The final YAML's
 `abi_and_capabilities` is the deliberately smaller projection required by the authoritative
 schema: `abi_major`, string `capabilities`, and `corpus_digests`.

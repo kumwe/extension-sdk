@@ -13,10 +13,13 @@ The input schema is `kumwe-verified-native-fixture-input/v1` with:
 - `source_record_path` and `source_record_sha256`: the verified bundle's `source.json`;
 - `source_archive_path` and `source_archive_sha256`: its original published source archive;
 - `source_sbom_path` and `source_sbom_sha256`: its published `source.spdx.json`.
+- `release_attestation_path` and `release_attestation_sha256`: the independently verified binding
+  receipt, validated against the complete release-attestation schema and exact source/archive/metadata/SPDX identities.
 
 All paths must be canonical absolute paths. The helper binds those bytes and the complete extracted
-file inventory to the source record, and refuses candidate versions, source blockers or unverified
-embedded Engine metadata. It copies the source to a new private output directory, verifies arginfo,
+file inventory to the source record, and refuses candidate versions, source blockers or an absent,
+failed, incomplete or mismatched independent receipt. The immutable source's older observation flags
+are preserved; verification comes from the externally supplied receipt. It copies the source to a new private output directory, verifies arginfo,
 binding and Engine ownership, then executes actual `phpize`, configure and make commands.
 
 The expected Computation constructor tuple comes from the binding's `tools/expected-tuple.php`.

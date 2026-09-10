@@ -16,26 +16,36 @@ pathlib.Path(os.environ['KUMWE_NATIVE_EVIDENCE'], 'network-namespace.json').writ
 PY
 cd "$source_root"
 cmake --version > "$evidence/cmake-version.txt"
-c++ --version > "$evidence/compiler-version.txt"
+"${CC:-cc}" --version > "$evidence/c-compiler-version.txt"
+"${CXX:-c++}" --version > "$evidence/compiler-version.txt"
 uname -a > "$evidence/platform.txt"
 if [[ "$kind" == native_cpp ]]; then
   bash tools/check-architecture.sh
   cmake -S . -B "$evidence/build" -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
   cmake --build "$evidence/build" --parallel 2
-  node tools/check-manifests.mjs "$evidence/build"
-  ctest --test-dir "$evidence/build" --output-on-failure
+  # The released CMake recipe verifies the ABI source closure while configuring.
+  # CTest and the real CLI prove the executable ABI, corpus and capability inventories.
+  ctest --test-dir "$evidence/build" --show-only=json-v1 > "$evidence/ctest-inventory.json"
+  ctest --test-dir "$evidence/build" --no-tests=error --output-on-failure --output-junit "$evidence/ctest.xml"
   bash tools/check-consumer.sh
   "$evidence/build/kumwe-engine-conformance" --capabilities > "$evidence/actual-capabilities.json"
   "$evidence/build/kumwe-engine-conformance" --verify-bundle "$source_root/corpus" > "$evidence/corpus-results.json"
   cp "$evidence/build/generated/capabilities.json" "$evidence/expected-capabilities.json"
   python3 - <<'PY'
-import json, os, pathlib
+import json, os, pathlib, xml.etree.ElementTree as ET
 p = pathlib.Path(os.environ['KUMWE_NATIVE_EVIDENCE'])
 actual = json.loads((p/'actual-capabilities.json').read_text())
 expected = json.loads((p/'expected-capabilities.json').read_text())
 assert actual == expected, 'Installed native Engine reports a different complete capability tuple.'
+inventory = json.loads((p/'ctest-inventory.json').read_text())['tests']
+executed = ET.parse(p/'ctest.xml').getroot().findall('testcase')
+assert inventory and sorted(test['name'] for test in inventory) == sorted(test.get('name') for test in executed), \
+    'The complete configured CTest inventory must execute.'
+assert all(test.get('status') == 'run' and test.find('failure') is None and test.find('skipped') is None
+           for test in executed), 'A native CTest was failed or skipped.'
 result = {'status': 'passed', 'network_disabled': True, 'kind': 'native_cpp',
           'actual_capabilities': actual, 'ctest': 'passed', 'installed_c11_consumer': 'passed',
+          'ctest_count': len(executed),
           'corpus': json.loads((p/'corpus-results.json').read_text())}
 (p/'verification.json').write_text(json.dumps(result, indent=2) + '\n')
 PY
@@ -50,7 +60,7 @@ elif [[ "$kind" == php_extension ]]; then
   php -n tools/verify-binding.php
   php -n tools/verify-engine.php
   bash tools/offline-install.sh
-  python3 tools/verify-native-linkage.py
+  php -n tools/verify-native-linkage.php
   php -n tools/expected-tuple.php > "$evidence/expected-tuple.json"
   cp "$evidence/expected-tuple.json" candidate-compatibility.json
   cmake --build engine-build --target kumwe-engine-conformance --parallel 2
@@ -91,7 +101,11 @@ api = json.loads(pathlib.Path('resources/api/v1.json').read_text())
 assert sorted(api['classes']) == json.loads((p/'module-reflection.json').read_text()), 'Registered class inventory differs.'
 compatibility = json.loads(pathlib.Path('resources/compatibility/v1.json').read_text())
 assert observed['php'].startswith(compatibility['php'] + '.'), 'Built PHP minor is outside the released tuple.'
-assert ('ZTS' if observed['zts'] else 'NTS') == compatibility['thread_model'], 'Released PHP thread mode differs.'
+thread_model = 'ZTS' if observed['zts'] else 'NTS'
+assert thread_model in compatibility['thread_models'], 'Released PHP thread mode is unsupported.'
+assert thread_model == expected['binding_build']['thread_model'], 'Built PHP thread mode differs from its identity.'
+assert observed['php'] == expected['binding_build']['php_version'], 'Built PHP patch differs from its identity.'
+assert bool(observed['debug']) == expected['binding_build']['debug'], 'Built PHP debug mode differs from its identity.'
 assert observed['os'] == compatibility['os'], 'Released operating system differs.'
 assert observed['architecture'] == compatibility['architecture'], 'Released architecture differs.'
 assert tuple_['extension_version'] == compatibility['version'], 'Actual module and release metadata versions differ.'
