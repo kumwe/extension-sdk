@@ -1,1 +1,8 @@
-[]
+[
+  {
+    "name": "kumwe/engine",
+    "version": "1.0.3",
+    "source_commit": "814edeb8376c24a4226668e936b0c64141ee88fe",
+    "archive_sha256": "bb447ae8bae41e26d927627cef244c4837e7bc4a4d28ac30e8b06d2150c31a4d"
+  }
+]
