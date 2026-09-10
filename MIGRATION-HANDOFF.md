@@ -33,15 +33,15 @@
       "The source/API classification and generation semantics are preserved; this handoff governs SDK readiness rather than repeating the historical extraction."
     ],
     "active_related_pull_requests": [
-      "https://github.com/kumwe/extension-sdk/pull/15"
+      "https://github.com/kumwe/extension-sdk/pull/16"
     ]
   },
   "target": {
     "repository": "https://github.com/kumwe/extension-sdk",
     "artifact_identity": "kumwe/extension-sdk",
     "canonical_namespace_or_abi": "Kumwe\\Extension\\",
-    "branch": "codex/extraction-readiness-20260907",
-    "pull_request": "https://github.com/kumwe/extension-sdk/pull/15"
+    "branch": "claude/page-builder-integration-vijc3m",
+    "pull_request": "https://github.com/kumwe/extension-sdk/pull/16"
   },
   "ownership": {
     "responsibility": "Canonical extension author contracts, strict manifests, executable binding ports and host-neutral package authoring/evidence tooling.",
