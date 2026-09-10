@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import YAML from '../release-verification/node_modules/yaml/dist/index.js';
 import { coordinate, safePath, handoff, validateAttestation, validateUpstreamReceipt,
   qualityRun, qualityCheckout, releaseAssets, finalize, receiptReference, selectReceipt, identicalInventory } from './verify-native.mjs';
+import './test-binding-sync-authority.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 let checks = 0;

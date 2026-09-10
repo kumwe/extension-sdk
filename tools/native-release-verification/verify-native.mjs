@@ -5,6 +5,8 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import YAML from '../release-verification/node_modules/yaml/dist/index.js';
 import Ajv from '../release-verification/node_modules/ajv/dist/2020.js';
+import { reviewedMerge, bindingSyncSources, bindingSyncPaths, bindingSyncRun,
+  bindingSyncLog, bindingSyncTree } from './binding-sync-authority.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const parsers = path.resolve(here, '../release-verification');
@@ -251,6 +253,65 @@ async function verifyUpstreams(root, input, output) {
   return result;
 }
 
+async function verifyBindingSyncAuthority(input, lock, branch, checkout, archive, upstreams, output) {
+  const api = `https://api.github.com/repos/${input.name}`;
+  const commit = await request(`${api}/commits/${input.source_commit}`);
+  requireFact(commit.parents?.length === 1, 'Binding sync must have exactly one reviewed parent.');
+  const parent = commit.parents[0].sha;
+  requireFact(/^[a-f0-9]{40}$/.test(parent), 'Binding sync parent is invalid.');
+  const parentPulls = await request(`${api}/commits/${parent}/pulls?per_page=100`);
+  const engine = await request('https://api.github.com/repos/kumwe/engine');
+  const enginePulls = await request(`https://api.github.com/repos/kumwe/engine/commits/${lock.commit}/pulls?per_page=100`);
+  const authority = bindingSyncSources(commit, input, lock, parentPulls, enginePulls, branch, engine.default_branch);
+  // verifyUpstreams already checked the immutable receipt's complete schema, archive and source identity.
+  const engineReceipt = upstreams.find(receipt => receipt.repository === lock.repository
+    && receipt.version === lock.version && receipt.source_commit === lock.commit);
+  requireFact(engineReceipt, 'Binding sync requires the independently verified exact Engine receipt.');
+  const paths = readCommand(['git', 'diff', '--name-only', '-z', parent, input.source_commit], checkout).split('\0').filter(Boolean);
+  bindingSyncPaths(paths);
+  const inventory = await request(`${api}/actions/runs?head_sha=${parent}&per_page=100`);
+  requireFact(inventory.total_count === inventory.workflow_runs.length, 'Incomplete binding parent workflow inventory.');
+  let observed;
+  const rejected = [];
+  for (const candidate of inventory.workflow_runs.filter(run => run.path === '.github/workflows/engine-sync.yml')) {
+    try {
+      const run = await request(`${api}/actions/runs/${candidate.id}`);
+      const jobs = await request(`${api}/actions/runs/${candidate.id}/jobs?per_page=100`);
+      requireFact(jobs.total_count === jobs.jobs.length, 'Incomplete binding sync job inventory.');
+      bindingSyncRun(run, jobs.jobs, input, parent, branch);
+      const file = `binding-sync-${run.id}-${jobs.jobs[0].id}.log`;
+      command(['gh', 'run', 'view', String(run.id), '--repo', input.name, '--job', String(jobs.jobs[0].id), '--log'],
+        output, path.join(output, file));
+      const bytes = fs.readFileSync(path.join(output, file));
+      bindingSyncLog(bytes.toString('utf8'), input, parent, branch, lock);
+      observed = { run, jobs, log: { path: file, sha256: hash(bytes) } };
+      break;
+    } catch (error) { rejected.push({ run_id: candidate.id, reason: error.message }); }
+  }
+  requireFact(observed, 'No successful observed sync proves the exact reviewed-parent to released-source transition.');
+  const replay = path.join(output, 'reviewed-binding-sync-replay');
+  command(['git', 'worktree', 'add', '--detach', replay, parent], checkout, path.join(output, 'binding-sync-replay-checkout.log'));
+  let workflow, reproduced, released;
+  try {
+    workflow = fs.readFileSync(path.join(replay, '.github/workflows/engine-sync.yml'));
+    fs.writeFileSync(path.join(output, 'reviewed-binding-sync-workflow.yml'), workflow);
+    command(['sudo', 'unshare', '--net', '--', 'env', '-u', 'GH_TOKEN', '-u', 'GITHUB_TOKEN', '-u', 'COMPOSER_AUTH',
+      `PATH=${process.env.PATH}`, 'php', 'tools/sync-engine.php', archive, '--release', lock.release,
+      '--commit', lock.commit, '--expected-sha256', lock.archive_sha256], replay, path.join(output, 'binding-sync-replay.log'));
+    command(['git', 'add', '--all'], replay, path.join(output, 'binding-sync-replay-index.log'));
+    reproduced = readCommand(['git', 'write-tree'], replay);
+    released = readCommand(['git', 'rev-parse', `${input.source_commit}^{tree}`], checkout);
+    bindingSyncTree(reproduced, released);
+  } finally {
+    command(['git', 'worktree', 'remove', '--force', replay], checkout, path.join(output, 'binding-sync-replay-cleanup.log'));
+  }
+  const result = { kind: 'reviewed-deterministic-binding-sync', ...authority, engine_receipt: engineReceipt,
+    source_commit: input.source_commit, generated_paths: paths, workflow_sha256: hash(workflow),
+    observed, rejected, reproduced_tree: reproduced, released_tree: released, replay_network_disabled: true };
+  save(path.join(output, 'binding-sync-authority.json'), result);
+  return result;
+}
+
 export async function verifyNative(raw, destination) {
   const input = coordinate(raw);
   const output = path.resolve(destination);
@@ -302,9 +363,11 @@ export async function verifyNative(raw, destination) {
   const publisher = { ...quality, conclusion: publication.conclusion, job_url: publication.html_url,
     workflow_conclusion: quality.conclusion };
   const publisherJobs = jobs;
-  const merged = await get(`/commits/${input.source_commit}/pulls`);
-  requireFact(merged.some(pr => pr.merged_at && pr.merge_commit_sha === input.source_commit),
+  const merged = await get(`/commits/${input.source_commit}/pulls?per_page=100`);
+  const directReview = reviewedMerge(merged, input.source_commit, input.name, branch);
+  requireFact(directReview || input.kind === 'php_extension',
     'Native source does not identify an observed merged pull request.');
+  let sourceAuthority = directReview ? { kind: 'merged-pull-request', pull_request: directReview } : null;
   save(path.join(output, 'github-observations.json'), { repository, tag, release, quality, jobs, rejectedQuality,
     publisher, publisherJobs, merged });
   const bundle = path.join(output, 'publisher-assets');
@@ -390,9 +453,12 @@ export async function verifyNative(raw, destination) {
     const publishedInventory = sourceInventory(path.join(extractedEngine, 'kumwe-engine'));
     identicalInventory(publishedInventory, lock.files);
     identicalInventory(sourceInventory(path.join(root, 'vendor/engine')), publishedInventory);
+    if (!sourceAuthority) sourceAuthority = await verifyBindingSyncAuthority(input, lock, branch,
+      checkout, embeddedArchive, upstreams, output);
   } else {
     fs.copyFileSync(path.join(bundle, input.archive_name), embeddedArchive);
   }
+  requireFact(sourceAuthority, 'The released native source lacks complete review authority.');
   const build = path.join(output, 'build-evidence'); fs.mkdirSync(build);
   command(['sudo', 'unshare', '--net', '--', 'env', '-u', 'GH_TOKEN', '-u', 'GITHUB_TOKEN', '-u', 'COMPOSER_AUTH',
     `PATH=${process.env.PATH}`, 'COMPOSER_DISABLE_NETWORK=1', `KUMWE_PIE_PATH=${process.env.KUMWE_PIE_PATH || ''}`,
@@ -417,7 +483,8 @@ export async function verifyNative(raw, destination) {
         sha256: hash(fs.readFileSync(path.join(bundle, name))) })) },
     source_verification: { status: 'passed', reproduced_source_bundle: true,
       archive_sha256: input.archive_sha256, source_commit: input.source_commit, source_tree: source.source.tree,
-      full_handoff_schema: 'passed', upstream_attestation_schemas: 'passed', quality_checkouts: qualityCheckouts },
+      full_handoff_schema: 'passed', upstream_attestation_schemas: 'passed', quality_checkouts: qualityCheckouts,
+      review_authority: sourceAuthority },
     publisher: { url: publisher.job_url, conclusion: publisher.conclusion,
       workflow_url: publisher.html_url, workflow_conclusion: publisher.workflow_conclusion },
     release: { url: release.html_url, id: release.id, published_at: release.published_at, platform_immutable: release.immutable === true },
