@@ -295,7 +295,8 @@ async function verifyBindingSyncAuthority(input, lock, branch, checkout, archive
   try {
     workflow = fs.readFileSync(path.join(replay, '.github/workflows/engine-sync.yml'));
     fs.writeFileSync(path.join(output, 'reviewed-binding-sync-workflow.yml'), workflow);
-    command(['sudo', 'unshare', '--net', '--', 'env', '-u', 'GH_TOKEN', '-u', 'GITHUB_TOKEN', '-u', 'COMPOSER_AUTH',
+    command(['sudo', 'unshare', '--net', '--setgid', String(process.getgid()), '--setuid', String(process.getuid()),
+      '--', 'env', '-u', 'GH_TOKEN', '-u', 'GITHUB_TOKEN', '-u', 'COMPOSER_AUTH',
       `PATH=${process.env.PATH}`, 'php', 'tools/sync-engine.php', archive, '--release', lock.release,
       '--commit', lock.commit, '--expected-sha256', lock.archive_sha256], replay, path.join(output, 'binding-sync-replay.log'));
     command(['git', 'add', '--all'], replay, path.join(output, 'binding-sync-replay-index.log'));
