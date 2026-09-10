@@ -1,14 +1,1 @@
-[
-  {
-    "name": "kumwe/kumwe-engine",
-    "version": "1.0.2",
-    "source_commit": "3f0c22e8c58928fe55db580b893f8ff815b9542c",
-    "archive_sha256": "79aa3c2a44ee4b202762f4517b94cd6f8a9e638ab14d9902674840fb7f9c8aae",
-    "upstream_receipts": {
-      "kumwe/engine": {
-        "uri": "https://raw.githubusercontent.com/kumwe/extension-sdk/194c7701ce1452570299d78a417f3cb391364942/evidence/releases/native/engine/1.0.2/34518885975/RELEASE-ATTESTATION.yaml",
-        "sha256": "9e893ca948e256e004ab4dc34cc09163cf4e6140e890266633a60267d876a22e"
-      }
-    }
-  }
-]
+[]

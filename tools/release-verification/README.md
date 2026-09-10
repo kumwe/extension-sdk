@@ -50,7 +50,7 @@ hosted attestation.
 ## Stable native fixtures and the two complete graphs
 
 `native-releases.json` stays `null` until actual independently verified stable Engine
-and binding releases have durable evidence. Its eventual schema is
+and binding releases have accessible original evidence. Its schema is
 `kumwe-verified-native-selection/v1`, with `engine` and `extension` entries containing
 `name`, `version`, `source_commit`, the **published compressed** `archive_sha256`,
 `attestation: {zip_uri, zip_sha256, member, member_sha256}`, and
@@ -59,9 +59,21 @@ and binding releases have durable evidence. Its eventual schema is
 SDK Git commit under `evidence/`; preserved bytes and the original hosted artifact
 URIs remain recorded there. This evidence tree is excluded from package archives.
 
+The larger evidence envelope can instead remain in its original same-repository
+Actions artifact. Set `evidence: {actions_artifact: {repository, id, run_id,
+verifier_commit, name}, zip_sha256, verification_member}` with repository exactly
+`kumwe/extension-sdk`. The materializer uses the workflow's existing `actions: read`
+token to read its metadata and original ZIP; it does not publish the envelope or
+send the token to artifact storage. Exact artifact ID, run, verifier head, owner name,
+expiry, size and ZIP digest must match before the unchanged inventory and receipt
+checks run. Attestation ZIPs retain their immutable Git URI convention. Actions
+evidence is retained for 90 days, not permanently: expiry or deletion requires a new
+genuine independent verification and updated observed receipt coordinates. A missing
+artifact never falls back to a reconstructed or unverified envelope.
+
 `materialize-native-evidence.mjs` checks the original ZIP/member hashes, complete
-external receipt schema, source coordinates, all five previously verified publisher
-signature subjects, complete evidence inventory, full schema/source verification and
+external receipt schema, source coordinates, all four previously verified publisher
+signature subjects and their signature bundle, complete evidence inventory, full schema/source verification and
 actual network-isolated build records. It matches both owners' raw embedding TAR
 identity separately from the published compressed Engine archive, then builds a fresh
 fixture using the unchanged binding source. Signature verification itself belongs to
