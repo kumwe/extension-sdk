@@ -1,5 +1,10 @@
 # Kumwe extension SDK
 
+[![Packagist version](https://img.shields.io/packagist/v/kumwe/extension-sdk)](https://packagist.org/packages/kumwe/extension-sdk)
+[![CI](https://github.com/kumwe/extension-sdk/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/kumwe/extension-sdk/actions/workflows/ci.yml)
+[![PHP](https://img.shields.io/packagist/dependency-v/kumwe/extension-sdk/php)](composer.json)
+[![License](https://img.shields.io/packagist/l/kumwe/extension-sdk)](LICENSE)
+
 `kumwe/extension-sdk` is the canonical author-facing contract for Kumwe extensions. It provides:
 
 - strict, versioned manifest parsing and a canonical contribution graph;
@@ -27,8 +32,9 @@ SDK inspection report into its policy layer instead of implementing a parallel s
 composer require kumwe/extension-sdk
 ```
 
-Composer installs the canonical library contracts used by the SDK, including conversion value types.
-The Studio document-schema authority is supplied by `kumwe/producer` at the released 0.3.0.
+Requires PHP 8.5 with JSON, mbstring, Sodium and ZIP. Composer installs the exact canonical
+library contracts declared in [composer.json](composer.json). Studio document-schema authority
+belongs to `kumwe/producer`. Core and other consumers qualify and pin an exact SDK release.
 
 The author toolchain is a PHP API. Start with `Kumwe\Extension\Toolchain\ComponentScaffolder`,
 `DeterministicPackageBuilder`, `PackageSigner`, `PackageInspector` or
@@ -72,6 +78,14 @@ The CLI verifies an explicitly supplied native tuple per invocation. The runtime
 generated production extensions depend on the portable encoder contract; native Computation is
 required only by the optional CLI and development/generated test toolchain.
 
-[MIGRATION-HANDOFF.md](MIGRATION-HANDOFF.md) records the prepublication ownership and next-consumer
-contract. An independent external release attestation must identify actual published bytes before
-release verification is claimed. This handoff does not perform App integration.
+## Compatibility, releases and support
+
+The [host integration contract](docs/host-integration.md) and [App agreement](docs/app-agreement.md)
+define Core responsibilities, exact version pins, generation compatibility and shared inspection.
+The [release contract record](docs/release-record.md) binds exported APIs, manifest digests and
+consumer verification obligations. Published versions, source CI and Core integration are distinct
+states; passing CI alone does not establish independent release qualification.
+
+See [releases](https://github.com/kumwe/extension-sdk/releases), [release policy](docs/releasing.md),
+[graph qualification](docs/release-qualification.md) and [test ownership](docs/test-ownership.md).
+Report defects or missing contract capabilities in [GitHub issues](https://github.com/kumwe/extension-sdk/issues).

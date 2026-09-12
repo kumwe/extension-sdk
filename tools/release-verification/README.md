@@ -3,7 +3,7 @@
 `releases.json` selects exact stable PHP versions and full source commits. The hosted
 workflow observes their tag, merged PR, release workflow, Packagist source/dist and
 original archive. It compares every archive file to the Git object, validates the
-complete Git export inventory, released v2 handoff and all three canonical manifests
+complete Git export inventory, release contract record and all three canonical manifests
 against their pinned authoritative schemas, runs the unchanged package's complete
 check and security audit, and installs the original ZIP without development
 requirements. It removes vendor and replays the same lock using an isolated,
@@ -38,12 +38,22 @@ Run the verifier with PHP 8.5, Composer, Git and Node (with the locked npm depen
 
 ```sh
 npm ci --prefix tools/release-verification --ignore-scripts
+node tools/release-verification/test-release-record.mjs
 node tools/release-verification/test-verifier.mjs
 node tools/release-verification/verify-release.mjs verify coordinate.json output
 ```
 
-The bundled handoff schema is the v2 schema from Kumwe App, used read-only. The
-selected released handoff remains authoritative; mutable chat claims cannot supply
+Current packages ship `docs/release-record.md` using
+[`kumwe-package-release-record/v1`](package-release-record.v1.schema.json). This strict schema
+retains public manifests, symbols, DI, native requirements, test ownership and consumer
+obligations while omitting completed task, branch and roadmap bookkeeping. The bundled
+v2 handoff schema remains unchanged for immutable historical `MIGRATION-HANDOFF.md`
+archives. Exactly one record path is accepted, and that path selects its corresponding
+schema; a legacy record cannot be relabeled to bypass validation. Both formats bind the
+actual record bytes in the external attestation. Existing historical verifier output
+without an explicit record path continues to identify the legacy file.
+
+The selected release record remains authoritative; mutable chat claims cannot supply
 missing evidence. Local passing checks remain local evidence and cannot finalize a
 hosted attestation.
 
@@ -87,10 +97,11 @@ to those subprocesses. SDK's original production ZIP consumer and the complete
 portable graph still run with the original native-free PHP. Native Computation's
 source and production consumer use the verified stable fixture.
 
-`releases.json` selects the 31-package portable graph with Computation 0.1.1.
-`native-php-releases.json` stays empty until the independently published native
-Computation 0.3.3 can be selected. Once populated, the workflow verifies that additional
-archive and builds a separate 31-package native graph by replacing only Computation.
+`releases.json` is the explicit portable graph selection.
+`native-php-releases.json` selects the additional native Computation archive; the current
+workflow constrains it to 0.3.3. A complete portable selection contains all 31 package
+owners. Once both selections and native receipts are complete, the workflow verifies
+the additional archive and builds a separate native graph by replacing only Computation.
 Both modes perform a fresh no-dev authoritative install and a second installation
 from the unchanged lock with network disabled. The native mode also checks the actual
 module's full expected tuple and native adapter behavior. Neither mode claims App

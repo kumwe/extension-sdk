@@ -36,7 +36,7 @@ try {
                 }
             }
             if ($zip->getFromName('src/Manifest/ExtensionManifest.php') === false
-                || $zip->getFromName('MIGRATION-HANDOFF.md') === false) {
+                || $zip->getFromName('docs/release-record.md') === false) {
                 throw new RuntimeException('Archive boundary proof must retain actual SDK source and its handoff.');
             }
         } finally {

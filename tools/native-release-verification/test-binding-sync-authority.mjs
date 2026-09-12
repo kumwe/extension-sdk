@@ -37,6 +37,8 @@ refuse(() => reviewedMerge(Array(100).fill(parentReview), parent, input.name, 'm
 const paths = ['MIGRATION-HANDOFF.md', 'php_kumwe_engine.h', 'php_kumwe_engine_build.h',
   'resources/compatibility/v1.json', 'resources/engine-lock.json', 'vendor/engine/src/kernel.cpp'];
 pass(() => bindingSyncPaths(paths));
+pass(() => bindingSyncPaths(paths.map(p => p === 'MIGRATION-HANDOFF.md' ? 'docs/release-record.md' : p)));
+refuse(() => bindingSyncPaths([...paths, 'docs/release-record.md']));
 for (const illegal of ['kumwe_engine.cpp', 'tools/sync-engine.php', '.github/workflows/engine-sync.yml',
   'vendor/engine/../../injected.php', 'vendor/engine//bad', 'vendor/engine/./bad', 'vendor/engine\\bad']) {
   refuse(() => bindingSyncPaths([...paths, illegal]));
