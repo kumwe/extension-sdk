@@ -28,12 +28,13 @@
       }
     ],
     "examined_dependencies": [
-      "All 21 exact published PHP source coordinates and their complete runtime constraints agree in resources/source-ci-dependencies.json; actual registry and native qualification blockers remain recorded in docs/readiness-review.md.",
+      "The 21 exact published PHP source coordinates agree with both workflow checkouts, but Reporting 0.1.3 requires Integration 0.2.2 while this SDK selects Integration 0.2.3. The dependency graph remains blocked until a compatible Reporting successor is published and selected; see docs/readiness-review.md.",
       "Historical SDK adoption records docs/migration-map.json and docs/canonical-package-migration.json are retained as documentation, not a claim of current App examination.",
       "The source/API classification and generation semantics are preserved; this handoff governs SDK readiness rather than repeating the historical extraction."
     ],
     "active_related_pull_requests": [
-      "https://github.com/kumwe/extension-sdk/pull/16"
+      "https://github.com/kumwe/extension-sdk/pull/20",
+      "https://github.com/kumwe/reporting/pull/10"
     ]
   },
   "target": {
@@ -41,7 +42,7 @@
     "artifact_identity": "kumwe/extension-sdk",
     "canonical_namespace_or_abi": "Kumwe\\Extension\\",
     "branch": "agent/sdk-runtime-successor",
-    "pull_request": "https://github.com/kumwe/extension-sdk/pull/16"
+    "pull_request": "https://github.com/kumwe/extension-sdk/pull/20"
   },
   "ownership": {
     "responsibility": "Canonical extension author contracts, strict manifests, executable binding ports and host-neutral package authoring/evidence tooling.",
@@ -2389,6 +2390,8 @@
     "The embedded handoff is prepublication source evidence, not a self-issued release attestation."
   ],
   "blockers": [
+    "Reporting 0.1.3 requires Integration 0.2.2 and cannot resolve with the selected Integration 0.2.3. Publish and select the compatible Reporting successor at its actual post-rebase release commit.",
+    "Business Policy 0.1.1 is published on GitHub but remains absent from Packagist as checked on 2026-09-12. The clean published-dependency consumer cannot install until the canonical repository is registered and the exact release indexed.",
     "Actual coordinated stable publication and independent external verification must precede release-verified status."
   ]
 }
