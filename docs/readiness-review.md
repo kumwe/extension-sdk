@@ -1,5 +1,34 @@
 # Canonical SDK integration handoff
 
+## SDK 0.3.2 update — 2026-09-12
+
+[PR #20](https://github.com/kumwe/extension-sdk/pull/20), branch
+`agent/sdk-runtime-successor`, selects Automation 0.2.2 and Integration 0.2.3 to fix
+their installed examples. Both native CI jobs currently stop at Composer resolution:
+Reporting 0.1.3 still requires Integration 0.2.2. The source-selection checker verifies
+that the SDK records and checkouts agree; it does not establish that transitive
+Composer constraints are satisfiable.
+
+The prerequisite [Reporting PR #10](https://github.com/kumwe/reporting/pull/10)
+prepares version 0.1.4 selecting Integration 0.2.3. Publish that successor, then update the SDK's exact
+Reporting requirement, both workflow checkouts and both source dependency records to
+that actual released version and tag commit. Refresh the resource and handoff hashes.
+Do not assign a future release identity to the Reporting PR commit.
+
+The clean published-dependency consumer separately fails because Business Policy 0.1.1
+is not indexed on Packagist. Its canonical GitHub release exists, but both Packagist
+package and Composer metadata endpoints returned HTTP 404 on 2026-09-12. Register
+`https://github.com/kumwe/business-policy` using its maintainer's Packagist account,
+then verify the exact 0.1.1 source/dist identity. This candidate and its generated
+scaffold have no VCS overrides; source-path installation does not satisfy this gate.
+
+Both source/native workflows, the generated component consumer and the independent
+published-dependency consumer must pass before PR #20 is ready for a rebase merge.
+The review below records the earlier 0.3.0 work and its observations at that time;
+its old registry, version and PR status statements are not current 0.3.2 evidence.
+
+## Historical SDK 0.3.0 review
+
 This review is implemented in [PR #15](https://github.com/kumwe/extension-sdk/pull/15), branch
 `codex/extraction-readiness-20260907`. Its recorded successor is `0.3.0`; published `0.2.5`
 remains the previous API until the maintainer merges the change and publication succeeds.
