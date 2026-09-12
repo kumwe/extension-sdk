@@ -1,9 +1,9 @@
 # Kumwe extension SDK
 
-[![Packagist version](https://img.shields.io/packagist/v/kumwe/extension-sdk)](https://packagist.org/packages/kumwe/extension-sdk)
-[![CI](https://github.com/kumwe/extension-sdk/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/kumwe/extension-sdk/actions/workflows/ci.yml)
-[![PHP](https://img.shields.io/packagist/dependency-v/kumwe/extension-sdk/php)](composer.json)
-[![License](https://img.shields.io/packagist/l/kumwe/extension-sdk)](LICENSE)
+[![Packagist version][badge-packagist-version-image]][badge-packagist-version-link]
+[![CI][badge-ci-image]][badge-ci-link]
+[![PHP][badge-php-image]][badge-php-link]
+[![License][badge-license-image]][badge-license-link]
 
 `kumwe/extension-sdk` is the canonical author-facing contract for Kumwe extensions. It provides:
 
@@ -89,3 +89,12 @@ states; passing CI alone does not establish independent release qualification.
 See [releases](https://github.com/kumwe/extension-sdk/releases), [release policy](docs/releasing.md),
 [graph qualification](docs/release-qualification.md) and [test ownership](docs/test-ownership.md).
 Report defects or missing contract capabilities in [GitHub issues](https://github.com/kumwe/extension-sdk/issues).
+
+[badge-packagist-version-image]: https://img.shields.io/packagist/v/kumwe/extension-sdk
+[badge-packagist-version-link]: https://packagist.org/packages/kumwe/extension-sdk
+[badge-ci-image]: https://github.com/kumwe/extension-sdk/actions/workflows/ci.yml/badge.svg?branch=main
+[badge-ci-link]: https://github.com/kumwe/extension-sdk/actions/workflows/ci.yml
+[badge-php-image]: https://img.shields.io/packagist/dependency-v/kumwe/extension-sdk/php
+[badge-php-link]: composer.json
+[badge-license-image]: https://img.shields.io/packagist/l/kumwe/extension-sdk
+[badge-license-link]: LICENSE

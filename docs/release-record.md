@@ -2366,13 +2366,51 @@
 
 # SDK release contract record
 
-This machine-readable record binds the SDK public manifests, exported symbols, dependency
-injection, test ownership and consumer obligations. Source baselines and the two attestation
-identifiers preserve verification provenance. Current publication state is observed through
-[GitHub releases](https://github.com/kumwe/extension-sdk/releases) and
-[Packagist](https://packagist.org/packages/kumwe/extension-sdk).
+## Package contract
 
-The [host contract](host-integration.md) and [App agreement](app-agreement.md) define current
-consumer responsibilities. [Release qualification](release-qualification.md) defines the
-independent source, archive and graph checks. Actual release identity and results belong in
-external attestations; this record cannot attest to its own publication or Core integration.
+This record binds public manifests, exported symbols, construction, test ownership and consumer
+obligations. Source baselines and the two attestation identifiers preserve verification provenance.
+Actual publication state is observed through [releases](https://github.com/kumwe/extension-sdk/releases)
+and [Packagist](https://packagist.org/packages/kumwe/extension-sdk).
+
+## Public API and responsibility
+
+The [API reference](public-api.md) describes the 96 SDK exports. Signed manifests define declarations;
+bindings satisfy declared IDs. The SDK reports package facts and leaves admission, authorization,
+activation, persistence and execution policy to the host.
+
+## Dependencies and semantic inputs
+
+[Dependencies](dependencies.md) identifies canonical package ownership, exact source selections and
+the optional native authoring toolchain. Runtime APIs receive an explicit canonical encoder.
+Producer retains its Studio semantic profile.
+
+## Consumer contract
+
+The [host contract](host-integration.md) and [Core/App agreement](app-agreement.md) define exact
+pins, shared inspection, typed bindings and authority boundaries. Canonical symbol maps preserve
+integration obligations without runtime aliases or duplicate package implementations.
+
+## Test ownership
+
+Package tests own manifest, archive, signature, binding, generation and scaffold behavior.
+Core retains composition, authority, persistence, delivery, lifecycle and recovery tests.
+See [test ownership](test-ownership.md).
+
+## Consumer verification
+
+[Release qualification](release-qualification.md) defines independent source, archive and graph
+checks. Consumers install the exact verified artifacts, audit their graph and replay the same lock
+without network access. Native tooling additionally requires verified source and compatibility evidence.
+
+## Compatibility and drift
+
+Public manifest digests, canonical exports and signed fixture generations remain package-owned
+compatibility records. Both archive formats retain these records while excluding external evidence.
+Neither source CI nor this record attests to its own publication or Core integration.
+
+## Validation
+
+Run `composer check`, production autoload smoke, archive consumers and release automation tests.
+The independent verifier supports this strict production schema and the original legacy schema
+for immutable historical archives; both bind the actual record bytes in external attestations.
