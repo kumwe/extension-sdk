@@ -134,10 +134,10 @@
   },
   {
     "package": "kumwe/reporting",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/reporting.git",
-    "requested_ref": "b521b3113bd97afc2de6ab74fcb71a36fe7d0890"
+    "requested_ref": "63f807e70e3390ca9be65b22ac23b8c879866394"
   },
   {
     "package": "kumwe/sequence",

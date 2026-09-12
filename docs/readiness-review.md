@@ -4,16 +4,16 @@
 
 [PR #20](https://github.com/kumwe/extension-sdk/pull/20), branch
 `agent/sdk-runtime-successor`, selects Automation 0.2.2 and Integration 0.2.3 to fix
-their installed examples. Both native CI jobs currently stop at Composer resolution:
-Reporting 0.1.3 still requires Integration 0.2.2. The source-selection checker verifies
-that the SDK records and checkouts agree; it does not establish that transitive
-Composer constraints are satisfiable.
+their installed examples. The earlier native CI jobs stopped at Composer resolution
+because Reporting 0.1.3 still required Integration 0.2.2.
 
-The prerequisite [Reporting PR #10](https://github.com/kumwe/reporting/pull/10)
-prepares version 0.1.4 selecting Integration 0.2.3. Publish that successor, then update the SDK's exact
-Reporting requirement, both workflow checkouts and both source dependency records to
-that actual released version and tag commit. Refresh the resource and handoff hashes.
-Do not assign a future release identity to the Reporting PR commit.
+[Reporting PR #10](https://github.com/kumwe/reporting/pull/10) has now merged and
+[Reporting 0.1.4](https://github.com/kumwe/reporting/releases/tag/v0.1.4) is published.
+The SDK's exact Reporting requirement, both workflow checkouts and both source records
+select 0.1.4 at its actual tag commit `63f807e70e3390ca9be65b22ac23b8c879866394`.
+Resource and handoff hashes match the updated selection. This resolves the Reporting
+constraint conflict; the complete Composer and runtime gates still determine whether
+the full graph is ready.
 
 The clean published-dependency consumer separately fails because Business Policy 0.1.1
 is not indexed on Packagist. Its canonical GitHub release exists, but both Packagist

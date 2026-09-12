@@ -118,7 +118,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           repository: kumwe/reporting
-          ref: b521b3113bd97afc2de6ab74fcb71a36fe7d0890
+          ref: 63f807e70e3390ca9be65b22ac23b8c879866394
           path: dependencies/reporting
           persist-credentials: false
       - name: Check out business-definition source

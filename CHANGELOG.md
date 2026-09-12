@@ -8,6 +8,8 @@ Notable changes to `kumwe/extension-sdk` are recorded here in
 - Select published Automation 0.2.2 and Integration 0.2.3 together. Their installed examples now use
   the consumer Composer autoloader, while their runtime source and public signatures remain unchanged.
   Keep both source CI lanes and dependency evidence at those exact released commits.
+- Select Reporting 0.1.4 at its published tag commit so its exact Integration requirement
+  agrees with the SDK's Integration 0.2.3 selection.
 - Resolve production dependencies through Packagist without the former access-control and business-policy
   VCS repository overrides; generated scaffolds select this exact SDK successor.
 
