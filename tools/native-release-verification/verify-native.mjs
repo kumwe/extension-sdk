@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import YAML from '../release-verification/node_modules/yaml/dist/index.js';
 import Ajv from '../release-verification/node_modules/ajv/dist/2020.js';
+import { releaseRecordArtifact, releaseRecordPath, legacyRecordPath } from '../release-verification/release-record.mjs';
 import { reviewedMerge, bindingSyncSources, bindingSyncPaths, bindingSyncRun,
   bindingSyncLog, bindingSyncTree } from './binding-sync-authority.mjs';
 
@@ -16,6 +17,7 @@ const save = (file, value) => fs.writeFileSync(file, JSON.stringify(value, null,
 export const requireFact = (fact, message) => { if (!fact) throw new Error(message); };
 const ajv = new Ajv({ strict: false, allErrors: true });
 const handoffSchema = ajv.compile(json(path.join(parsers, 'migration-handoff.schema.json')));
+const releaseRecordSchema = ajv.compile(json(path.join(parsers, 'package-release-record.v1.schema.json')));
 const attestationSchema = ajv.compile(json(path.join(parsers, 'release-attestation.v2.schema.json')));
 export const inventories = {
   'kumwe/engine': ['native (ubuntu-24.04, gcc, g++)', 'native (ubuntu-24.04, clang, clang++)',
@@ -48,17 +50,22 @@ export function safePath(value) {
   return value;
 }
 
-export function handoff(text, input) {
+export function handoff(text, input, recordPath = legacyRecordPath) {
   const match = /^---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/.exec(text);
   requireFact(match, 'Missing or unterminated handoff front matter.');
   const record = YAML.parse(match[1], { uniqueKeys: true, maxAliasCount: 20 });
-  requireFact(handoffSchema(record), `Full handoff schema failed: ${JSON.stringify(handoffSchema.errors)}`);
+  requireFact([releaseRecordPath, legacyRecordPath].includes(recordPath), 'Unsupported native release record path.');
+  const validate = recordPath === releaseRecordPath ? releaseRecordSchema : handoffSchema;
+  requireFact(validate(record), `Full release record schema failed: ${JSON.stringify(validate.errors)}`);
   requireFact(record.artifact_kind === input.kind && record.target.repository === `https://github.com/${input.name}`,
     'Native handoff owner or kind differs.');
   requireFact(record.governance.completion_claim === false, 'Native extraction cannot claim App completion.');
-  const headings = ['Migration/implementation summary', 'Public API and responsibility',
-    'Capability reuse/semantic input review', 'Consumer inventory', 'Test ownership', 'Next-task execution notes',
-    'Drift check', 'Validation recipe and observed local results'];
+  const headings = recordPath === releaseRecordPath
+    ? ['Package contract', 'Public API and responsibility', 'Dependencies and semantic inputs',
+      'Consumer contract', 'Test ownership', 'Consumer verification', 'Compatibility and drift', 'Validation']
+    : ['Migration/implementation summary', 'Public API and responsibility',
+      'Capability reuse/semantic input review', 'Consumer inventory', 'Test ownership', 'Next-task execution notes',
+      'Drift check', 'Validation recipe and observed local results'];
   let previous = -1;
   for (const heading of headings) {
     const offset = text.indexOf(`## ${heading}`);
@@ -417,13 +424,16 @@ export async function verifyNative(raw, destination) {
   command(['python3', path.join(here, 'extract-source.py'), path.join(bundle, input.archive_name), archive,
     input.kind === 'native_cpp' ? 'kumwe-engine' : 'kumwe-engine-php'], output, path.join(output, 'archive-extraction.log'));
   const root = path.join(archive, input.kind === 'native_cpp' ? 'kumwe-engine' : 'kumwe-engine-php');
-  const handoffRecord = handoff(fs.readFileSync(path.join(root, 'MIGRATION-HANDOFF.md'), 'utf8'), input);
+  const releaseRecord = releaseRecordArtifact(root);
+  const handoffRecord = handoff(releaseRecord.bytes.toString('utf8'), input, releaseRecord.path);
   const manifests = handoffRecord.ownership.public_manifests.map(entry => {
     const p = safePath(entry.path); const digest = hash(fs.readFileSync(path.join(root, p)));
     requireFact(digest === entry.sha256, `Released native handoff hash differs: ${p}`);
     return { path: p, sha256: digest };
   });
-  manifests.push({ path: 'MIGRATION-HANDOFF.md', sha256: hash(fs.readFileSync(path.join(root, 'MIGRATION-HANDOFF.md'))) });
+  requireFact(!manifests.some(m => [releaseRecordPath, legacyRecordPath].includes(m.path)),
+    'A native release record cannot self-declare its own digest.');
+  manifests.push({ path: releaseRecord.path, sha256: releaseRecord.sha256 });
   const engineRoot = input.kind === 'native_cpp' ? root : path.join(root, 'vendor/engine');
   const caps = json(path.join(engineRoot, 'resources/capabilities.json'));
   for (const corpus of caps.corpora) {

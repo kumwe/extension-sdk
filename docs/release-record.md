@@ -1,10 +1,9 @@
 ---
 {
-  "schema": "kumwe-migration-handoff/v2",
+  "schema": "kumwe-package-release-record/v1",
   "artifact_kind": "framework_php",
   "migration_id": "KUMWE-MIG-2026-033",
   "change_set": "KUMWE-CS-2026-033",
-  "state": "draft_pr_open",
   "source": {
     "app": {
       "repository": "https://github.com/kumwe/app",
@@ -28,20 +27,14 @@
       }
     ],
     "examined_dependencies": [
-      "The 21 exact published PHP source coordinates agree with both workflow checkouts. Reporting 0.1.4 at 63f807e70e3390ca9be65b22ac23b8c879866394 selects Integration 0.2.3 and resolves the former Reporting pin conflict; see docs/readiness-review.md for consumer validation and remaining registry requirements.",
-      "Historical SDK adoption records docs/migration-map.json and docs/canonical-package-migration.json are retained as documentation, not a claim of current App examination.",
-      "The source/API classification and generation semantics are preserved; this handoff governs SDK readiness rather than repeating the historical extraction."
-    ],
-    "active_related_pull_requests": [
-      "https://github.com/kumwe/extension-sdk/pull/20"
+      "Exact published dependency versions are declared in composer.json. The dependency-selection gate checks the source coordinates in resources/source-ci-dependencies.json and resources/source-candidate-dependencies.json against both CI workflows.",
+      "docs/migration-map.json and docs/canonical-package-migration.json preserve canonical symbol ownership for Core integration; their baseline identities are historical provenance."
     ]
   },
   "target": {
     "repository": "https://github.com/kumwe/extension-sdk",
     "artifact_identity": "kumwe/extension-sdk",
-    "canonical_namespace_or_abi": "Kumwe\\Extension\\",
-    "branch": "agent/sdk-runtime-successor",
-    "pull_request": "https://github.com/kumwe/extension-sdk/pull/20"
+    "canonical_namespace_or_abi": "Kumwe\\Extension\\"
   },
   "ownership": {
     "responsibility": "Canonical extension author contracts, strict manifests, executable binding ports and host-neutral package authoring/evidence tooling.",
@@ -58,7 +51,7 @@
       "Native Computation only for optional CLI and development tooling"
     ],
     "implementation_owner": "kumwe/extension-sdk",
-    "next_consumer": "Independent release verification and generated extension authors, then a separately authorized App composition/adoption step.",
+    "next_consumer": "Extension authors and host implementations, including Kumwe Core, qualified against the exact published SDK and dependency graph.",
     "public_manifests": [
       {
         "path": "resources/public-api/v1.json",
@@ -90,8 +83,8 @@
       }
     ],
     "intentionally_excluded": [
-      "No App source, configuration, test removal or capability-index modification in this readiness train.",
-      "No duplicate capability implementation, arbitrary namespace alias or ownership reassignment.",
+      "Host application source, configuration, admission policy and persistence are owned by the consumer.",
+      "No duplicate capability implementation, namespace alias or ownership reassignment.",
       "No self artifact SHA, future tag identity or embedded release attestation."
     ]
   },
@@ -119,7 +112,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Manifest\\ExtensionDependency",
@@ -140,7 +133,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Manifest\\ExtensionIdentifier",
@@ -160,7 +153,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Manifest\\ExtensionManifest",
@@ -194,7 +187,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Manifest\\ExtensionType",
@@ -223,7 +216,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Manifest\\ManifestContributions",
@@ -298,7 +291,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Manifest\\ManifestIdentifierPolicies",
@@ -315,7 +308,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Manifest\\SemanticVersion",
@@ -338,7 +331,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Manifest\\TemplateKisCompatibility",
@@ -360,7 +353,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Manifest\\VersionConstraint",
@@ -379,7 +372,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\ArchiveContentReader",
@@ -396,7 +389,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\ArchiveEntry",
@@ -418,7 +411,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\ArchiveEntryType",
@@ -445,7 +438,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\ArchivePackage",
@@ -463,7 +456,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\ArchiveReader",
@@ -480,7 +473,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\InspectedPackage",
@@ -511,7 +504,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\InvalidPackage",
@@ -530,7 +523,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageAttestationState",
@@ -557,7 +550,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageBillOfMaterials",
@@ -585,7 +578,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageChecksum",
@@ -605,7 +598,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageCodeConformance",
@@ -626,7 +619,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageEvidenceInspector",
@@ -644,7 +637,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageEvidenceReport",
@@ -675,7 +668,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageEvidenceScope",
@@ -701,7 +694,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageFinding",
@@ -724,7 +717,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageLimits",
@@ -752,7 +745,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackagePath",
@@ -771,7 +764,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageProvenance",
@@ -801,7 +794,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageSafetyInspector",
@@ -818,7 +811,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageSignature",
@@ -839,7 +832,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageSignatureMessage",
@@ -858,7 +851,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PackageSignatureVerifier",
@@ -875,7 +868,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\PublicKeyPackageSignatureVerifier",
@@ -892,7 +885,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\SodiumEd25519Verifier",
@@ -910,7 +903,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\SodiumPublicKeyPackageSignatureVerifier",
@@ -927,7 +920,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\ZipArchiveContentReader",
@@ -944,7 +937,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Package\\ZipArchiveReader",
@@ -961,7 +954,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Application\\Automation\\JobHandler",
@@ -978,7 +971,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Application\\ExecutionContext",
@@ -1001,7 +994,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Application\\ExtensionServiceProvider",
@@ -1018,7 +1011,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingKind",
@@ -1054,7 +1047,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Binding\\ExecutableBindingRequirements",
@@ -1075,7 +1068,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingProvider",
@@ -1092,7 +1085,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Binding\\ExtensionBindingRegistrar",
@@ -1121,7 +1114,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteHandlerFactory",
@@ -1138,7 +1131,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Binding\\Http\\AdministratorRouteRenderer",
@@ -1155,7 +1148,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteHandlerFactory",
@@ -1172,7 +1165,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Binding\\Http\\PortalRouteRenderer",
@@ -1189,7 +1182,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\DomainEventHandler",
@@ -1206,7 +1199,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventHandler",
@@ -1223,7 +1216,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessIntegration\\Application\\IntegrationEventTransport",
@@ -1240,7 +1233,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordPage",
@@ -1259,7 +1252,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordQueryPurpose",
@@ -1285,7 +1278,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReadRequest",
@@ -1308,7 +1301,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordReader",
@@ -1325,7 +1318,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\BusinessRecord\\Application\\BusinessRecordView",
@@ -1350,7 +1343,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionDocument",
@@ -1376,7 +1369,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\CanonicalCompositionKind",
@@ -1406,7 +1399,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\CompositionBlockDeclaration",
@@ -1433,7 +1426,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\CompositionDesignVocabularyDeclaration",
@@ -1462,7 +1455,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\CompositionFieldControlDeclaration",
@@ -1485,7 +1478,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\CompositionHostBinding",
@@ -1509,7 +1502,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\CompositionInspectorDeclaration",
@@ -1531,7 +1524,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\CompositionMigrationDeclaration",
@@ -1559,7 +1552,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\CompositionPatternDeclaration",
@@ -1584,7 +1577,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\CompositionPropertySchema",
@@ -1611,7 +1604,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\CompositionPropertyType",
@@ -1641,7 +1634,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Contribution\\TranslationSetItemAssociation",
@@ -1667,7 +1660,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Http\\ExtensionRequest",
@@ -1688,7 +1681,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Migration\\ExtensionMigration",
@@ -1707,7 +1700,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Migration\\ExtensionTableNames",
@@ -1725,7 +1718,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Runtime\\BootableExtension",
@@ -1742,7 +1735,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionContainer",
@@ -1760,7 +1753,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Runtime\\ExtensionEvent",
@@ -1780,7 +1773,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBindingResult",
@@ -1803,7 +1796,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlock",
@@ -1823,7 +1816,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockFragment",
@@ -1846,7 +1839,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Spi\\Studio\\Application\\Preview\\StudioPreviewBlockRenderer",
@@ -1863,7 +1856,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\ComponentScaffolder",
@@ -1881,7 +1874,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\ConformanceReport",
@@ -1904,7 +1897,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\DeterministicPackageBuilder",
@@ -1922,7 +1915,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\ExtensionConformanceTestCase",
@@ -1937,7 +1930,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\ExtensionLifecycleTestCase",
@@ -1954,7 +1947,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\ExtensionPackageConformance",
@@ -1974,7 +1967,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\LifecycleConformanceAdapter",
@@ -2007,7 +2000,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\LifecycleConformanceReport",
@@ -2029,7 +2022,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\LifecycleConformanceRunner",
@@ -2047,7 +2040,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\PackageBuildResult",
@@ -2068,7 +2061,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\PackageInspection",
@@ -2088,7 +2081,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\PackageInspector",
@@ -2107,7 +2100,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\PackageSigner",
@@ -2126,7 +2119,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\ProtectedSigningKeyReader",
@@ -2143,7 +2136,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\ScaffoldRequest",
@@ -2167,7 +2160,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\ScaffoldResult",
@@ -2188,7 +2181,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\SignatureDocument",
@@ -2214,7 +2207,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       },
       {
         "old_fqcn": "Kumwe\\Extension\\Toolchain\\StaticConformanceRunner",
@@ -2232,7 +2225,7 @@
           "Declared parameter, filesystem, archive, cryptographic and domain refusals are preserved in source PHPDoc and docs/public-api.md."
         ],
         "serialization_contract": "Existing manifest generations, canonical byte records and public value/report shapes remain SDK-owned; see resources/contract/generations.json and source-derived API reference.",
-        "compatibility": "Existing canonical SDK export retained under its exact name; this entry adds governed metadata and does not claim a new App extraction."
+        "compatibility": "Canonical SDK export retains its exact name and public member contract."
       }
     ],
     "consumers": {
@@ -2275,7 +2268,7 @@
   "tests": {
     "moved_or_added": [
       "Existing tests retain package-owned behavior, boundaries and conformance; see tests/ownership.json.",
-      "tools/public-api.php and tools/verify-v2-metadata.php verify every declared API member, capability and handoff identity.",
+      "tools/public-api.php and tools/verify-v2-metadata.php verify every declared API member, capability and release-record identity.",
       "tools/verify-clean-consumer.php and tools/verify-scaffold-consumer.php prove actual archived SDK/generated production installs.",
       "tools/verify-package-set-consumer.php checks the complete verified archive graph including an actual empty-vendor offline replay."
     ],
@@ -2322,21 +2315,29 @@
     "required_registry_or_installer": "Packagist kumwe/extension-sdk",
     "required_external_attestation": true
   },
-  "next_task": {
-    "phase_name": "Begin separately scoped App implementation after all released repositories qualify",
+  "governance": {
+    "completion_claim": false
+  },
+  "decisions": [
+    "All 96 exports remain governed; exactly two documented PHPUnit bridge types are optional for no-dev consumers.",
+    "Runtime and generated production PHP APIs require an injected canonical encoder contract; the optional CLI and development toolchain use the verified native adapter.",
+    "Direct construction expresses operation and authority boundaries; no ambient provider is registered.",
+    "This source record describes the package contract; independent release attestations identify actual published bytes."
+  ],
+  "blockers": [],
+  "consumer_contract": {
     "permitted_only_when": [
       "All selected stable PHP archives and the Engine/binding/Computation native successor have independent release evidence.",
       "The external release attestation identifies the exact SDK archive and coherent dependency graph."
     ],
     "consumer_repository": "https://github.com/kumwe/app",
-    "dependency_or_native_change": "In a later App task, install the qualified exact SDK/package graph and provision the qualified native tuple where needed. No App change is executed by this handoff.",
+    "dependency_or_native_change": "Install the independently qualified exact SDK/package graph and provision the qualified native tuple for the optional CLI and development toolchain.",
     "namespace_or_api_replacements": [
       "Review docs/canonical-package-migration.json for duplicate SDK symbols moved to their canonical owners; retain all 96 current SDK exports."
     ],
     "files_to_update": [
-      "composer.json",
-      "composer.lock",
-      "App imports, explicit service composition and capability evidence identified by the future App investigation"
+      "Consumer composer.json and composer.lock",
+      "Consumer imports, explicit service composition and capability evidence"
     ],
     "files_to_remove": [],
     "tests_to_remove": [],
@@ -2349,65 +2350,29 @@
       "Explicitly inject encoder/toolchain collaborators and verify native tuple at host composition boundaries."
     ],
     "capability_index_changes": [
-      "A future App task records verified owner, release and manifest coordinates."
+      "Record the verified owner, release and manifest coordinates in the consumer capability index."
     ],
     "changelog_and_evidence_changes": [
-      "Separate package publication, independent release verification and App adoption states."
+      "Record package publication, independent release verification and Core integration as separate observations."
     ],
     "verification_commands": [
       "composer validate --strict",
       "composer check",
       "php tools/verify-clean-consumer.php --scaffold"
     ]
-  },
-  "concurrency": {
-    "likely_conflict_files": [
-      "composer.json",
-      "CHANGELOG.md",
-      "MIGRATION-HANDOFF.md",
-      "resources/source-ci-dependencies.json",
-      "resources/source-candidate-dependencies.json",
-      ".github/workflows/ci.yml",
-      ".github/workflows/source-candidate.yml"
-    ],
-    "related_migrations": [],
-    "ownership_conflicts": [],
-    "integration_train": null,
-    "resolution_rule": "semantic-preservation"
-  },
-  "governance": {
-    "roadmap_source_sha256": "a202155ef1a65f5ab293d4f8397ebf4ac430db7f1e877c776bbe7851e6fe18d8",
-    "roadmap_refs": [],
-    "non_roadmap_refs": [],
-    "completion_claim": false
-  },
-  "decisions": [
-    "This is SDK governance and readiness completion; the existing canonical SDK classification and generation semantics are retained.",
-    "All 96 exports remain governed; exactly two documented PHPUnit bridge types are optional for no-dev consumers.",
-    "The runtime and generated production PHP APIs require an injected portable canonical encoder contract; optional CLI/development uses the qualified native adapter.",
-    "Direct construction expresses the real operation and authority boundaries; no ceremonial or ambient provider is registered.",
-    "The embedded handoff is prepublication source evidence, not a self-issued release attestation."
-  ],
-  "blockers": [
-    "Business Policy 0.1.1 is published on GitHub but remains absent from Packagist as checked on 2026-09-12. The clean published-dependency consumer cannot install until the canonical repository is registered and the exact release indexed.",
-    "Actual coordinated stable publication and independent external verification must precede release-verified status."
-  ]
+  }
 }
 ---
 
-# SDK extraction and acceleration readiness handoff
+# SDK release contract record
 
-This source-owned record governs the existing canonical SDK API and its next consumer. It preserves
-all 96 exported SDK types, the generation/profile records and canonical package ownership. The
-0.3 successor removes duplicate capability declarations under the SDK namespace; the historical
-and canonical package migration maps remain shipped review inputs for later App adoption.
+This machine-readable record binds the SDK public manifests, exported symbols, dependency
+injection, test ownership and consumer obligations. Source baselines and the two attestation
+identifiers preserve verification provenance. Current publication state is observed through
+[GitHub releases](https://github.com/kumwe/extension-sdk/releases) and
+[Packagist](https://packagist.org/packages/kumwe/extension-sdk).
 
-The API, capabilities, service map, full source-derived reference, direct-construction example and
-package-owned tests describe the actual implementation. Separate native and published-dependency
-consumer gates distinguish the optional authoring accelerator from production PHP requirements.
-The archive/generated-project checks use installed code and real declared dependencies.
-
-Publication and independent verification remain external observations. No current App baseline,
-App implementation, admission permission, source-artifact self hash or future release result is
-asserted here. The next App step begins only after the coordinated stable graph and native tuple
-have their independent immutable evidence.
+The [host contract](host-integration.md) and [App agreement](app-agreement.md) define current
+consumer responsibilities. [Release qualification](release-qualification.md) defines the
+independent source, archive and graph checks. Actual release identity and results belong in
+external attestations; this record cannot attest to its own publication or Core integration.

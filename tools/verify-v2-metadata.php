@@ -1,6 +1,6 @@
 <?php
 
-/** Verify governed metadata and the v2 handoff without changing the stable runtime/profile API. @since 0.3.0 */
+/** Verify governed metadata and the v2 release record without changing the stable runtime/profile API. @since 0.3.0 */
 
 declare(strict_types=1);
 
@@ -57,12 +57,12 @@ $require(
     is_string($services['provider_absence_reason']) && $services['provider_absence_reason'] !== '',
     'provider rationale',
 );
-$handoffBytes = (string) file_get_contents($root . '/MIGRATION-HANDOFF.md');
+$handoffBytes = (string) file_get_contents($root . '/docs/release-record.md');
 $parts = explode("\n---\n", $handoffBytes, 2);
 $require(str_starts_with($parts[0], "---\n") && count($parts) === 2, 'v2 handoff front matter');
 // The handoff deliberately uses JSON-compatible YAML 1.2 for dependency-free verification.
 $handoff = json_decode(substr($parts[0], 4), true, 512, JSON_THROW_ON_ERROR);
-$require($handoff['schema'] === 'kumwe-migration-handoff/v2', 'handoff schema identity');
+$require($handoff['schema'] === 'kumwe-package-release-record/v1', 'release record schema identity');
 $require($handoff['framework_php']['composer_package'] === $composer['name'], 'handoff package identity');
 $require($handoff['framework_php']['public_api_manifest'] === 'resources/public-api/v1.json', 'canonical API location');
 $observed = [];
@@ -83,7 +83,9 @@ foreach (
     $require(isset($observed[$path]), 'handoff must identify ' . $path);
 }
 $require($handoff['migration_id'] === 'KUMWE-MIG-2026-033' && $handoff['change_set'] === 'KUMWE-CS-2026-033', 'reserved SDK migration identity');
-$require($handoff['state'] === 'draft_pr_open' && $handoff['governance']['completion_claim'] === false, 'handoff must not attest its own release');
+$require(!isset($handoff['state']) && !isset($handoff['next_task']) && !isset($handoff['concurrency'])
+    && isset($handoff['consumer_contract'])
+    && $handoff['governance']['completion_claim'] === false, 'release record must not contain process state or attest its own release');
 $require($handoff['native_cpp'] === null && $handoff['php_extension'] === null, 'SDK is a PHP artifact');
 $di = $handoff['framework_php']['dependency_injection'];
 $require($di['mode'] === 'direct' && $di['provider'] === null && $di['factories'] === [] && $di['aliases'] === [], 'handoff direct construction agreement');
@@ -106,7 +108,7 @@ $require(!isset($composer['extra']['laminas']['config-provider']), 'no implicit 
 foreach (
     [
     'CHARTER.md', 'README.md', 'docs/public-api.md', 'docs/architecture.md', 'docs/host-integration.md',
-    'docs/app-agreement.md', 'docs/canonical-package-candidate.md', 'docs/test-ownership.md',
+    'docs/app-agreement.md', 'docs/dependencies.md', 'docs/test-ownership.md',
     'examples/direct-construction.php',
     ] as $path
 ) {

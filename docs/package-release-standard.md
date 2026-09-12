@@ -1,6 +1,6 @@
 # Package release standard
 
-This is the common Kumwe package release contract. Apply it to every new extraction.
+This is the common Kumwe package release contract. Apply it to each package.
 
 ## One quality gate
 
@@ -66,7 +66,7 @@ external attestations. Dependency identity fixtures remain part of source CI.
 `tools/check-release-dependencies.sh` remains a separate, optional strict audit in those
 packages. It additionally requires platform-immutable releases and independent evidence,
 including released-commit workflow and clean-consumer observations. Use that evidence for
-`release-verified` and downstream adoption decisions under the extraction handoff protocol.
+`release-verified` and downstream adoption decisions under the release qualification contract.
 Normal publication does not clear unresolved evidence or change those adoption states.
 
 ## Optional repository hardening

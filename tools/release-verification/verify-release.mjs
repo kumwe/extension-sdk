@@ -6,6 +6,7 @@ import { spawnSync } from 'node:child_process';
 import YAML from 'yaml';
 import Ajv from 'ajv/dist/2020.js';
 import { nativeFixtureScope } from './native-fixture-scope.mjs';
+import { releaseRecordArtifact, releaseRecordPath, legacyRecordPath, verifyRecordDigest } from './release-record.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const sha256 = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
@@ -14,6 +15,7 @@ const write = (p, value) => fs.writeFileSync(p, JSON.stringify(value, null, 2) +
 const requireFact = (fact, description) => { if (!fact) throw new Error(description); };
 const ajv = new Ajv({ strict: false, allErrors: true });
 const validateSchema = ajv.compile(json(path.join(here, 'migration-handoff.schema.json')));
+const validateReleaseRecord = ajv.compile(json(path.join(here, 'package-release-record.v1.schema.json')));
 const validateAttestation = ajv.compile(json(path.join(here, 'release-attestation.v2.schema.json')));
 const canonicalSchemas = { public_api_manifest: 'package-public-api.v1.schema.json',
   capability_manifest: 'package-capabilities.v1.schema.json', service_map: 'package-service-map.v1.schema.json' };
@@ -58,15 +60,17 @@ export function safePath(p) {
   return p;
 }
 
-export function handoffRecord(text, input) {
+export function handoffRecord(text, input, recordPath = legacyRecordPath) {
   const blocks = text.split(/^---\s*$/m);
   requireFact(blocks.length >= 3 && blocks[0].trim() === '', 'Missing YAML front matter.');
   const record = YAML.parse(blocks[1], { uniqueKeys: true, maxAliasCount: 20 });
-  requireFact(validateSchema(record), `Handoff schema failed: ${JSON.stringify(validateSchema.errors)}`);
+  requireFact([releaseRecordPath, legacyRecordPath].includes(recordPath), 'Unsupported release record path.');
+  const validate = recordPath === releaseRecordPath ? validateReleaseRecord : validateSchema;
+  requireFact(validate(record), `Release record schema failed: ${JSON.stringify(validate.errors)}`);
   requireFact(record.artifact_kind === 'framework_php', 'This verifier only qualifies framework PHP packages.');
   requireFact(record.target.repository === `https://github.com/${input.name}`
     && record.framework_php.composer_package === input.name, 'Handoff repository/package identity drift.');
-  requireFact(record.governance.completion_claim === false, 'Extraction handoff cannot claim composed App completion.');
+  requireFact(record.governance.completion_claim === false, 'Package record cannot claim composed Core completion.');
   return record;
 }
 
@@ -212,7 +216,8 @@ export async function verifyRelease(raw, output, nativeFixture = null) {
     const object = crypto.createHash('sha1').update(`blob ${bytes.length}\0`).update(bytes).digest('hex');
     requireFact(blobs.get(p)?.sha === object, `Published archive content differs from source: ${p}`);
   }
-  const handoff = handoffRecord(fs.readFileSync(path.join(input.package_root, 'MIGRATION-HANDOFF.md'), 'utf8'), input);
+  const releaseRecord = releaseRecordArtifact(input.package_root);
+  const handoff = handoffRecord(releaseRecord.bytes.toString('utf8'), input, releaseRecord.path);
   const canonicalValidation = canonicalManifests(input.package_root, handoff, input.version);
   write(path.join(output, 'canonical-schema-verification.json'), { status: 'passed', validators: json(path.join(here, 'schema-sources.json')), manifests: canonicalValidation });
   const manifests = handoff.ownership.public_manifests.map(m => {
@@ -220,9 +225,10 @@ export async function verifyRelease(raw, output, nativeFixture = null) {
     requireFact(actual === m.sha256, `Released handoff digest drift: ${p}`);
     return { path: p, sha256: actual };
   });
-  const handoffSha256 = sha256(fs.readFileSync(path.join(input.package_root, 'MIGRATION-HANDOFF.md')));
-  requireFact(!manifests.some(m => m.path === 'MIGRATION-HANDOFF.md'), 'A handoff cannot self-declare its own digest.');
-  manifests.push({ path: 'MIGRATION-HANDOFF.md', sha256: handoffSha256 });
+  const handoffSha256 = releaseRecord.sha256;
+  requireFact(!manifests.some(m => [releaseRecordPath, legacyRecordPath].includes(m.path)),
+    'A release record cannot self-declare its own digest.');
+  manifests.push({ path: releaseRecord.path, sha256: handoffSha256 });
   for (const key of ['public_api_manifest', 'capability_manifest', 'service_map']) {
     const p = handoff.framework_php[key];
     requireFact(manifests.some(m => m.path === p), `Handoff does not bind ${key}.`);
@@ -283,7 +289,7 @@ export async function verifyRelease(raw, output, nativeFixture = null) {
     canonical_schema_validation: canonicalValidation,
     manifests_and_corpora: [...manifests, ...corpusFiles.filter(p => !manifests.some(m => m.path === p))
       .map(p => ({ path: p, sha256: sha256(fs.readFileSync(path.join(input.package_root, p))) }))],
-    archived_files: archiveFiles.length, complete_git_export_matched: true, handoff_sha256: handoffSha256,
+    archived_files: archiveFiles.length, complete_git_export_matched: true, handoff_sha256: handoffSha256, release_record_path: releaseRecord.path,
     license: { declaration: input.composer.license, path: licensePath, sha256: sha256(fs.readFileSync(path.join(input.package_root, licensePath))) },
     release_workflow: releaseRuns[0].html_url, merged_pull_request: mergePulls[0].html_url,
     platform_immutable_flag: release.immutable === true, observed_at: observed,
@@ -320,10 +326,7 @@ export function finalize(output, evidenceUrl) {
     && evidence.canonical_schema_validation?.length === 3, 'All canonical manifest schemas must pass before attesting.');
   canonicalManifests(input.package_root, input.handoff, input.version);
   requireFact(sha256(fs.readFileSync(input.archive_path)) === input.archive_sha256, 'Source archive changed before attestation.');
-  const handoffManifests = evidence.manifests_and_corpora.filter(m => m.path === 'MIGRATION-HANDOFF.md');
-  requireFact(handoffManifests.length === 1 && handoffManifests[0].sha256 === evidence.handoff_sha256
-    && sha256(fs.readFileSync(path.join(input.package_root, 'MIGRATION-HANDOFF.md'))) === evidence.handoff_sha256,
-  'Attestation must retain the unchanged independently verified handoff digest.');
+  verifyRecordDigest(evidence);
   const artifact = p => `${evidenceUrl}#${p}`;
   const record = { schema: 'kumwe-release-attestation/v2', artifact_kind: 'framework_php',
     migration_id: input.handoff.migration_id, change_set: input.handoff.change_set,

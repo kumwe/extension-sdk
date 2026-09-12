@@ -36,6 +36,22 @@ for (const alter of [r => { r.artifact_kind = 'framework_php'; },
   const mutated = structuredClone(record); alter(mutated);
   refuse(() => handoff(replaceHandoff(mutated), input));
 }
+const currentRecord = structuredClone(record);
+currentRecord.schema = 'kumwe-package-release-record/v1';
+delete currentRecord.state; delete currentRecord.concurrency;
+delete currentRecord.source.active_related_pull_requests;
+delete currentRecord.target.branch; delete currentRecord.target.pull_request;
+for (const key of ['roadmap_source_sha256', 'roadmap_refs', 'non_roadmap_refs']) delete currentRecord.governance[key];
+currentRecord.consumer_contract = currentRecord.next_task; delete currentRecord.next_task;
+delete currentRecord.consumer_contract.phase_name;
+const currentHeadings = ['Package contract', 'Public API and responsibility', 'Dependencies and semantic inputs',
+  'Consumer contract', 'Test ownership', 'Consumer verification', 'Compatibility and drift', 'Validation'];
+const currentText = '---\n' + YAML.stringify(currentRecord) + '---\n'
+  + currentHeadings.map(title => '## ' + title + '\nSynthetic contract fixture.\n').join('\n');
+pass(() => handoff(currentText, input, 'docs/release-record.md'));
+refuse(() => handoff(currentText, input));
+refuse(() => handoff(handoffText, input, 'docs/release-record.md'));
+refuse(() => handoff(currentText.replace('## Consumer contract', '## Missing section'), input, 'docs/release-record.md'));
 refuse(() => handoff(handoffText.replace('## Consumer inventory', '## Missing section'), input));
 refuse(() => handoff(handoffText.replace('---\n', '---\ninvalid: "unterminated\n'), input));
 refuse(() => handoff(handoffText.replace('---\n', '---\nschema: duplicate\n'), input));

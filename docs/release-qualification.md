@@ -1,14 +1,14 @@
 # Complete released package graph qualification
 
 `php tools/verify-package-set-consumer.php INPUT_JSON OUTPUT_JSON` accepts the archive set produced
-by the independent published release verifier. It requires all 28 extraction catalog owners plus
+by the independent published release verifier. It requires all 28 capability owners plus
 `kumwe/conversion`, `kumwe/producer` and `kumwe/extension-sdk`. Every Kumwe runtime dependency must
 resolve exactly within the supplied stable graph. An incomplete graph is a refusal.
 
 The input schema is `kumwe-verified-php-package-set/v1`. Each `packages` entry contains its canonical
 `name`, exact stable `version`, full `source_commit`, local canonical `archive_path`, verified
 `archive_sha256`, extracted `package_root` and unchanged original `composer` object. The upstream
-verifier owns tag/source/registry/archive and handoff validation. This consumer checks those local
+verifier owns tag/source/registry/archive and release-record validation. This consumer checks those local
 bytes again, installs only their ZIP distributions, and never substitutes a path or source checkout.
 
 Both modes install into a fresh project with a private Composer cache, no development packages or
@@ -24,7 +24,7 @@ type must load from its owning installed archive.
 Set `graph_mode` to `portable`; omitted mode retains this behavior for earlier verifier inputs.
 No `native` field is allowed. The process must have no loaded `kumwe_engine` extension, and no
 selected package may require it. Select the independently verified portable Computation baseline.
-This graph demonstrates extension-free extraction compatibility.
+This graph demonstrates extension-free package compatibility.
 
 ## Native graph
 

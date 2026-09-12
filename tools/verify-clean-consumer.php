@@ -37,7 +37,7 @@ try {
         throw new RuntimeException('Archive must ship Composer metadata and its public API.');
     }
     foreach ([
-        'MIGRATION-HANDOFF.md', 'CHARTER.md', 'CHANGELOG.md', 'README.md',
+        'docs/release-record.md', 'CHARTER.md', 'CHANGELOG.md', 'README.md',
         'resources/public-api/v1.json', 'resources/public-api/signature-details-v1.json',
         'resources/capabilities/v1.json', 'resources/service-map/v1.json',
         'resources/contract/classification.json', 'resources/contract/generations.json', 'resources/PIN.json',

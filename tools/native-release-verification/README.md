@@ -1,5 +1,11 @@
 # Independent native release verification
 
+Current native packages use `docs/release-record.md` and the strict
+[`kumwe-package-release-record/v1`](../release-verification/package-release-record.v1.schema.json)
+schema. Historical published archives retain their original `MIGRATION-HANDOFF.md`
+validation. Record paths select their schemas and ordered documentation sections;
+ambiguous records are refused and record bytes remain bound in release attestations.
+
 This verifier checks actual published Engine and PHP binding source releases. It does not publish,
 change tags, insert an artifact's own final identity into source, or qualify App integration.
 

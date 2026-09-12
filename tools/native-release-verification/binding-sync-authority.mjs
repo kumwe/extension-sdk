@@ -25,9 +25,11 @@ export function bindingSyncSources(commit, input, lock, parentPulls, enginePulls
 }
 
 export function bindingSyncPaths(paths) {
-  const generated = ['MIGRATION-HANDOFF.md', 'php_kumwe_engine.h', 'php_kumwe_engine_build.h',
+  const records = ['docs/release-record.md', 'MIGRATION-HANDOFF.md'];
+  const recordPaths = Array.isArray(paths) ? records.filter(p => paths.includes(p)) : [];
+  const generated = [...recordPaths, 'php_kumwe_engine.h', 'php_kumwe_engine_build.h',
     'resources/compatibility/v1.json', 'resources/engine-lock.json'];
-  fact(Array.isArray(paths) && new Set(paths).size === paths.length && generated.every(p => paths.includes(p))
+  fact(Array.isArray(paths) && recordPaths.length === 1 && new Set(paths).size === paths.length && generated.every(p => paths.includes(p))
     && paths.every(p => typeof p === 'string' && !/[\\\x00-\x1f]/.test(p)
       && !p.split('/').some(segment => ['', '.', '..'].includes(segment))
       && (generated.includes(p) || p.startsWith('vendor/engine/'))),

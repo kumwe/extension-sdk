@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+- Standardize package badges and current installation, host and release documentation.
+- Replace completed handover/readiness documents with the durable release record and dependency contract.
+- Preserve legacy published records in independent verification while digest-binding the current record path.
+
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 

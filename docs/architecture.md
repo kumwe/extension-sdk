@@ -4,7 +4,7 @@ The SDK owns strict manifest parsing, neutral package evidence, executable bindi
 extension authoring tools. A signed manifest is the declaration authority. Binding implementations
 can satisfy validated identifiers; they cannot declare new routes, jobs, policies or composition
 relationships. The consuming host retains admission, authorization, activation, persistence and
-execution policy. Extracted domain values retain their package namespaces and implementation owners.
+execution policy. Canonical domain values retain their package namespaces and implementation owners.
 
 `resources/contract/classification.json` identifies the 96 public SDK types and their source digests.
 `resources/contract/generations.json` identifies the six manifest and four binding-SPI generations.
@@ -65,4 +65,4 @@ The portable mode refuses a loaded extension or any runtime extension requiremen
 requires the qualified stable Computation successor, immutable native attestations and complete
 expected runtime tuple, then performs a real installed-adapter call after its offline replay.
 See [release qualification](release-qualification.md) for the distinct input and evidence boundaries.
-App namespace replacement and composition are a later task.
+Core owns namespace adoption and service composition; SDK checks do not establish host integration.

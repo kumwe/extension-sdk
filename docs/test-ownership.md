@@ -4,6 +4,10 @@ The package's `tests/ownership.json` maps every published type to the actual pac
 
 Evidence references identify responsibility; they are not a claim of 100% line, branch or input coverage. Ports with no runtime implementation own their signatures and vocabulary here; concrete host implementations retain their execution tests. Package tests use neutral fixtures and adapters, and never bootstrap Kumwe App.
 
-The legacy extraction is already adopted in App at baseline 960ce8ec00cf724a7cae03e5ba09c4852c9ab54e. The current App tests inspected exercise host composition, authority, persistence, delivery, lifecycle or recovery. No whole current App test file is identified for removal by this patch. Future extraction handoffs must list exact pure tests to remove or mixed tests to split on adoption. A dependency bump alone is not authorization to delete host acceptance tests.
+Core and other hosts retain composition, trust, authorization, persistence, delivery, lifecycle
+and recovery tests. A dependency update does not justify deleting those acceptance tests.
 
-The SDK owns neutral signed-package parsing/inspection, query/value and scaffold conformance. Capability and Contribution owner tests remain here until their separately verified successor packages are adopted; draft dependencies are not consumed.
+The SDK owns neutral signed-package parsing and inspection, executable bindings, manifest
+conformance, generation compatibility and scaffolding. Values, grammar and algorithms owned
+by canonical capability packages are tested in those packages. The retained symbol ownership
+maps support consumer integration without creating namespace aliases or duplicate runtime code.

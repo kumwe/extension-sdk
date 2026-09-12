@@ -1,7 +1,7 @@
 # The App agreement
 
-This document records the contract between the extension SDK and Kumwe App, its source and its
-first consumer. Every clause is written so a second consumer — another platform admitting Kumwe
+This document records the contract between the extension SDK and Kumwe Core/App, its
+consuming host. Every clause is written so a second consumer — another platform admitting Kumwe
 extension packages — needs no new agreement. The [charter](../CHARTER.md) states what the SDK is;
 this states what a consumer may rely on and what it owes.
 
@@ -62,8 +62,8 @@ What makes it hold, and how it is proven:
 3. **The equality test.** The App's suite carries a test that replays every signed generation
    fixture and the hostile-archive corpus through both entry points — the SDK inspector as an
    author runs it, and the admission path as the App runs it — and asserts identical findings.
-   That test is part of the App's standing gate from the phase that wires admission to the SDK
-   (E-5 in [`roadmap.md`](roadmap.md)) onward, and removing or weakening it is a security defect.
+   That test is part of the host's standing admission gate; removing or weakening it is a
+   security defect.
 
 ## What the consumer keeps
 

@@ -246,6 +246,13 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
+      - name: Install independent verifier dependencies
+        run: npm ci --prefix tools/release-verification --ignore-scripts --no-audit
+      - name: Verify release records and artifact qualification controls
+        run: |
+          node tools/release-verification/test-release-record.mjs
+          node tools/release-verification/test-verifier.mjs
+          node tools/native-release-verification/test-verifier.mjs
       - name: Verify release transitions and repository setup
         run: |
           bash tools/test-release-record.sh
