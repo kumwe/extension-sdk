@@ -9,6 +9,18 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## 0.3.3 — 2026-09-23
+
+- Select the published successor releases Administrator Contract 0.2.2, Portal Contract 0.2.2,
+  Integration 0.2.4, Idempotency 0.1.3, Record Model 0.1.4, Record Query 0.1.4, Reporting 0.1.5 and
+  Business Surface Contract 0.1.4 at their exact tag commits in the runtime requirement, the stable
+  source selection, the candidate dependency evidence and both CI checkouts. Their release records now
+  carry ledger identifiers the Kumwe App can adopt: Integration CS-027, Record Query MIG/CS-039,
+  Record Model MIG/CS-040, Reporting MIG/CS-041, Portal Contract CS-037, Administrator Contract CS-036,
+  Business Surface Contract CS-038, and the Idempotency record serialized in the StrictYaml subset.
+- Keep the runtime source, the public API and every other selection unchanged; generated scaffolds
+  select this exact SDK successor.
+
 ## 0.3.2 — 2026-09-10
 
 - Select published Automation 0.2.2 and Integration 0.2.3 together. Their installed examples now use
