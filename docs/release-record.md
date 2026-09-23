@@ -79,7 +79,7 @@
       },
       {
         "path": "resources/PIN.json",
-        "sha256": "b0dc47cbc04106345972b89fcf3f7c354183fb3a9386188a909e8e5eefea7aff"
+        "sha256": "973b79d103bc57c653b61118b8cae25aa04f2c7b91d7248f30d521dc52bb0c01"
       }
     ],
     "intentionally_excluded": [
