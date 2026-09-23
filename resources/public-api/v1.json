@@ -1,7 +1,7 @@
 {
     "schema": "kumwe-package-public-api/v1",
     "package": "kumwe/extension-sdk",
-    "release": "0.3.2",
+    "release": "0.3.3",
     "namespace": "Kumwe\\Extension\\",
     "symbols": {
         "Kumwe\\Extension\\Contract\\NameBasedUuid": {
