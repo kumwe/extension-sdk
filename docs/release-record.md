@@ -55,19 +55,19 @@
     "public_manifests": [
       {
         "path": "resources/public-api/v1.json",
-        "sha256": "452976e3cc1d06e09226f1e76c3446548822e56942951ac10d413ccfe6d6d2c3"
+        "sha256": "e09b7781ffb0c9dd7995fc7b82b8e24f1b6fa4193853aaa4aaa106a8622b5e4e"
       },
       {
         "path": "resources/public-api/signature-details-v1.json",
-        "sha256": "e19d48cd996b82e08adf41b66a1adb4579d49e5e5eb39d61bb6c3b33c1fa583a"
+        "sha256": "8dd0b107ab47a75bb63f1a5e78d31922e195869b6bc1a547f7e21fe6d6296864"
       },
       {
         "path": "resources/capabilities/v1.json",
-        "sha256": "f2e1dc835806674f8d655263ce8342bc9b4a81d7df66ee45d567d6bbd2a49688"
+        "sha256": "6dfde8b934cc8918e3c7a5eab8dd5a98028aaa2c5b043022f78b0de7e7db88da"
       },
       {
         "path": "resources/service-map/v1.json",
-        "sha256": "78322c30c1ca232ac185ea29d8e16f159fa6cf6a35cbf3a44233a0e23b50a742"
+        "sha256": "c5f6f638369db32278ef1f30c4ae5de7faba0790efa79f334c30e9af18f3f800"
       },
       {
         "path": "resources/contract/classification.json",
@@ -79,7 +79,7 @@
       },
       {
         "path": "resources/PIN.json",
-        "sha256": "a27f48a1c1af7cf9050fb4767d952f27c38e9eabdf1cc9d7e322d4ab7e050c65"
+        "sha256": "0fe92753d9a38de780f78333fb7e12835ffb3c0aba360e7ff9d24835231b03e4"
       }
     ],
     "intentionally_excluded": [
@@ -2296,7 +2296,7 @@
     "examples": [
       "examples/direct-construction.php"
     ],
-    "changelog_record": "CHANGELOG.md 0.3.4"
+    "changelog_record": "CHANGELOG.md 0.3.5"
   },
   "release_expectations": {
     "version_policy": "Exact pre-1.0 canonical dependency pins; SDK 0.3 preserves the existing 96 owned public exports while removing duplicate declarations now owned by extracted packages.",

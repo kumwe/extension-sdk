@@ -6,7 +6,7 @@
   "require": {
     "php": "^8.5",
     "doctrine/dbal": "^4.3",
-    "kumwe/extension-sdk": "0.3.4",
+    "kumwe/extension-sdk": "0.3.5",
     "laminas/laminas-diactoros": "^3.6",
     "psr/http-message": "^2.0",
     "psr/http-server-handler": "^1.0"
