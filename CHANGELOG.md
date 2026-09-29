@@ -9,6 +9,13 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## 0.3.4 — 2026-09-29
+
+- Select Producer 0.4.0 as the exact Studio document-schema dependency so host applications can
+  adopt Studio beta.7 and its consecutive-save and localized hosted-control fixes without conflicting
+  SDK requirements. Preserve the SDK's public API and all other dependency selections.
+- Generate extension scaffolds against this exact SDK successor.
+
 ## 0.3.3 — 2026-09-23
 
 - Select the published successor releases Administrator Contract 0.2.2, Portal Contract 0.2.2,
