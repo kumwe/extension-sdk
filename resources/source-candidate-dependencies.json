@@ -106,10 +106,10 @@
   },
   {
     "package": "kumwe/producer",
-    "version": "0.4.0",
+    "version": "0.5.0",
     "state": "Published stable PHP coordinate; source verification does not constitute independent release attestation.",
     "repository": "https://github.com/kumwe/producer.git",
-    "requested_ref": "de7aff27866d59a2a15d1988f086168e107fc5d8"
+    "requested_ref": "4fb81db6a672f0ece3f0ae869237f5f4af1f659e"
   },
   {
     "package": "kumwe/record-model",

@@ -9,6 +9,12 @@
 Notable changes to `kumwe/extension-sdk` are recorded here in
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format.
 
+## 0.3.5 — 2026-09-29
+
+- Select Producer 0.5.0 so host applications can adopt the Studio outline keyboard-accessibility
+  correction with a coherent dependency set. Preserve the SDK public API and all other dependencies.
+- Generate extension scaffolds against this exact SDK successor.
+
 ## 0.3.4 — 2026-09-29
 
 - Select Producer 0.4.0 as the exact Studio document-schema dependency so host applications can
