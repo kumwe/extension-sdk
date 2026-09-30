@@ -60,8 +60,8 @@
     "version": "0.2.2"
   },
   "kumwe/producer": {
-    "ref": "4fb81db6a672f0ece3f0ae869237f5f4af1f659e",
-    "version": "0.5.0"
+    "ref": "af6cec20ff5f91aa8dca1eec75460016ea962782",
+    "version": "0.6.0"
   },
   "kumwe/record-model": {
     "ref": "907d5175fe4c6fe1d30e8fa92560dc569631d98d",
